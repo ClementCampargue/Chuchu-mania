@@ -1,0 +1,67 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1001 &9130162883119237664
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 310153615395688793, guid: 0b8864be2f839cc4d888d39fd4ecf4e1, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -2.2158833
+      objectReference: {fileID: 0}
+    - target: {fileID: 310153615395688793, guid: 0b8864be2f839cc4d888d39fd4ecf4e1, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -1.6439147
+      objectReference: {fileID: 0}
+    - target: {fileID: 310153615395688793, guid: 0b8864be2f839cc4d888d39fd4ecf4e1, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 310153615395688793, guid: 0b8864be2f839cc4d888d39fd4ecf4e1, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 310153615395688793, guid: 0b8864be2f839cc4d888d39fd4ecf4e1, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 310153615395688793, guid: 0b8864be2f839cc4d888d39fd4ecf4e1, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 310153615395688793, guid: 0b8864be2f839cc4d888d39fd4ecf4e1, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 310153615395688793, guid: 0b8864be2f839cc4d888d39fd4ecf4e1, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 310153615395688793, guid: 0b8864be2f839cc4d888d39fd4ecf4e1, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 310153615395688793, guid: 0b8864be2f839cc4d888d39fd4ecf4e1, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 793143194083467424, guid: 0b8864be2f839cc4d888d39fd4ecf4e1, type: 3}
+      propertyPath: m_Name
+      value: Star_bit (2) Variant
+      objectReference: {fileID: 0}
+    - target: {fileID: 4697125950110828525, guid: 0b8864be2f839cc4d888d39fd4ecf4e1, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: -333362823, guid: 26442bd4a5082094fa9c0e2a25c4e3cf, type: 3}
+    - target: {fileID: 8850293883598317108, guid: 0b8864be2f839cc4d888d39fd4ecf4e1, type: 3}
+      propertyPath: ice_cream_UI
+      value: 
+      objectReference: {fileID: 8614146724696054357, guid: 2498ce080b421084588b6bbd29a2f2b5, type: 3}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 0b8864be2f839cc4d888d39fd4ecf4e1, type: 3}
