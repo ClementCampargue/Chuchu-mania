@@ -55,7 +55,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: a97c105638bdf8b4a8650670310a4cd3, type: 2}
+  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -97,6 +97,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1741744674937619627}
   - component: {fileID: 1509680522267840086}
+  - component: {fileID: 3285755059392873347}
   m_Layer: 0
   m_Name: Ice_cream_ui
   m_TagString: Untagged
@@ -140,3 +141,25 @@ MonoBehaviour:
   blinkDuration: 2
   blinkInterval: 0.1
   spriteRenderer: {fileID: 3432287915386421383}
+  juice: {fileID: 3285755059392873347}
+--- !u!114 &3285755059392873347
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8614146724696054357}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 202ee3a233513de4e97c15ba372a6847, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  spriteRenderer: {fileID: 3432287915386421383}
+  flashMaterial: {fileID: 2100000, guid: 778865bbd08486043a01aeb31184e581, type: 2}
+  flashDuration: 0.05
+  stretchAmount: 1.2
+  squashAmount: 0.5
+  scaleDuration: 0.15
+  verticalStretch: 0
+  shakeDuration: 0
+  shakeIntensity: 0

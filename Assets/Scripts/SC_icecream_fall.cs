@@ -15,7 +15,7 @@ public class SC_icecream_fall : MonoBehaviour
     private Vector3 velocity = Vector3.zero;
     private bool hasLanded = false;
     public SpriteRenderer spriteRenderer;
-
+    public SC_juiciness juice;
     void Awake()
     {
     }
@@ -33,45 +33,21 @@ public class SC_icecream_fall : MonoBehaviour
             {
                 transform.position = new Vector3(transform.position.x, targetPosition.position.y, transform.position.z);
                 hasLanded = true;
-                StartCoroutine(JuicyEffect());
+                juice.PlayJuice();
             }
         }
     }
 
-    System.Collections.IEnumerator JuicyEffect()
-    {
-        Vector3 originalScale = transform.localScale;
-        Vector3 punchScale = originalScale * punchScaleAmount;
-
-        float elapsed = 0f;
-
-        // Agrandissement rapide
-        while (elapsed < punchDuration / 2)
-        {
-            transform.localScale = Vector3.Lerp(originalScale, punchScale, elapsed / (punchDuration / 2));
-            elapsed += Time.deltaTime;
-            yield return null;
-        }
-
-        // Retour à la taille originale
-        elapsed = 0f;
-        while (elapsed < punchDuration / 2)
-        {
-            transform.localScale = Vector3.Lerp(punchScale, originalScale, elapsed / (punchDuration / 2));
-            elapsed += Time.deltaTime;
-            yield return null;
-        }
-
-        transform.localScale = originalScale;
-    }
 
     public void Eat()
     {
-        Destroy(gameObject);
+        juice.PlayJuice();
+        BounceAndBlink();
     }
 
     public void BounceAndBlink()
     {
+        juice.PlayJuice();
         StartCoroutine(BounceAndBlinkCoroutine());
     }
 
