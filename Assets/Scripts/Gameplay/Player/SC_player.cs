@@ -4,6 +4,11 @@ using System.Collections;
 
 public class SC_player : MonoBehaviour
 {
+    [Header("Power_up_stats")]
+    public float PowermoveSpeed = 5f;
+    public float PowerJump = 5f;
+
+
     [Header("Movement")]
     public float moveSpeed = 5f;
     public float jumpForce = 10f;
@@ -50,9 +55,6 @@ public class SC_player : MonoBehaviour
     public float rightLimit = 10f;
     public Transform ghost;
 
-    [Header("Double Jump")]
-    public bool canDoubleJump = false; // Permet d'activer/désactiver le double saut
-    private int jumpCount; // Compteur de sauts effectués
 
     private float levelWidth;
     private Coroutine hitCoroutine;
@@ -61,6 +63,11 @@ public class SC_player : MonoBehaviour
     public ParticleSystem ps_damage;
 
     private SC_icecream_eat_system eat_system;
+    public static SC_player instance;
+    private void Awake()
+    {
+        instance = this;
+    }
     void OnEnable()
     {
         Jump.action.Enable();
@@ -85,10 +92,6 @@ public class SC_player : MonoBehaviour
 
         isGrounded = Physics2D.OverlapCircle(groundCheck.position, groundCheckRadius, groundLayer);
         // Réinitialiser le compteur de sauts si le joueur est au sol
-        if (isGrounded && !wasGrounded)
-        {
-            jumpCount = 0;
-        }
         anim.SetBool("Run", Mathf.Abs(moveInput.x) > 0.1f);
 
         if (!wasGrounded && isGrounded && rb.linearVelocity.y <= 1)
@@ -108,7 +111,14 @@ public class SC_player : MonoBehaviour
         {
             if (jumpTimeCounter > 0)
             {
-                rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpForce);
+                if (eat_system.isPowerUpActive)
+                {
+                    rb.linearVelocity = new Vector2(rb.linearVelocity.x, PowerJump);
+                }
+                else
+                {
+                    rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpForce);
+                }
                 jumpTimeCounter -= Time.deltaTime;
             }
             else
@@ -124,8 +134,17 @@ public class SC_player : MonoBehaviour
     {
         if (!isFrozen)
         {
-            // Mouvement horizontal + knockback horizontal
-            float horizontalSpeed = moveInput.x * moveSpeed + knockbackVelocity.x;
+            float horizontalSpeed;
+
+            if (eat_system.isPowerUpActive)
+            {
+                 horizontalSpeed = moveInput.x * PowermoveSpeed + knockbackVelocity.x;
+            }
+            else
+            {
+                 horizontalSpeed = moveInput.x * moveSpeed + knockbackVelocity.x;
+            }
+
 
             // Pour le vertical, on ne touche que si knockbackVelocity.y est significatif
             float verticalSpeed = rb.linearVelocity.y;
@@ -146,14 +165,13 @@ public class SC_player : MonoBehaviour
     {
         if (!isFrozen)
         {
-            if (isGrounded || (canDoubleJump && jumpCount < 2))
+            if (isGrounded || eat_system.isPowerUpActive)
             {
                 isJumping = true;
                 jumpTimeCounter = maxJumpTime;
                 rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpForce);
                 anim.SetTrigger("Jump");
 
-                jumpCount++; // Incrémente le compteur de sauts
             }
         }
     }
@@ -201,7 +219,7 @@ public class SC_player : MonoBehaviour
 
     public void TakeDamage(int damage, Vector3 sourcePosition)
     {
-        if (isFrozen || isInvincible) return; // Ignore les dégâts si gelé ou invincible
+        if (isFrozen || isInvincible || eat_system.isPowerUpActive) return; // Ignore les dégâts si gelé ou invincible
         ps_damage.Play();
         currentHealth -= damage;
         eat_system.take_damage();
@@ -242,14 +260,14 @@ public class SC_player : MonoBehaviour
         anim.SetTrigger("Hit");
 
         rb.linearVelocity = Vector2.zero;
-        rb.isKinematic = true;
+        rb.bodyType = RigidbodyType2D.Kinematic;
 
         float originalTimeScale = Time.timeScale;
         Time.timeScale = 0f;
 
         yield return new WaitForSecondsRealtime(hitFreezeTime);
 
-        rb.isKinematic = false;
+        rb.bodyType = RigidbodyType2D.Dynamic;
         Time.timeScale = originalTimeScale;
         isFrozen = false;
 
@@ -268,7 +286,7 @@ public class SC_player : MonoBehaviour
         isFrozen = true;
         anim.SetTrigger("Die");
         rb.linearVelocity = Vector2.zero;
-        rb.isKinematic = false; // débloquer le Rigidbody
+        rb.bodyType = RigidbodyType2D.Dynamic;
         knockbackVelocity = Vector2.zero;
         Time.timeScale = 0.5f; // temps ralenti
     }

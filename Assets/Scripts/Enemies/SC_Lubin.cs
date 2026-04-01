@@ -2,118 +2,167 @@ using UnityEngine;
 
 public class SC_Lubin : MonoBehaviour
 {
-    [Header("Movement")]
-    public float moveSpeed = 3f;
-    public float maxJumpForce = 7f;
-    public float chaseRange = 10f;
+    [Header("Cibles et vitesse")]
+    public Transform player;
+    public float moveSpeed = 4f;
+    public float jumpForce = 12f;
 
-    [Header("Stun")]
-    public float stopTimeOnHit = 2f;
-
-    [Header("Detection")]
+    [Header("Détection des plateformes")]
     public LayerMask groundLayer;
-    public Transform groundCheck;
-    public float groundCheckDistance = 1f;
-    public float platformLookDistance = 5f; // distance maximale pour détecter les plateformes
-    public float maxJumpHeight = 2f;        // hauteur maximale qu'il peut sauter
+    public float groundCheckDistance = 0.1f;
+    public float platformDetectDistance = 3f;
+    public Vector3 platformCheckAhead = new Vector3(1f, 0f, 0f);
+
+    [Header("Warp écran")]
+    public float screenLeft = -10f;
+    public float screenRight = 10f;
+
+    [Header("Delay")]
+    public float directionChangeDelay = 0.3f;
+
+    [Header("Animation")]
+    public Animator anim;
+
+    [Header("Anti-coincement")]
+    public float minVerticalDistance = 1.0f;
 
     private Rigidbody2D rb;
-    public SpriteRenderer spriteRenderer;
-    private GameObject player;
-    private bool isStunned = false;
-    private float stunTimer = 0f;
+    private bool isGrounded;
+    private float directionTimer = 0f;
+    private float currentDirection = 1f;
+    private bool changingDirection = false;
+    private bool wasGrounded = true;
+    private bool jumped = false;
+
+    private bool forcedWalkMode = false; // Marche forcée pour tomber
 
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
-        player = GameObject.FindGameObjectWithTag("Player");
+        if (anim == null) anim = GetComponent<Animator>();
     }
 
-    void FixedUpdate()
+    void Update()
     {
-        if (isStunned)
-        {
-            stunTimer -= Time.fixedDeltaTime;
-            rb.linearVelocity = new Vector2(0, rb.linearVelocity.y);
-            if (stunTimer <= 0) isStunned = false;
-            return;
-        }
-
         if (player == null) return;
 
-        float distance = Vector2.Distance(transform.position, player.transform.position);
-        if (distance <= chaseRange)
+        // Détection sol
+        isGrounded = Physics2D.Raycast(transform.position, Vector2.down, groundCheckDistance, groundLayer);
+
+        // Atterrissage
+        if (isGrounded && !wasGrounded)
         {
-            float direction = Mathf.Sign(player.transform.position.x - transform.position.x);
-            spriteRenderer.flipX = direction < 0;
+            anim.SetTrigger("Land");
+            jumped = false;
+            forcedWalkMode = false; // Arrête la marche forcée quand il atterrit
+        }
 
-            // Détection du sol devant l'ennemi
-            bool isGroundAhead = Physics2D.Raycast(groundCheck.position, Vector2.down, groundCheckDistance, groundLayer);
+        // Chute libre
+        if (!isGrounded && wasGrounded && !jumped)
+        {
+            anim.SetTrigger("Fall");
+        }
 
-            // Détection d'une plateforme devant pour sauter
-            RaycastHit2D platformHit = Physics2D.Raycast(groundCheck.position + Vector3.up * 0.5f, Vector2.right * direction, platformLookDistance, groundLayer);
+        wasGrounded = isGrounded;
 
-            if (platformHit.collider != null)
+        // Warp clone du joueur pour comparer distance
+        Vector3 playerWarpClone = player.position;
+        if (player.position.x < screenLeft + 1f) playerWarpClone.x = player.position.x + (screenRight - screenLeft);
+        if (player.position.x > screenRight - 1f) playerWarpClone.x = player.position.x - (screenRight - screenLeft);
+
+        float distDirect = Mathf.Abs(player.position.x - transform.position.x);
+        float distWarp = Mathf.Abs(playerWarpClone.x - transform.position.x);
+        Vector3 targetPos = distDirect < distWarp ? player.position : playerWarpClone;
+
+        // --- Anti-coincement : si le joueur est sous l'ennemi ---
+        bool playerBelow = player.position.y + 0.2f < transform.position.y - minVerticalDistance;
+        if (playerBelow && isGrounded)
+        {
+            forcedWalkMode = true; // Active la marche forcée
+        }
+
+        float targetDirection = Mathf.Sign(targetPos.x - transform.position.x);
+
+        // Changement de direction uniquement au sol
+        if (isGrounded && !forcedWalkMode)
+        {
+            if (targetDirection != currentDirection)
             {
-                float platformHeight = platformHit.point.y;
-                float heightDiff = platformHeight - transform.position.y;
+                changingDirection = true;
+                directionTimer += Time.deltaTime;
 
-                if (heightDiff > 0.1f && heightDiff <= maxJumpHeight)
+                if (directionTimer >= directionChangeDelay)
                 {
-                    // Calcul du jump vertical nécessaire
-                    float jumpForce = Mathf.Min(maxJumpForce, Mathf.Sqrt(2 * 9.81f * heightDiff));
-                    rb.linearVelocity = new Vector2(direction * moveSpeed, jumpForce);
+                    currentDirection = targetDirection;
+                    directionTimer = 0f;
+                    changingDirection = false;
+                    anim.ResetTrigger("Fall");
+                    anim.ResetTrigger("Land");
+                    anim.SetTrigger("Turn");
                 }
-                else if (isGroundAhead)
-                {
-                    rb.linearVelocity = new Vector2(direction * moveSpeed, rb.linearVelocity.y);
-                }
-                else
-                {
-                    rb.linearVelocity = new Vector2(0, rb.linearVelocity.y); // stop au bord
-                }
-            }
-            else if (isGroundAhead)
-            {
-                rb.linearVelocity = new Vector2(direction * moveSpeed, rb.linearVelocity.y);
             }
             else
             {
-                rb.linearVelocity = new Vector2(0, rb.linearVelocity.y); // stop au bord
+                directionTimer = 0f;
+                changingDirection = false;
             }
+        }
+
+        // Déplacement horizontal
+        float horizontalVelocity = (changingDirection ? 0f : currentDirection * moveSpeed);
+
+        // Si mode marche forcée, avance même si pas de plateforme
+        if (forcedWalkMode)
+        {
+            rb.linearVelocity = new Vector2(currentDirection * moveSpeed, rb.linearVelocity.y);
         }
         else
         {
-            rb.linearVelocity = new Vector2(0, rb.linearVelocity.y);
+            rb.linearVelocity = new Vector2(horizontalVelocity, rb.linearVelocity.y);
         }
-    }
 
-    void OnCollisionEnter2D(Collision2D collision)
-    {
-        if (collision.collider.CompareTag("Player"))
+        // Trigger Run
+        anim.SetBool("Run", (!changingDirection && isGrounded) || forcedWalkMode);
+
+        // Platform check en avant
+        Vector3 offset = new Vector3(platformCheckAhead.x * currentDirection, platformCheckAhead.y, platformCheckAhead.z);
+        bool willLandOnPlatform = Physics2D.Raycast(
+            transform.position + offset,
+            Vector2.down,
+            platformDetectDistance,
+            groundLayer
+        );
+
+        // Saut intelligent
+        if (!forcedWalkMode && isGrounded && !changingDirection && (player.position.y > transform.position.y + 0.5f) && willLandOnPlatform)
         {
-            Vector2 contactPoint = collision.contacts[0].point;
-            if (contactPoint.y > transform.position.y + 0.2f)
-            {
-                StunEnemy();
-            }
+            rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpForce);
+            anim.SetTrigger("Jump");
+            jumped = true;
         }
+
+        // Warp réel
+        if (transform.position.x < screenLeft) transform.position = new Vector3(screenRight, transform.position.y, transform.position.z);
+        if (transform.position.x > screenRight) transform.position = new Vector3(screenLeft, transform.position.y, transform.position.z);
     }
 
-    void StunEnemy()
+    private void OnDrawGizmos()
     {
-        isStunned = true;
-        stunTimer = stopTimeOnHit;
-        rb.linearVelocity = Vector2.zero;
-    }
+        Gizmos.color = Color.red;
+        Gizmos.DrawLine(transform.position, transform.position + Vector3.down * groundCheckDistance);
 
-    void OnDrawGizmosSelected()
-    {
-        if (groundCheck != null)
+        if (player != null)
         {
+            Vector3 offset = new Vector3(platformCheckAhead.x * currentDirection, platformCheckAhead.y, platformCheckAhead.z);
+            Gizmos.color = Color.blue;
+            Gizmos.DrawLine(transform.position + offset,
+                            transform.position + offset + Vector3.down * platformDetectDistance);
+
+            Vector3 playerWarpClone = player.position;
+            if (player.position.x < screenLeft + 1f) playerWarpClone.x = player.position.x + (screenRight - screenLeft);
+            if (player.position.x > screenRight - 1f) playerWarpClone.x = player.position.x - (screenRight - screenLeft);
             Gizmos.color = Color.green;
-            Gizmos.DrawLine(groundCheck.position, groundCheck.position + Vector3.down * groundCheckDistance);
-            Gizmos.DrawLine(groundCheck.position + Vector3.up * 0.5f, groundCheck.position + Vector3.up * 0.5f + Vector3.right * platformLookDistance);
+            Gizmos.DrawSphere(playerWarpClone, 0.3f);
         }
     }
 }
