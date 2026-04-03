@@ -2,9 +2,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
-
+using TMPro;
 public class SC_icecream_eat_system : MonoBehaviour
 {
+    [Header("Multiplier UI")]
+    public TextMeshPro multiplierText;
+    private int multiplier = 0;
     [Header("Eat Settings")]
     public bool progressiveEat = false; // Si vrai, le joueur mange progressivement
     public float eatSpeed = 0.5f;       // Vitesse de manger progressive
@@ -32,6 +35,8 @@ public class SC_icecream_eat_system : MonoBehaviour
 
     public static SC_icecream_eat_system instance;
     private SC_player player;
+    private int eaten_cream;
+
     private void Awake()
     {
         instance = this;
@@ -39,6 +44,8 @@ public class SC_icecream_eat_system : MonoBehaviour
 
     void Start()
     {
+        multiplierText.gameObject.SetActive(false);
+        multiplier = 0;
         player = SC_player.instance;
         mat.SetFloat("_Fill_amount", 0);
     }
@@ -70,14 +77,22 @@ public class SC_icecream_eat_system : MonoBehaviour
 
     private IEnumerator EatCreamsCoroutine()
     {
+        eaten_cream = 0;
+        multiplier = 0;
+        multiplierText.gameObject.SetActive(true);
+        UpdateMultiplierUI();
         isEating = true;
         player.canMove = false;
-
-        calculate_score();
+        player.anim_.SetBool("Eat",true);
 
         int i = creams.Count - 1;
         while (i >= 0)
         {
+            multiplierText.transform.localScale = Vector3.one * 1.3f;
+            StartCoroutine(ScaleBack());
+            eaten_cream++;
+            multiplier++;
+            UpdateMultiplierUI();
             SC_icecream_fall cream = creams[i];
             cream.Eat();
             creams.RemoveAt(i);
@@ -91,6 +106,10 @@ public class SC_icecream_eat_system : MonoBehaviour
                 {
                     if (!eat_input.action.IsPressed())
                     {
+                        calculate_score();
+
+                        player.anim_.SetBool("Eat", false);
+                        multiplierText.gameObject.SetActive(false);
                         isEating = false;
                         player.canMove = true;
                         yield break;
@@ -111,16 +130,29 @@ public class SC_icecream_eat_system : MonoBehaviour
 
             displayedFill = targetFill;
             mat.SetFloat("_Fill_amount", displayedFill);
-
             yield return new WaitForSeconds(delayBetweenCreams);
 
             i--;
         }
         creams.Clear();
         currrent_ice_cream = 0;
+        player.anim_.SetBool("Eat", false);
+        multiplierText.gameObject.SetActive(false);
+        calculate_score();
 
         isEating = false;
         player.canMove = true;
+    }
+    void UpdateMultiplierUI()
+    {
+        multiplierText.text = "x" + multiplier.ToString();
+    }
+
+
+    IEnumerator ScaleBack()
+    {
+        yield return new WaitForSeconds(0.1f);
+        multiplierText.transform.localScale = Vector3.one;
     }
     private IEnumerator PowerUpCoroutine()
     {
@@ -165,7 +197,8 @@ public class SC_icecream_eat_system : MonoBehaviour
 
     void calculate_score()
     {
-        SC_score.Instance.AddScore(100 * currrent_ice_cream);
+        Debug.Log("calculated");
+        SC_score.Instance.AddScore(100 * eaten_cream * multiplier);
     }
     public void ActivatePowerUpInstant()
     {

@@ -612,6 +612,50 @@ TextureImporter:
       indices: 
       edges: []
       weights: []
+    - serializedVersion: 2
+      name: Chuchu_Sprites_21
+      rect:
+        serializedVersion: 2
+        x: 160
+        y: 0
+        width: 32
+        height: 32
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7f53e78f91a5c794d9f8afb6e79937c4
+      internalID: -360899595
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Chuchu_Sprites_22
+      rect:
+        serializedVersion: 2
+        x: 192
+        y: 0
+        width: 32
+        height: 32
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 06faa23ae433ca6438ddf8c2cc420f25
+      internalID: 189172509
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     outline: []
     customData: 
     physicsShape: []
@@ -642,6 +686,8 @@ TextureImporter:
       Chuchu_Sprites_19: -257689456
       Chuchu_Sprites_2: -1975899617347518263
       Chuchu_Sprites_20: -945475521
+      Chuchu_Sprites_21: -360899595
+      Chuchu_Sprites_22: 189172509
       Chuchu_Sprites_3: -7264327011172748482
       Chuchu_Sprites_4: 5530200922566418561
       Chuchu_Sprites_5: 4247713066699967537
