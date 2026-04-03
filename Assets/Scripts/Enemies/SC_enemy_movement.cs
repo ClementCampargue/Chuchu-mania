@@ -43,7 +43,7 @@ public class SC_enemy_movement : MonoBehaviour
     // Variables pour knockback manuel
     private Vector2 knockbackVelocity = Vector2.zero;
     public SC_juiciness juice;
-    public BoxCollider2D collision;
+    public Transform collision;
     void Start()
     {
         player = SC_player.instance;
@@ -145,7 +145,6 @@ public class SC_enemy_movement : MonoBehaviour
     {
         ps.Play();
         if (isKnockedBack) return;
-        collision.enabled = false;
         juice.PlayJuice();
         isKnockedBack = true;
 

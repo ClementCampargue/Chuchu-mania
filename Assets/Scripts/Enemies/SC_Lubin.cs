@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 public class SC_Lubin : MonoBehaviour
@@ -33,18 +34,40 @@ public class SC_Lubin : MonoBehaviour
     private bool changingDirection = false;
     private bool wasGrounded = true;
     private bool jumped = false;
+    private SC_icecream_eat_system eat;
 
     private bool forcedWalkMode = false; // Marche forcée pour tomber
-
+    [Header("Knockback")]
+    public float knockbackForce = 5f;
+    public float knockbackVerticalForce = 5f;
+    public float flickerDuration = 1f;
+    public float flickerInterval = 0.1f;
+    [Header("Player Detection")]
+    public float detectionRadius = 0.5f;
+    public LayerMask playerLayer;
+    private bool isKnockedBack = false;
+    private Vector2 knockbackVelocity;
+    public Transform collision;
+    public ParticleSystem ps;
+    public SpriteRenderer spriteRenderer;
+    public SC_juiciness juice; // ou ton type exact si c’est un script spécifique
     void Start()
     {
+        eat = SC_icecream_eat_system.instance;
+
         rb = GetComponent<Rigidbody2D>();
         if (anim == null) anim = GetComponent<Animator>();
     }
 
     void Update()
     {
+        if (isKnockedBack)
+        {
+            rb.linearVelocity = knockbackVelocity;
+            return;
+        }
         if (player == null) return;
+        DetectPlayerOverlap();
 
         // Détection sol
         isGrounded = Physics2D.Raycast(transform.position, Vector2.down, groundCheckDistance, groundLayer);
@@ -179,5 +202,59 @@ public class SC_Lubin : MonoBehaviour
             Gizmos.color = Color.green;
             Gizmos.DrawSphere(warpClone, 0.3f);
         }
+        Gizmos.color = Color.blue;
+        Gizmos.DrawWireSphere(collision.transform.position, detectionRadius);
+
+    }
+    private void DetectPlayerOverlap()
+    {
+        Collider2D playerCollider = Physics2D.OverlapCircle(collision.transform.position, detectionRadius, playerLayer);
+        if (playerCollider != null && eat.isPowerUpActive)
+        {
+            bool playerOnRight = playerCollider.transform.position.x > transform.position.x;
+            Knockback(playerOnRight);
+        }
+    }
+
+    public void Knockback(bool playerOnRight)
+    {
+        if (ps != null) ps.Play();
+
+        if (isKnockedBack) return;
+
+        if (juice != null)
+        {
+            // si ton script juice a une méthode spécifique, adapte ici
+            juice.SendMessage("PlayJuice", SendMessageOptions.DontRequireReceiver);
+        }
+
+        isKnockedBack = true;
+
+        // Désactiver collisions
+        Collider2D col = GetComponent<Collider2D>();
+        if (col != null) col.enabled = false;
+
+        // Direction du knockback
+        float horizontalDir = playerOnRight ? -1f : 1f;
+        knockbackVelocity = new Vector2(horizontalDir * knockbackForce, knockbackVerticalForce);
+
+        StartCoroutine(FlickerAndDestroy());
+    }
+
+    private IEnumerator FlickerAndDestroy()
+    {
+        anim.enabled = false;
+        float elapsed = 0f;
+
+        while (elapsed < flickerDuration)
+        {
+            if (spriteRenderer != null)
+                spriteRenderer.enabled = !spriteRenderer.enabled;
+
+            yield return new WaitForSeconds(flickerInterval);
+            elapsed += flickerInterval;
+        }
+
+        Destroy(gameObject);
     }
 }

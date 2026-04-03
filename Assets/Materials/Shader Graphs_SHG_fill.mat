@@ -63,7 +63,7 @@ Material:
     m_Ints: []
     m_Floats:
     - _Epaisseur: 0.05
-    - _Fill_amount: 0.5702708
+    - _Fill_amount: 0.9754552
     m_Colors:
     - _Color: {r: 1, g: 0.8634205, b: 0.29716977, a: 1}
     - _Scroll: {r: 0.1, g: 0, b: 0, a: 0}

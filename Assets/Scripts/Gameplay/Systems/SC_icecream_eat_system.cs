@@ -80,33 +80,23 @@ public class SC_icecream_eat_system : MonoBehaviour
         {
             SC_icecream_fall cream = creams[i];
             cream.Eat();
+            creams.RemoveAt(i);
+            currrent_ice_cream--;
 
             float targetFill = displayedFill + stomach_fill_per_cream;
 
             if (progressiveEat)
             {
-                // Mange progressivement tant qu'on n'a pas atteint la glace suivante
                 while (displayedFill < targetFill - 0.001f)
                 {
-                    displayedFill = Mathf.MoveTowards(displayedFill, targetFill, eatSpeed * Time.deltaTime);
-                    mat.SetFloat("_Fill_amount", displayedFill);
-
-                    // Si on atteint le fill max, déclenche le power-up
-                    if (displayedFill >= 1f && !isPowerUpActive)
+                    if (!eat_input.action.IsPressed())
                     {
-                        player.powerup();
-                        StartCoroutine(PowerUpCoroutine());
+                        isEating = false;
+                        player.canMove = true;
+                        yield break;
                     }
 
-                    yield return null;
-                }
-            }
-            else
-            {
-                // Mange normalement
-                while (displayedFill < targetFill - 0.001f)
-                {
-                    displayedFill = Mathf.Lerp(displayedFill, targetFill, Time.deltaTime * stomach_fill_speed);
+                    displayedFill = Mathf.MoveTowards(displayedFill, targetFill, eatSpeed * Time.deltaTime);
                     mat.SetFloat("_Fill_amount", displayedFill);
 
                     if (displayedFill >= 1f && !isPowerUpActive)
@@ -122,12 +112,10 @@ public class SC_icecream_eat_system : MonoBehaviour
             displayedFill = targetFill;
             mat.SetFloat("_Fill_amount", displayedFill);
 
-            // Attend un peu avant de passer à la glace suivante
             yield return new WaitForSeconds(delayBetweenCreams);
 
-            i--; // Passe à la glace suivante
+            i--;
         }
-
         creams.Clear();
         currrent_ice_cream = 0;
 

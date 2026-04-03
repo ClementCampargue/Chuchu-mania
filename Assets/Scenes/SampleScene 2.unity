@@ -702,6 +702,18 @@ MonoBehaviour:
   directionChangeDelay: 0.3
   anim: {fileID: 0}
   minVerticalDistance: 1
+  knockbackForce: 5
+  knockbackVerticalForce: 5
+  flickerDuration: 1
+  flickerInterval: 0.1
+  detectionRadius: 0.5
+  playerLayer:
+    serializedVersion: 2
+    m_Bits: 0
+  collision: {fileID: 0}
+  ps: {fileID: 0}
+  spriteRenderer: {fileID: 0}
+  juice: {fileID: 0}
 --- !u!1 &191914509
 GameObject:
   m_ObjectHideFlags: 0
@@ -10247,7 +10259,7 @@ PrefabInstance:
       objectReference: {fileID: 1429248336}
     - target: {fileID: 5286284455900837583, guid: be32bd5204c8ff744944233561695ee7, type: 3}
       propertyPath: drainSpeed
-      value: 0.09
+      value: 0.33
       objectReference: {fileID: 0}
     - target: {fileID: 5286284455900837583, guid: be32bd5204c8ff744944233561695ee7, type: 3}
       propertyPath: progressiveEat
