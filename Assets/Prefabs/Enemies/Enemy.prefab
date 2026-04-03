@@ -221,6 +221,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   spriteRenderer: {fileID: 8178178168088807887}
   flashMaterial: {fileID: 2100000, guid: 778865bbd08486043a01aeb31184e581, type: 2}
+  ps: {fileID: 0}
   flashDuration: 0.14
   stretchAmount: 1.2
   squashAmount: 0.8
@@ -228,6 +229,7 @@ MonoBehaviour:
   verticalStretch: 1
   shakeDuration: 0
   shakeIntensity: 0
+  freeze: 1
   freezeDuration: 0.15
   zoomAmount: 1.05
   zoomDuration: 0.03

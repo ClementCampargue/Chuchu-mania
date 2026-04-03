@@ -38,8 +38,9 @@ public class SC_juiciness : MonoBehaviour
     private Coroutine scaleRoutine;
     private Coroutine shakeRoutine;
     private Coroutine flashRoutine;
-    private Coroutine freezeRoutine;
     private Coroutine zoomRoutine;
+    private Coroutine freezeRoutine;
+    private bool isFreezing = false;
 
     void Awake()
     {
@@ -61,20 +62,25 @@ public class SC_juiciness : MonoBehaviour
             ps.Play();
         }
 
+        // Squash & Stretch
         if (scaleRoutine != null) StopCoroutine(scaleRoutine);
         scaleRoutine = StartCoroutine(SquashAndStretch());
 
+        // Flash
         if (flashRoutine != null) StopCoroutine(flashRoutine);
         flashRoutine = StartCoroutine(Flash());
 
+        // Shake
         if (shakeRoutine != null && shakeIntensity != 0) StopCoroutine(shakeRoutine);
         shakeRoutine = StartCoroutine(Shake());
-        if (freeze)
+
+        // Freeze Frame (sécurisé)
+        if (freeze && !isFreezing)
         {
-            if (freezeRoutine != null && freezeDuration != 0) StopCoroutine(freezeRoutine);
             freezeRoutine = StartCoroutine(FreezeFrame());
         }
 
+        // Zoom
         if (zoomRoutine != null && zoomAmount != 0) StopCoroutine(zoomRoutine);
         zoomRoutine = StartCoroutine(Zoom());
     }
@@ -117,7 +123,7 @@ public class SC_juiciness : MonoBehaviour
             yield return null;
         }
 
-        // Phase 2: Overshoot vers la position originale
+        // Phase 2: Retour overshoot
         t = 0f;
         Vector3 overshootScale = originalScale + (stretchScale - originalScale) * 1.05f;
 
@@ -126,11 +132,9 @@ public class SC_juiciness : MonoBehaviour
             t += Time.deltaTime;
             float rawLerp = Mathf.Clamp01(t / scaleDuration);
 
-            // Calcul d'overshoot sûr sans NaN
             float overshootLerp = Mathf.Sin(rawLerp * Mathf.PI * (0.2f + 2.5f * Mathf.Pow(rawLerp, 3f)))
                                   * Mathf.Pow(Mathf.Max(0f, 1f - rawLerp), 2.2f) + 1f;
-
-            overshootLerp = Mathf.Clamp(overshootLerp, 0f, 1.5f); // sécurité
+            overshootLerp = Mathf.Clamp(overshootLerp, 0f, 1.5f);
 
             float newX = Mathf.Lerp(overshootScale.x, originalScale.x, overshootLerp);
             float newY = Mathf.Lerp(overshootScale.y, originalScale.y, overshootLerp);
@@ -160,10 +164,16 @@ public class SC_juiciness : MonoBehaviour
 
     IEnumerator FreezeFrame()
     {
+        isFreezing = true;
         float originalTimeScale = Time.timeScale;
         Time.timeScale = 0f;
+
         yield return new WaitForSecondsRealtime(freezeDuration);
-        Time.timeScale = originalTimeScale;
+
+        if (Time.timeScale == 0f)
+            Time.timeScale = originalTimeScale;
+
+        isFreezing = false;
     }
 
     IEnumerator Zoom()

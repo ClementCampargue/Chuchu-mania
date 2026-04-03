@@ -8,7 +8,6 @@ public class SC_player : MonoBehaviour
     public float PowermoveSpeed = 5f;
     public float PowerJump = 5f;
 
-
     [Header("Movement")]
     public float moveSpeed = 5f;
     public float jumpForce = 10f;
@@ -20,7 +19,7 @@ public class SC_player : MonoBehaviour
     public int maxHealth = 3;
     private int currentHealth;
     public float hitFreezeTime = 0.15f;
-    public Vector2 hitKnockback = new Vector2(5f, 3f); // force du knockback
+    public Vector2 hitKnockback = new Vector2(5f, 3f);
 
     [Header("Ground Check")]
     public Transform groundCheck;
@@ -34,15 +33,22 @@ public class SC_player : MonoBehaviour
     private bool canTakeDamage = true;
 
     [Header("Invincibility")]
-    public float invincibilityTime = 1f; // Durée de l'invincibilité
-    public SpriteRenderer spriteRenderer; // Assigne le sprite du joueur dans l'inspecteur
+    public float invincibilityTime = 1f;
+    public SpriteRenderer spriteRenderer;
     private bool isInvincible = false;
 
+    [Header("Transformation")]
+    public float transformFreezeTime = 0.5f;
+    public string transformAnimTrigger = "Transform";
+    public string detransformAnimTrigger = "DeTransform";
+
     private Rigidbody2D rb;
-    public Animator anim;
+    public Animator anim_;
+    public Animator anim_powerup;
+    private Animator anim;
 
     private Vector2 moveInput;
-    private bool isGrounded;
+    public bool isGrounded;
     private bool wasGrounded;
     private bool isFrozen;
 
@@ -55,19 +61,22 @@ public class SC_player : MonoBehaviour
     public float rightLimit = 10f;
     public Transform ghost;
 
-
     private float levelWidth;
     private Coroutine hitCoroutine;
-
-    private Vector2 knockbackVelocity; // stocke le knockback
+    private Vector2 knockbackVelocity;
     public ParticleSystem ps_damage;
 
     private SC_icecream_eat_system eat_system;
     public static SC_player instance;
+    public BoxCollider2D collider;
+
+    public GameObject game_over_screen;
+    public bool canMove;
     private void Awake()
     {
         instance = this;
     }
+
     void OnEnable()
     {
         Jump.action.Enable();
@@ -81,20 +90,21 @@ public class SC_player : MonoBehaviour
         levelWidth = rightLimit - leftLimit;
         rb = GetComponent<Rigidbody2D>();
         currentHealth = maxHealth;
+        anim = anim_;
     }
 
     void Update()
     {
-        if (!isFrozen)
+        if (!isFrozen  && canMove)
             moveInput = Move.action.ReadValue<Vector2>();
         else
             moveInput = Vector2.zero;
 
         isGrounded = Physics2D.OverlapCircle(groundCheck.position, groundCheckRadius, groundLayer);
-        // Réinitialiser le compteur de sauts si le joueur est au sol
+
         anim.SetBool("Run", Mathf.Abs(moveInput.x) > 0.1f);
 
-        if (!wasGrounded && isGrounded && rb.linearVelocity.y <= 1)
+        if (!wasGrounded && isGrounded && rb.linearVelocity.y <= 1f)
         {
             anim.ResetTrigger("Jump");
             anim.SetTrigger("Land");
@@ -111,14 +121,8 @@ public class SC_player : MonoBehaviour
         {
             if (jumpTimeCounter > 0)
             {
-                if (eat_system.isPowerUpActive)
-                {
-                    rb.linearVelocity = new Vector2(rb.linearVelocity.x, PowerJump);
-                }
-                else
-                {
-                    rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpForce);
-                }
+                float jumpPower = eat_system.isPowerUpActive ? PowerJump : jumpForce;
+                rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpPower);
                 jumpTimeCounter -= Time.deltaTime;
             }
             else
@@ -134,36 +138,24 @@ public class SC_player : MonoBehaviour
     {
         if (!isFrozen)
         {
-            float horizontalSpeed;
+            float horizontalSpeed = moveInput.x * (eat_system.isPowerUpActive ? PowermoveSpeed : moveSpeed) + knockbackVelocity.x;
 
-            if (eat_system.isPowerUpActive)
-            {
-                 horizontalSpeed = moveInput.x * PowermoveSpeed + knockbackVelocity.x;
-            }
-            else
-            {
-                 horizontalSpeed = moveInput.x * moveSpeed + knockbackVelocity.x;
-            }
-
-
-            // Pour le vertical, on ne touche que si knockbackVelocity.y est significatif
             float verticalSpeed = rb.linearVelocity.y;
             if (knockbackVelocity.y != 0)
             {
                 verticalSpeed = knockbackVelocity.y;
-                knockbackVelocity.y = 0; // appliquer une seule fois
+                knockbackVelocity.y = 0;
             }
 
             rb.linearVelocity = new Vector2(horizontalSpeed, verticalSpeed);
 
-            // Diminution du knockback horizontal progressivement
             knockbackVelocity.x = Mathf.Lerp(knockbackVelocity.x, 0, 0.15f);
         }
     }
 
     private void OnJumpStarted(InputAction.CallbackContext context)
     {
-        if (!isFrozen)
+        if (!isFrozen && canMove)
         {
             if (isGrounded || eat_system.isPowerUpActive)
             {
@@ -171,7 +163,6 @@ public class SC_player : MonoBehaviour
                 jumpTimeCounter = maxJumpTime;
                 rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpForce);
                 anim.SetTrigger("Jump");
-
             }
         }
     }
@@ -219,16 +210,16 @@ public class SC_player : MonoBehaviour
 
     public void TakeDamage(int damage, Vector3 sourcePosition)
     {
-        if (isFrozen || isInvincible || eat_system.isPowerUpActive) return; // Ignore les dégâts si gelé ou invincible
+        if (isFrozen || isInvincible || eat_system.isPowerUpActive) return;
+
         ps_damage.Play();
         currentHealth -= damage;
         eat_system.take_damage();
+
         if (currentHealth > 0)
         {
             if (hitCoroutine != null) StopCoroutine(hitCoroutine);
             hitCoroutine = StartCoroutine(HitFreezeWithKnockback(sourcePosition));
-
-            // Lancer l’invincibilité avec clignotement
             StartCoroutine(InvincibilityCoroutine());
         }
         else
@@ -236,6 +227,7 @@ public class SC_player : MonoBehaviour
             Die();
         }
     }
+
     private IEnumerator InvincibilityCoroutine()
     {
         isInvincible = true;
@@ -244,15 +236,16 @@ public class SC_player : MonoBehaviour
 
         while (elapsed < invincibilityTime)
         {
-            elapsed += 0.1f; // incrément fixe, pas DeltaTime
+            elapsed += 0.1f;
             visible = !visible;
             spriteRenderer.enabled = visible;
-            yield return new WaitForSecondsRealtime(0.1f); // temps réel
+            yield return new WaitForSecondsRealtime(0.1f);
         }
 
         spriteRenderer.enabled = true;
         isInvincible = false;
     }
+
     private IEnumerator HitFreezeWithKnockback(Vector3 sourcePosition)
     {
         isFrozen = true;
@@ -271,7 +264,6 @@ public class SC_player : MonoBehaviour
         Time.timeScale = originalTimeScale;
         isFrozen = false;
 
-        // Appliquer le knockback
         Vector2 direction = (transform.position - sourcePosition).normalized;
         knockbackVelocity = new Vector2(direction.x * hitKnockback.x, hitKnockback.y);
 
@@ -279,18 +271,56 @@ public class SC_player : MonoBehaviour
         canTakeDamage = true;
     }
 
+    private IEnumerator PowerupFreeze(bool isActivating)
+    {
+        isFrozen = true;
+        rb.linearVelocity = Vector2.zero;
+        rb.bodyType = RigidbodyType2D.Kinematic;
+
+        string trigger = isActivating ? transformAnimTrigger : detransformAnimTrigger;
+        anim.SetTrigger(trigger);
+
+        float originalTimeScale = Time.timeScale;
+        Time.timeScale = 0f;
+
+        yield return new WaitForSecondsRealtime(transformFreezeTime);
+
+        Time.timeScale = originalTimeScale;
+        rb.bodyType = RigidbodyType2D.Dynamic;
+        isFrozen = false;
+    }
     private void Die()
     {
         if (hitCoroutine != null) StopCoroutine(hitCoroutine);
 
         isFrozen = true;
-        anim.SetTrigger("Die");
-        rb.linearVelocity = Vector2.zero;
+        anim.SetBool("Die",true);
+
+
+            collider.enabled = false;
+
+        // Faire rebondir l�g�rement le joueur vers le haut
         rb.bodyType = RigidbodyType2D.Dynamic;
+        rb.linearVelocity = new Vector2(0, 5f); // rebond initial
+        rb.gravityScale = 1f;
+
         knockbackVelocity = Vector2.zero;
-        Time.timeScale = 0.5f; // temps ralenti
+
+        // Ralentir le temps pour effet dramatique
+        Time.timeScale = 0.5f;
+
+        // Commencer coroutine pour la chute apr�s le rebond
+        StartCoroutine(FallAfterBounce());
     }
 
+    private IEnumerator FallAfterBounce()
+    {
+        // Attendre que le rebond atteigne son apog�e
+        yield return new WaitForSecondsRealtime(0.3f);
+        game_over_screen.SetActive(true);
+        // Lancer la chute vers le bas
+        rb.linearVelocity = new Vector2(0, -5f);
+    }
     void OnDrawGizmosSelected()
     {
         if (damageCheck != null)
@@ -298,5 +328,21 @@ public class SC_player : MonoBehaviour
             Gizmos.color = Color.red;
             Gizmos.DrawWireSphere(damageCheck.position, damageRadius);
         }
+    }
+
+    public void powerup()
+    {
+        anim_powerup.gameObject.SetActive(true);
+        anim_.gameObject.SetActive(false);
+        anim = anim_powerup;
+        StartCoroutine(PowerupFreeze(true));
+    }
+
+    public void end_powerup()
+    {
+        anim_powerup.gameObject.SetActive(false);
+        anim_.gameObject.SetActive(true);
+        anim = anim_;
+        StartCoroutine(PowerupFreeze(false));
     }
 }

@@ -1054,8 +1054,8 @@ MonoBehaviour:
   score: 0
   displayedScore: 0
   scoreSpeed: 50
+  digits: 6
   scoreText: {fileID: 990790836}
-  maxScaleAmplitude: 0.3
 --- !u!1 &1023286842
 GameObject:
   m_ObjectHideFlags: 0
@@ -2559,10 +2559,6 @@ PrefabInstance:
       propertyPath: ghost
       value: 
       objectReference: {fileID: 1572074358}
-    - target: {fileID: 1939792554238048137, guid: 699aef5bce431b945abe8a89d250bc89, type: 3}
-      propertyPath: PowerJump
-      value: 6
-      objectReference: {fileID: 0}
     - target: {fileID: 8165713803702597279, guid: 699aef5bce431b945abe8a89d250bc89, type: 3}
       propertyPath: m_Name
       value: Player

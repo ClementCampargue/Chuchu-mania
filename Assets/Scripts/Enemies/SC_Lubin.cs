@@ -65,14 +65,19 @@ public class SC_Lubin : MonoBehaviour
 
         wasGrounded = isGrounded;
 
-        // Warp clone du joueur pour comparer distance
-        Vector3 playerWarpClone = player.position;
-        if (player.position.x < screenLeft + 1f) playerWarpClone.x = player.position.x + (screenRight - screenLeft);
-        if (player.position.x > screenRight - 1f) playerWarpClone.x = player.position.x - (screenRight - screenLeft);
+        // --- Calcul distance minimale avec warp ---
+        float screenWidth = screenRight - screenLeft;
+        float dx = player.position.x - transform.position.x;
 
-        float distDirect = Mathf.Abs(player.position.x - transform.position.x);
-        float distWarp = Mathf.Abs(playerWarpClone.x - transform.position.x);
-        Vector3 targetPos = distDirect < distWarp ? player.position : playerWarpClone;
+        float distDirect = Mathf.Abs(dx);
+        float distLeftWarp = Mathf.Abs((player.position.x + screenWidth) - transform.position.x);
+        float distRightWarp = Mathf.Abs((player.position.x - screenWidth) - transform.position.x);
+
+        float minDist = Mathf.Min(distDirect, distLeftWarp, distRightWarp);
+
+        Vector3 targetPos = player.position;
+        if (minDist == distLeftWarp) targetPos.x = player.position.x + screenWidth;
+        if (minDist == distRightWarp) targetPos.x = player.position.x - screenWidth;
 
         // --- Anti-coincement : si le joueur est sous l'ennemi ---
         bool playerBelow = player.position.y + 0.2f < transform.position.y - minVerticalDistance;
@@ -81,6 +86,7 @@ public class SC_Lubin : MonoBehaviour
             forcedWalkMode = true; // Active la marche forcée
         }
 
+        // Direction cible
         float targetDirection = Mathf.Sign(targetPos.x - transform.position.x);
 
         // Changement de direction uniquement au sol
@@ -158,11 +164,20 @@ public class SC_Lubin : MonoBehaviour
             Gizmos.DrawLine(transform.position + offset,
                             transform.position + offset + Vector3.down * platformDetectDistance);
 
-            Vector3 playerWarpClone = player.position;
-            if (player.position.x < screenLeft + 1f) playerWarpClone.x = player.position.x + (screenRight - screenLeft);
-            if (player.position.x > screenRight - 1f) playerWarpClone.x = player.position.x - (screenRight - screenLeft);
+            // Visualisation warp
+            float screenWidth = screenRight - screenLeft;
+            Vector3 warpClone = player.position;
+            float dx = player.position.x - transform.position.x;
+            float distDirect = Mathf.Abs(dx);
+            float distLeftWarp = Mathf.Abs((player.position.x + screenWidth) - transform.position.x);
+            float distRightWarp = Mathf.Abs((player.position.x - screenWidth) - transform.position.x);
+            float minDist = Mathf.Min(distDirect, distLeftWarp, distRightWarp);
+
+            if (minDist == distLeftWarp) warpClone.x = player.position.x + screenWidth;
+            if (minDist == distRightWarp) warpClone.x = player.position.x - screenWidth;
+
             Gizmos.color = Color.green;
-            Gizmos.DrawSphere(playerWarpClone, 0.3f);
+            Gizmos.DrawSphere(warpClone, 0.3f);
         }
     }
 }

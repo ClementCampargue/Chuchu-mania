@@ -5,6 +5,11 @@ using UnityEngine.InputSystem;
 
 public class SC_icecream_eat_system : MonoBehaviour
 {
+    [Header("Eat Settings")]
+    public bool progressiveEat = false; // Si vrai, le joueur mange progressivement
+    public float eatSpeed = 0.5f;       // Vitesse de manger progressive
+
+    private bool isEating = false;      // Empêche de bouger pendant l'action
     [Header("Ice Cream")]
     public List<Transform> creams_points = new List<Transform>();
     public List<SC_icecream_fall> creams = new List<SC_icecream_fall>();
@@ -20,14 +25,13 @@ public class SC_icecream_eat_system : MonoBehaviour
 
     [Header("Spawn")]
     public float minDistanceForSpawn = 2f;
-    public Transform player;
 
     [Header("Power Up")]
     public bool isPowerUpActive = false;
     public float drainSpeed = 0.25f;
 
     public static SC_icecream_eat_system instance;
-
+    private SC_player player;
     private void Awake()
     {
         instance = this;
@@ -35,19 +39,19 @@ public class SC_icecream_eat_system : MonoBehaviour
 
     void Start()
     {
+        player = SC_player.instance;
         mat.SetFloat("_Fill_amount", 0);
     }
-
     void Update()
     {
-        if (eat_input.action.WasPressedThisFrame() && currrent_ice_cream > 0 && !isPowerUpActive)
+        if (eat_input.action.WasPressedThisFrame() && currrent_ice_cream > 0 && !isPowerUpActive && player.isGrounded && !isEating)
         {
-            eat_all();
+            StartCoroutine(EatCreamsCoroutine());
         }
     }
     public void get_cream(GameObject cream_type)
     {
-        if (Vector3.Distance(player.position, transform.position) < minDistanceForSpawn)
+        if (Vector3.Distance(player.transform.position, transform.position) < minDistanceForSpawn)
             return;
 
         SC_icecream_fall cream = Instantiate(cream_type, transform.position, Quaternion.identity)
@@ -66,37 +70,74 @@ public class SC_icecream_eat_system : MonoBehaviour
 
     private IEnumerator EatCreamsCoroutine()
     {
-        for (int i = creams.Count - 1; i >= 0; i--)
+        isEating = true;
+        player.canMove = false;
+
+        calculate_score();
+
+        int i = creams.Count - 1;
+        while (i >= 0)
         {
             SC_icecream_fall cream = creams[i];
             cream.Eat();
 
             float targetFill = displayedFill + stomach_fill_per_cream;
 
-            while (displayedFill < targetFill - 0.001f)
+            if (progressiveEat)
             {
-                displayedFill = Mathf.Lerp(displayedFill, targetFill, Time.deltaTime * stomach_fill_speed);
-                mat.SetFloat("_Fill_amount", displayedFill);
-                yield return null;
+                // Mange progressivement tant qu'on n'a pas atteint la glace suivante
+                while (displayedFill < targetFill - 0.001f)
+                {
+                    displayedFill = Mathf.MoveTowards(displayedFill, targetFill, eatSpeed * Time.deltaTime);
+                    mat.SetFloat("_Fill_amount", displayedFill);
+
+                    // Si on atteint le fill max, déclenche le power-up
+                    if (displayedFill >= 1f && !isPowerUpActive)
+                    {
+                        player.powerup();
+                        StartCoroutine(PowerUpCoroutine());
+                    }
+
+                    yield return null;
+                }
+            }
+            else
+            {
+                // Mange normalement
+                while (displayedFill < targetFill - 0.001f)
+                {
+                    displayedFill = Mathf.Lerp(displayedFill, targetFill, Time.deltaTime * stomach_fill_speed);
+                    mat.SetFloat("_Fill_amount", displayedFill);
+
+                    if (displayedFill >= 1f && !isPowerUpActive)
+                    {
+                        player.powerup();
+                        StartCoroutine(PowerUpCoroutine());
+                    }
+
+                    yield return null;
+                }
             }
 
             displayedFill = targetFill;
             mat.SetFloat("_Fill_amount", displayedFill);
 
-            if (displayedFill >= 1f && !isPowerUpActive)
-            {
-                StartCoroutine(PowerUpCoroutine());
-            }
-
+            // Attend un peu avant de passer à la glace suivante
             yield return new WaitForSeconds(delayBetweenCreams);
+
+            i--; // Passe à la glace suivante
         }
 
         creams.Clear();
         currrent_ice_cream = 0;
-    }
 
+        isEating = false;
+        player.canMove = true;
+    }
     private IEnumerator PowerUpCoroutine()
     {
+        player.canMove = true;
+
         isPowerUpActive = true;
         Debug.Log("POWER UP ACTIVÉ");
 
@@ -112,6 +153,7 @@ public class SC_icecream_eat_system : MonoBehaviour
 
         displayedFill = 0f;
         mat.SetFloat("_Fill_amount", displayedFill);
+        player.end_powerup();
 
         isPowerUpActive = false;
     }
@@ -146,6 +188,7 @@ public class SC_icecream_eat_system : MonoBehaviour
         // Si le PowerUp n'est pas déjà actif, lance la coroutine
         if (!isPowerUpActive)
         {
+            player.powerup();
             StartCoroutine(PowerUpCoroutine());
         }
     }
