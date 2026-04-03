@@ -57,7 +57,7 @@ public class SC_rank_system : MonoBehaviour
             if (displayedScore < targetScore)
             {
                 // Animation fluide
-                displayedScore += Time.deltaTime * 2000f;
+                displayedScore += Time.unscaledDeltaTime * 2000f;
 
                 if (displayedScore > targetScore)
                     displayedScore = targetScore;
