@@ -1,59 +1,86 @@
 using UnityEngine;
+using System.Collections;
 
 public class SC_icecream_fall : MonoBehaviour
 {
-    public Transform targetPosition;   // Où l'objet doit tomber
-    public float gravity = 9.8f;       // Intensité de la gravité simulée
+    public enum IceCreamType { Vanilla, Chocolate, Lemon, Milk, Strawberry }
+    public IceCreamType type;
 
-    public float punchScaleAmount = 1.2f; // Combien l'objet s'agrandit
-    public float punchDuration = 0.2f;    // Durée de l'effet
-
-    public float bounceForce = 5f;        // Force du saut horizontal
-    public float blinkDuration = 2f;      // Durée totale du clignotement avant désactivation
-    public float blinkInterval = 0.1f;    // Intervalle de clignotement
+    public float gravity = 9.8f;
+    public float bounceForce = 5f;
+    public float blinkDuration = 2f;
+    public float blinkInterval = 0.1f;
 
     private Vector3 velocity = Vector3.zero;
-    private bool hasLanded = false;
+    public bool hasLanded = false;
+
+    public bool isSelected = false;
+
     public SpriteRenderer spriteRenderer;
     public SC_juiciness juice;
-    void Awake()
-    {
-    }
 
+    public Transform currentTargetPosition;
+    public GameObject selected_sprite;
     void Update()
     {
-        if (!hasLanded)
+        if (!hasLanded && currentTargetPosition != null)
         {
-            // Calcul de la descente
             velocity.y -= gravity * Time.deltaTime;
             transform.position += velocity * Time.deltaTime;
 
-            // Vérifie si l'objet a atteint ou dépassé la position cible
-            if (transform.position.y <= targetPosition.position.y)
+            if (transform.position.y <= currentTargetPosition.position.y)
             {
-                transform.position = new Vector3(transform.position.x, targetPosition.position.y, transform.position.z);
+                transform.position = new Vector3(
+                    transform.position.x,
+                    currentTargetPosition.position.y,
+                    transform.position.z
+                );
+
                 hasLanded = true;
                 juice.PlayJuice();
             }
         }
     }
 
+    public void Select()
+    {
+        if (isSelected) return;
+        selected_sprite.SetActive(true);
+        isSelected = true;
+        transform.localScale = Vector3.one * 1.2f;
+    }
+
+    public void Deselect()
+    {
+        selected_sprite.SetActive(false);
+
+        isSelected = false;
+        transform.localScale = Vector3.one;
+    }
 
     public void Eat()
     {
+        if (!hasLanded && currentTargetPosition != null)
+        {
+            transform.position = new Vector3(
+                transform.position.x,
+                currentTargetPosition.position.y,
+                transform.position.z
+            );
+            hasLanded = true;
+        }
+
         juice.PlayJuice();
         BounceAndBlink();
     }
 
     public void BounceAndBlink()
     {
-        juice.PlayJuice();
         StartCoroutine(BounceAndBlinkCoroutine());
     }
 
-    System.Collections.IEnumerator BounceAndBlinkCoroutine()
+    IEnumerator BounceAndBlinkCoroutine()
     {
-        // Direction aléatoire sur X
         float randomDir = Random.Range(-1f, 1f);
         velocity = new Vector3(randomDir * bounceForce, bounceForce, 0f);
 
@@ -62,23 +89,16 @@ public class SC_icecream_fall : MonoBehaviour
 
         while (elapsed < blinkDuration)
         {
-            // Applique la gravité
             velocity.y -= gravity * Time.deltaTime;
             transform.position += velocity * Time.deltaTime;
 
-            // Clignotement
             elapsed += Time.deltaTime;
-            if (elapsed % blinkInterval < blinkInterval / 2)
-                visible = true;
-            else
-                visible = false;
-
+            visible = (elapsed % blinkInterval) < (blinkInterval / 2);
             spriteRenderer.enabled = visible;
 
             yield return null;
         }
 
-        // Désactivation
         gameObject.SetActive(false);
     }
 }

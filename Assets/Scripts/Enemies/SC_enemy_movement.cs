@@ -59,12 +59,18 @@ public class SC_enemy_movement : MonoBehaviour
 
     void Update()
     {
+
         if (!isKnockedBack)
         {
+            DetectPlayerOverlap();
+
+            if (SC_freeze_screen.freeze)
+            {
+                return;
+            }
             HandleMovement();
             UpdateGhost();
             HandleScreenWrap();
-            DetectPlayerOverlap();
         }
         else
         {

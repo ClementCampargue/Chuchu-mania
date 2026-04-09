@@ -343,7 +343,7 @@ GameObject:
   - component: {fileID: 7386265966331084851}
   m_Layer: 8
   m_Name: Lubin
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

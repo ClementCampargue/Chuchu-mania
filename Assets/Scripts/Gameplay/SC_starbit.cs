@@ -8,21 +8,42 @@ public class SC_starbit : MonoBehaviour
     public float detectionRadius = 0.5f;
     public LayerMask playerLayer;
     public GameObject ice_cream_UI;
+
     private SC_icecream_eat_system eat_system;
+
+    private bool isAttracted = false;
+    private Transform attractTarget;
+    private float attractSpeed;
 
     private void Start()
     {
         eat_system = SC_icecream_eat_system.instance;
     }
+
     private void Update()
     {
-        // Vérifie si un collider du joueur est dans la zone
+        if (isAttracted && attractTarget != null)
+        {
+            transform.position = Vector2.MoveTowards(
+                transform.position,
+                attractTarget.position,
+                attractSpeed * Time.deltaTime
+            );
+        }
+
         Collider2D hit = Physics2D.OverlapCircle(transform.position, detectionRadius, playerLayer);
 
         if (hit != null)
         {
             Collect();
         }
+    }
+
+    public void AttractTo(Transform target, float speed)
+    {
+        isAttracted = true;
+        attractTarget = target;
+        attractSpeed = speed;
     }
 
     void Collect()
@@ -35,7 +56,6 @@ public class SC_starbit : MonoBehaviour
         }
     }
 
-    // Pour visualiser la zone dans l'éditeur
     private void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.yellow;

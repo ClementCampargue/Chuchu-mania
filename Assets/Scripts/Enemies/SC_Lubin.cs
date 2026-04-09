@@ -53,6 +53,7 @@ public class SC_Lubin : MonoBehaviour
     public SC_juiciness juice; // ou ton type exact si c’est un script spécifique
     void Start()
     {
+        player = SC_player.instance.transform;
         eat = SC_icecream_eat_system.instance;
 
         rb = GetComponent<Rigidbody2D>();
@@ -61,10 +62,21 @@ public class SC_Lubin : MonoBehaviour
 
     void Update()
     {
+   
         if (isKnockedBack)
         {
             rb.linearVelocity = knockbackVelocity;
             return;
+        }
+        if (SC_freeze_screen.freeze)
+        {
+            anim.speed = 0;
+            return;
+        }
+        else
+        {
+            anim.speed = 1;
+
         }
         if (player == null) return;
         DetectPlayerOverlap();

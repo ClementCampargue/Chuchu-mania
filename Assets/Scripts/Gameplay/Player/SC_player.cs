@@ -345,4 +345,27 @@ public class SC_player : MonoBehaviour
         anim = anim_;
         StartCoroutine(PowerupFreeze(false));
     }
+    public void TriggerInvincibility(float duration)
+    {
+        if (hitCoroutine != null) StopCoroutine(hitCoroutine);
+        StartCoroutine(InvincibilityRoutine(duration));
+    }
+
+    private IEnumerator InvincibilityRoutine(float duration)
+    {
+        isInvincible = true;
+        float elapsed = 0f;
+        bool visible = true;
+
+        while (elapsed < duration)
+        {
+            elapsed += 0.1f;
+            visible = !visible;
+            spriteRenderer.enabled = visible;
+            yield return new WaitForSecondsRealtime(0.1f);
+        }
+
+        spriteRenderer.enabled = true;
+        isInvincible = false;
+    }
 }

@@ -10,7 +10,8 @@ GameObject:
   m_Component:
   - component: {fileID: 310153615395688793}
   - component: {fileID: 8850293883598317108}
-  m_Layer: 0
+  - component: {fileID: 6038040437515322048}
+  m_Layer: 10
   m_Name: Star_bit
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -52,6 +53,42 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 64
   ice_cream_UI: {fileID: 4373944046443122973, guid: 7ee5726e9e5b2b543b35b320b11f4b0e, type: 3}
+--- !u!58 &6038040437515322048
+CircleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 793143194083467424}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_CompositeOperation: 0
+  m_CompositeOrder: 0
+  m_Offset: {x: 0, y: 0}
+  m_Radius: 0.41
 --- !u!1 &5001263249252507058
 GameObject:
   m_ObjectHideFlags: 0
@@ -63,7 +100,7 @@ GameObject:
   - component: {fileID: 661571258715724186}
   - component: {fileID: 8702567714187410781}
   - component: {fileID: 3334232014616332545}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Particle System
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4895,7 +4932,7 @@ GameObject:
   m_Component:
   - component: {fileID: 279830177382239596}
   - component: {fileID: 4697125950110828525}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Star_Bits_0
   m_TagString: Untagged
   m_Icon: {fileID: 0}
