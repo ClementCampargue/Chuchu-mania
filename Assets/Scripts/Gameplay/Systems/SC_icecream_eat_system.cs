@@ -89,18 +89,24 @@ public class SC_icecream_eat_system : MonoBehaviour
         {
             SC_icecream_fall cream = creams[i];
 
-            if (cream.hasLanded)
+            if (!cream.hasLanded)
             {
-                cream.Select();
-
-                selectedCreams.Add(cream);
-
-                multiplier++;
-                UpdateMultiplierUI();
-
-                yield return new WaitForSeconds(0.08f);
+                // Si la glace est en chute, on force sa position avant de la sélectionner
+                cream.transform.position = new Vector3(
+                    cream.transform.position.x,
+                    cream.currentTargetPosition.position.y,
+                    cream.transform.position.z
+                );
+                cream.hasLanded = true;
             }
 
+            cream.Select();
+            selectedCreams.Add(cream);
+
+            multiplier++;
+            UpdateMultiplierUI();
+
+            yield return new WaitForSeconds(0.08f);
             i--;
         }
     }
