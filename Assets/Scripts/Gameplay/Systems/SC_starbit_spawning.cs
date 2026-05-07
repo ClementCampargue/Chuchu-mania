@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -7,19 +8,25 @@ public class SC_starbit_spawning : MonoBehaviour
     public int numberToSpawn = 10;
     public GameObject[] collectiblePrefabs;
 
-    public Transform player; 
-    public float minDistanceFromPlayer = 5f; 
+    public Transform player;
+    public float minDistanceFromPlayer = 5f;
+
+    public float delay_respawn = 3f;
+
+    [Header("Délai entre chaque spawn")]
+    public float delayBetweenSpawns = 0.5f;
 
     private List<GameObject> currentCollectibles = new List<GameObject>();
 
-    public float delay_respawn;
-
     void Start()
     {
-        SpawnCollectibles();
+    }
+    public void Spawn_collectibles()
+    {
+        StartCoroutine(SpawnCollectibles());
     }
 
-    void SpawnCollectibles()
+    IEnumerator SpawnCollectibles()
     {
         currentCollectibles.Clear();
 
@@ -28,7 +35,7 @@ public class SC_starbit_spawning : MonoBehaviour
         for (int i = 0; i < numberToSpawn; i++)
         {
             if (availablePoints.Count == 0)
-                break;
+                yield break;
 
             Transform spawnPoint = null;
             int safety = 0;
@@ -55,7 +62,7 @@ public class SC_starbit_spawning : MonoBehaviour
             }
 
             if (spawnPoint == null)
-                break;
+                yield break;
 
             int prefabIndex = Random.Range(0, collectiblePrefabs.Length);
             GameObject prefab = collectiblePrefabs[prefabIndex];
@@ -65,6 +72,9 @@ public class SC_starbit_spawning : MonoBehaviour
             obj.GetComponent<SC_starbit>().spawner = this;
 
             currentCollectibles.Add(obj);
+
+            // Délai avant le prochain spawn
+            yield return new WaitForSeconds(delayBetweenSpawns);
         }
     }
 
@@ -74,7 +84,12 @@ public class SC_starbit_spawning : MonoBehaviour
 
         if (currentCollectibles.Count == 0)
         {
-            Invoke("SpawnCollectibles", delay_respawn);
+            Invoke(nameof(StartRespawn), delay_respawn);
         }
+    }
+
+    void StartRespawn()
+    {
+        StartCoroutine(SpawnCollectibles());
     }
 }

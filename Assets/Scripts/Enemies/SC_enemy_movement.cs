@@ -9,11 +9,6 @@ public class SC_enemy_movement : MonoBehaviour
     public float detectionDistance = 1f;
     public float flipCooldown = 0.2f;
 
-    [Header("Screen Wrap")]
-    public float leftLimit = -10f;
-    public float rightLimit = 10f;
-    public GameObject ghostPrefab;
-
     [Header("Knockback")]
     public ParticleSystem ps;
     public Transform visuals;
@@ -22,159 +17,184 @@ public class SC_enemy_movement : MonoBehaviour
     public float spinSpeed = 360f;
     public float flickerDuration = 2f;
     public float flickerInterval = 0.1f;
-    public float gravity = 9.8f; // gravité simulée
+    public float gravity = 9.8f;
 
     [Header("Player Detection")]
     public float detectionRadius = 0.5f;
     public LayerMask playerLayer;
 
-    private bool movingRight = true;
-    private float lastFlipTime = 0f;
+    [Header("Enemy Detection")]
+    public float enemyDetectionDistance = 0.2f;
+    public LayerMask enemyLayer;
+
+    [Header("References")]
     public SpriteRenderer spriteRenderer;
     public LayerMask groundLayer;
+    public SC_juiciness juice;
+    public Transform collision;
 
-    private GameObject ghost;
-    private float levelWidth;
+    private bool movingRight = true;
+    private float lastFlipTime = 0f;
 
     private SC_player player;
     private SC_icecream_eat_system eat;
-    private bool isKnockedBack = false;
 
-    // Variables pour knockback manuel
+    private bool isKnockedBack = false;
     private Vector2 knockbackVelocity = Vector2.zero;
-    public SC_juiciness juice;
-    public Transform collision;
+
     void Start()
     {
         player = SC_player.instance;
         eat = SC_icecream_eat_system.instance;
-        levelWidth = rightLimit - leftLimit;
-
-        if (ghostPrefab != null)
-        {
-            ghost = Instantiate(ghostPrefab);
-            ghost.SetActive(false);
-        }
     }
 
     void Update()
     {
+        if (!SC_level_intro.gameStarted)
+            return;
 
         if (!isKnockedBack)
         {
             DetectPlayerOverlap();
 
             if (SC_freeze_screen.freeze)
-            {
                 return;
-            }
+
             HandleMovement();
-            UpdateGhost();
-            HandleScreenWrap();
         }
         else
         {
-            // Appliquer knockback et gravité manuellement
-            knockbackVelocity.y -= gravity * Time.deltaTime;
-            transform.position += (Vector3)(knockbackVelocity * Time.deltaTime);
-            visuals.Rotate(Vector3.forward * spinSpeed * Time.deltaTime);
+            HandleKnockback();
         }
     }
 
-    private void HandleMovement()
+    void HandleMovement()
     {
-        // Déplacement horizontal manuel
-        transform.position += (movingRight ? Vector3.right : Vector3.left) * moveSpeed * Time.deltaTime;
+        // D�placement
+        transform.position +=
+            (movingRight ? Vector3.right : Vector3.left)
+            * moveSpeed
+            * Time.deltaTime;
 
-        // Vérifie sol et mur
-        bool isGroundAhead = Physics2D.Raycast(groundDetection.position, Vector2.down, detectionDistance, groundLayer);
-        bool isWallAhead = Physics2D.Raycast(groundDetection.position, movingRight ? Vector2.right : Vector2.left, 0.1f, groundLayer);
+        // V�rifie si il y a du sol devant
+        bool isGroundAhead =
+            Physics2D.Raycast(
+                groundDetection.position,
+                Vector2.down,
+                detectionDistance,
+                groundLayer
+            );
 
-        if ((!isGroundAhead || isWallAhead) && Time.time - lastFlipTime > flipCooldown)
+        // V�rifie si il y a un mur devant
+        bool isWallAhead =
+            Physics2D.Raycast(
+                groundDetection.position,
+                movingRight ? Vector2.right : Vector2.left,
+                0.1f,
+                groundLayer
+            );
+
+        // V�rifie si un autre ennemi est devant
+        RaycastHit2D enemyHit =
+            Physics2D.Raycast(
+                groundDetection.position,
+                movingRight ? Vector2.right : Vector2.left,
+                enemyDetectionDistance,
+                enemyLayer
+            );
+
+        bool isEnemyAhead =
+            enemyHit.collider != null
+            && enemyHit.collider.gameObject != gameObject;
+
+        // Change de direction
+        if ((!isGroundAhead || isWallAhead || isEnemyAhead)
+            && Time.time - lastFlipTime > flipCooldown)
         {
             Flip();
             lastFlipTime = Time.time;
         }
     }
 
-    private void DetectPlayerOverlap()
+    void HandleKnockback()
     {
-        Collider2D playerCollider = Physics2D.OverlapCircle(collision.transform.position, detectionRadius, playerLayer);
+        knockbackVelocity.y -= gravity * Time.deltaTime;
+
+        transform.position +=
+            (Vector3)(knockbackVelocity * Time.deltaTime);
+
+        visuals.Rotate(
+            Vector3.forward * spinSpeed * Time.deltaTime
+        );
+    }
+
+    void DetectPlayerOverlap()
+    {
+        Collider2D playerCollider =
+            Physics2D.OverlapCircle(
+                collision.position,
+                detectionRadius,
+                playerLayer
+            );
+
         if (playerCollider != null && eat.isPowerUpActive)
         {
-            bool playerOnRight = playerCollider.transform.position.x > transform.position.x;
+            bool playerOnRight =
+                playerCollider.transform.position.x
+                > transform.position.x;
+
             Knockback(playerOnRight);
         }
     }
 
-    void Flip()
+    public void Flip()
     {
         movingRight = !movingRight;
+
         Vector3 scale = transform.localScale;
         scale.x *= -1;
         transform.localScale = scale;
     }
 
-    void UpdateGhost()
-    {
-        if (ghost == null) return;
-
-        Vector3 pos = transform.position;
-
-        if (pos.x > rightLimit - levelWidth / 2)
-        {
-            ghost.SetActive(true);
-            ghost.transform.position = new Vector3(pos.x - levelWidth, pos.y, pos.z);
-            ghost.transform.localScale = transform.localScale;
-        }
-        else if (pos.x < leftLimit + levelWidth / 2)
-        {
-            ghost.SetActive(true);
-            ghost.transform.position = new Vector3(pos.x + levelWidth, pos.y, pos.z);
-            ghost.transform.localScale = transform.localScale;
-        }
-        else
-        {
-            ghost.SetActive(false);
-        }
-    }
-
-    private void HandleScreenWrap()
-    {
-        Vector3 pos = transform.position;
-        if (pos.x > rightLimit) pos.x = leftLimit;
-        else if (pos.x < leftLimit) pos.x = rightLimit;
-        transform.position = pos;
-    }
-
     public void Knockback(bool playerOnRight)
     {
+        if (isKnockedBack)
+            return;
+
         ps.Play();
-        if (isKnockedBack) return;
         juice.PlayJuice();
+
         isKnockedBack = true;
 
-        // Désactiver collisions si nécessaire
         Collider2D col = GetComponent<Collider2D>();
-        if (col != null) col.enabled = false;
 
-        // Définir la vitesse initiale du knockback
-        float horizontalDir = playerOnRight ? -1f : 1f;
-        knockbackVelocity = new Vector2(horizontalDir * knockbackForce, knockbackVerticalForce);
+        if (col != null)
+            col.enabled = false;
 
-        // Lancer flicker et destruction
+        float horizontalDir =
+            playerOnRight ? -1f : 1f;
+
+        knockbackVelocity = new Vector2(
+            horizontalDir * knockbackForce,
+            knockbackVerticalForce
+        );
+
         StartCoroutine(FlickerAndDestroy());
     }
 
-    private IEnumerator FlickerAndDestroy()
-    {       
-        spriteRenderer.enabled = !spriteRenderer.enabled;
-
+    IEnumerator FlickerAndDestroy()
+    {
         float elapsed = 0f;
+
         while (elapsed < flickerDuration)
         {
-            spriteRenderer.enabled = !spriteRenderer.enabled;
-            yield return new WaitForSeconds(flickerInterval);
+            spriteRenderer.enabled =
+                !spriteRenderer.enabled;
+
+            yield return new WaitForSeconds(
+                flickerInterval
+            );
+
             elapsed += flickerInterval;
         }
 
@@ -186,11 +206,44 @@ public class SC_enemy_movement : MonoBehaviour
         if (groundDetection != null)
         {
             Gizmos.color = Color.red;
-            Gizmos.DrawLine(groundDetection.position, groundDetection.position + Vector3.down * detectionDistance);
-            Gizmos.DrawLine(groundDetection.position, groundDetection.position + (movingRight ? Vector3.right : Vector3.left) * 0.1f);
+
+            // Sol
+            Gizmos.DrawLine(
+                groundDetection.position,
+                groundDetection.position
+                + Vector3.down * detectionDistance
+            );
+
+            // Mur
+            Gizmos.DrawLine(
+                groundDetection.position,
+                groundDetection.position
+                + (movingRight
+                    ? Vector3.right
+                    : Vector3.left) * 0.1f
+            );
+
+            // Ennemi
+            Gizmos.color = Color.yellow;
+
+            Gizmos.DrawLine(
+                groundDetection.position,
+                groundDetection.position
+                + (movingRight
+                    ? Vector3.right
+                    : Vector3.left)
+                    * enemyDetectionDistance
+            );
         }
 
-        Gizmos.color = Color.blue;
-        Gizmos.DrawWireSphere(collision.transform.position, detectionRadius);
+        if (collision != null)
+        {
+            Gizmos.color = Color.blue;
+
+            Gizmos.DrawWireSphere(
+                collision.position,
+                detectionRadius
+            );
+        }
     }
 }

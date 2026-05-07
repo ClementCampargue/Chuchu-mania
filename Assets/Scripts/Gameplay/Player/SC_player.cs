@@ -20,7 +20,12 @@ public class SC_player : MonoBehaviour
     private int currentHealth;
     public float hitFreezeTime = 0.15f;
     public Vector2 hitKnockback = new Vector2(5f, 3f);
+    [Header("Low Health Warning")]
+    public Material normalMaterial;
+    public Material lowHealthMaterial;
+    public float lowHealthBlinkRate = 0.2f;
 
+    private Coroutine lowHealthCoroutine;
     [Header("Ground Check")]
     public Transform groundCheck;
     public float groundCheckRadius = 0.2f;
@@ -42,7 +47,7 @@ public class SC_player : MonoBehaviour
     public string transformAnimTrigger = "Transform";
     public string detransformAnimTrigger = "DeTransform";
 
-    private Rigidbody2D rb;
+    public Rigidbody2D rb;
     public Animator anim_;
     public Animator anim_powerup;
     private Animator anim;
@@ -86,15 +91,16 @@ public class SC_player : MonoBehaviour
 
     void Start()
     {
+        spriteRenderer.material = normalMaterial;
         eat_system = SC_icecream_eat_system.instance;
         levelWidth = rightLimit - leftLimit;
-        rb = GetComponent<Rigidbody2D>();
         currentHealth = maxHealth;
         anim = anim_;
     }
 
     void Update()
     {
+        if (!SC_level_intro.gameStarted) return;
         if (!isFrozen  && canMove)
             moveInput = Move.action.ReadValue<Vector2>();
         else
@@ -104,7 +110,7 @@ public class SC_player : MonoBehaviour
 
         anim.SetBool("Run", Mathf.Abs(moveInput.x) > 0.1f);
 
-        if (!wasGrounded && isGrounded && rb.linearVelocity.y <= 1f)
+        if (!wasGrounded && isGrounded && rb.linearVelocity.y <= 0.01f)
         {
             anim.ResetTrigger("Jump");
             anim.SetTrigger("Land");
@@ -130,12 +136,46 @@ public class SC_player : MonoBehaviour
                 isJumping = false;
             }
         }
-
+        HandleLowHealthBlink();
         CheckDamage();
     }
+    void HandleLowHealthBlink()
+    {
+        if (currentHealth == 1)
+        {
+            if (lowHealthCoroutine == null)
+                lowHealthCoroutine = StartCoroutine(LowHealthBlink());
+        }
+        else
+        {
+            if (lowHealthCoroutine != null)
+            {
+                StopCoroutine(lowHealthCoroutine);
+                lowHealthCoroutine = null;
+            }
 
+            spriteRenderer.material = normalMaterial;
+        }
+    }
+    IEnumerator LowHealthBlink()
+    {
+        bool toggle = false;
+
+        while (currentHealth == 1)
+        {
+            spriteRenderer.material = toggle ? normalMaterial : lowHealthMaterial;
+            toggle = !toggle;
+
+            yield return new WaitForSeconds(lowHealthBlinkRate);
+        }
+
+        spriteRenderer.material = normalMaterial;
+        lowHealthCoroutine = null;
+
+    }
     void FixedUpdate()
     {
+        if (!SC_level_intro.gameStarted) return;
         if (!isFrozen)
         {
             float horizontalSpeed = moveInput.x * (eat_system.isPowerUpActive ? PowermoveSpeed : moveSpeed) + knockbackVelocity.x;
@@ -152,10 +192,9 @@ public class SC_player : MonoBehaviour
             knockbackVelocity.x = Mathf.Lerp(knockbackVelocity.x, 0, 0.15f);
         }
     }
-
     private void OnJumpStarted(InputAction.CallbackContext context)
     {
-        if (!isFrozen && canMove)
+        if (!isFrozen && canMove && rb.linearVelocity.y <0.5f)
         {
             if (isGrounded || eat_system.isPowerUpActive)
             {

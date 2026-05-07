@@ -16,7 +16,7 @@ public class SC_rank_system : MonoBehaviour
     public TextMeshProUGUI scoreText;
     public TextMeshProUGUI rankText;
     public Animator rankAnimator;
-
+    public float rank_speed = 2;
     [Header("Rank Icons")]
     public Image rankImage;           // Image UI pour le rang
     public Sprite rankDImage;
@@ -56,16 +56,19 @@ public class SC_rank_system : MonoBehaviour
         {
             if (displayedScore < targetScore)
             {
-                // Animation fluide
-                displayedScore += Time.unscaledDeltaTime * 2000f;
+                
 
-                if (displayedScore > targetScore)
+                displayedScore = Mathf.Lerp(
+                    displayedScore,
+                    targetScore,
+                    Time.unscaledDeltaTime * rank_speed
+                );
+
+                // éviter de tourner indéfiniment à la fin
+                if (Mathf.Abs(targetScore - displayedScore) < 0.1f)
                     displayedScore = targetScore;
 
-                // Affichage arcade
                 scoreText.text = FormatScore(displayedScore);
-
-                // Update rank
                 UpdateRank(displayedScore);
             }
 

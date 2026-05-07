@@ -15,7 +15,6 @@ public class SC_icecream_eat_system : MonoBehaviour
     public float eatSpeed = 0.5f;
 
     private bool isEating = false;
-
     private bool isSelecting = false;
     private bool forceEatAll = false;
     private List<SC_icecream_fall> selectedCreams = new List<SC_icecream_fall>();
@@ -40,9 +39,24 @@ public class SC_icecream_eat_system : MonoBehaviour
     public bool isPowerUpActive = false;
     public float drainSpeed = 0.25f;
 
+    [Header("Phase System")]
+    private bool phase1Triggered = false;
+    private bool phase2Triggered = false;
+
     public static SC_icecream_eat_system instance;
     private SC_player player;
-    private int eaten_cream;
+    private int eaten_cream; 
+    [ContextMenu("DEBUG - Fill Stomach")]
+    public void DebugFillStomach()
+    {
+        displayedFill = displayedFill +0.25f;
+        mat.SetFloat("_Fill_amount", displayedFill);
+
+        // Force les phases si pas encore déclenchées
+        CheckPhases();
+
+        Debug.Log("DEBUG: Stomach filled to 100%");
+    }
 
     private void Awake()
     {
@@ -72,6 +86,26 @@ public class SC_icecream_eat_system : MonoBehaviour
 
             StartCoroutine(EatSelectedCreamsCoroutine());
         }
+        CheckPhases();
+    }
+
+    // =========================
+    // PHASE SYSTEM
+    // =========================
+    void CheckPhases()
+    {
+
+        if (!phase1Triggered && displayedFill >= 0.33f)
+        {
+            phase1Triggered = true;
+            SC_phases.instance.NextPhase();
+        }
+
+        if (!phase2Triggered && displayedFill >= 0.66f)
+        {
+            phase2Triggered = true;
+            SC_phases.instance.NextPhase();
+        }
     }
 
     IEnumerator SelectionCoroutine()
@@ -91,7 +125,6 @@ public class SC_icecream_eat_system : MonoBehaviour
 
             if (!cream.hasLanded)
             {
-                // Si la glace est en chute, on force sa position avant de la sélectionner
                 cream.transform.position = new Vector3(
                     cream.transform.position.x,
                     cream.currentTargetPosition.position.y,
@@ -119,8 +152,11 @@ public class SC_icecream_eat_system : MonoBehaviour
         if (creams.Count >= creams_points.Count)
             return;
 
-        SC_icecream_fall cream = Instantiate(cream_type, transform.position, Quaternion.identity)
-            .GetComponent<SC_icecream_fall>();
+        SC_icecream_fall cream = Instantiate(
+            cream_type,
+            creams_points[creams_points.Count - 1].position,
+            Quaternion.identity
+        ).GetComponent<SC_icecream_fall>();
 
         cream.currentTargetPosition = creams_points[creams.Count];
         cream.hasLanded = false;
@@ -153,7 +189,6 @@ public class SC_icecream_eat_system : MonoBehaviour
         for (int i = selectedCreams.Count - 1; i >= 0; i--)
         {
             StartCoroutine(ScaleBack());
-
             eaten_cream++;
 
             SC_icecream_fall cream = selectedCreams[i];
@@ -185,6 +220,8 @@ public class SC_icecream_eat_system : MonoBehaviour
                     displayedFill = Mathf.MoveTowards(displayedFill, targetFill, eatSpeed * Time.deltaTime);
                     mat.SetFloat("_Fill_amount", displayedFill);
 
+                    CheckPhases();
+
                     if (displayedFill >= 1f && !isPowerUpActive)
                     {
                         player.powerup();
@@ -198,18 +235,16 @@ public class SC_icecream_eat_system : MonoBehaviour
             displayedFill = targetFill;
             mat.SetFloat("_Fill_amount", displayedFill);
 
+            CheckPhases();
+
             yield return new WaitForSeconds(delayBetweenCreams);
         }
 
-        // Reset visuel des restantes
         foreach (var c in creams)
             c.transform.localScale = Vector3.one;
 
-        // Réassigner les positions
         for (int j = 0; j < creams.Count; j++)
-        {
             creams[j].currentTargetPosition = creams_points[j];
-        }
 
         player.anim_.SetBool("Eat", false);
         multiplierText.gameObject.SetActive(false);
@@ -238,7 +273,6 @@ public class SC_icecream_eat_system : MonoBehaviour
     private IEnumerator PowerUpCoroutine()
     {
         player.canMove = true;
-
         isPowerUpActive = true;
 
         while (displayedFill > 0f)
@@ -248,13 +282,15 @@ public class SC_icecream_eat_system : MonoBehaviour
 
             mat.SetFloat("_Fill_amount", displayedFill);
 
+            CheckPhases();
+
             yield return null;
         }
 
         displayedFill = 0f;
         mat.SetFloat("_Fill_amount", displayedFill);
-        player.end_powerup();
 
+        player.end_powerup();
         isPowerUpActive = false;
     }
 
@@ -286,6 +322,8 @@ public class SC_icecream_eat_system : MonoBehaviour
     {
         displayedFill = 1f;
         mat.SetFloat("_Fill_amount", displayedFill);
+
+        CheckPhases();
 
         if (!isPowerUpActive)
         {

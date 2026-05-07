@@ -1,27 +1,52 @@
 using UnityEngine;
+using System.Collections;
 
 public class SC_bullet_spawner : MonoBehaviour
 {
     [Header("Objet à Spawn")]
-    public GameObject objetPrefab; // L'objet que tu veux spawn
+    public GameObject objetPrefab;
 
     [Header("Paramètres de Spawn")]
-    public float intervalle = 2f; // Intervalle entre chaque spawn en secondes
-    public Transform pointSpawn; // Optionnel, où spawn l'objet. Si null, spawn à la position du Spawner
+    public float intervalle = 2f;
+
+    [Header("Délai après le Juice")]
+    public float delaiAvantTir = 1f;
+
+    public Transform pointSpawn;
 
     private float timer;
+    private bool estEnTrainDeTirer = false;
+
+    public SC_juiciness juice_fire;
 
     void Update()
     {
-        // Incrémente le timer
+        if (!SC_level_intro.gameStarted) return;
         timer += Time.deltaTime;
 
-        // Si le timer dépasse l'intervalle, spawn l'objet
-        if (timer >= intervalle)
+        if (timer >= intervalle && !estEnTrainDeTirer)
         {
-            SpawnObjet();
-            timer = 0f; // Reset le timer
+            StartCoroutine(TirAvecDelai());
+            timer = 0f;
         }
+    }
+
+    IEnumerator TirAvecDelai()
+    {
+        estEnTrainDeTirer = true;
+
+        // Joue le juice
+        if (juice_fire != null)
+        {
+            juice_fire.PlayJuice();
+        }
+
+        // Attend avant de tirer
+        yield return new WaitForSeconds(delaiAvantTir);
+
+        SpawnObjet();
+
+        estEnTrainDeTirer = false;
     }
 
     void SpawnObjet()
@@ -29,6 +54,7 @@ public class SC_bullet_spawner : MonoBehaviour
         if (objetPrefab != null)
         {
             Vector3 spawnPosition = pointSpawn != null ? pointSpawn.position : transform.position;
+
             Instantiate(objetPrefab, spawnPosition, Quaternion.identity);
         }
         else
