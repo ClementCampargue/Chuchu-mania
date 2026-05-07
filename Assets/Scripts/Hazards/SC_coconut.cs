@@ -9,27 +9,34 @@ public class SC_coconut : MonoBehaviour
     [Header("Distance de détection")]
     public float rayDistance = 2f;
 
-    [Header("Rebond")]
+    [Header("Rebond aléatoire")]
     public float bounceForce = 5f;
+    public float randomHorizontalForce = 3f;
 
     [Header("Flicker")]
     public float flickerDuration = 2f;
     public float flickerInterval = 0.1f;
 
+    [Header("Respawn")]
+    public float respawnTime = 5f;
+
     private Rigidbody2D rb;
-    private CircleCollider2D col;
+    public GameObject coll;
     public SpriteRenderer sr;
 
     private bool hasFallen = false;
     private bool hasHitGround = false;
 
+    private Vector3 startPosition;
+
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
-        col = GetComponent<CircleCollider2D>();
+
+        startPosition = transform.position;
 
         rb.gravityScale = 0f;
-        col.enabled = false;
+        coll.SetActive(false) ;
     }
 
     void Update()
@@ -53,27 +60,38 @@ public class SC_coconut : MonoBehaviour
     {
         hasFallen = true;
 
-        col.enabled = true;
+        coll.SetActive(true);
         rb.gravityScale = 1f;
     }
+
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (hasHitGround) return;
 
-        if (((1 << collision.gameObject.layer) & triggerLayer) != 0 ||collision.tag == "Ground")
+        if (((1 << collision.gameObject.layer) & triggerLayer) != 0
+            || collision.CompareTag("Ground")|| collision.CompareTag("Enemy"))
         {
             hasHitGround = true;
 
-            // rebond
-            rb.linearVelocity = new Vector2(rb.linearVelocity.x, bounceForce);
+            // rebond aléatoire
+            float randomX = Random.Range(
+                -randomHorizontalForce,
+                randomHorizontalForce
+            );
 
-            // désactive collision après impact pour éviter bug physique
-            col.enabled = false;
+            float randomY = Random.Range(
+                bounceForce * 0.7f,
+                bounceForce * 1.5f
+            );
+
+            rb.linearVelocity = new Vector2(randomX, randomY);
+
+            // désactive collision après impact
+            coll.SetActive(false);
 
             StartCoroutine(FlickerThenDestroy());
         }
     }
-
 
     IEnumerator FlickerThenDestroy()
     {
@@ -88,12 +106,38 @@ public class SC_coconut : MonoBehaviour
             elapsed += flickerInterval;
         }
 
-        Destroy(gameObject);
+        sr.enabled = false;
+
+        yield return new WaitForSeconds(respawnTime);
+
+        Respawn();
+    }
+
+    void Respawn()
+    {
+        rb.linearVelocity = Vector2.zero;
+        transform.position = startPosition;
+
+        ResetCoconut();
+    }
+
+    void ResetCoconut()
+    {
+        hasFallen = false;
+        hasHitGround = false;
+
+        rb.gravityScale = 0f;
+        rb.linearVelocity = Vector2.zero;
+        rb.angularVelocity = 0f;
+
+        sr.enabled = true;
+        coll.SetActive(false);
     }
 
     void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.red;
+
         Gizmos.DrawLine(
             transform.position,
             transform.position + Vector3.down * rayDistance

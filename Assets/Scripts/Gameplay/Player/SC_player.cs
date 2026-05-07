@@ -7,7 +7,7 @@ public class SC_player : MonoBehaviour
     [Header("Power_up_stats")]
     public float PowermoveSpeed = 5f;
     public float PowerJump = 5f;
-
+    public SC_juiciness juice;
     [Header("Movement")]
     public float moveSpeed = 5f;
     public float jumpForce = 10f;
@@ -36,7 +36,11 @@ public class SC_player : MonoBehaviour
     public float damageRadius = 0.5f;
     public LayerMask damageLayer;
     private bool canTakeDamage = true;
+    [Header("Stun")]
+    public LayerMask stunLayer;
+    public float stunDuration = 2f;
 
+    private bool isStunned = false;
     [Header("Invincibility")]
     public float invincibilityTime = 1f;
     public SpriteRenderer spriteRenderer;
@@ -101,6 +105,14 @@ public class SC_player : MonoBehaviour
     void Update()
     {
         if (!SC_level_intro.gameStarted) return;
+        CheckStun();
+        HandleLowHealthBlink();
+        CheckDamage();
+        if (isStunned)
+        {
+            moveInput = Vector2.zero;
+            return;
+        }
         if (!isFrozen  && canMove)
             moveInput = Move.action.ReadValue<Vector2>();
         else
@@ -136,8 +148,38 @@ public class SC_player : MonoBehaviour
                 isJumping = false;
             }
         }
-        HandleLowHealthBlink();
-        CheckDamage();
+
+    }
+    void CheckStun()
+    {
+        if (isStunned)
+            return;
+
+        Collider2D hit =
+            Physics2D.OverlapCircle(
+                damageCheck.position,
+                damageRadius,
+                stunLayer
+            );
+
+        if (hit != null)
+        {
+            StartCoroutine(StunCoroutine());
+        }
+    }
+    IEnumerator StunCoroutine()
+    {
+        juice.PlayJuice();
+        isStunned = true;
+        anim.SetBool("Stun", true);
+        rb.linearVelocity = Vector2.zero;
+
+
+        yield return new WaitForSeconds(stunDuration);
+        anim.SetBool("Stun", false);
+
+
+        isStunned = false;
     }
     void HandleLowHealthBlink()
     {
@@ -250,7 +292,10 @@ public class SC_player : MonoBehaviour
     public void TakeDamage(int damage, Vector3 sourcePosition)
     {
         if (isFrozen || isInvincible || eat_system.isPowerUpActive) return;
+        anim.SetBool("Stun", false);
 
+
+        isStunned = false;
         ps_damage.Play();
         currentHealth -= damage;
         eat_system.take_damage();

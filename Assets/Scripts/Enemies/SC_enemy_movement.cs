@@ -8,7 +8,7 @@ public class SC_enemy_movement : MonoBehaviour
     public Transform groundDetection;
     public float detectionDistance = 1f;
     public float flipCooldown = 0.2f;
-
+    public Animator animator;
     [Header("Knockback")]
     public ParticleSystem ps;
     public Transform visuals;
@@ -41,7 +41,14 @@ public class SC_enemy_movement : MonoBehaviour
 
     private bool isKnockedBack = false;
     private Vector2 knockbackVelocity = Vector2.zero;
+    [Header("Stun")]
+    public SC_juiciness juice_stun;
+    public LayerMask stunLayer;
+    public float stunDuration = 2f;
+    public float stunRadius = 0.5f;
+    public Transform stunDetection;
 
+    private bool isStunned = false;
     void Start()
     {
         player = SC_player.instance;
@@ -51,6 +58,11 @@ public class SC_enemy_movement : MonoBehaviour
     void Update()
     {
         if (!SC_level_intro.gameStarted)
+            return;
+
+        DetectStun();
+
+        if (isStunned)
             return;
 
         if (!isKnockedBack)
@@ -67,7 +79,6 @@ public class SC_enemy_movement : MonoBehaviour
             HandleKnockback();
         }
     }
-
     void HandleMovement()
     {
         // Déplacement
@@ -155,12 +166,44 @@ public class SC_enemy_movement : MonoBehaviour
         scale.x *= -1;
         transform.localScale = scale;
     }
+    void DetectStun()
+    {
+        if (isStunned)
+            return;
+
+        Collider2D stunCollider =
+            Physics2D.OverlapCircle(
+                stunDetection.position,
+                stunRadius,
+                stunLayer
+            );
+
+        if (stunCollider != null)
+        {
+            StartCoroutine(Stun());
+        }
+    }
+    IEnumerator Stun()
+    {
+        if (isStunned)
+            yield break;
+        animator.SetBool("Stun",true);
+        isStunned = true;
+        juice_stun.PlayJuice();
+
+        yield return new WaitForSeconds(stunDuration);
+        animator.SetBool("Stun", false);
+
+
+        isStunned = false;
+    }
+
 
     public void Knockback(bool playerOnRight)
     {
         if (isKnockedBack)
             return;
-
+        animator.SetTrigger("Death");
         ps.Play();
         juice.PlayJuice();
 

@@ -16,9 +16,16 @@ public class SC_enemy_random_teleport : MonoBehaviour
 
     [Tooltip("Objets empêchant le TP")]
     public LayerMask blockedLayers;
+    [Header("Stun")]
+    public Transform reactionCheck;
+    public float reactionRadius = 0.5f;
+    public LayerMask reactionLayer;
 
+    public string reactionTrigger = "hit";
+
+    private bool hasReacted = false;
     private float timer;
-
+    public SC_juiciness juice;
     public Animator anim;
     private void Start()
     {
@@ -26,6 +33,8 @@ public class SC_enemy_random_teleport : MonoBehaviour
     }
     void Update()
     {
+        CheckReaction();
+
         timer += Time.deltaTime;
 
         if (timer >= teleportInterval)
@@ -34,8 +43,27 @@ public class SC_enemy_random_teleport : MonoBehaviour
             teleport();
         }
     }
+    void CheckReaction()
+    {
+        if (hasReacted)
+            return;
 
-     void teleport()
+        Collider2D hit =
+            Physics2D.OverlapCircle(
+                reactionCheck.position,
+                reactionRadius,
+                reactionLayer
+            );
+
+        if (hit != null)
+        {
+            hasReacted = true;
+            juice.PlayJuice();
+            anim.SetTrigger(reactionTrigger);
+
+        }
+    }
+    void teleport()
     {
         anim.SetTrigger("teleport");
 
@@ -92,6 +120,15 @@ public class SC_enemy_random_teleport : MonoBehaviour
 
                 Gizmos.DrawWireCube(checkPos, checkSize);
             }
+        }
+        if (reactionCheck != null)
+        {
+            Gizmos.color = Color.magenta;
+
+            Gizmos.DrawWireSphere(
+                reactionCheck.position,
+                reactionRadius
+            );
         }
     }
 }
