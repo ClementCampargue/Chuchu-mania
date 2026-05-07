@@ -14,6 +14,7 @@ public class SC_debug : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.T))
         {
+            SC_score.Instance.score = 1000;
             eat.ActivatePowerUpInstant();
 
         }

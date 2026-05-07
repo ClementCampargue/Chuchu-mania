@@ -45,8 +45,15 @@ public class SC_icecream_eat_system : MonoBehaviour
 
     public static SC_icecream_eat_system instance;
     private SC_player player;
-    private int eaten_cream; 
-    [ContextMenu("DEBUG - Fill Stomach")]
+    private int eaten_cream;
+    public bool loosing_points;
+
+
+
+
+
+[ContextMenu("DEBUG - Fill Stomach")]
+
     public void DebugFillStomach()
     {
         displayedFill = displayedFill +0.25f;
@@ -289,9 +296,9 @@ public class SC_icecream_eat_system : MonoBehaviour
 
         displayedFill = 0f;
         mat.SetFloat("_Fill_amount", displayedFill);
-
-        player.end_powerup();
-        isPowerUpActive = false;
+        loosing_points = true;
+       // player.end_powerup();
+       //  isPowerUpActive = false;
     }
 
     public void take_damage()

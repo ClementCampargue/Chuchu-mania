@@ -31,6 +31,7 @@ public class SC_cage : MonoBehaviour
 
     void die()
     {
+        SC_icecream_eat_system.instance.loosing_points = false;
         Health--;
         juice.PlayJuice();
         if (Health == 0)

@@ -6,45 +6,72 @@ public class SC_score : MonoBehaviour
     public static SC_score Instance;
 
     [Header("Score Settings")]
-    public int score = 0;             // Score réel
-    public int displayedScore = 0;    // Score affiché
-    public float scoreSpeed = 50f;    // Vitesse d’incrément du score
+    public int score = 0;
+    public int displayedScore = 0;
+
+    public float scoreSpeed = 50f;
+
+    [Header("Score Drain")]
+    public float scoreDrainSpeed = 10f;
 
     [Header("Arcade Style")]
-    public int digits = 6;            // Nombre de chiffres affichés (ex: 000123)
+    public int digits = 6;
 
     [Header("UI Settings")]
     public TMP_Text scoreText;
 
-
-    private void Start()
-    {
-        UpdateScoreUI();
-
-    }
     private void Awake()
     {
         if (Instance == null)
             Instance = this;
         else
             Destroy(gameObject);
+    }
 
+    private void Start()
+    {
+        UpdateScoreUI();
     }
 
     private void Update()
     {
+        if (SC_icecream_eat_system.instance.loosing_points)
+        {
+            score -= Mathf.RoundToInt(
+                scoreDrainSpeed * Time.deltaTime
+            );
+
+            if (score < 0)
+                score = 0;
+        }
+
         if (displayedScore < score)
         {
-            int increment = Mathf.CeilToInt(scoreSpeed * Time.deltaTime);
+            int increment =
+                Mathf.CeilToInt(
+                    scoreSpeed * Time.deltaTime
+                );
+
             displayedScore += increment;
 
             if (displayedScore > score)
                 displayedScore = score;
 
             UpdateScoreUI();
+        }
+        else if (displayedScore > score)
+        {
+            int decrement =
+                Mathf.CeilToInt(
+                    scoreSpeed * Time.deltaTime
+                );
 
-            float progress = (float)displayedScore / score;
+            displayedScore -= decrement;
 
+            if (displayedScore < score)
+                displayedScore = score;
+
+            UpdateScoreUI();
         }
     }
 
@@ -52,8 +79,10 @@ public class SC_score : MonoBehaviour
     {
         if (scoreText != null)
         {
-            // Format arcade avec zéros devant
-            scoreText.text = displayedScore.ToString("D" + digits);
+            scoreText.text =
+                displayedScore.ToString(
+                    "D" + digits
+                );
         }
     }
 

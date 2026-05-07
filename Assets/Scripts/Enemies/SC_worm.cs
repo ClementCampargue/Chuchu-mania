@@ -22,6 +22,7 @@ public class SC_enemy_random_teleport : MonoBehaviour
     public LayerMask reactionLayer;
 
     public string reactionTrigger = "hit";
+    public LayerMask playerLayer;
 
     private bool hasReacted = false;
     private float timer;
@@ -55,7 +56,14 @@ public class SC_enemy_random_teleport : MonoBehaviour
                 reactionLayer
             );
 
-        if (hit != null)
+        Collider2D hit2 =
+            Physics2D.OverlapCircle(
+                reactionCheck.position,
+                reactionRadius,
+                playerLayer
+            );
+
+        if (hit != null || hit2 != null && SC_icecream_eat_system.instance.isPowerUpActive)
         {
             hasReacted = true;
             juice.PlayJuice();

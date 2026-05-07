@@ -5081,6 +5081,9 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 2048
   reactionTrigger: hit
+  playerLayer:
+    serializedVersion: 2
+    m_Bits: 64
   juice: {fileID: 3025372228658459560}
   anim: {fileID: 2211419458393525847}
 --- !u!95 &2211419458393525847
