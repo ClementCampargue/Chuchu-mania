@@ -243,6 +243,7 @@ MonoBehaviour:
   flickerDuration: 0.88
   flickerInterval: 0.1
   respawnTime: 3
+  maxAirTime: 1.18
   coll: {fileID: 5306348733980360988}
   sr: {fileID: 4000415714314098505}
 --- !u!50 &3340598236732196251

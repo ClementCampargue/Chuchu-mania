@@ -49,5 +49,8 @@ TagManager:
   - name: UI
     uniqueID: 458446795
     locked: 0
+  - name: Sticker
+    uniqueID: 777298749
+    locked: 0
   m_RenderingLayers:
   - Default

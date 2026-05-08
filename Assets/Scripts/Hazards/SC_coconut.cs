@@ -19,7 +19,9 @@ public class SC_coconut : MonoBehaviour
 
     [Header("Respawn")]
     public float respawnTime = 5f;
+    public float maxAirTime = 3f;
 
+    private float airTimer = 0f;
     private Rigidbody2D rb;
     public GameObject coll;
     public SpriteRenderer sr;
@@ -41,6 +43,16 @@ public class SC_coconut : MonoBehaviour
 
     void Update()
     {
+        if (hasFallen && !hasHitGround)
+        {
+            airTimer += Time.deltaTime;
+
+            if (airTimer >= maxAirTime)
+            {
+                ForceHit();
+            }
+        }
+
         if (hasFallen) return;
 
         RaycastHit2D hit = Physics2D.Raycast(
@@ -55,10 +67,25 @@ public class SC_coconut : MonoBehaviour
             Fall();
         }
     }
+    void ForceHit()
+    {
+        if (hasHitGround) return;
 
+        hasHitGround = true;
+
+        float randomX = Random.Range(-randomHorizontalForce, randomHorizontalForce);
+        float randomY = Random.Range(bounceForce * 0.7f, bounceForce * 1.5f);
+
+        rb.linearVelocity = new Vector2(randomX, randomY);
+
+        coll.SetActive(false);
+
+        StartCoroutine(FlickerThenDestroy());
+    }
     void Fall()
     {
         hasFallen = true;
+        airTimer = 0f;
 
         coll.SetActive(true);
         rb.gravityScale = 1f;
@@ -66,30 +93,10 @@ public class SC_coconut : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (hasHitGround) return;
-
         if (((1 << collision.gameObject.layer) & triggerLayer) != 0
-            ||  collision.CompareTag("Enemy"))
+            || collision.CompareTag("Enemy"))
         {
-            hasHitGround = true;
-
-            // rebond aléatoire
-            float randomX = Random.Range(
-                -randomHorizontalForce,
-                randomHorizontalForce
-            );
-
-            float randomY = Random.Range(
-                bounceForce * 0.7f,
-                bounceForce * 1.5f
-            );
-
-            rb.linearVelocity = new Vector2(randomX, randomY);
-
-            // désactive collision après impact
-            coll.SetActive(false);
-
-            StartCoroutine(FlickerThenDestroy());
+            ForceHit();
         }
     }
 
