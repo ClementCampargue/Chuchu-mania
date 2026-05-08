@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class SC_starbit_spawning : MonoBehaviour
 {
-    public Transform[] spawnPoints;
+    private List<Transform> spawnPoints = new List<Transform>();
     public int numberToSpawn = 10;
     public GameObject[] collectiblePrefabs;
 
@@ -20,6 +20,10 @@ public class SC_starbit_spawning : MonoBehaviour
 
     void Start()
     {
+        foreach (Transform child in transform)
+        {
+            spawnPoints.Add(child);
+        }
     }
     public void Spawn_collectibles()
     {

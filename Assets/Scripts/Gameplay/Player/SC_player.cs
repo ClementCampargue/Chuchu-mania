@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 using System.Collections;
+using System.Collections.Generic;
 
 public class SC_player : MonoBehaviour
 {
@@ -19,6 +20,7 @@ public class SC_player : MonoBehaviour
     public int maxHealth = 3;
     private int currentHealth;
     public float hitFreezeTime = 0.15f;
+    public List<GameObject> hearts;
     public Vector2 hitKnockback = new Vector2(5f, 3f);
     [Header("Low Health Warning")]
     public Material normalMaterial;
@@ -294,7 +296,7 @@ public class SC_player : MonoBehaviour
         if (isFrozen || isInvincible || eat_system.isPowerUpActive) return;
         anim.SetBool("Stun", false);
 
-
+        hearts[currentHealth-1].SetActive(false);
         isStunned = false;
         ps_damage.Play();
         currentHealth -= damage;

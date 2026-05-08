@@ -1,9 +1,10 @@
 using UnityEngine;
+using System.Collections.Generic;
 
 public class SC_enemy_random_teleport : MonoBehaviour
 {
     [Header("Teleport Points")]
-    public Transform[] teleportPoints;
+    private List<Transform> teleportPoints;
 
     [Header("Teleport")]
     public float teleportInterval = 3f;
@@ -30,6 +31,8 @@ public class SC_enemy_random_teleport : MonoBehaviour
     public Animator anim;
     private void Start()
     {
+        teleportPoints = SC_worm_manager.manager.points;
+        SC_worm_manager.manager.worms.Add(this);
         timer = Random.Range(teleportInterval/2, teleportInterval);
     }
     void Update()
@@ -71,6 +74,13 @@ public class SC_enemy_random_teleport : MonoBehaviour
 
         }
     }
+    private void OnDestroy()
+    {
+        if(!SC_icecream_eat_system.instance.isPowerUpActive)
+        {
+            SC_worm_manager.manager.worms.Remove(this);
+        }
+    }
     void teleport()
     {
         anim.SetTrigger("teleport");
@@ -79,14 +89,14 @@ public class SC_enemy_random_teleport : MonoBehaviour
 
     public  void TeleportToRandomPoint()
     {
-        if (teleportPoints.Length == 0)
+        if (teleportPoints.Count == 0)
             return;
 
-        int randomStart = Random.Range(0, teleportPoints.Length);
+        int randomStart = Random.Range(0, teleportPoints.Count);
 
-        for (int i = 0; i < teleportPoints.Length; i++)
+        for (int i = 0; i < teleportPoints.Count; i++)
         {
-            int index = (randomStart + i) % teleportPoints.Length;
+            int index = (randomStart + i) % teleportPoints.Count;
 
             Transform targetPoint = teleportPoints[index];
 

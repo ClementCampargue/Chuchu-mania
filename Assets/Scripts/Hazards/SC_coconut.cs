@@ -69,7 +69,7 @@ public class SC_coconut : MonoBehaviour
         if (hasHitGround) return;
 
         if (((1 << collision.gameObject.layer) & triggerLayer) != 0
-            || collision.CompareTag("Ground")|| collision.CompareTag("Enemy"))
+            ||  collision.CompareTag("Enemy"))
         {
             hasHitGround = true;
 
