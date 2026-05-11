@@ -38,7 +38,10 @@ public class SC_sprite_grid : MonoBehaviour
                 0f
             );
 
+#if UNITY_EDITOR
             Undo.RecordObject(child, "Grid Arrange");
+#endif
+
             child.localPosition = pos;
 
             index++;
