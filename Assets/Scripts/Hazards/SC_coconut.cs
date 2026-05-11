@@ -78,7 +78,6 @@ public class SC_coconut : MonoBehaviour
 
         rb.linearVelocity = new Vector2(randomX, randomY);
 
-        coll.SetActive(false);
 
         StartCoroutine(FlickerThenDestroy());
     }
@@ -93,8 +92,7 @@ public class SC_coconut : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (((1 << collision.gameObject.layer) & triggerLayer) != 0
-            || collision.CompareTag("Enemy"))
+        if (collision.CompareTag("Enemy") || collision.CompareTag("Player"))
         {
             ForceHit();
         }
@@ -109,6 +107,7 @@ public class SC_coconut : MonoBehaviour
             sr.enabled = !sr.enabled;
 
             yield return new WaitForSeconds(flickerInterval);
+            coll.SetActive(false);
 
             elapsed += flickerInterval;
         }
