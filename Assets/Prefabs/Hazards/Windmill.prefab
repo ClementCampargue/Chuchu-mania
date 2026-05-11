@@ -83,7 +83,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   rotationSpeed: 300
-  rotationDuration: 10
+  rotationDuration: 3
   slowDownTime: 0.5
   hitBoost: 1200
   boostDecay: 5
