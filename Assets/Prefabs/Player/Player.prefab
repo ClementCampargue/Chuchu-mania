@@ -20111,8 +20111,13 @@ MonoBehaviour:
   moveSpeed: 4
   jumpForce: 6
   maxJumpTime: 0.3
+  climbSpeed: 0.65
   maxHealth: 3
   hitFreezeTime: 0.51
+  hearts:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
   hitKnockback: {x: 10, y: 5}
   normalMaterial: {fileID: 2100000, guid: a97c105638bdf8b4a8650670310a4cd3, type: 2}
   lowHealthMaterial: {fileID: 2100000, guid: dab62154501204d48b91a6f1cc99c506, type: 2}
@@ -20147,6 +20152,7 @@ MonoBehaviour:
   ghost: {fileID: 0}
   ps_damage: {fileID: 2596787470629622434}
   collider: {fileID: 5554834976724675085}
+  base_gravity: 0
   game_over_screen: {fileID: 0}
   canMove: 1
 --- !u!114 &1906161946050759491

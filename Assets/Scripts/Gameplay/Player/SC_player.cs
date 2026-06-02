@@ -16,6 +16,12 @@ public class SC_player : MonoBehaviour
     private float jumpTimeCounter;
     private bool isJumping;
 
+    [Header("Climbing")]
+    public float climbSpeed = 4f;
+
+    private bool isClimbing;
+    private bool canClimb;
+    private SC_grillage grillage;
     [Header("Health")]
     public int maxHealth = 3;
     private int currentHealth;
@@ -80,9 +86,10 @@ public class SC_player : MonoBehaviour
     private SC_icecream_eat_system eat_system;
     public static SC_player instance;
     public BoxCollider2D collider;
-
+    public float base_gravity;
     public GameObject game_over_screen;
     public bool canMove;
+    private bool was_climbing;
     private void Awake()
     {
         instance = this;
@@ -97,6 +104,7 @@ public class SC_player : MonoBehaviour
 
     void Start()
     {
+        base_gravity = rb.gravityScale;
         spriteRenderer.material = normalMaterial;
         eat_system = SC_icecream_eat_system.instance;
         levelWidth = rightLimit - leftLimit;
@@ -114,6 +122,20 @@ public class SC_player : MonoBehaviour
         {
             moveInput = Vector2.zero;
             return;
+        }
+  
+        if (canClimb)
+        {
+            float verticalInput = moveInput.y;
+
+            if (Mathf.Abs(verticalInput) > 0.1f)
+            {
+                StartClimbing(verticalInput);
+            }
+            else if (isClimbing)
+            {
+                rb.linearVelocity = Vector2.zero;
+            }
         }
         if (!isFrozen  && canMove)
             moveInput = Move.action.ReadValue<Vector2>();
@@ -219,10 +241,16 @@ public class SC_player : MonoBehaviour
     }
     void FixedUpdate()
     {
+        if (isClimbing && grillage != null)
+        {
+            Vector2 clamped = grillage.ClampPosition(rb.position);
+            rb.position = clamped;
+        }
         if (!SC_level_intro.gameStarted) return;
         if (!isFrozen)
         {
             float horizontalSpeed = moveInput.x * (eat_system.isPowerUpActive ? PowermoveSpeed : moveSpeed) + knockbackVelocity.x;
+
 
             float verticalSpeed = rb.linearVelocity.y;
             if (knockbackVelocity.y != 0)
@@ -238,6 +266,17 @@ public class SC_player : MonoBehaviour
     }
     private void OnJumpStarted(InputAction.CallbackContext context)
     {
+        if (isClimbing)
+        {
+            StopClimbingJump();
+
+            isJumping = true;
+            jumpTimeCounter = maxJumpTime;
+            rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpForce);
+            anim.SetTrigger("Jump");
+
+            return;
+        }
         if (!isFrozen && canMove && rb.linearVelocity.y <0.5f)
         {
             if (isGrounded || eat_system.isPowerUpActive)
@@ -453,5 +492,79 @@ public class SC_player : MonoBehaviour
 
         spriteRenderer.enabled = true;
         isInvincible = false;
+    }
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        if (other.CompareTag("Climb"))
+        {
+            canClimb = true;
+            grillage = other.GetComponent<SC_grillage>();
+        }
+    }
+
+    private void OnTriggerStay2D(Collider2D other)
+    {
+        if (other.CompareTag("Climb"))
+        {
+            canClimb = true;
+            if (was_climbing)
+            {
+                StartClimbing(0);
+            }
+        }
+    }
+
+    private void OnTriggerExit2D(Collider2D other)
+    {
+        if (other.CompareTag("Climb"))
+        {
+            StopClimbing();
+        }
+    }
+    void StartClimbing(float verticalInput)
+    {
+        isClimbing = true;
+
+        rb.gravityScale = 0;
+
+        Vector2 velocity = new Vector2(0, verticalInput * climbSpeed);
+
+        if (grillage != null)
+        {
+            Vector2 clamped = grillage.ClampPosition(rb.position + velocity * Time.fixedDeltaTime);
+            rb.position = clamped;
+            rb.linearVelocity = velocity;
+        }
+        else
+        {
+            rb.linearVelocity = velocity;
+        }
+
+        anim.SetBool("Climb", true);
+    }
+    void StopClimbing()
+    {
+        canClimb = false;
+        was_climbing = true;
+        grillage = null;
+
+        isClimbing = false;
+        Invoke("Delay_climb",0.02f);
+        rb.gravityScale = base_gravity;
+        anim.SetBool("Climb", false);
+    }
+
+    void StopClimbingJump()
+    {
+        canClimb = false;
+
+        isClimbing = false;
+        rb.gravityScale = base_gravity;
+        anim.SetBool("Climb", false);
+    }
+
+    void Delay_climb()
+    {
+        was_climbing = false;
     }
 }
