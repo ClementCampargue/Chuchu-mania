@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: 70654dcc163c6c04dae53ee7ad08eea2
+guid: 2113c1009620b4b4c8ccccfa0aef9582
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 6875376424259941753
-    second: motif_estomac_0
+      213: 8134830314296692368
+    second: mask_estomac_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -100,7 +100,7 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: motif_estomac_0
+      name: mask_estomac_0
       rect:
         serializedVersion: 2
         x: 0
@@ -115,8 +115,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 975fb193e6e3a6f50800000000000000
-      internalID: 6875376424259941753
+      spriteID: 09ecbb71219b4e070800000000000000
+      internalID: 8134830314296692368
       vertices: []
       indices: 
       edges: []
@@ -135,7 +135,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      motif_estomac_0: 6875376424259941753
+      mask_estomac_0: 8134830314296692368
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

@@ -5123,6 +5123,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5970181971369506332}
   - component: {fileID: 1117725058429507512}
+  - component: {fileID: 6162067483996259934}
   - component: {fileID: 3255610440191343998}
   - component: {fileID: 5197983828705797774}
   - component: {fileID: 1178745191239530512}
@@ -5168,36 +5169,51 @@ MonoBehaviour:
   groundDetection: {fileID: 4019116714124266283}
   detectionDistance: 0.15
   flipCooldown: 0.2
-  animator: {fileID: 8652064909510127099}
-  ps: {fileID: 4752508073273262270}
-  visuals: {fileID: 8636599317760690865}
-  knockbackForce: 3
-  knockbackVerticalForce: 3
-  spinSpeed: 720
-  flickerDuration: 2
-  flickerInterval: 0.1
-  gravity: 15
-  detectionRadius: 0.5
-  playerLayer:
-    serializedVersion: 2
-    m_Bits: 64
-  enemyDetectionDistance: 0.2
-  enemyLayer:
-    serializedVersion: 2
-    m_Bits: 8
-  spriteRenderer: {fileID: 8178178168088807887}
   groundLayer:
     serializedVersion: 2
     m_Bits: 8
-  juice: {fileID: 5197983828705797774}
-  collision: {fileID: 5970181971369506332}
-  juice_stun: {fileID: 1178745191239530512}
+  enemyLayer:
+    serializedVersion: 2
+    m_Bits: 8
+  enemyDetectionDistance: 0.2
+  CanMove: 1
+  damgage: {fileID: 6162067483996259934}
+--- !u!114 &6162067483996259934
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3366398786417948820}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ca40273a996d68f4d843cc040c3bd10d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  spriteRenderer: {fileID: 8178178168088807887}
+  animator: {fileID: 8652064909510127099}
+  ps: {fileID: 4752508073273262270}
+  visuals: {fileID: 8636599317760690865}
+  collision: {fileID: 3184147318508318437}
+  stunDetection: {fileID: 3184147318508318437}
+  playerLayer:
+    serializedVersion: 2
+    m_Bits: 64
   stunLayer:
     serializedVersion: 2
     m_Bits: 2048
+  detectionRadius: 0.5
+  stunRadius: 0.5
+  knockbackForce: 2
+  knockbackVerticalForce: 5
+  spinSpeed: 720
+  gravity: 9.8
   stunDuration: 2
-  stunRadius: 0.34
-  stunDetection: {fileID: 3184147318508318437}
+  flickerDuration: 2
+  flickerInterval: 0.1
+  juice: {fileID: 5197983828705797774}
+  juice_stun: {fileID: 1178745191239530512}
+  isStunned: 0
 --- !u!114 &3255610440191343998
 MonoBehaviour:
   m_ObjectHideFlags: 0

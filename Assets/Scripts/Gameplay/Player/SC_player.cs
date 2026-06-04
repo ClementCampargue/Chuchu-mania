@@ -1,7 +1,8 @@
-using UnityEngine;
-using UnityEngine.InputSystem;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
+using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class SC_player : MonoBehaviour
 {
@@ -89,7 +90,10 @@ public class SC_player : MonoBehaviour
     public float base_gravity;
     public GameObject game_over_screen;
     public bool canMove;
-    private bool was_climbing;
+    public bool burning;
+    private bool was_climbing; 
+    private Vector2 added_velocity;
+    private Vector2 added_velocity_;
     private void Awake()
     {
         instance = this;
@@ -191,6 +195,13 @@ public class SC_player : MonoBehaviour
             StartCoroutine(StunCoroutine());
         }
     }
+    public void stun_player()
+    {
+        if (isStunned)
+            return;
+        StartCoroutine(StunCoroutine());
+
+    }
     IEnumerator StunCoroutine()
     {
         juice.PlayJuice();
@@ -241,6 +252,7 @@ public class SC_player : MonoBehaviour
     }
     void FixedUpdate()
     {
+        added_velocity_ = Vector2.Lerp(added_velocity_, added_velocity, 0.2f);
         if (isClimbing && grillage != null)
         {
             Vector2 clamped = grillage.ClampPosition(rb.position);
@@ -259,8 +271,10 @@ public class SC_player : MonoBehaviour
                 knockbackVelocity.y = 0;
             }
 
-            rb.linearVelocity = new Vector2(horizontalSpeed, verticalSpeed);
-
+            rb.linearVelocity = new Vector2(
+                horizontalSpeed + added_velocity_.x,
+                verticalSpeed + added_velocity_.y
+            );
             knockbackVelocity.x = Mathf.Lerp(knockbackVelocity.x, 0, 0.15f);
         }
     }
@@ -352,7 +366,53 @@ public class SC_player : MonoBehaviour
             Die();
         }
     }
+    public void LavaHit(Vector2 launchVelocity, float controlMultiplier, float controlTime)
+    {
+        burning = true;
 
+        StopAllCoroutines();
+        anim.SetBool("Stun", false);
+        hearts[currentHealth - 1].SetActive(false);
+        isStunned = false;
+        ps_damage.Play();
+        currentHealth -= 1;
+        eat_system.take_damage();
+
+        if (currentHealth > 0)
+        {
+            if (hitCoroutine != null) StopCoroutine(hitCoroutine);
+            StartCoroutine(InvincibilityCoroutine());
+        }
+        else
+        {
+            Die();
+        }
+        isFrozen = false;
+        isStunned = false;
+        canTakeDamage = true;
+
+        rb.bodyType = RigidbodyType2D.Dynamic;
+
+        rb.linearVelocity = launchVelocity;
+
+        StartCoroutine(LavaControlLock(controlMultiplier, controlTime));
+    }
+    private IEnumerator LavaControlLock(float multiplier, float time)
+    {
+        float originalMove = moveSpeed;
+        float originalPower = PowermoveSpeed;
+
+        moveSpeed *= multiplier;
+        PowermoveSpeed *= multiplier;
+
+        yield return new WaitForSeconds(time);
+
+        yield return new WaitUntil(() => isGrounded);
+        burning = false;
+
+        moveSpeed = originalMove;
+        PowermoveSpeed = originalPower;
+    }
     private IEnumerator InvincibilityCoroutine()
     {
         isInvincible = true;
@@ -516,7 +576,7 @@ public class SC_player : MonoBehaviour
 
     private void OnTriggerExit2D(Collider2D other)
     {
-        if (other.CompareTag("Climb"))
+        if (other.CompareTag("Climb") && isClimbing)
         {
             StopClimbing();
         }
@@ -566,5 +626,9 @@ public class SC_player : MonoBehaviour
     void Delay_climb()
     {
         was_climbing = false;
+    }
+    public void SetGroundVelocity(Vector2 vel)
+    {
+        added_velocity = vel;
     }
 }

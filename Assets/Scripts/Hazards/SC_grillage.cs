@@ -9,6 +9,7 @@ public class SC_grillage : MonoBehaviour
     public float maxY;
 
     [Header("Auto compute from collider")]
+    public float multiplier = 1;
     public bool autoCompute = true;
     public BoxCollider2D box;
 
@@ -22,10 +23,10 @@ public class SC_grillage : MonoBehaviour
             if (box != null)
             {
                 Bounds b = box.bounds;
-                minX = b.min.x;
-                maxX = b.max.x;
-                minY = b.min.y;
-                maxY = b.max.y;
+                minX = b.min.x * multiplier;
+                maxX = b.max.x * multiplier;
+                minY = b.min.y * multiplier;
+                maxY = b.max.y * multiplier;
             }
         }
     }

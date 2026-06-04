@@ -18,5 +18,10 @@ public class SC_debug : MonoBehaviour
             eat.ActivatePowerUpInstant();
 
         }
+        if (Input.GetKeyDown(KeyCode.N))
+        {
+            SC_phases.instance.NextPhase();
+
+        }
     }
 }
