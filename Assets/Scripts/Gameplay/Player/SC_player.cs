@@ -147,8 +147,22 @@ public class SC_player : MonoBehaviour
             moveInput = Vector2.zero;
 
         isGrounded = Physics2D.OverlapCircle(groundCheck.position, groundCheckRadius, groundLayer);
+        if (isClimbing)
+        {
+            if (Mathf.Abs(moveInput.y) > 0.1f || Mathf.Abs(moveInput.x) > 0.1f)
+            {
+                anim.SetBool("Run", true);
+            }
+            else
+            {
+                anim.SetBool("Run", false);
+            }
 
-        anim.SetBool("Run", Mathf.Abs(moveInput.x) > 0.1f);
+        }
+        else
+        {
+            anim.SetBool("Run", Mathf.Abs(moveInput.x) > 0.1f);
+        }
 
         if (!wasGrounded && isGrounded && rb.linearVelocity.y <= 0.01f)
         {
@@ -348,7 +362,10 @@ public class SC_player : MonoBehaviour
     {
         if (isFrozen || isInvincible || eat_system.isPowerUpActive) return;
         anim.SetBool("Stun", false);
-
+        if (isClimbing)
+        {
+            StopClimbingJump();
+        }
         hearts[currentHealth-1].SetActive(false);
         isStunned = false;
         ps_damage.Play();

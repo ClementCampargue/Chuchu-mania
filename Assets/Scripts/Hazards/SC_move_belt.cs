@@ -9,6 +9,10 @@ public class SC_move_belt : MonoBehaviour
 
     private SC_player player;
     public Material mat;
+    private void Awake()
+    {
+        mat.SetVector("_Speed", new Vector2(0, 0));
+    }
     private void Start()
     {
         player = SC_player.instance;

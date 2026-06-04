@@ -5,10 +5,13 @@ public class SC_spawner : MonoBehaviour
     [Header("Liste des prefabs à spawner")]
     public GameObject[] prefabs;
 
+    [Header("Points de spawn (si vide = transform du spawner)")]
+    public Transform[] spawnPoints;
+
     [Header("Mode de spawn")]
     public bool spawnInOrder = false;
-    public bool RandomizeOrder = false;
-    public bool PlayOnAwake = false;
+    public bool randomizeOrder = false;
+    public bool playOnAwake = false;
 
     [Header("Temps entre chaque spawn")]
     public float spawnInterval = 2f;
@@ -20,28 +23,21 @@ public class SC_spawner : MonoBehaviour
     private float timer;
     private int currentPrefabIndex = 0;
 
+    private int lastSpawnPointIndex = -1;
+
     private void Start()
     {
-        if (RandomizeOrder)
+        if (randomizeOrder && prefabs != null && prefabs.Length > 0)
         {
             Shuffle(prefabs);
         }
-        if (PlayOnAwake)
+
+        if (playOnAwake)
         {
             timer = spawnInterval;
         }
     }
-    private void Shuffle(GameObject[] array)
-    {
-        for (int i = array.Length - 1; i > 0; i--)
-        {
-            int randomIndex = Random.Range(0, i + 1);
 
-            GameObject temp = array[i];
-            array[i] = array[randomIndex];
-            array[randomIndex] = temp;
-        }
-    }
     private void Update()
     {
         timer += Time.deltaTime;
@@ -70,8 +66,6 @@ public class SC_spawner : MonoBehaviour
         if (spawnInOrder)
         {
             prefabChoisi = prefabs[currentPrefabIndex];
-
-            // Passe au suivant et revient au début à la fin de la liste
             currentPrefabIndex = (currentPrefabIndex + 1) % prefabs.Length;
         }
         else
@@ -79,7 +73,42 @@ public class SC_spawner : MonoBehaviour
             prefabChoisi = prefabs[Random.Range(0, prefabs.Length)];
         }
 
-        Instantiate(prefabChoisi, transform.position, transform.rotation);
+        Transform spawnPoint = GetRandomSpawnPoint();
+
+        Instantiate(prefabChoisi, spawnPoint.position, spawnPoint.rotation);
         currentSpawnCount++;
+    }
+
+    private Transform GetRandomSpawnPoint()
+    {
+        if (spawnPoints == null || spawnPoints.Length == 0)
+            return transform;
+
+        if (spawnPoints.Length == 1)
+            return spawnPoints[0];
+
+        int newIndex;
+
+        do
+        {
+            newIndex = Random.Range(0, spawnPoints.Length);
+        }
+        while (newIndex == lastSpawnPointIndex);
+
+        lastSpawnPointIndex = newIndex;
+
+        return spawnPoints[newIndex];
+    }
+
+    private void Shuffle(GameObject[] array)
+    {
+        for (int i = array.Length - 1; i > 0; i--)
+        {
+            int randomIndex = Random.Range(0, i + 1);
+
+            GameObject temp = array[i];
+            array[i] = array[randomIndex];
+            array[randomIndex] = temp;
+        }
     }
 }
