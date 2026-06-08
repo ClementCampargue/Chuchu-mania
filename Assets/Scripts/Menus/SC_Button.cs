@@ -13,84 +13,56 @@ public class SC_Button : MonoBehaviour
     [Header("Events")]
     public UnityEvent onClick;
 
-    [Header("Interaction")]
-    public Camera interactionCamera;
-
-    private Animator anim;
-    private Collider2D col;
-
-    private bool isHovered;
+    private SpriteRenderer spriteRenderer;
+    public bool isHovered;
     private bool isPressed;
 
+    private Animator anim;
     private void Awake()
     {
-        anim = GetComponent<Animator>();
-        col = GetComponent<Collider2D>();
+        spriteRenderer = GetComponent<SpriteRenderer>();
 
-        if (interactionCamera == null)
-            interactionCamera = Camera.main;
+        anim = GetComponent<Animator>();
+    }
+    public void Select()
+    {
+        isHovered = true;
+        anim.SetTrigger(hover);
+    }
+    public void UnSelect()
+    {
+        isHovered = true;
+        anim.SetTrigger(unhover);
+    }
+    public void Press()
+    {
+        isPressed = true;
+        anim.SetTrigger(press);
+        onClick?.Invoke();
+    }
+    private void OnMouseEnter()
+    {
+        Select();
     }
 
-    private void Update()
+    private void OnMouseExit()
     {
-        if (interactionCamera == null)
-            return;
+        UnSelect();
+    }
 
-        // Position de la souris en coordonnées monde
-        Vector3 mousePos = Input.mousePosition;
-        Vector3 worldPos = interactionCamera.ScreenToWorldPoint(mousePos);
-        worldPos.z = 0f;
+    private void OnMouseDown()
+    {
+        isPressed = true;
+        anim.SetTrigger(press);
+    }
 
-        // Raycast / détection du collider sous la souris
-        Collider2D hit = Physics2D.OverlapPoint(worldPos);
-
-        bool currentlyHovered = hit == col;
-
-        // Hover Enter
-        if (currentlyHovered && !isHovered)
+    private void OnMouseUp()
+    {
+        // Si la souris est toujours sur le bouton,
+        // on considère que c'est un clic valide.
+        if (isHovered)
         {
-            isHovered = true;
-
-            if (!string.IsNullOrEmpty(hover))
-                anim.SetTrigger(hover);
-        }
-
-        // Hover Exit
-        if (!currentlyHovered && isHovered)
-        {
-            isHovered = false;
-
-            if (!string.IsNullOrEmpty(unhover))
-                anim.SetTrigger(unhover);
-        }
-
-        // Mouse Down
-        if (isHovered && Input.GetMouseButtonDown(0))
-        {
-            isPressed = true;
-
-            if (!string.IsNullOrEmpty(press))
-                anim.SetTrigger(press);
-        }
-
-        // Mouse Up
-        if (isPressed && Input.GetMouseButtonUp(0))
-        {
-            isPressed = false;
-
-            // Clic valide uniquement si la souris est toujours dessus
-            if (isHovered)
-            {
-                onClick?.Invoke();
-
-                if (!string.IsNullOrEmpty(hover))
-                    anim.SetTrigger(hover);
-            }
-            else
-            {
-                if (!string.IsNullOrEmpty(unhover))
-                    anim.SetTrigger(unhover);
-            }
+            onClick?.Invoke();
         }
     }
 }

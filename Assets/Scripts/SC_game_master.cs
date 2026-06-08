@@ -7,16 +7,24 @@ public class SC_game_master : MonoBehaviour
 
     private void Awake()
     {
+        if (instance != null && instance != this)
+        {
+            Destroy(gameObject);
+            return;
+        }
+
         instance = this;
-    }
-    void Start()
-    {
-        
+
+        DontDestroyOnLoad(gameObject);
     }
 
-    // Update is called once per frame
+    void Start()
+    {
+
+    }
+
     void Update()
     {
-        
+
     }
 }

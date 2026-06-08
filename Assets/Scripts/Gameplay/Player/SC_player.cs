@@ -105,6 +105,7 @@ public class SC_player : MonoBehaviour
     public SC_juiciness land;
     public AudioSource grid;
     public AudioSource run;
+    private Collider2D hit;
     private void Awake()
     {
         instance = this;
@@ -253,18 +254,29 @@ public class SC_player : MonoBehaviour
     }
     void CheckDamage()
     {
-        if (!canTakeDamage) return;
+        if (!canTakeDamage || currentHealth == 0) return;
 
-        Collider2D hit = Physics2D.OverlapCircle(damageCheck.position, damageRadius, damageLayer);
+        hit = Physics2D.OverlapCircle(damageCheck.position, damageRadius, damageLayer);
         if (hit != null)
         {
             TakeDamage(1, hit.transform.position);
             if(currentHealth == 0)
             {
                 hit.GetComponentInParent<SortingGroup>().sortingLayerName = "UI";
+                StartCoroutine(delay_death_enemy());
             }
         }
     }
+    IEnumerator delay_death_enemy()
+    {
+        yield return new WaitForSecondsRealtime(1.5f);
+
+
+        hit.GetComponentInParent<SortingGroup>().sortingLayerName = "Default";
+
+
+    }
+
     public void stun_player()
     {
         if (isStunned)

@@ -8,6 +8,12 @@ EditorBuildSettings:
   - enabled: 0
     path: Assets/Scenes/SampleScene.unity
     guid: 8c9cfa26abfee488c85f1582747f6a02
+  - enabled: 1
+    path: Assets/Scenes/Canvas test.unity
+    guid: 70a030e4e4c1e084fb2322e4426caf6b
+  - enabled: 1
+    path: Assets/Scenes/MoneyScene.unity
+    guid: e32df890a46001344b5bd88ff4676238
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
   m_UseUCBPForAssetBundles: 0

@@ -3,7 +3,7 @@ using UnityEngine.SceneManagement;
 
 public class SC_loose_screen : MonoBehaviour
 {
-
+    public GameObject ui;
     public void ReloadCurrentScene()
     {
         Time.timeScale = 1.0f;  
@@ -19,6 +19,8 @@ public class SC_loose_screen : MonoBehaviour
     }
     public void give_up()
     {
-
+        SC_screenshot_transition.instance.Capture("MoneyScene");
+        ui.SetActive(false);
+        gameObject.SetActive(false);
     }
 }
