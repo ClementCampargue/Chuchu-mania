@@ -1,203 +1,228 @@
 using System.Collections;
 using UnityEngine;
+using UnityEngine.InputSystem;
+using System.Collections.Generic;
 
 public class SC_juiciness : MonoBehaviour
 {
+    public Transform trs;
+
+    [Header("Renderer")]
     public SpriteRenderer spriteRenderer;
     public Material flashMaterial;
     private Material defaultMaterial;
 
-    [Header("Particles")]
-    public ParticleSystem ps;
+    [Header("Controller Rumble")]
+    public bool rumble = true;
+    public float rumbleLow = 0.1f;
+    public float rumbleHigh = 0.3f;
+    public float rumbleDuration = 0.1f;
 
-    [Header("Flash Settings")]
+    [Header("Screen Shake")]
+    public float shakeAmplitude = 0f;
+    public float shakeFrequency = 0f;
+    public float shakeScreenDuration = 0f;
+
+    [Header("Particles")]
+    public List<ParticleSystem> ps;
+
+
+    [Header("Audio")]
+    public List<AudioSource> audio;
+
+    [Header("Flash")]
+    public bool flash = true;
     public float flashDuration = 0.05f;
 
-    [Header("Squash & Stretch Settings")]
+    [Header("Squash & Stretch")]
     public float stretchAmount = 1.2f;
     public float squashAmount = 0.8f;
     public float scaleDuration = 0.1f;
     public bool verticalStretch = true;
 
-    [Header("Shake Settings")]
+    [Header("Local Shake")]
     public float shakeDuration = 0.15f;
     public float shakeIntensity = 0.1f;
 
-    [Header("Freeze Frame Settings")]
+    [Header("Freeze Frame")]
     public bool freeze = false;
     public float freezeDuration = 0.05f;
+    public float slowMoScale = 0.05f;
+    public float freezeRecoverDuration = 0.15f;
 
-    [Header("Zoom Settings")]
-    public float zoomAmount = 2f;
-    public float zoomDuration = 0.1f;
+    [Header("Curves")]
+    public AnimationCurve fovCurve = AnimationCurve.EaseInOut(0, 0, 1, 1);
+    public AnimationCurve timeScaleCurve = AnimationCurve.EaseInOut(0, 0, 1, 1);
 
     private Vector3 originalScale;
     private Vector3 originalPosition;
-    private float originalCamSize;
 
     private Coroutine scaleRoutine;
     private Coroutine shakeRoutine;
     private Coroutine flashRoutine;
-    private Coroutine zoomRoutine;
     private Coroutine freezeRoutine;
-    private bool isFreezing = false;
 
-    void Awake()
+    private bool isFreezing;
+
+    void Start()
     {
-        if (spriteRenderer == null)
-            spriteRenderer = GetComponent<SpriteRenderer>();
+        trs ??= transform;
 
-        defaultMaterial = spriteRenderer.material;
-        originalScale = transform.localScale;
-        originalPosition = transform.localPosition;
+        if (flash)
+        {
+            if (spriteRenderer == null)
+                spriteRenderer = GetComponent<SpriteRenderer>();
 
-        if (Camera.main != null)
-            originalCamSize = Camera.main.orthographicSize;
+            defaultMaterial = spriteRenderer.material;
+        }
+        if (trs != null)
+            originalScale = trs.localScale;
+
+    }
+
+    void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.V))
+            PlayJuice();
     }
 
     public void PlayJuice()
     {
-        if (ps != null)
+        // Rumble
+        if (rumble)
+            SC_rumbleManager.instance.PlayRumble(rumbleLow, rumbleHigh, rumbleDuration);
+
+
+
+
+        // Particles
+        if (ps.Count > 0)
         {
-            ps.Play();
+            foreach(ParticleSystem ps in ps)
+            {
+                ps.Play();
+            }
+        }
+        if (audio.Count > 0)
+        {
+            foreach(AudioSource audio in audio)
+            {
+                audio.Play();
+            }
         }
 
-        // Squash & Stretch
-        if (scaleRoutine != null) StopCoroutine(scaleRoutine);
-        scaleRoutine = StartCoroutine(SquashAndStretch());
+        // Squash
+        RestartCoroutine(ref scaleRoutine, SquashAndStretch());
 
         // Flash
-        if (flashRoutine != null) StopCoroutine(flashRoutine);
-        flashRoutine = StartCoroutine(Flash());
+        if (flash)
+            RestartCoroutine(ref flashRoutine, Flash());
 
-        // Shake
-        if (shakeRoutine != null && shakeIntensity != 0) StopCoroutine(shakeRoutine);
-        shakeRoutine = StartCoroutine(Shake());
+        // Local shake
+        RestartCoroutine(ref shakeRoutine, Shake());
 
-        // Freeze Frame (sécurisé)
-        if (freeze && !isFreezing)
-        {
+        // Freeze frame (independent)
+        if (freeze && !isFreezing && Time.timeScale == 1f)
             freezeRoutine = StartCoroutine(FreezeFrame());
-        }
-
-        // Zoom
-        if (zoomRoutine != null && zoomAmount != 0) StopCoroutine(zoomRoutine);
-        zoomRoutine = StartCoroutine(Zoom());
     }
+
+    // ---------------- CAMERA ZOOM (SEPARATED) ---------------- 
+
+
+
+    // ---------------- FREEZE FRAME ----------------
+
+    IEnumerator FreezeFrame()
+    {
+        isFreezing = true;
+
+        float originalTimeScale = Time.timeScale;
+        Time.timeScale = slowMoScale;
+
+
+        yield return new WaitForSecondsRealtime(freezeDuration);
+
+        Time.timeScale = originalTimeScale;
+
+
+
+        isFreezing = false;
+    }
+
+    // ---------------- EFFECTS ----------------
 
     IEnumerator Flash()
     {
         spriteRenderer.material = flashMaterial;
-        yield return new WaitForSeconds(flashDuration);
+        yield return new WaitForSecondsRealtime(flashDuration);
         spriteRenderer.material = defaultMaterial;
     }
 
     IEnumerator SquashAndStretch()
     {
-        transform.localScale = originalScale;
+        Vector3 baseScale = originalScale;
 
-        Vector3 stretchScale = originalScale;
+        Vector3 stretchScale = baseScale;
+
         if (verticalStretch)
         {
-            stretchScale.y = originalScale.y * stretchAmount;
-            stretchScale.x = originalScale.x * squashAmount;
+            stretchScale.y *= stretchAmount;
+            stretchScale.x *= squashAmount;
+            stretchScale.z *= squashAmount;
         }
         else
         {
-            stretchScale.x = originalScale.x * stretchAmount;
-            stretchScale.y = originalScale.y * squashAmount;
+            stretchScale.x *= stretchAmount;
+            stretchScale.y *= squashAmount;
+            stretchScale.z *= squashAmount;
         }
 
-        // Phase 1: Stretch
         float t = 0f;
+
         while (t < scaleDuration)
         {
-            t += Time.deltaTime;
+            t += Time.unscaledDeltaTime;
             float lerp = Mathf.Clamp01(t / scaleDuration);
-            lerp = lerp * lerp; // ease-in rapide
-
-            float newX = Mathf.Lerp(originalScale.x, stretchScale.x, lerp);
-            float newY = Mathf.Lerp(originalScale.y, stretchScale.y, lerp);
-            transform.localScale = new Vector3(newX, newY, originalScale.z);
-
+            trs.localScale = Vector3.Lerp(baseScale, stretchScale, lerp * lerp);
             yield return null;
         }
 
-        // Phase 2: Retour overshoot
         t = 0f;
-        Vector3 overshootScale = originalScale + (stretchScale - originalScale) * 1.05f;
 
         while (t < scaleDuration)
         {
-            t += Time.deltaTime;
-            float rawLerp = Mathf.Clamp01(t / scaleDuration);
-
-            float overshootLerp = Mathf.Sin(rawLerp * Mathf.PI * (0.2f + 2.5f * Mathf.Pow(rawLerp, 3f)))
-                                  * Mathf.Pow(Mathf.Max(0f, 1f - rawLerp), 2.2f) + 1f;
-            overshootLerp = Mathf.Clamp(overshootLerp, 0f, 1.5f);
-
-            float newX = Mathf.Lerp(overshootScale.x, originalScale.x, overshootLerp);
-            float newY = Mathf.Lerp(overshootScale.y, originalScale.y, overshootLerp);
-            transform.localScale = new Vector3(newX, newY, originalScale.z);
-
+            t += Time.unscaledDeltaTime;
+            float lerp = Mathf.Clamp01(t / scaleDuration);
+            trs.localScale = Vector3.Lerp(stretchScale, baseScale, 1f - Mathf.Pow(1f - lerp, 3f));
             yield return null;
         }
 
-        transform.localScale = originalScale;
+        trs.localScale = baseScale;
     }
 
     IEnumerator Shake()
     {
-        originalPosition = transform.localPosition;
+        originalPosition = trs.localPosition;
+
         float t = 0f;
 
         while (t < shakeDuration)
         {
-            t += Time.deltaTime;
-            Vector3 offset = Random.insideUnitCircle * shakeIntensity;
-            transform.localPosition = originalPosition + offset;
+            t += Time.unscaledDeltaTime;
+            trs.localPosition = originalPosition + Random.insideUnitSphere * shakeIntensity;
             yield return null;
         }
 
-        transform.localPosition = originalPosition;
+        trs.localPosition = originalPosition;
     }
 
-    IEnumerator FreezeFrame()
+    // ---------------- UTILS ----------------
+
+    void RestartCoroutine(ref Coroutine routine, IEnumerator enumerator)
     {
-        isFreezing = true;
-        float originalTimeScale = Time.timeScale;
-        Time.timeScale = 0f;
+        if (routine != null)
+            StopCoroutine(routine);
 
-        yield return new WaitForSecondsRealtime(freezeDuration);
-
-        if (Time.timeScale == 0f)
-            Time.timeScale = originalTimeScale;
-
-        isFreezing = false;
-    }
-
-    IEnumerator Zoom()
-    {
-        if (Camera.main == null) yield break;
-
-        float t = 0f;
-        float targetSize = originalCamSize / zoomAmount;
-
-        while (t < zoomDuration)
-        {
-            t += Time.unscaledDeltaTime;
-            Camera.main.orthographicSize = Mathf.Lerp(originalCamSize, targetSize, Mathf.Clamp01(t / zoomDuration));
-            yield return null;
-        }
-
-        t = 0f;
-        while (t < zoomDuration)
-        {
-            t += Time.unscaledDeltaTime;
-            Camera.main.orthographicSize = Mathf.Lerp(targetSize, originalCamSize, Mathf.Clamp01(t / zoomDuration));
-            yield return null;
-        }
-
-        Camera.main.orthographicSize = originalCamSize;
+        routine = StartCoroutine(enumerator);
     }
 }

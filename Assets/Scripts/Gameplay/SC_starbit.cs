@@ -14,7 +14,9 @@ public class SC_starbit : MonoBehaviour
     private bool isAttracted = false;
     private Transform attractTarget;
     private float attractSpeed;
-
+    public SC_juiciness get;
+    private bool canpickup =true;
+    public GameObject visuals;
     private void Start()
     {
         eat_system = SC_icecream_eat_system.instance;
@@ -48,14 +50,21 @@ public class SC_starbit : MonoBehaviour
 
     void Collect()
     {
-        if (eat_system.currrent_ice_cream < 10)
+        if (eat_system.currrent_ice_cream < 10 && canpickup)
         {
-            spawner.OnCollectiblePicked(gameObject);
-            eat_system.get_cream(ice_cream_UI);
-            Destroy(gameObject);
+            visuals.SetActive(false);
+            canpickup = false;
+            get.PlayJuice();
+            Invoke("delay_destroy", 0.5f);
         }
     }
+    void delay_destroy()
+    {
+        spawner.OnCollectiblePicked(gameObject);
+        eat_system.get_cream(ice_cream_UI);
+        Destroy(gameObject);
 
+    }
     private void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.yellow;

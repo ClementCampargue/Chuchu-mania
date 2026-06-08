@@ -23,5 +23,10 @@ public class SC_debug : MonoBehaviour
             SC_phases.instance.NextPhase();
 
         }
+        if (Input.GetKeyDown(KeyCode.K))
+        {
+            SC_player.instance.TakeDamage(1, SC_player.instance.transform.position);
+
+        }
     }
 }

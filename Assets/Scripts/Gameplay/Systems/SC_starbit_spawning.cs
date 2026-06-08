@@ -17,7 +17,12 @@ public class SC_starbit_spawning : MonoBehaviour
     public float delayBetweenSpawns = 0.5f;
 
     private List<GameObject> currentCollectibles = new List<GameObject>();
+    public static SC_starbit_spawning instance;
 
+    private void Awake()
+    {
+        instance = this;
+    }
     void Start()
     {
         foreach (Transform child in transform)

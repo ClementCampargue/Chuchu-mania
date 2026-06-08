@@ -48,11 +48,13 @@ public class SC_icecream_eat_system : MonoBehaviour
     private int eaten_cream;
     public bool loosing_points;
 
+    public SC_juiciness eat;
+    public AudioSource eating_sfx;
 
 
 
 
-[ContextMenu("DEBUG - Fill Stomach")]
+    [ContextMenu("DEBUG - Fill Stomach")]
 
     public void DebugFillStomach()
     {
@@ -191,6 +193,7 @@ public class SC_icecream_eat_system : MonoBehaviour
 
         isEating = true;
         player.canMove = false;
+        eating_sfx.Play();
         player.anim_.SetBool("Eat", true);
 
         for (int i = selectedCreams.Count - 1; i >= 0; i--)
@@ -216,6 +219,7 @@ public class SC_icecream_eat_system : MonoBehaviour
                     if (!eat_input.action.IsPressed() && !forceEatAll)
                     {
                         calculate_score();
+                        eat.PlayJuice();
 
                         player.anim_.SetBool("Eat", false);
                         multiplierText.gameObject.SetActive(false);
@@ -255,7 +259,7 @@ public class SC_icecream_eat_system : MonoBehaviour
 
         player.anim_.SetBool("Eat", false);
         multiplierText.gameObject.SetActive(false);
-
+        eating_sfx.Stop();
         calculate_score();
 
         isEating = false;

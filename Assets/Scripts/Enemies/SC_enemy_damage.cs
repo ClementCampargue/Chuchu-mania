@@ -65,7 +65,6 @@ public class SC_enemy_damage : MonoBehaviour
     void DetectPlayerOverlap()
     {
         if (isKnockedBack || isStunned) return;
-     
         Collider2D playerCollider =
             Physics2D.OverlapCircle(collision.position, detectionRadius, playerLayer);
 
@@ -121,7 +120,7 @@ public class SC_enemy_damage : MonoBehaviour
         if (isKnockedBack) return;
 
         isKnockedBack = true;
-
+        player.anim_powerup.SetTrigger("Punch");
         if (animator != null)
         {
             animator.SetTrigger("Death");

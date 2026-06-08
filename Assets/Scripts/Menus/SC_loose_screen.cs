@@ -12,4 +12,13 @@ public class SC_loose_screen : MonoBehaviour
         // Recharge la scène
         SceneManager.LoadScene(currentScene.name);
     }
+
+    public void revive()
+    {
+
+    }
+    public void give_up()
+    {
+
+    }
 }

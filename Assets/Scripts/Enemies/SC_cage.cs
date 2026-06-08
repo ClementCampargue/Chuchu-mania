@@ -6,9 +6,10 @@ public class SC_cage : MonoBehaviour
     private SC_icecream_eat_system system;
 
     public int Health = 1;
-    public SC_juiciness juice;
     public GameObject fire_system;
     public GameObject win_screen;
+    public SC_juiciness juice_damage;
+    public SC_juiciness juice_death;
     void Start()
     {
         system = SC_icecream_eat_system.instance;
@@ -31,15 +32,19 @@ public class SC_cage : MonoBehaviour
 
     void die()
     {
-        SC_icecream_eat_system.instance.loosing_points = false;
         Health--;
-        juice.PlayJuice();
         if (Health == 0)
         {
+            SC_icecream_eat_system.instance.loosing_points = false;
             fire_system.SetActive(false);
-            juice.PlayJuice();
+            juice_death.PlayJuice();
+            Invoke("win_sc", 1);
         }
-        Invoke("win_sc", 1);
+        else
+        {
+            juice_damage.PlayJuice();
+
+        }
     }
 
     void win_sc()

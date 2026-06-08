@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.Rendering;
 
 public class SC_player : MonoBehaviour
 {
@@ -53,7 +54,7 @@ public class SC_player : MonoBehaviour
     [Header("Invincibility")]
     public float invincibilityTime = 1f;
     public SpriteRenderer spriteRenderer;
-    private bool isInvincible = false;
+    public bool isInvincible = false;
 
     [Header("Transformation")]
     public float transformFreezeTime = 0.5f;
@@ -75,8 +76,7 @@ public class SC_player : MonoBehaviour
     public InputActionReference Move;
 
     [Header("Screen Wrap")]
-    public float leftLimit = -10f;
-    public float rightLimit = 10f;
+    private float limit = -10f;
     public Transform ghost;
 
     private float levelWidth;
@@ -94,6 +94,17 @@ public class SC_player : MonoBehaviour
     private bool was_climbing; 
     private Vector2 added_velocity;
     private Vector2 added_velocity_;
+
+    [Header("Audio")]
+    public SC_juiciness jump;
+    public SC_juiciness damage_sfx;
+    public SC_juiciness damage_lava_sfx;
+    public SC_juiciness stun;
+    public SC_juiciness transformation;
+    public SC_juiciness die;
+    public SC_juiciness land;
+    public AudioSource grid;
+    public AudioSource run;
     private void Awake()
     {
         instance = this;
@@ -108,10 +119,10 @@ public class SC_player : MonoBehaviour
 
     void Start()
     {
+        limit = SC_game_master.instance.limits;
         base_gravity = rb.gravityScale;
         spriteRenderer.material = normalMaterial;
         eat_system = SC_icecream_eat_system.instance;
-        levelWidth = rightLimit - leftLimit;
         currentHealth = maxHealth;
         anim = anim_;
     }
@@ -120,8 +131,8 @@ public class SC_player : MonoBehaviour
     {
         if (!SC_level_intro.gameStarted) return;
         CheckStun();
-        HandleLowHealthBlink();
         CheckDamage();
+        HandleLowHealthBlink();
         if (isStunned)
         {
             moveInput = Vector2.zero;
@@ -151,23 +162,54 @@ public class SC_player : MonoBehaviour
         {
             if (Mathf.Abs(moveInput.y) > 0.1f || Mathf.Abs(moveInput.x) > 0.1f)
             {
+                if (!grid.isPlaying)
+                {
+                    grid.Play();
+                }
+
                 anim.SetBool("Run", true);
             }
             else
             {
+                grid.Stop();
                 anim.SetBool("Run", false);
             }
 
         }
         else
         {
-            anim.SetBool("Run", Mathf.Abs(moveInput.x) > 0.1f);
+
+
+            if (Mathf.Abs(moveInput.x) > 0.1f)
+            {
+                if (isGrounded)
+                {
+                    if (!run.isPlaying)
+                    {
+                        run.Play();
+                    }
+                 
+                }
+                else
+                {
+                    run.Stop();
+
+                }
+                anim.SetBool("Run", true);
+            }
+            else
+            {
+                run.Stop();
+
+                anim.SetBool("Run", false);
+            }
         }
 
         if (!wasGrounded && isGrounded && rb.linearVelocity.y <= 0.01f)
         {
             anim.ResetTrigger("Jump");
             anim.SetTrigger("Land");
+            land.PlayJuice();
         }
 
         if (moveInput.x > 0)
@@ -207,6 +249,20 @@ public class SC_player : MonoBehaviour
         if (hit != null)
         {
             StartCoroutine(StunCoroutine());
+        }
+    }
+    void CheckDamage()
+    {
+        if (!canTakeDamage) return;
+
+        Collider2D hit = Physics2D.OverlapCircle(damageCheck.position, damageRadius, damageLayer);
+        if (hit != null)
+        {
+            TakeDamage(1, hit.transform.position);
+            if(currentHealth == 0)
+            {
+                hit.GetComponentInParent<SortingGroup>().sortingLayerName = "UI";
+            }
         }
     }
     public void stun_player()
@@ -302,7 +358,7 @@ public class SC_player : MonoBehaviour
             jumpTimeCounter = maxJumpTime;
             rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpForce);
             anim.SetTrigger("Jump");
-
+            jump.PlayJuice();
             return;
         }
         if (!isFrozen && canMove && rb.linearVelocity.y <0.5f)
@@ -313,6 +369,7 @@ public class SC_player : MonoBehaviour
                 jumpTimeCounter = maxJumpTime;
                 rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpForce);
                 anim.SetTrigger("Jump");
+                jump.PlayJuice();
             }
         }
     }
@@ -326,12 +383,12 @@ public class SC_player : MonoBehaviour
     {
         float x = transform.position.x;
 
-        if (x > (rightLimit - levelWidth / 2))
+        if (x > (limit - levelWidth / 2))
         {
             ghost.gameObject.SetActive(true);
             ghost.position = new Vector3(x - levelWidth, transform.position.y, transform.position.z);
         }
-        else if (x < (leftLimit + levelWidth / 2))
+        else if (x < (-limit + levelWidth / 2))
         {
             ghost.gameObject.SetActive(true);
             ghost.position = new Vector3(x + levelWidth, transform.position.y, transform.position.z);
@@ -341,31 +398,25 @@ public class SC_player : MonoBehaviour
             ghost.gameObject.SetActive(false);
         }
 
-        if (x > rightLimit)
-            transform.position = new Vector3(leftLimit, transform.position.y, transform.position.z);
-        else if (x < leftLimit)
-            transform.position = new Vector3(rightLimit, transform.position.y, transform.position.z);
+        if (x > limit)
+            transform.position = new Vector3(-limit, transform.position.y, transform.position.z);
+        else if (x < -limit)
+            transform.position = new Vector3(limit, transform.position.y, transform.position.z);
     }
 
-    void CheckDamage()
-    {
-        if (!canTakeDamage) return;
-
-        Collider2D hit = Physics2D.OverlapCircle(damageCheck.position, damageRadius, damageLayer);
-        if (hit != null)
-        {
-            TakeDamage(1, hit.transform.position);
-        }
-    }
 
     public void TakeDamage(int damage, Vector3 sourcePosition)
     {
+        if (!canTakeDamage) return;
+
         if (isFrozen || isInvincible || eat_system.isPowerUpActive) return;
         anim.SetBool("Stun", false);
         if (isClimbing)
         {
             StopClimbingJump();
         }
+        damage_sfx.PlayJuice();
+
         hearts[currentHealth-1].SetActive(false);
         isStunned = false;
         ps_damage.Play();
@@ -407,6 +458,7 @@ public class SC_player : MonoBehaviour
         isFrozen = false;
         isStunned = false;
         canTakeDamage = true;
+        damage_lava_sfx.PlayJuice();
 
         rb.bodyType = RigidbodyType2D.Dynamic;
 
@@ -453,7 +505,6 @@ public class SC_player : MonoBehaviour
         isFrozen = true;
         canTakeDamage = false;
         anim.SetTrigger("Hit");
-
         rb.linearVelocity = Vector2.zero;
         rb.bodyType = RigidbodyType2D.Kinematic;
 
@@ -494,35 +545,20 @@ public class SC_player : MonoBehaviour
     private void Die()
     {
         if (hitCoroutine != null) StopCoroutine(hitCoroutine);
-
+        GetComponent<SortingGroup>().sortingLayerName = "UI";
         isFrozen = true;
         anim.SetBool("Die",true);
+        game_over_screen.SetActive(true);
 
-
-            collider.enabled = false;
-
-        // Faire rebondir légèrement le joueur vers le haut
-        rb.bodyType = RigidbodyType2D.Dynamic;
-        rb.linearVelocity = new Vector2(0, 5f); // rebond initial
-        rb.gravityScale = 1f;
+        collider.enabled = false;
+        die.PlayJuice();
 
         knockbackVelocity = Vector2.zero;
 
-        // Ralentir le temps pour effet dramatique
-        Time.timeScale = 0.5f;
+        Time.timeScale = 0;
 
-        // Commencer coroutine pour la chute après le rebond
-        StartCoroutine(FallAfterBounce());
     }
 
-    private IEnumerator FallAfterBounce()
-    {
-        // Attendre que le rebond atteigne son apogée
-        yield return new WaitForSecondsRealtime(0.3f);
-        game_over_screen.SetActive(true);
-        // Lancer la chute vers le bas
-        rb.linearVelocity = new Vector2(0, -5f);
-    }
     void OnDrawGizmosSelected()
     {
         if (damageCheck != null)
@@ -534,6 +570,7 @@ public class SC_player : MonoBehaviour
 
     public void powerup()
     {
+        transformation.PlayJuice();
         anim_powerup.gameObject.SetActive(true);
         anim_.gameObject.SetActive(false);
         anim = anim_powerup;
@@ -583,7 +620,6 @@ public class SC_player : MonoBehaviour
     {
         if (other.CompareTag("Climb"))
         {
-            canClimb = true;
             if (was_climbing)
             {
                 StartClimbing(0);
@@ -593,9 +629,11 @@ public class SC_player : MonoBehaviour
 
     private void OnTriggerExit2D(Collider2D other)
     {
-        if (other.CompareTag("Climb") && isClimbing)
+        if (other.CompareTag("Climb"))
         {
+            grillage = null;
             StopClimbing();
+            canClimb = false;
         }
     }
     void StartClimbing(float verticalInput)
@@ -624,6 +662,7 @@ public class SC_player : MonoBehaviour
         canClimb = false;
         was_climbing = true;
         grillage = null;
+        grid.Stop();
 
         isClimbing = false;
         Invoke("Delay_climb",0.02f);
@@ -647,5 +686,53 @@ public class SC_player : MonoBehaviour
     public void SetGroundVelocity(Vector2 vel)
     {
         added_velocity = vel;
+    }
+    public void Revive()
+    {
+        StopAllCoroutines();
+
+        // Réinitialisation des états
+        isFrozen = false;
+        isStunned = false;
+        isInvincible = false;
+        burning = false;
+        canTakeDamage = true;
+
+        // Restaurer la vie
+        currentHealth = maxHealth;
+
+        // Réactiver les cœurs
+        foreach (GameObject heart in hearts)
+        {
+            heart.SetActive(true);
+        }
+
+        // Réactiver les composants
+        collider.enabled = true;
+        spriteRenderer.enabled = true;
+
+        // Réinitialiser la physique
+        rb.bodyType = RigidbodyType2D.Dynamic;
+        rb.gravityScale = base_gravity;
+        rb.linearVelocity = Vector2.zero;
+        knockbackVelocity = Vector2.zero;
+
+        // Réinitialiser les animations
+        anim.SetBool("Die", false);
+        anim.SetBool("Stun", false);
+        anim.SetBool("Climb", false);
+
+        // Déplacer au point de respawn
+        if (transform.position != null)
+            transform.position = transform.position;
+
+        // Fermer l'écran Game Over
+        game_over_screen.SetActive(false);
+
+        // Remettre le temps normal
+        Time.timeScale = 1f;
+
+        // Petite invincibilité après respawn
+        StartCoroutine(InvincibilityRoutine(2f));
     }
 }

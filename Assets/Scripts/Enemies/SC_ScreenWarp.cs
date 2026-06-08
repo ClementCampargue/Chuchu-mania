@@ -2,9 +2,7 @@ using UnityEngine;
 
 public class SC_ScreenWarp : MonoBehaviour
 {
-    [Header("Screen Limits")]
-    public float leftLimit = -10f;
-    public float rightLimit = 10f;
+    private float limit = -10f;
 
     [Header("Warning")]
     public float warningDistance = 2f;
@@ -15,6 +13,11 @@ public class SC_ScreenWarp : MonoBehaviour
 
     private bool hasSpawnedWarning;
 
+
+    private void Start()
+    {
+        limit = SC_game_master.instance.limits;
+    }
     void Update()
     {
         HandleWarning();
@@ -26,10 +29,10 @@ public class SC_ScreenWarp : MonoBehaviour
         Vector3 pos = transform.position;
 
         bool inRightWarningZone =
-            pos.x > rightLimit - warningDistance;
+            pos.x > limit - warningDistance;
 
         bool inLeftWarningZone =
-            pos.x < leftLimit + warningDistance;
+            pos.x < -limit + warningDistance;
 
         // Spawn seulement une fois
         if (!hasSpawnedWarning)
@@ -39,7 +42,7 @@ public class SC_ScreenWarp : MonoBehaviour
             {
                 SpawnWarning(
                     new Vector3(
-                        leftLimit + warningSpawnOffset,
+                        -limit + warningSpawnOffset,
                         pos.y,
                         pos.z
                     )
@@ -53,7 +56,7 @@ public class SC_ScreenWarp : MonoBehaviour
             {
                 SpawnWarning(
                     new Vector3(
-                        rightLimit - warningSpawnOffset,
+                        limit - warningSpawnOffset,
                         pos.y,
                         pos.z
                     )
@@ -88,13 +91,13 @@ public class SC_ScreenWarp : MonoBehaviour
     {
         Vector3 pos = transform.position;
 
-        if (pos.x > rightLimit)
+        if (pos.x > limit)
         {
-            pos.x = leftLimit;
+            pos.x = -limit;
         }
-        else if (pos.x < leftLimit)
+        else if (pos.x < -limit)
         {
-            pos.x = rightLimit;
+            pos.x = limit;
         }
 
         transform.position = pos;
@@ -105,25 +108,25 @@ public class SC_ScreenWarp : MonoBehaviour
         Gizmos.color = Color.green;
 
         Gizmos.DrawLine(
-            new Vector3(leftLimit, -50, 0),
-            new Vector3(leftLimit, 50, 0)
+            new Vector3(-limit, -50, 0),
+            new Vector3(-limit, 50, 0)
         );
 
         Gizmos.DrawLine(
-            new Vector3(rightLimit, -50, 0),
-            new Vector3(rightLimit, 50, 0)
+            new Vector3(limit, -50, 0),
+            new Vector3(limit, 50, 0)
         );
 
         Gizmos.color = Color.yellow;
 
         Gizmos.DrawLine(
-            new Vector3(leftLimit + warningDistance, -50, 0),
-            new Vector3(leftLimit + warningDistance, 50, 0)
+            new Vector3(-limit + warningDistance, -50, 0),
+            new Vector3(-limit + warningDistance, 50, 0)
         );
 
         Gizmos.DrawLine(
-            new Vector3(rightLimit - warningDistance, -50, 0),
-            new Vector3(rightLimit - warningDistance, 50, 0)
+            new Vector3(limit - warningDistance, -50, 0),
+            new Vector3(limit - warningDistance, 50, 0)
         );
     }
 }

@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 4065612673290041711}
   - component: {fileID: 4716725249261485806}
   - component: {fileID: 6844880340681224406}
-  m_Layer: 3
+  m_Layer: 5
   m_Name: Particle System
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4901,7 +4901,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2946675883833778429}
   - component: {fileID: 5657485328520968930}
-  m_Layer: 3
+  m_Layer: 5
   m_Name: Sprite (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4988,7 +4988,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8584521937271597739}
   - component: {fileID: 1282220975533961506}
-  m_Layer: 3
+  m_Layer: 5
   m_Name: Trail
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5127,7 +5127,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8018602965194818601}
   - component: {fileID: 3432287915386421383}
-  m_Layer: 3
+  m_Layer: 5
   m_Name: Sprite
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5217,7 +5217,7 @@ GameObject:
   - component: {fileID: 1741744674937619627}
   - component: {fileID: 1509680522267840086}
   - component: {fileID: 3285755059392873347}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: Ice_cream_ui
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5276,9 +5276,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 202ee3a233513de4e97c15ba372a6847, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  trs: {fileID: 0}
   spriteRenderer: {fileID: 3432287915386421383}
   flashMaterial: {fileID: 2100000, guid: 778865bbd08486043a01aeb31184e581, type: 2}
-  ps: {fileID: 4716725249261485806}
+  rumble: 1
+  rumbleLow: 0.1
+  rumbleHigh: 0.3
+  rumbleDuration: 0.1
+  shakeAmplitude: 0
+  shakeFrequency: 0
+  shakeScreenDuration: 0
+  ps: []
+  audio: []
+  flash: 1
   flashDuration: 0.05
   stretchAmount: 1.2
   squashAmount: 0.5
@@ -5288,5 +5298,53 @@ MonoBehaviour:
   shakeIntensity: 0
   freeze: 0
   freezeDuration: 0
-  zoomAmount: 0
-  zoomDuration: 0
+  slowMoScale: 0.05
+  freezeRecoverDuration: 0.15
+  fovCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  timeScaleCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
