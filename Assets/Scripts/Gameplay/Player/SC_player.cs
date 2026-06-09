@@ -54,6 +54,7 @@ public class SC_player : MonoBehaviour
     [Header("Invincibility")]
     public float invincibilityTime = 1f;
     public SpriteRenderer spriteRenderer;
+    public SpriteRenderer spriteRendererPower;
     public bool isInvincible = false;
 
     [Header("Transformation")]
@@ -564,12 +565,12 @@ public class SC_player : MonoBehaviour
 
         collider.enabled = false;
         die.PlayJuice();
-
         knockbackVelocity = Vector2.zero;
 
         Time.timeScale = 0;
 
     }
+
 
     void OnDrawGizmosSelected()
     {

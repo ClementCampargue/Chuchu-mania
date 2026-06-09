@@ -1,5 +1,6 @@
 using UnityEngine;
-
+using UnityEngine.UI;
+using UnityEngine.EventSystems;
 public class SC_sticker_button : MonoBehaviour
 {
     [Header("Scale settings")]
@@ -16,6 +17,7 @@ public class SC_sticker_button : MonoBehaviour
 
     public GameObject hover;
     public GameObject Sticker_prefab;
+    public bool hovered;
     private void Start()
     {
         originalScale = pivot.transform.localScale;
@@ -48,29 +50,52 @@ public class SC_sticker_button : MonoBehaviour
         }
     }
 
-    private void OnMouseEnter()
+    public void OnMouseEnter()
     {
         if (sticker.unlocked)
         {
             targetScale = originalScale * hoverScale;
             hover.SetActive(true);
         }
+        hovered = true;
     }
 
-    private void OnMouseExit()
+    public void OnMouseExit()
     {
         targetScale = originalScale;
         hover.SetActive(false);
+        hovered = false;
     }
 
-    private void OnMouseDown()
+    public void OnMouseDown()
     {
-        if (sticker.unlocked)
-        {
-            SpriteRenderer spr = Instantiate(Sticker_prefab, SC_scursorManager.instance.transform.position, Quaternion.identity).GetComponent<SpriteRenderer>();
-            spr.sprite = sticker.sticker_sprite;
-            spr.gameObject.GetComponent<SC_sticker>().RefreshCollider();
-            hover.SetActive(false);
-        }
+        if (EventSystem.current != null && EventSystem.current.IsPointerOverGameObject())
+            return;
+
+        if (!sticker.unlocked) return;
+
+        Canvas canvas = GameObject.Find("MainCanvas").GetComponent<Canvas>();
+        RectTransform canvasRect = canvas.GetComponent<RectTransform>();
+
+        GameObject obj = Instantiate(Sticker_prefab, canvas.transform.GetChild(0).transform);
+        Image img = obj.GetComponent<Image>();
+
+        RectTransformUtility.ScreenPointToLocalPointInRectangle(
+            canvasRect,
+            Input.mousePosition,
+            null,
+            out Vector2 localPoint
+        );
+        img.maskable = false;
+
+        hovered = false;
+
+        RectTransform rect = obj.GetComponent<RectTransform>();
+        rect.anchoredPosition = localPoint;
+
+        img.sprite = sticker.sticker_sprite;
+        img.SetNativeSize();
+
+        hover.SetActive(false);
     }
 }

@@ -9,18 +9,14 @@ public class SC_sprite_grid : MonoBehaviour
 {
     public int columns = 5;
     public Vector2 spacing;
-
     public bool autoUpdate = true;
-
     public Vector2 offset;
 
     void Update()
     {
         if (!autoUpdate) return;
 
-#if UNITY_EDITOR
         Arrange();
-#endif
     }
 
     public void Arrange()
@@ -39,7 +35,8 @@ public class SC_sprite_grid : MonoBehaviour
             );
 
 #if UNITY_EDITOR
-            Undo.RecordObject(child, "Grid Arrange");
+            if (!Application.isPlaying)
+                Undo.RecordObject(child, "Grid Arrange");
 #endif
 
             child.localPosition = pos;

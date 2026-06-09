@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.UI;
 
 public class SC_scursorManager : MonoBehaviour
 {
@@ -9,46 +10,40 @@ public class SC_scursorManager : MonoBehaviour
     public Sprite hoverSprite;
     public Sprite grabSprite;
 
-    [Header("Prefab curseur")]
-    public GameObject cursorPrefab;
+    [Header("UI")]
+    public Image cursorRenderer;     
+    public RectTransform cursorRect; 
 
-    public SpriteRenderer cursorRenderer;
-
-    private Camera cam;
-    public bool grabing;
+    public bool grabbing;
     public GameObject fader;
+
     void Awake()
     {
         instance = this;
-        cam = Camera.main;
 
         Cursor.visible = false;
-
 
         SetNormalCursor();
     }
 
     void Update()
     {
-        Vector3 mousePos = Input.mousePosition;
-        mousePos.z = 10f;
-
-        Vector3 worldPos = cam.ScreenToWorldPoint(mousePos);
-        worldPos.z = -5f;
-
-        transform.position = worldPos;
+        // Cursor UI follow screen mouse position
+        cursorRect.position = Input.mousePosition;
     }
 
     public void SetNormalCursor()
     {
-        fader.SetActive(false);
-        grabing = false;
+        if (fader != null)
+            fader.SetActive(false);
+
+        grabbing = false;
         cursorRenderer.sprite = normalSprite;
     }
 
     public void SetHoverCursor()
     {
-        if (!grabing)
+        if (!grabbing)
         {
             cursorRenderer.sprite = hoverSprite;
         }
@@ -56,9 +51,10 @@ public class SC_scursorManager : MonoBehaviour
 
     public void SetGrabCursor()
     {
-        fader.SetActive(true);
+        if (fader != null)
+            fader.SetActive(true);
 
-        grabing = true;
+        grabbing = true;
         cursorRenderer.sprite = grabSprite;
     }
 }

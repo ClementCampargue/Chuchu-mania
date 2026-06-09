@@ -7,12 +7,20 @@ public class SC_cage : MonoBehaviour
 
     public int Health = 1;
     public GameObject fire_system;
-    public GameObject win_screen;
+    private SC_win_screen win_screen;
     public SC_juiciness juice_damage;
     public SC_juiciness juice_death;
+
+    public Material player_green;
+    private Material default_mat;
+    private SpriteRenderer spr;
+    public Animator anim;
     void Start()
     {
         system = SC_icecream_eat_system.instance;
+        spr = SC_player.instance.spriteRendererPower;
+        default_mat = spr.material;
+        win_screen = SC_win_screen.instance;
     }
 
     // Update is called once per frame
@@ -35,23 +43,35 @@ public class SC_cage : MonoBehaviour
         Health--;
         if (Health == 0)
         {
+            anim.SetTrigger("Die");
             SC_icecream_eat_system.instance.loosing_points = false;
             fire_system.SetActive(false);
             juice_death.PlayJuice();
-            Invoke("win_sc", 1);
+            Time.timeScale = 0.25f;
+            spr.material = player_green;
+            SC_player.instance.enabled = false;
+            SC_player.instance.collider.enabled = false;
+            SC_player.instance.rb.gravityScale = 0;
+            SC_player.instance.rb.constraints = RigidbodyConstraints2D.FreezeAll;
+            SC_player.instance.anim_powerup.SetTrigger("End");
         }
         else
         {
+            anim.SetTrigger("Damage");
             juice_damage.PlayJuice();
 
         }
     }
 
-    void win_sc()
+    public void RestorePlayerMat()
     {
+        spr.material = default_mat;
+        SC_player.instance.gameObject.SetActive(false);
+    }
+
+    public void win_sc()
+    {
+        win_screen.Start_screen();
         Time.timeScale = 0f;
-
-        win_screen.SetActive(true);
-
     }
 }

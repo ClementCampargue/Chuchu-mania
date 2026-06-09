@@ -5,5 +5,8 @@ public class SO_Sticker : ScriptableObject
 {
     public Sprite sticker_sprite;
     public string sticker_name;
+    public string description;
+    public string artist;
     public bool unlocked;
+    
 }

@@ -71,7 +71,7 @@ public class SC_sticker : MonoBehaviour
 
         // droit
         if (Input.GetMouseButtonDown(1)
-            && !SC_scursorManager.instance.grabing)
+            && !SC_scursorManager.instance.grabbing)
         {
             SC_stickerManager.instance.SaveStickers();
 

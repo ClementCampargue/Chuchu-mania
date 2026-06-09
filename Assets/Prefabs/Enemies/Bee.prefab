@@ -56,8 +56,7 @@ MonoBehaviour:
   shakeAmplitude: 0
   shakeFrequency: 0
   shakeScreenDuration: 0
-  ps:
-  - {fileID: 0}
+  ps: []
   audio:
   - {fileID: 2003218365753602117}
   - {fileID: 8278263886095271063}
@@ -274,8 +273,7 @@ MonoBehaviour:
   shakeAmplitude: 0
   shakeFrequency: 0
   shakeScreenDuration: 0
-  ps:
-  - {fileID: 0}
+  ps: []
   audio:
   - {fileID: 5662854929130217847}
   - {fileID: 6713198521767046017}

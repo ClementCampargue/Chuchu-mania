@@ -21599,6 +21599,7 @@ MonoBehaviour:
   stunDuration: 2
   invincibilityTime: 1.5
   spriteRenderer: {fileID: 4167154217632997446}
+  spriteRendererPower: {fileID: 9120311054899858401}
   isInvincible: 0
   transformFreezeTime: 0.5
   transformAnimTrigger: Transform

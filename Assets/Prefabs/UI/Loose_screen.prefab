@@ -104,7 +104,7 @@ MonoBehaviour:
       m_Calls: []
   m_text: "\"Alors, on prend le soleil, la gel\xE9e?\""
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 1a3e72d5f834a2a4baa6bdad122aaec8, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: c46be904f5086384ba1c7f77052229ea, type: 2}
   m_sharedMaterial: {fileID: 5493907304893502123, guid: 1a3e72d5f834a2a4baa6bdad122aaec8, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
@@ -173,7 +173,7 @@ MonoBehaviour:
   _SortingLayer: 0
   _SortingLayerID: 0
   _SortingOrder: 0
-  m_hasFontAssetChanged: 0
+  m_hasFontAssetChanged: 1
   m_renderer: {fileID: 4662090462546406061}
   m_maskType: 0
 --- !u!1 &2545864521009350766
@@ -767,7 +767,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   move: {fileID: -1680190386980627800, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
   confirm: {fileID: 392368643174621059, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
-  timer: 0.1
+  repeatDelay: 0.25
+  repeatRate: 0.1
 --- !u!1 &6068576223921515791
 GameObject:
   m_ObjectHideFlags: 0
@@ -902,6 +903,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3204d9a4a7b62af4da9c45167c6c9d64, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ui: {fileID: 0}
 --- !u!95 &5035901642332590931
 Animator:
   serializedVersion: 7
@@ -1257,6 +1259,10 @@ PrefabInstance:
     - target: {fileID: 362592184335010109, guid: f3c7b956bb8e2ae47a33403dbf3195bc, type: 3}
       propertyPath: m_Layer
       value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 2959461204918368628, guid: f3c7b956bb8e2ae47a33403dbf3195bc, type: 3}
+      propertyPath: m_StringReference.m_TableEntryReference.m_KeyId
+      value: 219739045773312
       objectReference: {fileID: 0}
     - target: {fileID: 5641122258638546335, guid: f3c7b956bb8e2ae47a33403dbf3195bc, type: 3}
       propertyPath: m_Pivot.x
