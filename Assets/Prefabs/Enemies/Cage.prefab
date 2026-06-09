@@ -417,7 +417,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Health: 3
   fire_system: {fileID: 5117453445091579984}
-  win_screen: {fileID: 0}
   juice_damage: {fileID: 255846722985302402}
   juice_death: {fileID: 365765761796414619}
   player_green: {fileID: 2100000, guid: 4a14cdf686b9e0d4288140ab84d83279, type: 2}
@@ -567,8 +566,8 @@ CircleCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: 0, y: 0}
-  m_Radius: 0.68
+  m_Offset: {x: 0, y: -0.18124175}
+  m_Radius: 0.7226453
 --- !u!95 &6895808571220485109
 Animator:
   serializedVersion: 7
@@ -616,6 +615,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   target: {fileID: 0}
+  secondTarget: {fileID: 0}
+  delayBeforeSecondTarget: 0.5
   attractionSpeed: 10
   steeringForce: 5
   initialVelocityDamping: 2
@@ -2021,7 +2022,7 @@ Transform:
   m_GameObject: {fileID: 6622166188884502863}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.23000002, y: 0.16000009, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 166}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -2071,7 +2072,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 7046362281623975461, guid: bfd2c1369bece9a4abb245946504f73b, type: 3}
+  m_Sprite: {fileID: 7046362281623975461, guid: e9145bba47d08d64dbf4ce87f3d8c102, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
