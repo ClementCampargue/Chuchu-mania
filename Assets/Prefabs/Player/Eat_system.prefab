@@ -253,6 +253,7 @@ MonoBehaviour:
   loosing_points: 0
   eat: {fileID: 4251476775065246266}
   eating_sfx: {fileID: 1275778307263400631}
+  music: {fileID: 8300000, guid: d83efc43f00eb5545865017d07e8e960, type: 3}
 --- !u!1 &2063167180171344698
 GameObject:
   m_ObjectHideFlags: 0
@@ -898,7 +899,7 @@ SpriteRenderer:
   m_Size: {x: 0.58, y: 0.74}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 1
+  m_WasSpriteAssigned: 0
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
 --- !u!1 &5676743818534894127

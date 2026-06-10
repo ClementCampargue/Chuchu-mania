@@ -46,6 +46,22 @@ MonoBehaviour:
     m_Localized: course clear!
     m_Metadata:
       m_Items: []
+  - m_Id: 348038111707136
+    m_Localized: Time
+    m_Metadata:
+      m_Items: []
+  - m_Id: 348027609169920
+    m_Localized: Score
+    m_Metadata:
+      m_Items: []
+  - m_Id: 348016406183936
+    m_Localized: Life
+    m_Metadata:
+      m_Items: []
+  - m_Id: 347986916032512
+    m_Localized: Belly
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds: []

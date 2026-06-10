@@ -15,6 +15,7 @@ public class SC_cage : MonoBehaviour
     private Material default_mat;
     private SpriteRenderer spr;
     public Animator anim;
+    public AudioClip clip;
     void Start()
     {
         system = SC_icecream_eat_system.instance;
@@ -54,6 +55,7 @@ public class SC_cage : MonoBehaviour
             SC_player.instance.rb.gravityScale = 0;
             SC_player.instance.rb.constraints = RigidbodyConstraints2D.FreezeAll;
             SC_player.instance.anim_powerup.SetTrigger("End");
+            SC_music_manager.instance.stop_music();
         }
         else
         {
@@ -73,5 +75,10 @@ public class SC_cage : MonoBehaviour
     {
         win_screen.Start_screen();
         Time.timeScale = 0f;
+    }
+
+    public void play_music()
+    {
+        SC_music_manager.instance.update_music(clip,false);
     }
 }

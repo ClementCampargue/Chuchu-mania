@@ -14,7 +14,21 @@ public class SC_music_manager : MonoBehaviour
         if (clip != currentClip) 
         {
             music.clip = clip;
+            music.loop = true;
             music.Play();
         }
+    }
+    public void update_music(AudioClip clip, bool looping)
+    {
+        if (clip != currentClip) 
+        {
+            music.clip = clip;
+            music.loop= looping;
+            music.Play();
+        }
+    }
+    public void stop_music()
+    {
+        music.Stop();
     }
 }

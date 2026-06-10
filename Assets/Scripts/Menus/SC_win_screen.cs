@@ -1,4 +1,6 @@
+using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class SC_win_screen : MonoBehaviour
 {
@@ -7,6 +9,9 @@ public class SC_win_screen : MonoBehaviour
     public string nextscene;
     public static SC_win_screen instance;
     public Animator anim;
+    public InputActionReference confirm;
+    private bool once;
+    private bool canact;
     private void Awake()
     {
         instance = this;
@@ -19,7 +24,11 @@ public class SC_win_screen : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        if (confirm.action.WasPerformedThisFrame() && !once && canact)
+        {
+            once = true;
+            transition_();
+        }
     }
 
     public void transition_()
@@ -27,6 +36,13 @@ public class SC_win_screen : MonoBehaviour
         anim.ResetTrigger("show");
         anim.SetTrigger("hide");
         transition.Capture(nextscene);
+        canact = false;
+        once = false;
+    }
+
+    public void canact_()
+    {
+        canact = true;
     }
 
     public void Start_screen()

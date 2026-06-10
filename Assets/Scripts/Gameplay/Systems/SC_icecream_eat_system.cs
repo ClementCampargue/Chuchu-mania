@@ -51,7 +51,7 @@ public class SC_icecream_eat_system : MonoBehaviour
     public SC_juiciness eat;
     public AudioSource eating_sfx;
 
-
+    public AudioClip music;
 
 
     [ContextMenu("DEBUG - Fill Stomach")]
@@ -235,6 +235,7 @@ public class SC_icecream_eat_system : MonoBehaviour
 
                     if (displayedFill >= 1f && !isPowerUpActive)
                     {
+                        SC_music_manager.instance.update_music(music);
                         player.powerup();
                         StartCoroutine(PowerUpCoroutine());
                     }
@@ -338,6 +339,8 @@ public class SC_icecream_eat_system : MonoBehaviour
 
         if (!isPowerUpActive)
         {
+            SC_music_manager.instance.update_music(music);
+
             player.powerup();
             StartCoroutine(PowerUpCoroutine());
         }
