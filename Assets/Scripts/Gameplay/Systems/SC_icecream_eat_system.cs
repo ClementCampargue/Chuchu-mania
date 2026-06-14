@@ -37,7 +37,6 @@ public class SC_icecream_eat_system : MonoBehaviour
 
     [Header("Power Up")]
     public bool isPowerUpActive = false;
-    public float drainSpeed = 0.25f;
 
     [Header("Phase System")]
     private bool phase1Triggered = false;
@@ -46,7 +45,6 @@ public class SC_icecream_eat_system : MonoBehaviour
     public static SC_icecream_eat_system instance;
     private SC_player player;
     private int eaten_cream;
-    public bool loosing_points;
 
     public SC_juiciness eat;
     public AudioSource eating_sfx;
@@ -237,7 +235,8 @@ public class SC_icecream_eat_system : MonoBehaviour
                     {
                         SC_music_manager.instance.update_music(music);
                         player.powerup();
-                        StartCoroutine(PowerUpCoroutine());
+                        player.canMove = true;
+                        isPowerUpActive = true;
                     }
 
                     yield return null;
@@ -282,30 +281,6 @@ public class SC_icecream_eat_system : MonoBehaviour
         multiplierText.transform.localScale = Vector3.one;
     }
 
-    private IEnumerator PowerUpCoroutine()
-    {
-        player.canMove = true;
-        isPowerUpActive = true;
-
-        while (displayedFill > 0f)
-        {
-            displayedFill -= drainSpeed * Time.deltaTime;
-            displayedFill = Mathf.Clamp01(displayedFill);
-
-            mat.SetFloat("_Fill_amount", displayedFill);
-
-            CheckPhases();
-
-            yield return null;
-        }
-
-        displayedFill = 0f;
-        mat.SetFloat("_Fill_amount", displayedFill);
-        loosing_points = true;
-       // player.end_powerup();
-       //  isPowerUpActive = false;
-    }
-
     public void take_damage()
     {
         if (creams.Count == 0) return;
@@ -342,7 +317,8 @@ public class SC_icecream_eat_system : MonoBehaviour
             SC_music_manager.instance.update_music(music);
 
             player.powerup();
-            StartCoroutine(PowerUpCoroutine());
+            player.canMove = true;
+            isPowerUpActive = true;
         }
     }
 }

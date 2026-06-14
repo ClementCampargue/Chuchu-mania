@@ -11,9 +11,6 @@ public class SC_score : MonoBehaviour
 
     public float scoreSpeed = 50f;
 
-    [Header("Score Drain")]
-    public float scoreDrainSpeed = 10f;
-
     [Header("Arcade Style")]
     public int digits = 6;
 
@@ -35,15 +32,6 @@ public class SC_score : MonoBehaviour
 
     private void Update()
     {
-        if (SC_icecream_eat_system.instance.loosing_points)
-        {
-            score -= Mathf.RoundToInt(
-                scoreDrainSpeed * Time.deltaTime
-            );
-
-            if (score < 0)
-                score = 0;
-        }
 
         if (displayedScore < score)
         {

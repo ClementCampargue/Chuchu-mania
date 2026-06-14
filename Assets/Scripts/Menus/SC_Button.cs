@@ -2,7 +2,6 @@ using UnityEngine;
 using UnityEngine.Events;
 
 [RequireComponent(typeof(Collider2D))]
-[RequireComponent(typeof(Animator))]
 public class SC_Button : MonoBehaviour
 {
     [Header("Anims")]
@@ -27,17 +26,26 @@ public class SC_Button : MonoBehaviour
     public void Select()
     {
         isHovered = true;
-        anim.SetTrigger(hover);
+        if (anim != null)
+        {
+            anim.SetTrigger(hover);
+        }
     }
     public void UnSelect()
     {
         isHovered = true;
-        anim.SetTrigger(unhover);
+        if (anim != null) 
+        {
+            anim.SetTrigger(unhover);
+        }
     }
     public void Press()
     {
         isPressed = true;
-        anim.SetTrigger(press);
+        if (anim != null)
+        {
+            anim.SetTrigger(press);
+        }
         onClick?.Invoke();
     }
     private void OnMouseEnter()
@@ -53,7 +61,10 @@ public class SC_Button : MonoBehaviour
     private void OnMouseDown()
     {
         isPressed = true;
-        anim.SetTrigger(press);
+        if (anim != null)
+        {
+            anim.SetTrigger(press);
+        }
     }
 
     private void OnMouseUp()

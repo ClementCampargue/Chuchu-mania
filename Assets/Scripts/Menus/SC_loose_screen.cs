@@ -4,6 +4,7 @@ using UnityEngine.SceneManagement;
 public class SC_loose_screen : MonoBehaviour
 {
     public GameObject ui;
+    public AudioClip clip;
     public void ReloadCurrentScene()
     {
         Time.timeScale = 1.0f;  
@@ -13,8 +14,14 @@ public class SC_loose_screen : MonoBehaviour
         SceneManager.LoadScene(currentScene.name);
     }
 
+
     public void revive()
     {
+
+    }
+    public void music()
+    {
+        SC_music_manager.instance.update_music(clip, false);
 
     }
     public void give_up()

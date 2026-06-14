@@ -45,7 +45,6 @@ public class SC_cage : MonoBehaviour
         if (Health == 0)
         {
             anim.SetTrigger("Die");
-            SC_icecream_eat_system.instance.loosing_points = false;
             fire_system.SetActive(false);
             juice_death.PlayJuice();
             Time.timeScale = 0.25f;

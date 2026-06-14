@@ -562,7 +562,7 @@ public class SC_player : MonoBehaviour
         isFrozen = true;
         anim.SetBool("Die",true);
         game_over_screen.SetActive(true);
-
+        SC_music_manager.instance.stop_music();
         collider.enabled = false;
         die.PlayJuice();
         knockbackVelocity = Vector2.zero;

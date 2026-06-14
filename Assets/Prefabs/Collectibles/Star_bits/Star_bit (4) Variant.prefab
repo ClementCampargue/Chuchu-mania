@@ -55,7 +55,7 @@ PrefabInstance:
     - target: {fileID: 4697125950110828525, guid: 0b8864be2f839cc4d888d39fd4ecf4e1, type: 3}
       propertyPath: m_Sprite
       value: 
-      objectReference: {fileID: -1885065595, guid: 26442bd4a5082094fa9c0e2a25c4e3cf, type: 3}
+      objectReference: {fileID: -1026060873, guid: df3a2c706bcb68444bc4a43b08472265, type: 3}
     - target: {fileID: 8850293883598317108, guid: 0b8864be2f839cc4d888d39fd4ecf4e1, type: 3}
       propertyPath: ice_cream_UI
       value: 
