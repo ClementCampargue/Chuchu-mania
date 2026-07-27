@@ -13,7 +13,7 @@ public class SC_starbit_spawning : MonoBehaviour
 
     public float delay_respawn = 3f;
 
-    [Header("Délai entre chaque spawn")]
+    [Header("Dï¿½lai entre chaque spawn")]
     public float delayBetweenSpawns = 0.5f;
 
     private List<GameObject> currentCollectibles = new List<GameObject>();
@@ -24,7 +24,8 @@ public class SC_starbit_spawning : MonoBehaviour
         instance = this;
     }
     void Start()
-    {
+    {        player = SC_player.instance.transform;
+
         foreach (Transform child in transform)
         {
             spawnPoints.Add(child);
@@ -82,7 +83,7 @@ public class SC_starbit_spawning : MonoBehaviour
 
             currentCollectibles.Add(obj);
 
-            // Délai avant le prochain spawn
+            // Dï¿½lai avant le prochain spawn
             yield return new WaitForSeconds(delayBetweenSpawns);
         }
     }
