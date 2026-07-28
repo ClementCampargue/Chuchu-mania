@@ -1,10 +1,7 @@
 fileFormatVersion: 2
-guid: 16870828b53801c42894c0db48d438b9
+guid: 2f2f4fcb178ef444d91ed248759d96bf
 TextureImporter:
-  internalIDToNameTable:
-  - first:
-      213: -9087577266532155448
-    second: smoke_0
+  internalIDToNameTable: []
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -75,7 +72,7 @@ TextureImporter:
     maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: -1
-    textureCompression: 1
+    textureCompression: 0
     compressionQuality: 50
     crunchedCompression: 0
     allowsAlphaSplitting: 0
@@ -100,13 +97,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: smoke_0
+      name: HUD_0
       rect:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 13
-        height: 11
+        width: 448
+        height: 336
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -115,8 +112,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 8cf7f67cf9072e180800000000000000
-      internalID: -9087577266532155448
+      spriteID: 505e2544db04ba0a0800000000000000
+      internalID: -6869325624984279803
       vertices: []
       indices: 
       edges: []
@@ -135,7 +132,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      smoke_0: -9087577266532155448
+      HUD_0: -6869325624984279803
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

@@ -37,7 +37,7 @@ public class SC_player : MonoBehaviour
 
     private Coroutine lowHealthCoroutine;
     [Header("Ground Check")]
-    public Transform groundCheck;
+    public Transform groundCheckBottom;
     public float groundCheckRadius = 0.2f;
     public LayerMask groundLayer;
 
@@ -159,7 +159,13 @@ public class SC_player : MonoBehaviour
         else
             moveInput = Vector2.zero;
 
-        isGrounded = Physics2D.OverlapCircle(groundCheck.position, groundCheckRadius, groundLayer);
+
+
+        isGrounded = Physics2D.OverlapCircle(
+            groundCheckBottom.position,
+            groundCheckRadius,
+            groundLayer
+        );
         if (isClimbing)
         {
             if (Mathf.Abs(moveInput.y) > 0.1f || Mathf.Abs(moveInput.x) > 0.1f)
@@ -207,17 +213,18 @@ public class SC_player : MonoBehaviour
             }
         }
 
-        if (!wasGrounded && isGrounded && rb.linearVelocity.y <= 0.01f)
+        if (!wasGrounded && isGrounded )
         {
             anim.ResetTrigger("Jump");
             anim.SetTrigger("Land");
             land.PlayJuice();
         }
+        float yScale = transform.localScale.y;
 
         if (moveInput.x > 0)
-            transform.localScale = new Vector3(1, 1, 1);
+            transform.localScale = new Vector3(1, yScale, 1);
         else if (moveInput.x < 0)
-            transform.localScale = new Vector3(-1, 1, 1);
+            transform.localScale = new Vector3(-1, yScale, 1);
 
         wasGrounded = isGrounded;
 
@@ -226,7 +233,12 @@ public class SC_player : MonoBehaviour
             if (jumpTimeCounter > 0)
             {
                 float jumpPower = eat_system.isPowerUpActive ? PowerJump : jumpForce;
-                rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpPower);
+                float direction = Mathf.Sign(rb.gravityScale);
+
+                rb.linearVelocity = new Vector2(
+                    rb.linearVelocity.x,
+                    jumpForce * direction
+                );
                 jumpTimeCounter -= Time.deltaTime;
             }
             else
