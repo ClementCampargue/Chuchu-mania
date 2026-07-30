@@ -29,7 +29,7 @@ public class SC_lava : MonoBehaviour
         float dir = Mathf.Sign(player.transform.position.x - transform.position.x);
         if (dir == 0) dir = 1;
 
-        Vector2 launchVelocity = new Vector2(dir * launchForceX, launchForceY);
+        Vector2 launchVelocity = new Vector2(dir * launchForceX, launchForceY * transform.localScale.y);
 
         player.LavaHit(
             launchVelocity,

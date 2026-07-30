@@ -5643,7 +5643,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   moveSpeed: 2
   groundDetection: {fileID: 4019116714124266283}
-  detectionDistance: 0.15
+  groundDistance: 0.27
+  wallDistance: 0.3
   flipCooldown: 0.2
   groundLayer:
     serializedVersion: 2
@@ -5653,7 +5654,7 @@ MonoBehaviour:
     m_Bits: 8
   enemyDetectionDistance: 0.2
   CanMove: 1
-  damgage: {fileID: 6162067483996259934}
+  damage: {fileID: 0}
 --- !u!114 &6162067483996259934
 MonoBehaviour:
   m_ObjectHideFlags: 0

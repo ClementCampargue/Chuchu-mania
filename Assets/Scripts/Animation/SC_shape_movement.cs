@@ -7,7 +7,8 @@ public class SC_shape_movement : MonoBehaviour
         Circle,
         RoundedSquare,
         Triangle,
-        Figure8
+        Figure8,
+        Line
     }
 
     [Header("Shape Settings")]
@@ -51,6 +52,7 @@ public class SC_shape_movement : MonoBehaviour
         transform.position = origin + new Vector3(pos.x, pos.y, 0f);
     }
 
+
     void BuildCurve()
     {
         int count = Mathf.Max(10, Mathf.CeilToInt(1f / resolution));
@@ -79,6 +81,7 @@ public class SC_shape_movement : MonoBehaviour
         totalLength = Mathf.Max(dist, 0.0001f);
     }
 
+
     Vector2 EvaluateUniform(float time)
     {
         float tNorm = time % totalLength;
@@ -91,12 +94,18 @@ public class SC_shape_movement : MonoBehaviour
                 float t1 = distances[i];
 
                 float lerp = Mathf.InverseLerp(t0, t1, tNorm);
-                return Vector2.Lerp(points[i - 1], points[i], lerp);
+
+                return Vector2.Lerp(
+                    points[i - 1],
+                    points[i],
+                    lerp
+                );
             }
         }
 
         return points[^1];
     }
+
 
     Vector2 EvaluateRaw(float time)
     {
@@ -107,7 +116,6 @@ public class SC_shape_movement : MonoBehaviour
 
             case ShapeType.RoundedSquare:
                 return SuperShape(time, 4f);
-       
 
             case ShapeType.Triangle:
                 return Triangle(time);
@@ -115,10 +123,14 @@ public class SC_shape_movement : MonoBehaviour
             case ShapeType.Figure8:
                 return Figure8(time);
 
+            case ShapeType.Line:
+                return Line(time);
+
             default:
                 return Vector2.zero;
         }
     }
+
 
     Vector2 Circle(float t)
     {
@@ -127,16 +139,24 @@ public class SC_shape_movement : MonoBehaviour
             Mathf.Sin(t)
         ) * radius;
     }
+
+
     Vector2 SuperShape(float t, float n)
     {
         float cos = Mathf.Cos(t);
         float sin = Mathf.Sin(t);
 
-        float x = Mathf.Sign(cos) * Mathf.Pow(Mathf.Abs(cos), 2f / n) * radius;
-        float y = Mathf.Sign(sin) * Mathf.Pow(Mathf.Abs(sin), 2f / n) * radius;
+        float x = Mathf.Sign(cos) *
+                  Mathf.Pow(Mathf.Abs(cos), 2f / n) *
+                  radius;
+
+        float y = Mathf.Sign(sin) *
+                  Mathf.Pow(Mathf.Abs(sin), 2f / n) *
+                  radius;
 
         return new Vector2(x, y);
     }
+
 
     Vector2 Triangle(float t)
     {
@@ -150,14 +170,17 @@ public class SC_shape_movement : MonoBehaviour
         };
 
         float section = Mathf.PI * 2f / 3f;
+
         int i = Mathf.FloorToInt(angle / section);
 
         Vector2 a = v[i % 3];
         Vector2 b = v[(i + 1) % 3];
 
         float lerp = (angle % section) / section;
+
         return Vector2.Lerp(a, b, lerp);
     }
+
 
     Vector2 Figure8(float t)
     {
@@ -167,9 +190,22 @@ public class SC_shape_movement : MonoBehaviour
         ) * radius;
     }
 
+
+    Vector2 Line(float t)
+    {
+        float value = (Mathf.Sin(t) + 1f) * 0.5f;
+
+        return new Vector2(
+            Mathf.Lerp(-radius, radius, value),
+            0f
+        );
+    }
+
+
     void OnDrawGizmos()
     {
-        if (!showGizmos) return;
+        if (!showGizmos)
+            return;
 
         Gizmos.color = gizmosColor;
 
@@ -180,6 +216,7 @@ public class SC_shape_movement : MonoBehaviour
         for (int i = 0; i <= steps; i++)
         {
             float t = (float)i / steps * Mathf.PI * 2f;
+
             Vector2 p = EvaluateRaw(t);
 
             Vector3 world = Application.isPlaying
@@ -187,6 +224,7 @@ public class SC_shape_movement : MonoBehaviour
                 : transform.position + new Vector3(p.x, p.y, 0);
 
             Gizmos.DrawLine(prev, world);
+
             prev = world;
         }
     }

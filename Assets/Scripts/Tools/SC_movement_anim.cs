@@ -5,6 +5,13 @@ public class SC_movement_anim : MonoBehaviour
     [Header("Vertical Movement")]
     public float height = 2f;
     public float speed = 2f;
+
+    [Header("Horizontal Movement")]
+    public float horizontalDistance = 0f;
+    public float horizontalSpeed = 0f;
+    public Vector3 horizontalDirection = Vector3.right;
+
+    [Header("Smoothing")]
     public bool useSmooth = true;
 
     [Header("Rotation")]
@@ -15,26 +22,35 @@ public class SC_movement_anim : MonoBehaviour
 
     void Start()
     {
-        // On stocke la position LOCALE
         startLocalPos = transform.localPosition;
 
-        height = Random.Range(height *0.8f, height *1.2f);
-        speed = Random.Range(speed * 0.8f, speed * 1.2f);
-        rotationSpeed = Random.Range(rotationSpeed * 0.8f, rotationSpeed * 1.2f);
+        // Légère variation aléatoire
+        height *= Random.Range(0.8f, 1.2f);
+        speed *= Random.Range(0.8f, 1.2f);
+
+        horizontalDistance *= Random.Range(0.8f, 1.2f);
+        horizontalSpeed *= Random.Range(0.8f, 1.2f);
+
+        rotationSpeed *= Random.Range(0.8f, 1.2f);
+
+        horizontalDirection.Normalize();
     }
 
     void Update()
     {
-        HandleVerticalMovement();
+        HandleMovement();
         HandleRotation();
     }
 
-    void HandleVerticalMovement()
+    void HandleMovement()
     {
-        float newY = Mathf.Sin(Time.time * speed) * height;
+        float offsetY = Mathf.Sin(Time.time * speed) * height;
+        float offsetX = Mathf.Sin(Time.time * horizontalSpeed) * horizontalDistance;
 
-        // Utilisation de localPosition au lieu de position
-        Vector3 targetPosition = startLocalPos + Vector3.up * newY;
+        Vector3 targetPosition =
+            startLocalPos +
+            Vector3.up * offsetY +
+            horizontalDirection * offsetX;
 
         if (useSmooth)
         {

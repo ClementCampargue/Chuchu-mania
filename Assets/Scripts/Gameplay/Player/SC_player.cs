@@ -553,7 +553,7 @@ public class SC_player : MonoBehaviour
         isFrozen = false;
 
         Vector2 direction = (transform.position - sourcePosition).normalized;
-        knockbackVelocity = new Vector2(direction.x * hitKnockback.x, hitKnockback.y);
+        knockbackVelocity = new Vector2(direction.x * hitKnockback.x, hitKnockback.y * transform.localScale.y);
 
         yield return new WaitForSeconds(0.1f);
         canTakeDamage = true;

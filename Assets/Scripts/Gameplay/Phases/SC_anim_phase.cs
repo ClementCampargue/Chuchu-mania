@@ -19,6 +19,7 @@ public class SC_anim_phase : MonoBehaviour
     {
         if (phaseIndex == phase) // exemple : passage à la phase 3 (index 2)
         {
+            animator.enabled = true;
             animator.SetTrigger("phase");
         }
 
