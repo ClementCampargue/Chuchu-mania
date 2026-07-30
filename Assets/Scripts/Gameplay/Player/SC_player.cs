@@ -255,6 +255,7 @@ public class SC_player : MonoBehaviour
     {
         if (isStunned)
             return;
+        if (isInvincible) return;
 
         Collider2D hit =
             Physics2D.OverlapCircle(
@@ -270,7 +271,8 @@ public class SC_player : MonoBehaviour
     }
 
     public void Stun()
-    {
+    { 
+        if (isInvincible) return;
         StartCoroutine(StunCoroutine());
     }
     void CheckDamage()
