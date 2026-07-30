@@ -6,13 +6,13 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Scenes/StickerMenu.unity
+    path: Assets/Scenes/Menus/StickerMenu.unity
     guid: b9aca608789b0c043beba9eb5b7bc5b0
   - enabled: 1
-    path: Assets/Scenes/Canvas test.unity
+    path: Assets/Scenes/Menus/Canvas test.unity
     guid: 70a030e4e4c1e084fb2322e4426caf6b
   - enabled: 1
-    path: Assets/Scenes/MoneyScene.unity
+    path: Assets/Scenes/Menus/MoneyScene.unity
     guid: e32df890a46001344b5bd88ff4676238
   - enabled: 1
     path: Assets/Scenes/ART.unity

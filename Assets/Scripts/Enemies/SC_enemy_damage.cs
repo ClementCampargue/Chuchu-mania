@@ -120,7 +120,7 @@ public class SC_enemy_damage : MonoBehaviour
         if (isKnockedBack) return;
 
         isKnockedBack = true;
-        player.anim_powerup.SetTrigger("Punch");
+        player.anim_.SetTrigger("Punch");
         if (animator != null)
         {
             animator.SetTrigger("Death");

@@ -4,7 +4,7 @@ public class SC_script_phase_enable : MonoBehaviour
 {
     public MonoBehaviour scriptToActivate;
     public float phase;
-
+    public float delay;
     private void OnEnable()
     {
         SC_phases.OnPhaseChanged += HandlePhaseChanged;
@@ -19,8 +19,14 @@ public class SC_script_phase_enable : MonoBehaviour
     {
         if (phaseIndex == phase) 
         {
-            scriptToActivate.enabled = true;
+            Invoke("enabl", delay);
         }
 
+    }
+
+    void enabl()
+    {
+        scriptToActivate.enabled = true;
+        this.enabled = false;
     }
 }

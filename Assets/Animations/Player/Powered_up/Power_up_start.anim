@@ -49,7 +49,7 @@ AnimationClip:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    path: Square
+    path: Square_powerup
   m_FloatCurves: []
   m_PPtrCurves:
   - serializedVersion: 2
@@ -57,7 +57,7 @@ AnimationClip:
     - time: 0
       value: {fileID: 5531610353424078286, guid: 46cc75fab56c93945bde473f907dc24a, type: 3}
     attribute: m_Sprite
-    path: Square
+    path: Square_powerup
     classID: 212
     script: {fileID: 0}
     flags: 2
@@ -69,7 +69,7 @@ AnimationClip:
   m_ClipBindingConstant:
     genericBindings:
     - serializedVersion: 2
-      path: 3394203039
+      path: 2948000579
       attribute: 3
       script: {fileID: 0}
       typeID: 4
@@ -78,7 +78,7 @@ AnimationClip:
       isIntCurve: 0
       isSerializeReferenceCurve: 0
     - serializedVersion: 2
-      path: 3394203039
+      path: 2948000579
       attribute: 0
       script: {fileID: 0}
       typeID: 212
@@ -144,7 +144,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalScale.x
-    path: Square
+    path: Square_powerup
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -183,7 +183,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalScale.y
-    path: Square
+    path: Square_powerup
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -222,7 +222,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalScale.z
-    path: Square
+    path: Square_powerup
     classID: 4
     script: {fileID: 0}
     flags: 0

@@ -27,6 +27,15 @@ AnimationClip:
     classID: 212
     script: {fileID: 0}
     flags: 2
+  - serializedVersion: 2
+    curve:
+    - time: 0
+      value: {fileID: -4906085645828531878, guid: 1ab93fc727a59754ab7577b4d018b50d, type: 3}
+    attribute: m_Sprite
+    path: Square_powerup
+    classID: 212
+    script: {fileID: 0}
+    flags: 2
   m_SampleRate: 60
   m_WrapMode: 0
   m_Bounds:
@@ -43,7 +52,17 @@ AnimationClip:
       isPPtrCurve: 1
       isIntCurve: 0
       isSerializeReferenceCurve: 0
+    - serializedVersion: 2
+      path: 2948000579
+      attribute: 0
+      script: {fileID: 0}
+      typeID: 212
+      customType: 23
+      isPPtrCurve: 1
+      isIntCurve: 0
+      isSerializeReferenceCurve: 0
     pptrCurveMapping:
+    - {fileID: -4906085645828531878, guid: 1ab93fc727a59754ab7577b4d018b50d, type: 3}
     - {fileID: -4906085645828531878, guid: 1ab93fc727a59754ab7577b4d018b50d, type: 3}
   m_AnimationClipSettings:
     serializedVersion: 2

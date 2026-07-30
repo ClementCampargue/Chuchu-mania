@@ -92,9 +92,14 @@ public class SC_coconut : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.CompareTag("Enemy") || collision.CompareTag("Player"))
+        if ( collision.CompareTag("Player"))
         {
             ForceHit();
+        }
+        if (collision.CompareTag("Player"))
+        {
+            SC_player.instance.Stun();
+            Debug.Log("stunned");
         }
     }
 

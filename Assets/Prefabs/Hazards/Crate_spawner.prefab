@@ -138,8 +138,10 @@ MonoBehaviour:
   - {fileID: 1157333570664718618, guid: 6f78fa3a88006784fb136d8c9071d584, type: 3}
   - {fileID: 1157333570664718618, guid: 6f78fa3a88006784fb136d8c9071d584, type: 3}
   - {fileID: 3824924570266481077, guid: 03f4d4190a080ea4b96f6b0d27459fca, type: 3}
+  spawnPoints: []
   spawnInOrder: 1
-  RandomizeOrder: 1
-  PlayOnAwake: 1
-  spawnInterval: 5
+  randomizeOrder: 0
+  playOnAwake: 0
+  minSpawnInterval: 2.5
+  maxSpawnInterval: 3
   maxSpawnCount: 0

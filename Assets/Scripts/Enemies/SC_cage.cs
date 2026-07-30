@@ -53,7 +53,7 @@ public class SC_cage : MonoBehaviour
             SC_player.instance.collider.enabled = false;
             SC_player.instance.rb.gravityScale = 0;
             SC_player.instance.rb.constraints = RigidbodyConstraints2D.FreezeAll;
-            SC_player.instance.anim_powerup.SetTrigger("End");
+            SC_player.instance.anim_.SetTrigger("End");
             SC_music_manager.instance.stop_music();
         }
         else

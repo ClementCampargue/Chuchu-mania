@@ -58,13 +58,14 @@ public class SC_player : MonoBehaviour
     public bool isInvincible = false;
 
     [Header("Transformation")]
+    public GameObject normal;
+    public GameObject transformed;
     public float transformFreezeTime = 0.5f;
     public string transformAnimTrigger = "Transform";
     public string detransformAnimTrigger = "DeTransform";
 
     public Rigidbody2D rb;
     public Animator anim_;
-    public Animator anim_powerup;
     private Animator anim;
 
     private Vector2 moveInput;
@@ -121,6 +122,8 @@ public class SC_player : MonoBehaviour
 
     void Start()
     {
+        normal.SetActive(true);
+        transformed.SetActive(false);
         limit = SC_game_master.instance.limits;
         base_gravity = rb.gravityScale;
         spriteRenderer.material = normalMaterial;
@@ -264,6 +267,11 @@ public class SC_player : MonoBehaviour
         {
             StartCoroutine(StunCoroutine());
         }
+    }
+
+    public void Stun()
+    {
+        StartCoroutine(StunCoroutine());
     }
     void CheckDamage()
     {
@@ -595,18 +603,17 @@ public class SC_player : MonoBehaviour
 
     public void powerup()
     {
+        anim.SetTrigger("Transform");
         transformation.PlayJuice();
-        anim_powerup.gameObject.SetActive(true);
-        anim_.gameObject.SetActive(false);
-        anim = anim_powerup;
+        normal.SetActive(false);
+        transformed.SetActive(true);
         StartCoroutine(PowerupFreeze(true));
     }
 
     public void end_powerup()
     {
-        anim_powerup.gameObject.SetActive(false);
-        anim_.gameObject.SetActive(true);
-        anim = anim_;
+        normal.SetActive(true);
+        transformed.SetActive(false);
         StartCoroutine(PowerupFreeze(false));
     }
     public void TriggerInvincibility(float duration)

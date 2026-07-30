@@ -13,16 +13,17 @@ public class SC_spawner : MonoBehaviour
     public bool randomizeOrder = false;
     public bool playOnAwake = false;
 
-    [Header("Temps entre chaque spawn")]
-    public float spawnInterval = 2f;
+    [Header("Temps entre chaque spawn (aléatoire)")]
+    public float minSpawnInterval = 1f;
+    public float maxSpawnInterval = 3f;
 
     [Header("Nombre maximum d'objets (0 = illimité)")]
     public int maxSpawnCount = 0;
 
     private int currentSpawnCount = 0;
-    private float timer;
+    private float timer = 0f;
+    private float currentSpawnInterval = 0f;
     private int currentPrefabIndex = 0;
-
     private int lastSpawnPointIndex = -1;
 
     private void Start()
@@ -32,9 +33,11 @@ public class SC_spawner : MonoBehaviour
             Shuffle(prefabs);
         }
 
+        SetNextSpawnTime();
+
         if (playOnAwake)
         {
-            timer = spawnInterval;
+            timer = currentSpawnInterval;
         }
     }
 
@@ -42,7 +45,7 @@ public class SC_spawner : MonoBehaviour
     {
         timer += Time.deltaTime;
 
-        if (timer >= spawnInterval)
+        if (timer >= currentSpawnInterval)
         {
             timer = 0f;
 
@@ -50,6 +53,8 @@ public class SC_spawner : MonoBehaviour
             {
                 SpawnObject();
             }
+
+            SetNextSpawnTime();
         }
     }
 
@@ -98,6 +103,18 @@ public class SC_spawner : MonoBehaviour
         lastSpawnPointIndex = newIndex;
 
         return spawnPoints[newIndex];
+    }
+
+    private void SetNextSpawnTime()
+    {
+        if (minSpawnInterval > maxSpawnInterval)
+        {
+            float temp = minSpawnInterval;
+            minSpawnInterval = maxSpawnInterval;
+            maxSpawnInterval = temp;
+        }
+
+        currentSpawnInterval = Random.Range(minSpawnInterval, maxSpawnInterval);
     }
 
     private void Shuffle(GameObject[] array)
