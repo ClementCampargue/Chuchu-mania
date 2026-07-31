@@ -8,6 +8,7 @@ TagManager:
   - Enemy
   - Climb
   - Crate
+  - Lava
   layers:
   - Default
   - TransparentFX

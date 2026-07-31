@@ -5158,7 +5158,6 @@ MonoBehaviour:
   freeze: 1
   freezeDuration: 0.15
   slowMoScale: 0.05
-  freezeRecoverDuration: 0.15
   fovCurve:
     serializedVersion: 2
     m_Curve:
@@ -5654,7 +5653,7 @@ MonoBehaviour:
     m_Bits: 8
   enemyDetectionDistance: 0.2
   CanMove: 1
-  damage: {fileID: 0}
+  damage: {fileID: 6162067483996259934}
 --- !u!114 &6162067483996259934
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5680,7 +5679,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 2048
   detectionRadius: 0.5
-  stunRadius: 0.5
+  stunRadius: 0.23
   knockbackForce: 2
   knockbackVerticalForce: 5
   spinSpeed: 720
@@ -10658,7 +10657,6 @@ MonoBehaviour:
   freeze: 1
   freezeDuration: 0.15
   slowMoScale: 0.05
-  freezeRecoverDuration: 0.15
   fovCurve:
     serializedVersion: 2
     m_Curve:

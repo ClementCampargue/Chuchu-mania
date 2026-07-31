@@ -25,7 +25,6 @@ public class SC_lava : MonoBehaviour
 
     void Launch(SC_player player)
     {
-        Debug.Log("lava");
         float dir = Mathf.Sign(player.transform.position.x - transform.position.x);
         if (dir == 0) dir = 1;
 

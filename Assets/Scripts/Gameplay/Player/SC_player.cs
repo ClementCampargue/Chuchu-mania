@@ -113,11 +113,21 @@ public class SC_player : MonoBehaviour
         instance = this;
     }
 
-    void OnEnable()
+    private void OnEnable()
     {
         Jump.action.Enable();
+        Move.action.Enable();
+
         Jump.action.performed += OnJumpStarted;
         Jump.action.canceled += OnJumpReleased;
+    }
+    private void OnDisable()
+    {
+        Jump.action.performed -= OnJumpStarted;
+        Jump.action.canceled -= OnJumpReleased;
+
+        Jump.action.Disable();
+        Move.action.Disable();
     }
 
     void Start()
@@ -216,11 +226,22 @@ public class SC_player : MonoBehaviour
             }
         }
 
-        if (!wasGrounded && isGrounded )
+        if (!wasGrounded && isGrounded)
         {
-            anim.ResetTrigger("Jump");
-            anim.SetTrigger("Land");
-            land.PlayJuice();
+            if (transform.localScale.y ==1 && rb.linearVelocityY < -0.5f)
+            {
+                anim.ResetTrigger("Jump");
+                anim.SetTrigger("Land");
+                land.PlayJuice();
+            }
+            else if (transform.localScale.y == -1 && rb.linearVelocityY > 0.5f)
+
+            {
+                anim.ResetTrigger("Jump");
+                anim.SetTrigger("Land");
+                land.PlayJuice();
+            }
+
         }
         float yScale = transform.localScale.y;
 
@@ -725,48 +746,48 @@ public class SC_player : MonoBehaviour
     {
         StopAllCoroutines();
 
-        // Réinitialisation des états
+        // Reset mouvements temporaires
+        moveInput = Vector2.zero;
+        added_velocity = Vector2.zero;
+        added_velocity_ = Vector2.zero;
+        knockbackVelocity = Vector2.zero;
+
+        // Reset états
         isFrozen = false;
         isStunned = false;
         isInvincible = false;
         burning = false;
         canTakeDamage = true;
 
-        // Restaurer la vie
+        isJumping = false;
+        jumpTimeCounter = 0;
+
+        isClimbing = false;
+        canClimb = false;
+        was_climbing = false;
+        grillage = null;
+
         currentHealth = maxHealth;
 
-        // Réactiver les cœurs
         foreach (GameObject heart in hearts)
-        {
             heart.SetActive(true);
-        }
 
-        // Réactiver les composants
         collider.enabled = true;
         spriteRenderer.enabled = true;
 
-        // Réinitialiser la physique
         rb.bodyType = RigidbodyType2D.Dynamic;
         rb.gravityScale = base_gravity;
         rb.linearVelocity = Vector2.zero;
-        knockbackVelocity = Vector2.zero;
+        rb.angularVelocity = 0;
 
-        // Réinitialiser les animations
         anim.SetBool("Die", false);
         anim.SetBool("Stun", false);
         anim.SetBool("Climb", false);
 
-        // Déplacer au point de respawn
-        if (transform.position != null)
-            transform.position = transform.position;
-
-        // Fermer l'écran Game Over
         game_over_screen.SetActive(false);
 
-        // Remettre le temps normal
         Time.timeScale = 1f;
 
-        // Petite invincibilité après respawn
         StartCoroutine(InvincibilityRoutine(2f));
     }
 }

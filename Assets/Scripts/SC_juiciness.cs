@@ -1,7 +1,6 @@
 using System.Collections;
-using UnityEngine;
-using UnityEngine.InputSystem;
 using System.Collections.Generic;
+using UnityEngine;
 
 public class SC_juiciness : MonoBehaviour
 {
@@ -24,11 +23,10 @@ public class SC_juiciness : MonoBehaviour
     public float shakeScreenDuration = 0f;
 
     [Header("Particles")]
-    public List<ParticleSystem> ps;
-
+    public List<ParticleSystem> ps = new();
 
     [Header("Audio")]
-    public List<AudioSource> audio;
+    public List<AudioSource> audio = new();
 
     [Header("Flash")]
     public bool flash = true;
@@ -48,37 +46,62 @@ public class SC_juiciness : MonoBehaviour
     public bool freeze = false;
     public float freezeDuration = 0.05f;
     public float slowMoScale = 0.05f;
-    public float freezeRecoverDuration = 0.15f;
 
     [Header("Curves")]
     public AnimationCurve fovCurve = AnimationCurve.EaseInOut(0, 0, 1, 1);
     public AnimationCurve timeScaleCurve = AnimationCurve.EaseInOut(0, 0, 1, 1);
 
+
     private Vector3 originalScale;
     private Vector3 originalPosition;
 
-    private Coroutine scaleRoutine;
-    private Coroutine shakeRoutine;
-    private Coroutine flashRoutine;
-    private Coroutine freezeRoutine;
-
+    private bool isScaling;
+    private bool isShaking;
+    private bool isFlashing;
     private bool isFreezing;
+
+
+    void Awake()
+    {
+        ResetState();
+    }
+
 
     void Start()
     {
-        trs ??= transform;
+        if (trs == null)
+            trs = transform;
+
+        originalScale = trs.localScale;
+
 
         if (flash)
         {
             if (spriteRenderer == null)
                 spriteRenderer = GetComponent<SpriteRenderer>();
 
-            defaultMaterial = spriteRenderer.material;
+            if (spriteRenderer != null)
+                defaultMaterial = spriteRenderer.material;
         }
-        if (trs != null)
-            originalScale = trs.localScale;
-
     }
+
+
+    void OnEnable()
+    {
+        ResetState();
+    }
+
+
+    void ResetState()
+    {
+        isScaling = false;
+        isShaking = false;
+        isFlashing = false;
+        isFreezing = false;
+
+        Time.timeScale = 1f;
+    }
+
 
     void Update()
     {
@@ -86,143 +109,190 @@ public class SC_juiciness : MonoBehaviour
             PlayJuice();
     }
 
+
     public void PlayJuice()
     {
-        // Rumble
-        if (rumble)
-            SC_rumbleManager.instance.PlayRumble(rumbleLow, rumbleHigh, rumbleDuration);
+        if (this == null || gameObject == null)
+            return;
+
+        if (!isActiveAndEnabled)
+            return;
 
 
+        if (!isScaling)
+            StartCoroutine(SquashAndStretch());
 
 
-        // Particles
-        if (ps.Count > 0)
-        {
-            foreach(ParticleSystem ps in ps)
-            {
-                ps.Play();
-            }
-        }
-        if (audio.Count > 0)
-        {
-            foreach(AudioSource audio in audio)
-            {
-                audio.Play();
-            }
-        }
+        if (flash && !isFlashing)
+            StartCoroutine(Flash());
 
-        // Squash
-        RestartCoroutine(ref scaleRoutine, SquashAndStretch());
 
-        // Flash
-        if (flash)
-            RestartCoroutine(ref flashRoutine, Flash());
+        if (!isShaking)
+            StartCoroutine(Shake());
 
-        // Local shake
-        RestartCoroutine(ref shakeRoutine, Shake());
 
-        // Freeze frame (independent)
-        if (freeze && !isFreezing && Time.timeScale == 1f)
-            freezeRoutine = StartCoroutine(FreezeFrame());
+        if (freeze && !isFreezing)
+            StartCoroutine(FreezeFrame());
     }
 
-    // ---------------- CAMERA ZOOM (SEPARATED) ---------------- 
-
-
-
-    // ---------------- FREEZE FRAME ----------------
 
     IEnumerator FreezeFrame()
     {
         isFreezing = true;
 
-        float originalTimeScale = Time.timeScale;
+        float oldTimeScale = Time.timeScale;
+
         Time.timeScale = slowMoScale;
 
 
         yield return new WaitForSecondsRealtime(freezeDuration);
 
-        Time.timeScale = originalTimeScale;
 
-
+        Time.timeScale = oldTimeScale;
 
         isFreezing = false;
     }
 
-    // ---------------- EFFECTS ----------------
+
 
     IEnumerator Flash()
     {
-        spriteRenderer.material = flashMaterial;
+        isFlashing = true;
+
+
+        if (spriteRenderer != null && flashMaterial != null)
+            spriteRenderer.material = flashMaterial;
+
+
         yield return new WaitForSecondsRealtime(flashDuration);
-        spriteRenderer.material = defaultMaterial;
+
+
+        if (spriteRenderer != null)
+            spriteRenderer.material = defaultMaterial;
+
+
+        isFlashing = false;
     }
+
+
+
 
     IEnumerator SquashAndStretch()
     {
-        Vector3 baseScale = originalScale;
+        isScaling = true;
 
-        Vector3 stretchScale = baseScale;
+
+        Vector3 baseScale = originalScale;
+        Vector3 targetScale = baseScale;
+
 
         if (verticalStretch)
         {
-            stretchScale.y *= stretchAmount;
-            stretchScale.x *= squashAmount;
-            stretchScale.z *= squashAmount;
+            targetScale.y *= stretchAmount;
+            targetScale.x *= squashAmount;
+            targetScale.z *= squashAmount;
         }
         else
         {
-            stretchScale.x *= stretchAmount;
-            stretchScale.y *= squashAmount;
-            stretchScale.z *= squashAmount;
+            targetScale.x *= stretchAmount;
+            targetScale.y *= squashAmount;
+            targetScale.z *= squashAmount;
         }
 
-        float t = 0f;
+
+
+        float t = 0;
+
 
         while (t < scaleDuration)
         {
             t += Time.unscaledDeltaTime;
-            float lerp = Mathf.Clamp01(t / scaleDuration);
-            trs.localScale = Vector3.Lerp(baseScale, stretchScale, lerp * lerp);
+
+            float value = Mathf.Clamp01(t / scaleDuration);
+
+            trs.localScale =
+                Vector3.Lerp(baseScale, targetScale, value * value);
+
             yield return null;
         }
 
-        t = 0f;
+
+
+        t = 0;
+
 
         while (t < scaleDuration)
         {
             t += Time.unscaledDeltaTime;
-            float lerp = Mathf.Clamp01(t / scaleDuration);
-            trs.localScale = Vector3.Lerp(stretchScale, baseScale, 1f - Mathf.Pow(1f - lerp, 3f));
+
+            float value = Mathf.Clamp01(t / scaleDuration);
+
+            trs.localScale =
+                Vector3.Lerp(
+                    targetScale,
+                    baseScale,
+                    1f - Mathf.Pow(1f - value, 3f)
+                );
+
             yield return null;
         }
+
 
         trs.localScale = baseScale;
+
+        isScaling = false;
     }
+
+
+
 
     IEnumerator Shake()
     {
+        isShaking = true;
+
+
         originalPosition = trs.localPosition;
 
-        float t = 0f;
+
+        float t = 0;
+
 
         while (t < shakeDuration)
         {
             t += Time.unscaledDeltaTime;
-            trs.localPosition = originalPosition + Random.insideUnitSphere * shakeIntensity;
+
+
+            trs.localPosition =
+                originalPosition +
+                Random.insideUnitSphere * shakeIntensity;
+
+
             yield return null;
         }
 
+
         trs.localPosition = originalPosition;
+
+
+        isShaking = false;
     }
 
-    // ---------------- UTILS ----------------
 
-    void RestartCoroutine(ref Coroutine routine, IEnumerator enumerator)
+
+    void OnDisable()
     {
-        if (routine != null)
-            StopCoroutine(routine);
+        Time.timeScale = 1f;
 
-        routine = StartCoroutine(enumerator);
+        StopAllCoroutines();
+
+        ResetState();
+    }
+
+
+    void OnDestroy()
+    {
+        StopAllCoroutines();
+
+        Time.timeScale = 1f;
     }
 }

@@ -147,7 +147,7 @@ BoxCollider2D:
   m_Enabled: 1
   serializedVersion: 3
   m_Density: 1
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 6200000, guid: c741f94094c1f0d49b7b0c50cad9671f, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -199,7 +199,7 @@ Rigidbody2D:
   m_LinearDamping: 1
   m_AngularDamping: 0.05
   m_GravityScale: 1
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 6200000, guid: c741f94094c1f0d49b7b0c50cad9671f, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -220,6 +220,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5013064743892331047}
   - component: {fileID: 8144807914100060067}
+  - component: {fileID: 5276971100253268518}
   m_Layer: 3
   m_Name: Collision
   m_TagString: Ground
@@ -288,6 +289,18 @@ BoxCollider2D:
   m_AutoTiling: 0
   m_Size: {x: 1, y: 1}
   m_EdgeRadius: 0
+--- !u!114 &5276971100253268518
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5465307612538632494}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 22d1d34bed0f3ff4eb9465eb31d988ed, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &6760824100104960217
 GameObject:
   m_ObjectHideFlags: 0

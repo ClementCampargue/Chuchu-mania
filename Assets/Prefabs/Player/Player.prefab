@@ -10571,7 +10571,6 @@ MonoBehaviour:
   freeze: 0
   freezeDuration: 0.05
   slowMoScale: 0.05
-  freezeRecoverDuration: 0.15
   fovCurve:
     serializedVersion: 2
     m_Curve:
@@ -20551,7 +20550,6 @@ MonoBehaviour:
   freeze: 0
   freezeDuration: 0.05
   slowMoScale: 0.05
-  freezeRecoverDuration: 0.15
   fovCurve:
     serializedVersion: 2
     m_Curve:
@@ -20768,7 +20766,6 @@ MonoBehaviour:
   freeze: 0
   freezeDuration: 0.05
   slowMoScale: 0.05
-  freezeRecoverDuration: 0.15
   fovCurve:
     serializedVersion: 2
     m_Curve:
@@ -20983,7 +20980,6 @@ MonoBehaviour:
   freeze: 0
   freezeDuration: 0.05
   slowMoScale: 0.05
-  freezeRecoverDuration: 0.15
   fovCurve:
     serializedVersion: 2
     m_Curve:
@@ -21233,7 +21229,6 @@ MonoBehaviour:
   freeze: 0
   freezeDuration: 0.05
   slowMoScale: 0.05
-  freezeRecoverDuration: 0.15
   fovCurve:
     serializedVersion: 2
     m_Curve:
@@ -21516,7 +21511,7 @@ Rigidbody2D:
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
-  m_Mass: 10000
+  m_Mass: 100
   m_LinearDamping: 0
   m_AngularDamping: 0.05
   m_GravityScale: 3
@@ -21639,7 +21634,6 @@ MonoBehaviour:
   freeze: 0
   freezeDuration: 0
   slowMoScale: 0.05
-  freezeRecoverDuration: 0.15
   fovCurve:
     serializedVersion: 2
     m_Curve:
@@ -21912,7 +21906,6 @@ MonoBehaviour:
   freeze: 0
   freezeDuration: 0.05
   slowMoScale: 0.05
-  freezeRecoverDuration: 0.15
   fovCurve:
     serializedVersion: 2
     m_Curve:

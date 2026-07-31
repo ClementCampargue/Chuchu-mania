@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using UnityEngine;
 
@@ -9,7 +10,8 @@ public class SC_gravity_flip : MonoBehaviour
     private SC_player player;
     public bool gravity_up = false;
     public static SC_gravity_flip instance;
-
+    public static event Action<bool> OnGravityChanged;
+    public Animator anim;
     private void Awake()
     {
         instance = this;
@@ -29,11 +31,22 @@ public class SC_gravity_flip : MonoBehaviour
         while (true)
         {
             yield return new WaitForSeconds(flipInterval);
-            FlipGravity();
+            trigger_lights();
         }
     }
+    public void trigger_lights()
+    {
+        if (anim.enabled)
+        {
+            anim.SetTrigger("switch");
+        }
+        else
+        {
+            anim.enabled = true;
 
-    private void FlipGravity()
+        }
+    }
+    public void FlipGravity()
     {
         gravityInverted = !gravityInverted;
         gravity_up = !gravity_up;
@@ -59,5 +72,6 @@ public class SC_gravity_flip : MonoBehaviour
                 player.transform.localScale.z
             );
         }
+        OnGravityChanged?.Invoke(gravity_up);
     }
 }

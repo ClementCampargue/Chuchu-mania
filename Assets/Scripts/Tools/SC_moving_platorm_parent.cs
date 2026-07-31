@@ -11,9 +11,9 @@ public class SC_moving_platorm_parent : MonoBehaviour
         gm = SC_game_master.instance;
     }
 
-    private void OnCollisionEnter2D(Collision2D collision)
+    private void OnCollisionStay2D(Collision2D collision)
     {
-        if (collision.gameObject.CompareTag("Player"))
+        if (collision.gameObject.CompareTag("Player") && player.isGrounded && player.rb.linearVelocity.y<0.1f&& player.rb.linearVelocity.y>-0.1f)
         {
             player.transform.SetParent(transform);
         }
