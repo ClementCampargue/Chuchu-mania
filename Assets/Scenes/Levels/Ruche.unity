@@ -1100,8 +1100,20 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 754118766153705996, guid: 5084ec099d987ab459f8b0a8bd031168, type: 3}
+      propertyPath: maxSpawnCount
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 754118766153705996, guid: 5084ec099d987ab459f8b0a8bd031168, type: 3}
       propertyPath: randomizeOrder
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 754118766153705996, guid: 5084ec099d987ab459f8b0a8bd031168, type: 3}
+      propertyPath: maxSpawnInterval
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 754118766153705996, guid: 5084ec099d987ab459f8b0a8bd031168, type: 3}
+      propertyPath: minSpawnInterval
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 1224448840006954510, guid: 5084ec099d987ab459f8b0a8bd031168, type: 3}
       propertyPath: m_LocalPosition.x
@@ -1280,8 +1292,20 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 754118766153705996, guid: 5084ec099d987ab459f8b0a8bd031168, type: 3}
+      propertyPath: maxSpawnCount
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 754118766153705996, guid: 5084ec099d987ab459f8b0a8bd031168, type: 3}
       propertyPath: randomizeOrder
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 754118766153705996, guid: 5084ec099d987ab459f8b0a8bd031168, type: 3}
+      propertyPath: maxSpawnInterval
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 754118766153705996, guid: 5084ec099d987ab459f8b0a8bd031168, type: 3}
+      propertyPath: minSpawnInterval
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 1224448840006954510, guid: 5084ec099d987ab459f8b0a8bd031168, type: 3}
       propertyPath: m_LocalPosition.x
