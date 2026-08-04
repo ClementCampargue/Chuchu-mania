@@ -392,6 +392,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   height: 0.2
   speed: 0.5
+  horizontalDistance: 0
+  horizontalSpeed: 0
+  horizontalDirection: {x: 1, y: 0, z: 0}
   useSmooth: 0
   rotationAxis: {x: 0, y: 0, z: 1}
   rotationSpeed: 0
@@ -1412,7 +1415,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: -1
   m_Sprite: {fileID: 21300000, guid: e2b16f26afb0144499990e5b64c4bbc2, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -7729,6 +7732,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   height: 0.2
   speed: 0.5
+  horizontalDistance: 0
+  horizontalSpeed: 0
+  horizontalDirection: {x: 1, y: 0, z: 0}
   useSmooth: 0
   rotationAxis: {x: 0, y: 0, z: 1}
   rotationSpeed: 0
@@ -30353,6 +30359,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   height: 0.2
   speed: 0.5
+  horizontalDistance: 0
+  horizontalSpeed: 0
+  horizontalDirection: {x: 1, y: 0, z: 0}
   useSmooth: 0
   rotationAxis: {x: 0, y: 0, z: 1}
   rotationSpeed: 0
@@ -36491,7 +36500,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: -3
+  m_SortingOrder: -2
   m_Sprite: {fileID: 21300000, guid: a5d5633e5ed9eea4b96f25d7f7fc1330, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -37140,6 +37149,7 @@ SceneRoots:
   - {fileID: 748704673}
   - {fileID: 142916051}
   - {fileID: 1566794540}
+  - {fileID: 426817165}
   - {fileID: 951281153}
   - {fileID: 1340161701}
   - {fileID: 846692598}
@@ -37153,7 +37163,6 @@ SceneRoots:
   - {fileID: 1194452617}
   - {fileID: 572797717}
   - {fileID: 1275938144}
-  - {fileID: 426817165}
   - {fileID: 2039258725}
   - {fileID: 1719737344}
   - {fileID: 1389132936}

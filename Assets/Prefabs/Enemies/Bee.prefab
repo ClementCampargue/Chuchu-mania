@@ -71,7 +71,6 @@ MonoBehaviour:
   freeze: 1
   freezeDuration: 0.15
   slowMoScale: 0.05
-  freezeRecoverDuration: 0.15
   fovCurve:
     serializedVersion: 2
     m_Curve:
@@ -288,7 +287,6 @@ MonoBehaviour:
   freeze: 1
   freezeDuration: 0.15
   slowMoScale: 0.05
-  freezeRecoverDuration: 0.15
   fovCurve:
     serializedVersion: 2
     m_Curve:
@@ -701,8 +699,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   shape: 0
-  radius: 1.46
-  speed: 1
+  radius: 1.5
+  speed: 2
   resolution: 0.05
   showGizmos: 1
   gizmosColor: {r: 0, g: 1, b: 1, a: 1}
