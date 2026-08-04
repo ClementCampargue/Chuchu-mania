@@ -118,23 +118,42 @@ public class SC_juiciness : MonoBehaviour
         if (!isActiveAndEnabled)
             return;
 
+        // Particles
+        if (ps != null)
+        {
+            foreach (ParticleSystem particle in ps)
+            {
+                if (particle != null)
+                    particle.Play();
+            }
+        }
 
+        // Audio
+        if (audio != null)
+        {
+            foreach (AudioSource source in audio)
+            {
+                if (source != null)
+                    source.Play();
+            }
+        }
+
+        // Squash & Stretch
         if (!isScaling)
             StartCoroutine(SquashAndStretch());
 
-
+        // Flash
         if (flash && !isFlashing)
             StartCoroutine(Flash());
 
-
+        // Local Shake
         if (!isShaking)
             StartCoroutine(Shake());
 
-
+        // Freeze Frame
         if (freeze && !isFreezing)
             StartCoroutine(FreezeFrame());
     }
-
 
     IEnumerator FreezeFrame()
     {
