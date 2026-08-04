@@ -10,7 +10,7 @@ public class SC_shape_movement : MonoBehaviour
         Figure8,
         Line
     }
-
+    public bool randomStartOnShape = true;
     [Header("Shape Settings")]
     public ShapeType shape = ShapeType.RoundedSquare;
     public float radius = 2f;
@@ -36,6 +36,11 @@ public class SC_shape_movement : MonoBehaviour
     {
         origin = transform.position;
         BuildCurve();
+
+        if (randomStartOnShape)
+        {
+            t = Random.Range(0f, totalLength);
+        }
     }
 
     void Update()

@@ -7,7 +7,7 @@ public class SC_spotlight : MonoBehaviour
 
     private bool joueurDansZone = false;
     public Animator anim;
-
+    public GameObject bonus;
     private void OnEnable()
     {
         Invoke(nameof(VerifierJoueur), delai);
@@ -52,13 +52,14 @@ public class SC_spotlight : MonoBehaviour
     {
         Debug.Log("Le joueur est dans la zone !");
         anim.SetTrigger("Inside");
+        Instantiate(bonus, transform.position, Quaternion.identity);
 
     }
 
     private void JoueurNonDetecte()
     {
         Debug.Log("Le joueur n'est pas dans la zone !");
-        SC_player.instance.TakeDamage(1,transform.position);
+       // SC_player.instance.TakeDamage(1,transform.position);
         anim.SetTrigger("Outside");
     }
 

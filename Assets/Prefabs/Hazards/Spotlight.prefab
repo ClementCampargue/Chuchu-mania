@@ -159,6 +159,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   delai: 3
   anim: {fileID: 8417972297707711568}
+  bonus: {fileID: 1268245026175110752, guid: 3b18e3c26b6b54f4e936b3f60889e00d, type: 3}
 --- !u!58 &150874335868875938
 CircleCollider2D:
   m_ObjectHideFlags: 0

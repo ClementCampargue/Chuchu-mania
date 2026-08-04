@@ -323,7 +323,7 @@ public class SC_player : MonoBehaviour
 
     public void stun_player()
     {
-        if (isStunned)
+        if (isStunned || isInvincible || eat_system.isPowerUpActive)
             return;
         StartCoroutine(StunCoroutine());
 
@@ -406,6 +406,7 @@ public class SC_player : MonoBehaviour
     }
     private void OnJumpStarted(InputAction.CallbackContext context)
     {
+        if (isStunned) return;
         if (isClimbing)
         {
             StopClimbingJump();
@@ -604,6 +605,8 @@ public class SC_player : MonoBehaviour
         GetComponent<SortingGroup>().sortingLayerName = "UI";
         isFrozen = true;
         anim.SetBool("Die",true);
+        anim.SetBool("Eat", false);
+        eat_system.eating_sfx.Stop();
         game_over_screen.SetActive(true);
         SC_music_manager.instance.stop_music();
         collider.enabled = false;

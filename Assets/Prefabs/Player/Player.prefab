@@ -21544,7 +21544,7 @@ MonoBehaviour:
   moveSpeed: 4
   jumpForce: 6
   maxJumpTime: 0.3
-  climbSpeed: 0.65
+  climbSpeed: 0.52
   maxHealth: 3
   hitFreezeTime: 0.51
   hearts:

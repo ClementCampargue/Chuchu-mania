@@ -41,6 +41,18 @@ public class SC_crate : MonoBehaviour
         isGrounded = true;
     }
 
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.gameObject.CompareTag("Player"))
+        {
+            if (SC_icecream_eat_system.instance.isPowerUpActive)
+            {
+                SC_player.instance.anim_.SetTrigger("Punch");
+                die();
+            }
+        }
+    }
+
     private void OnCollisionExit2D(Collision2D collision)
     {
         isGrounded = false;
@@ -67,5 +79,10 @@ public class SC_crate : MonoBehaviour
             Destroy(gameObject);
 
         }
+    }
+
+    public void die()
+    {
+        Destroy(gameObject);
     }
 }
