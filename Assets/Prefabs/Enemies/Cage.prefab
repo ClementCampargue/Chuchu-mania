@@ -54,6 +54,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   height: 0
   speed: 0
+  horizontalDistance: 0
+  horizontalSpeed: 0
+  horizontalDirection: {x: 1, y: 0, z: 0}
   useSmooth: 1
   rotationAxis: {x: 0, y: 0, z: 1}
   rotationSpeed: 50
@@ -484,7 +487,6 @@ MonoBehaviour:
   freeze: 0
   freezeDuration: 1
   slowMoScale: 0.05
-  freezeRecoverDuration: 0.15
   fovCurve:
     serializedVersion: 2
     m_Curve:
@@ -1696,7 +1698,6 @@ MonoBehaviour:
   freeze: 1
   freezeDuration: 5
   slowMoScale: 0
-  freezeRecoverDuration: 100
   fovCurve:
     serializedVersion: 2
     m_Curve:
@@ -1882,7 +1883,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5117453445091579984}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e50b49f965e44cd459c180b17a669551, type: 3}
   m_Name: 
@@ -1928,7 +1929,6 @@ MonoBehaviour:
   freeze: 0
   freezeDuration: 0
   slowMoScale: 0.05
-  freezeRecoverDuration: 0.15
   fovCurve:
     serializedVersion: 2
     m_Curve:
@@ -7415,7 +7415,6 @@ MonoBehaviour:
   freeze: 1
   freezeDuration: 0.15
   slowMoScale: 0.05
-  freezeRecoverDuration: 0.15
   fovCurve:
     serializedVersion: 2
     m_Curve:
