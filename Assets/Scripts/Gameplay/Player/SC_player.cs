@@ -493,6 +493,9 @@ public class SC_player : MonoBehaviour
     }
     public void LavaHit(Vector2 launchVelocity, float controlMultiplier, float controlTime)
     {
+        if (!canTakeDamage) return;
+        if (isFrozen || isInvincible || eat_system.isPowerUpActive) return;
+
         burning = true;
 
         StopAllCoroutines();
