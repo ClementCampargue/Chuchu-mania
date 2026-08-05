@@ -71,6 +71,22 @@ MonoBehaviour:
     m_Key: Press start to play
     m_Metadata:
       m_Items: []
+  - m_Id: 21048095823642624
+    m_Key: Settings
+    m_Metadata:
+      m_Items: []
+  - m_Id: 21071667875037184
+    m_Key: Let's go!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 21071691866456064
+    m_Key: Not yet
+    m_Metadata:
+      m_Items: []
+  - m_Id: 21071745918451712
+    m_Key: Ready to go?
+    m_Metadata:
+      m_Items: []
   m_Metadata:
     m_Items: []
   m_KeyGenerator:

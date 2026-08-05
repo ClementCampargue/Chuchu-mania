@@ -1092,6 +1092,8 @@ MonoBehaviour:
   overlay_on: 1
   level: 1
   spawn: {fileID: 1409162263840171399}
+  instance: {fileID: 0}
+  limits: 7
 --- !u!1 &6024660918130890506
 GameObject:
   m_ObjectHideFlags: 0

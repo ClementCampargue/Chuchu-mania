@@ -21,7 +21,6 @@ public class SC_bullet_spawner : MonoBehaviour
 
     void Update()
     {
-        if (!SC_level_intro.gameStarted) return;
         timer += Time.deltaTime;
 
         if (timer >= intervalle && !estEnTrainDeTirer)

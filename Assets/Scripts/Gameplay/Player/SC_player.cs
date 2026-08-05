@@ -17,10 +17,10 @@ public class SC_player : MonoBehaviour
     public float maxJumpTime = 0.3f;
     private float jumpTimeCounter;
     private bool isJumping;
-
+    public bool canJump = true;
     [Header("Climbing")]
     public float climbSpeed = 4f;
-
+    private bool justLanded;
     private bool isClimbing;
     private bool canClimb;
     private SC_grillage grillage;
@@ -111,6 +111,7 @@ public class SC_player : MonoBehaviour
     private void Awake()
     {
         instance = this;
+        this.enabled = false;
     }
 
     private void OnEnable()
@@ -144,7 +145,8 @@ public class SC_player : MonoBehaviour
 
     void Update()
     {
-        if (!SC_level_intro.gameStarted) return;
+        limit = SC_level_master.instance.limits;
+
         CheckStun();
         CheckDamage();
         HandleLowHealthBlink();
@@ -228,13 +230,17 @@ public class SC_player : MonoBehaviour
 
         if (!wasGrounded && isGrounded)
         {
-            if (transform.localScale.y ==1 && rb.linearVelocityY < -0.5f)
+            anim.ResetTrigger("Jump");
+
+
+
+            if (!wasGrounded && isGrounded && rb.linearVelocity.y <= 0.5f)
             {
                 anim.ResetTrigger("Jump");
                 anim.SetTrigger("Land");
                 land.PlayJuice();
             }
-            else if (transform.localScale.y == -1 && rb.linearVelocityY > 0.5f)
+            else if (transform.localScale.y == -1 && rb.linearVelocity.y >= -0.5f)
 
             {
                 anim.ResetTrigger("Jump");
@@ -384,7 +390,7 @@ public class SC_player : MonoBehaviour
             Vector2 clamped = grillage.ClampPosition(rb.position);
             rb.position = clamped;
         }
-        if (!SC_level_intro.gameStarted) return;
+        if (!canMove) return;
         if (!isFrozen)
         {
             float horizontalSpeed = moveInput.x * (eat_system.isPowerUpActive ? PowermoveSpeed : moveSpeed) + knockbackVelocity.x;
@@ -406,6 +412,8 @@ public class SC_player : MonoBehaviour
     }
     private void OnJumpStarted(InputAction.CallbackContext context)
     {
+        if (!canJump) return;
+
         if (isStunned) return;
         if (isClimbing)
         {
@@ -739,7 +747,31 @@ public class SC_player : MonoBehaviour
         rb.gravityScale = base_gravity;
         anim.SetBool("Climb", false);
     }
+    public void FaceTarget(Transform target)
+    {
+        if (target == null) return;
 
+        float direction = target.position.x - transform.position.x;
+
+        if (direction > 0)
+        {
+            // Le PNJ est à droite
+            transform.localScale = new Vector3(
+                Mathf.Abs(transform.localScale.x),
+                transform.localScale.y,
+                transform.localScale.z
+            );
+        }
+        else if (direction < 0)
+        {
+            // Le PNJ est à gauche
+            transform.localScale = new Vector3(
+                -Mathf.Abs(transform.localScale.x),
+                transform.localScale.y,
+                transform.localScale.z
+            );
+        }
+    }
     void StopClimbingJump()
     {
         canClimb = false;

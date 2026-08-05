@@ -74,6 +74,22 @@ MonoBehaviour:
     m_Localized: Press start to play
     m_Metadata:
       m_Items: []
+  - m_Id: 21048095823642624
+    m_Localized: Settings
+    m_Metadata:
+      m_Items: []
+  - m_Id: 21071691866456064
+    m_Localized: Not yet
+    m_Metadata:
+      m_Items: []
+  - m_Id: 21071745918451712
+    m_Localized: Ready to go?
+    m_Metadata:
+      m_Items: []
+  - m_Id: 21071667875037184
+    m_Localized: Let"s go!
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds: []

@@ -74,6 +74,22 @@ MonoBehaviour:
     m_Localized: Appuyez sur un bouton
     m_Metadata:
       m_Items: []
+  - m_Id: 21048095823642624
+    m_Localized: Options
+    m_Metadata:
+      m_Items: []
+  - m_Id: 21071745918451712
+    m_Localized: "On part \xE0 l'aventure?"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 21071691866456064
+    m_Localized: En fait non
+    m_Metadata:
+      m_Items: []
+  - m_Id: 21071667875037184
+    m_Localized: Allons-y!
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds: []

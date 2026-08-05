@@ -21544,6 +21544,7 @@ MonoBehaviour:
   moveSpeed: 4
   jumpForce: 6
   maxJumpTime: 0.3
+  canJump: 1
   climbSpeed: 0.52
   maxHealth: 3
   hitFreezeTime: 0.51
@@ -21692,7 +21693,7 @@ BoxCollider2D:
   m_Enabled: 1
   serializedVersion: 3
   m_Density: 1
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 6200000, guid: c741f94094c1f0d49b7b0c50cad9671f, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0

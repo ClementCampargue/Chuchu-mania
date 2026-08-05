@@ -35,7 +35,7 @@ public class SC_sticker_UI : MonoBehaviour,
     }
     void Start()
     {
-        deleteZone = GameObject.Find("TrashZone").GetComponent<RectTransform>();
+        //deleteZone = GameObject.Find("TrashZone").GetComponent<RectTransform>();
     }
     public void OnPointerEnter(PointerEventData eventData)
     {

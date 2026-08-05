@@ -16,7 +16,7 @@ public class SC_ScreenWarp : MonoBehaviour
 
     private void Start()
     {
-        limit = SC_game_master.instance.limits;
+        limit = SC_level_master.instance.limits;
     }
     void Update()
     {
