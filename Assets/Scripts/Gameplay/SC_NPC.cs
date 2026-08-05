@@ -143,13 +143,15 @@ public class SC_NPC : MonoBehaviour
 
     void EndTalking()
     {
-        Invoke(nameof(DelayEnd), 0.25f);
+        player.enabled = false;
+        Invoke(nameof(DelayEnd), 0.1f);
     }
 
 
     void DelayEnd()
     {
         dialogueActive = false;
+        player.enabled = true;
 
         if (player != null)
         {
