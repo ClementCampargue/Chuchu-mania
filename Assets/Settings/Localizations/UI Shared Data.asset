@@ -59,6 +59,18 @@ MonoBehaviour:
     m_Key: Time
     m_Metadata:
       m_Items: []
+  - m_Id: 20949983713050624
+    m_Key: Retry
+    m_Metadata:
+      m_Items: []
+  - m_Id: 20950025345712128
+    m_Key: Tutorial
+    m_Metadata:
+      m_Items: []
+  - m_Id: 20956653621100544
+    m_Key: Press start to play
+    m_Metadata:
+      m_Items: []
   m_Metadata:
     m_Items: []
   m_KeyGenerator:

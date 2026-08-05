@@ -33,7 +33,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -1.516, y: 0.126}
+  m_AnchoredPosition: {x: -1.5666667, y: -0.03333333}
   m_SizeDelta: {x: 1, y: 1}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!212 &8830645293944662422
@@ -80,7 +80,7 @@ SpriteRenderer:
   m_SortingLayerID: 458446795
   m_SortingLayer: 1
   m_SortingOrder: 5
-  m_Sprite: {fileID: -333362823, guid: 26442bd4a5082094fa9c0e2a25c4e3cf, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 374bc012c74da66478a3d993738bfaf6, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -106,6 +106,7 @@ GameObject:
   - component: {fileID: 8448153931858180641}
   - component: {fileID: 277001638723706476}
   - component: {fileID: 2959461204918368628}
+  - component: {fileID: 8115811079581317056}
   m_Layer: 0
   m_Name: Text_button
   m_TagString: Untagged
@@ -244,13 +245,13 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 2.67
-  m_fontSizeBase: 2.67
+  m_fontSize: 2.6666667
+  m_fontSizeBase: 2.6666667
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
   m_fontSizeMax: 72
-  m_fontStyle: 0
+  m_fontStyle: 16
   m_HorizontalAlignment: 2
   m_VerticalAlignment: 512
   m_textAlignment: 65535
@@ -399,3 +400,17 @@ MonoBehaviour:
   references:
     version: 2
     RefIds: []
+--- !u!114 &8115811079581317056
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7162493650667248326}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 007300fe472b3b549a423de237c94ceb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  textMesh: {fileID: 9176267513702836998}
+  padding: {x: 0.2, y: 0.2}

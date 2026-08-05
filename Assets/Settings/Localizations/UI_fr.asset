@@ -62,6 +62,18 @@ MonoBehaviour:
     m_Localized: Estomac
     m_Metadata:
       m_Items: []
+  - m_Id: 20949983713050624
+    m_Localized: Recommencer
+    m_Metadata:
+      m_Items: []
+  - m_Id: 20950025345712128
+    m_Localized: Fiche tuto
+    m_Metadata:
+      m_Items: []
+  - m_Id: 20956653621100544
+    m_Localized: Appuyez sur un bouton
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds: []

@@ -493,18 +493,36 @@ public class SC_player : MonoBehaviour
     }
     public void LavaHit(Vector2 launchVelocity, float controlMultiplier, float controlTime)
     {
-        if (!canTakeDamage) return;
-        if (isFrozen || isInvincible || eat_system.isPowerUpActive) return;
+
 
         burning = true;
 
         StopAllCoroutines();
+        rb.bodyType = RigidbodyType2D.Dynamic;
+
+        rb.linearVelocity = launchVelocity;
+
+        StartCoroutine(LavaControlLock(controlMultiplier, controlTime));
+
+
+        if (!canTakeDamage) return;
+        if (isFrozen || isInvincible || eat_system.isPowerUpActive) return;
+
+
         anim.SetBool("Stun", false);
         hearts[currentHealth - 1].SetActive(false);
         isStunned = false;
         ps_damage.Play();
-        currentHealth -= 1;
+
+        isFrozen = false;
+        isStunned = false;
+        canTakeDamage = true;
+
+
+
         eat_system.take_damage();
+        currentHealth -= 1;
+
 
         if (currentHealth > 0)
         {
@@ -515,16 +533,7 @@ public class SC_player : MonoBehaviour
         {
             Die();
         }
-        isFrozen = false;
-        isStunned = false;
-        canTakeDamage = true;
         damage_lava_sfx.PlayJuice();
-
-        rb.bodyType = RigidbodyType2D.Dynamic;
-
-        rb.linearVelocity = launchVelocity;
-
-        StartCoroutine(LavaControlLock(controlMultiplier, controlTime));
     }
     private IEnumerator LavaControlLock(float multiplier, float time)
     {
