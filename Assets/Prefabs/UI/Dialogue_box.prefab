@@ -874,7 +874,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1049678611521369945, guid: 3ce41f75411c41f448f4f822ac6d67b0, type: 3}
       propertyPath: m_Name
-      value: Text
+      value: Name
       objectReference: {fileID: 0}
     - target: {fileID: 2813768196200715495, guid: 3ce41f75411c41f448f4f822ac6d67b0, type: 3}
       propertyPath: m_Pivot.x
@@ -1190,8 +1190,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   textMeshPro: {fileID: 20518823985305923}
   typeSpeed: 0.01
-  shakeAmplitude: 7.42
-  shakeFrequency: 0.1
+  shakeAmplitude: 0.05
+  shakeFrequency: 0.2
   waveAmplitude: 5
   waveFrequency: 5
   scaleAmplitude: 0.2

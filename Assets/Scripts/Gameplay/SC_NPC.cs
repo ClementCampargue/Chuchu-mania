@@ -5,7 +5,13 @@ using UnityEngine.InputSystem;
 public class SC_NPC : MonoBehaviour
 {
     [Header("Dialogue")]
-    public DialogueData dialogues;
+    public DialogueData[] dialogues;
+
+    [Header("Dialogue progression")]
+    public bool loopLastDialogue = true;
+    private int currentDialogueIndex = 0;
+    private bool hasFinishedDialogue = false;
+
 
     [Header("Interaction")]
     public GameObject interaction_popup;
@@ -39,10 +45,13 @@ public class SC_NPC : MonoBehaviour
 
         dialogueActive = false;
     }
+
+
     void OnDestroy()
     {
         dialogueActive = false;
     }
+
 
     void Start()
     {
@@ -59,13 +68,11 @@ public class SC_NPC : MonoBehaviour
 
         if (playerInRange)
         {
-       //     player.canJump = false;
-
-
-            if (!dialogueActive)
+            if (!dialogueActive && !hasFinishedDialogue)
                 interaction_popup.SetActive(true);
 
-            if (interactAction.action.ReadValue<Vector2>().y>0.5f && !dialogueActive)
+
+            if (interactAction.action.ReadValue<Vector2>().y > 0.5f && !dialogueActive)
             {
                 StartTalking();
             }
@@ -91,10 +98,7 @@ public class SC_NPC : MonoBehaviour
         {
             playerInRange = false;
 
-            if (player != null)
-                //  player.canJump = true;
-
-                if (interaction_popup != null)
+            if (interaction_popup != null)
                 interaction_popup.SetActive(false);
         }
     }
@@ -105,10 +109,17 @@ public class SC_NPC : MonoBehaviour
         if (dialogueActive || !player.isGrounded)
             return;
 
-        if (dialogue == null)
+
+        if (dialogues.Length == 0)
         {
-            dialogue = DialogueManager.instance;
+            Debug.LogWarning("Aucun dialogue assigné !");
+            return;
         }
+
+
+        if (dialogue == null)
+            dialogue = DialogueManager.instance;
+
 
         if (dialogue == null)
         {
@@ -116,13 +127,18 @@ public class SC_NPC : MonoBehaviour
             return;
         }
 
-        dialogue.currentDialogue = dialogues;
+
+        // Choix du dialogue actuel
+        dialogue.currentDialogue = dialogues[currentDialogueIndex];
         dialogue.npc = this;
         dialogue.StartDialogue();
 
+
         dialogueActive = true;
 
+
         interaction_popup.SetActive(false);
+
 
         player.FaceTarget(transform);
 
@@ -135,14 +151,40 @@ public class SC_NPC : MonoBehaviour
 
     public void EndTalking()
     {
+        // Passage au dialogue suivant
+        NextDialogue();
+
+
         player.enabled = false;
         Invoke(nameof(DelayEnd), 0.1f);
+    }
+
+
+    void NextDialogue()
+    {
+        if (currentDialogueIndex < dialogues.Length - 1)
+        {
+            currentDialogueIndex++;
+        }
+        else
+        {
+            // Dernier dialogue atteint
+            if (loopLastDialogue)
+            {
+                currentDialogueIndex = dialogues.Length - 1;
+            }
+            else
+            {
+                hasFinishedDialogue = true;
+            }
+        }
     }
 
 
     void DelayEnd()
     {
         dialogueActive = false;
+
 
         if (player != null)
         {

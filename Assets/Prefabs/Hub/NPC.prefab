@@ -134,13 +134,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 621b58efd41c69a49b91c42353ee0df1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  dialogue: {fileID: 0}
   dialogues:
-  - {fileID: 11400000, guid: 4494e41d39544ba48b2e71c7176ce090, type: 2}
-  - {fileID: 11400000, guid: 6d69ee6ea8deb5d4c9a075cb00e34218, type: 2}
-  - {fileID: 11400000, guid: 9d818d50b401f8d4c91ad16e134f7a5f, type: 2}
+  - {fileID: 11400000, guid: c96953d908a48074399c283244bbc96e, type: 2}
+  loopLastDialogue: 1
   interaction_popup: {fileID: 5782342065406189963}
   interactAction: {fileID: -1680190386980627800, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
+  dialogue: {fileID: 0}
 --- !u!58 &640935987328102698
 CircleCollider2D:
   m_ObjectHideFlags: 0
