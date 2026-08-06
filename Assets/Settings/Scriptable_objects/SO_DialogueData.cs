@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.Events;
 
 [CreateAssetMenu(fileName = "New Dialogue", menuName = "Dialogue/System")]
 public class DialogueData : ScriptableObject
@@ -11,13 +12,13 @@ public class DialogueData : ScriptableObject
 public class DialogueLine
 {
     public SO_dialogue_character character;
+
     [TextArea(2, 4)]
     public string text;
 
     public bool hasChoices;
 
-    public Choice choiceA;
-    public Choice choiceB;
+    public Choice[] choices;
 }
 
 
@@ -25,8 +26,11 @@ public class DialogueLine
 public class Choice
 {
     public string choiceText;
-    public SO_dialogue_character character;
 
-    [TextArea(2, 4)]
-    public string answerText;
+
+    [Header("Réponse après le choix")]
+    public DialogueLine[] answer;
+    public string actionID;
+
+
 }

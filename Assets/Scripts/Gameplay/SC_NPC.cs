@@ -5,12 +5,12 @@ using UnityEngine.InputSystem;
 public class SC_NPC : MonoBehaviour
 {
     [Header("Dialogue")]
-    public SC_dialogue_system dialogue;
-    public List<SO_dialogue_line> dialogues;
+    public DialogueData dialogues;
 
     [Header("Interaction")]
     public GameObject interaction_popup;
     public InputActionReference interactAction;
+    public DialogueManager dialogue;
 
     private SC_player player;
     private bool playerInRange;
@@ -22,9 +22,6 @@ public class SC_NPC : MonoBehaviour
     {
         if (player == null)
             player = SC_player.instance;
-
-        if (dialogue == null)
-            dialogue = SC_dialogue_system.instance;
     }
 
 
@@ -39,9 +36,6 @@ public class SC_NPC : MonoBehaviour
     {
         if (interactAction != null)
             interactAction.action.Disable();
-
-        if (dialogue != null)
-            dialogue.onDialogueEnd -= EndTalking;
 
         dialogueActive = false;
     }
@@ -61,13 +55,6 @@ public class SC_NPC : MonoBehaviour
     {
         if (player == null)
             player = SC_player.instance;
-
-        if (dialogue == null)
-            dialogue = SC_dialogue_system.instance;
-
-
-        if (player == null || dialogue == null)
-            return;
 
 
         if (playerInRange)
@@ -118,34 +105,35 @@ public class SC_NPC : MonoBehaviour
         if (dialogueActive || !player.isGrounded)
             return;
 
+        if (dialogue == null)
+        {
+            dialogue = DialogueManager.instance;
+        }
+
+        if (dialogue == null)
+        {
+            Debug.LogError("Aucun DialogueManager trouvé !");
+            return;
+        }
+
+        dialogue.currentDialogue = dialogues;
+        dialogue.npc = this;
+        dialogue.StartDialogue();
 
         dialogueActive = true;
 
-
         interaction_popup.SetActive(false);
 
-
         player.FaceTarget(transform);
-
-
-        dialogue.dialogues = new List<SO_dialogue_line>(dialogues);
-
-        dialogue.StartDialogue();
-
 
         player.rb.constraints = RigidbodyConstraints2D.FreezeAll;
         player.canMove = false;
 
         player.anim_.Play("Idle");
-
-
-        dialogue.onDialogueEnd -= EndTalking;
-        dialogue.onDialogueEnd += EndTalking;
     }
 
 
-
-    void EndTalking()
+    public void EndTalking()
     {
         player.enabled = false;
         Invoke(nameof(DelayEnd), 0.1f);

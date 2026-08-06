@@ -4,7 +4,7 @@ using UnityEngine.Events;
 [RequireComponent(typeof(Collider2D))]
 public class SC_Button : MonoBehaviour
 {
-    [Header("Anims")]
+    [Header("Animations")]
     public string hover;
     public string unhover;
     public string press;
@@ -12,68 +12,129 @@ public class SC_Button : MonoBehaviour
     [Header("Events")]
     public UnityEvent onClick;
 
-    private SpriteRenderer spriteRenderer;
-    public bool isHovered;
-    private bool isPressed;
-
     private Animator anim;
+
+    private bool isSelected;   // Navigation clavier/manette
+    public bool isHovered;    // Souris
+    private bool isPressed;
+    public GameObject indicator;
+
     private void Awake()
     {
-        spriteRenderer = GetComponent<SpriteRenderer>();
-
         anim = GetComponent<Animator>();
     }
+
+
+    // Appelé par EventSystem Select()
     public void Select()
     {
-        isHovered = true;
-        if (anim != null)
-        {
-            anim.SetTrigger(hover);
-        }
+        if (isSelected)
+            return;
+
+        isSelected = true;
+        indicator.SetActive(true);
+        PlayAnimation(hover);
     }
+
+    private void OnDisable()
+    {
+        indicator.SetActive(false);
+        isSelected = false;
+        isHovered = false;
+    }
+
+    // Appelé par EventSystem Deselect()
     public void UnSelect()
     {
-        isHovered = true;
-        if (anim != null) 
+        if (!isSelected)
+            return;
+
+
+        isSelected = false;
+
+        // Si la souris est dessus, on garde l'état hover
+        if (!isHovered)
         {
-            anim.SetTrigger(unhover);
+            PlayAnimation(unhover);
+            indicator.SetActive(false);
         }
     }
-    public void Press()
-    {
-        isPressed = true;
-        if (anim != null)
-        {
-            anim.SetTrigger(press);
-        }
-        onClick?.Invoke();
-    }
+
+
     private void OnMouseEnter()
     {
-        Select();
+        isPressed = false;
+        isHovered = true;
+        indicator.SetActive(true);
+
+        PlayAnimation(hover);
     }
+
 
     private void OnMouseExit()
     {
-        UnSelect();
+        isHovered = false;
+        indicator.SetActive(false);
+
+        // Si la navigation garde le bouton sélectionné,
+        // on ne joue pas l'unhover
+        if (!isSelected)
+        {
+            PlayAnimation(unhover);
+        }
     }
+
 
     private void OnMouseDown()
     {
-        isPressed = true;
-        if (anim != null)
-        {
-            anim.SetTrigger(press);
-        }
+        PressAnimation();
     }
+
 
     private void OnMouseUp()
     {
-        // Si la souris est toujours sur le bouton,
-        // on considère que c'est un clic valide.
+        // Clic valide seulement si on relâche sur le bouton
         if (isHovered)
         {
-            onClick?.Invoke();
+            Click();
         }
+        indicator.SetActive(false);
+
+        isPressed = false;
+    }
+
+
+    public void Press()
+    {
+        PressAnimation();
+        Click();
+    }
+
+
+    private void PressAnimation()
+    {
+        if (isPressed)
+            return;
+
+        isPressed = true;
+        indicator.SetActive(false);
+
+        PlayAnimation(press);
+    }
+
+
+    private void Click()
+    {
+        onClick?.Invoke();
+    }
+
+
+    private void PlayAnimation(string trigger)
+    {
+        if (anim == null || string.IsNullOrEmpty(trigger))
+            return;
+
+        anim.ResetTrigger(trigger);
+        anim.SetTrigger(trigger);
     }
 }

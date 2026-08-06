@@ -117,17 +117,25 @@ public class SC_typewriter : MonoBehaviour
         }
 
         isTyping = false;
-        wait_input_logo.SetActive(true);
         if (audioSource != null && audioSource.isPlaying)
             audioSource.Stop();
     }
-
+    public void SetWaitInputVisible(bool visible)
+    {
+        if (wait_input_logo != null)
+            wait_input_logo.SetActive(visible);
+    }
     public void FinishText()
     {
-        wait_input_logo.SetActive(true);
+        if (!isTyping)
+            return;
+
         // arrêter la coroutine de frappe
         if (typeCoroutine != null)
+        {
             StopCoroutine(typeCoroutine);
+            typeCoroutine = null;
+        }
 
         // rendre visible toutes les lettres
         int charCount = textInfo.characterCount;

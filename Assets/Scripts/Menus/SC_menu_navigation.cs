@@ -117,13 +117,11 @@ public class SC_menu_navigation : MonoBehaviour
         {
             move.action.performed -= OnMoveInput;
             move.action.canceled -= OnMoveRelease;
-            move.action.Disable();
         }
 
         if (submit != null)
         {
             submit.action.performed -= OnSubmit;
-            submit.action.Disable();
         }
 
         if (pointerPosition != null)
