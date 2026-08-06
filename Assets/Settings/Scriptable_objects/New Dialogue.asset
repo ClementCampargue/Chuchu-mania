@@ -1,0 +1,48 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 890a21243a4f94d498c5fc6c8bce112f, type: 3}
+  m_Name: New Dialogue
+  m_EditorClassIdentifier: 
+  lines:
+  - character: {fileID: 11400000, guid: 358c18f725108b14d9b9efeb15db2fc1, type: 2}
+    text: "comment j'ai trop envie de p\xE9ter je peux?"
+    hasChoices: 1
+    choiceA:
+      choiceText: "Non \xE9vite"
+      character: {fileID: 11400000, guid: 201e18955e3c1254fae5fd2b355c5cac, type: 2}
+      answerText: Merci
+    choiceB:
+      choiceText: Allez fonce
+      character: {fileID: 11400000, guid: 201e18955e3c1254fae5fd2b355c5cac, type: 2}
+      answerText: "\xE7a pue sa m\xE8re s\xE9rieux"
+  - character: {fileID: 11400000, guid: 358c18f725108b14d9b9efeb15db2fc1, type: 2}
+    text: "allez \xE0 plus!"
+    hasChoices: 0
+    choiceA:
+      choiceText: 
+      character: {fileID: 0}
+      answerText: 
+    choiceB:
+      choiceText: 
+      character: {fileID: 0}
+      answerText: 
+  - character: {fileID: 11400000, guid: 201e18955e3c1254fae5fd2b355c5cac, type: 2}
+    text: "C'ets \xE7a boue de l\xE0"
+    hasChoices: 0
+    choiceA:
+      choiceText: 
+      character: {fileID: 0}
+      answerText: 
+    choiceB:
+      choiceText: 
+      character: {fileID: 0}
+      answerText: 
