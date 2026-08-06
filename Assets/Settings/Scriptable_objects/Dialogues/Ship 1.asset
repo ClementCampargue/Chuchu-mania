@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 890a21243a4f94d498c5fc6c8bce112f, type: 3}
+  m_Name: Ship 1
+  m_EditorClassIdentifier: 
+  lines:
+  - character: {fileID: 11400000, guid: f1b273b5eefe3a6408d92c0f6cb1c256, type: 2}
+    text: "On part \xE0 l'aventure"
+    hasChoices: 1
+    choices:
+    - choiceText: Oui
+      answer: []
+      actionID: LOAD_STICKERS
+    - choiceText: Non
+      answer: []
+      actionID: 

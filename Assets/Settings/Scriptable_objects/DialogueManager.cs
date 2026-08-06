@@ -90,6 +90,8 @@ public class DialogueManager : MonoBehaviour
 
     public void StartDialogue()
     {
+        choicePanel.SetActive(false);
+
         if (anim != null)
         {
             anim.enabled = true;
@@ -318,6 +320,7 @@ public class DialogueManager : MonoBehaviour
 
     private void EndDialogue()
     {
+        StopAllCoroutines();
         waitingInput = false;
 
         playingChoiceAnswer = false;
