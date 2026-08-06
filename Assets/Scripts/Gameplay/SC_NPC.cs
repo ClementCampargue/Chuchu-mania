@@ -72,14 +72,13 @@ public class SC_NPC : MonoBehaviour
 
         if (playerInRange)
         {
-            player.canJump = false;
+       //     player.canJump = false;
 
 
             if (!dialogueActive)
                 interaction_popup.SetActive(true);
 
-
-            if (interactAction.action.WasPressedThisFrame() && !dialogueActive)
+            if (interactAction.action.ReadValue<Vector2>().y>0.5f && !dialogueActive)
             {
                 StartTalking();
             }
@@ -106,9 +105,9 @@ public class SC_NPC : MonoBehaviour
             playerInRange = false;
 
             if (player != null)
-                player.canJump = true;
+                //  player.canJump = true;
 
-            if (interaction_popup != null)
+                if (interaction_popup != null)
                 interaction_popup.SetActive(false);
         }
     }

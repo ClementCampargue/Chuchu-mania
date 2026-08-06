@@ -140,7 +140,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 6d69ee6ea8deb5d4c9a075cb00e34218, type: 2}
   - {fileID: 11400000, guid: 9d818d50b401f8d4c91ad16e134f7a5f, type: 2}
   interaction_popup: {fileID: 5782342065406189963}
-  interactAction: {fileID: -2099379676528639254, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
+  interactAction: {fileID: -1680190386980627800, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
 --- !u!58 &640935987328102698
 CircleCollider2D:
   m_ObjectHideFlags: 0

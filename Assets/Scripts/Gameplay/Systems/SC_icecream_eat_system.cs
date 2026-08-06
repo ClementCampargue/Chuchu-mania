@@ -80,6 +80,8 @@ public class SC_icecream_eat_system : MonoBehaviour
 
     void Update()
     {
+        if (!player.enabled)
+            return;
         if (eat_input.action.IsPressed() && currrent_ice_cream > 0 && !isPowerUpActive && player.isGrounded && !isEating)
         {
             if (!isSelecting)
