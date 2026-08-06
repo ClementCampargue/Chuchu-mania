@@ -7,6 +7,7 @@ public class SO_Sticker : ScriptableObject
     public string sticker_name;
     public string description;
     public string artist;
+    public int rarity;
+    public int Price;
     public bool unlocked;
-    
 }

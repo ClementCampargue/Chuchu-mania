@@ -1794,7 +1794,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5541224540911051492, guid: 894c74b520a88a24e88966d64bc5ea3e, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -2361,7 +2361,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1995157033798224578, guid: 372718715dc6bb44ba7496d66291f69f, type: 3}
       propertyPath: m_Name
-      value: PNJ (2)
+      value: PNJ
       objectReference: {fileID: 0}
     - target: {fileID: 7522439848945351290, guid: 372718715dc6bb44ba7496d66291f69f, type: 3}
       propertyPath: dialogues
