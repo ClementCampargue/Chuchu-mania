@@ -16,7 +16,7 @@ public class SC_NPC : MonoBehaviour
     [Header("Interaction")]
     public GameObject interaction_popup;
     public InputActionReference interactAction;
-    public DialogueManager dialogue;
+    private DialogueManager dialogue;
 
     private SC_player player;
     private bool playerInRange;
