@@ -169,7 +169,8 @@ public class SC_player : MonoBehaviour
                 rb.linearVelocity = Vector2.zero;
             }
         }
-        if (!isFrozen  && canMove)
+
+        if (!isFrozen  && canMove && Time.timeScale != 0)
             moveInput = Move.action.ReadValue<Vector2>();
         else
             moveInput = Vector2.zero;
@@ -283,6 +284,7 @@ public class SC_player : MonoBehaviour
         if (isStunned)
             return;
         if (isInvincible) return;
+        if (eat_system.isPowerUpActive) return;
 
         Collider2D hit =
             Physics2D.OverlapCircle(
@@ -298,7 +300,9 @@ public class SC_player : MonoBehaviour
     }
 
     public void Stun()
-    { 
+    {
+        if (eat_system.isPowerUpActive) return;
+
         if (isInvincible) return;
         StartCoroutine(StunCoroutine());
     }
@@ -391,6 +395,7 @@ public class SC_player : MonoBehaviour
             rb.position = clamped;
         }
         if (!canMove) return;
+        if (Time.timeScale ==0) return;
         if (!isFrozen)
         {
             float horizontalSpeed = moveInput.x * (eat_system.isPowerUpActive ? PowermoveSpeed : moveSpeed) + knockbackVelocity.x;
@@ -412,6 +417,8 @@ public class SC_player : MonoBehaviour
     }
     private void OnJumpStarted(InputAction.CallbackContext context)
     {
+        if (Time.timeScale == 0) return;
+
         if (!canJump) return;
 
         if (isStunned) return;
@@ -621,6 +628,7 @@ public class SC_player : MonoBehaviour
     }
     private void Die()
     {
+        canMove = false;
         if (hitCoroutine != null) StopCoroutine(hitCoroutine);
         GetComponent<SortingGroup>().sortingLayerName = "UI";
         isFrozen = true;
@@ -632,7 +640,6 @@ public class SC_player : MonoBehaviour
         collider.enabled = false;
         die.PlayJuice();
         knockbackVelocity = Vector2.zero;
-
         Time.timeScale = 0;
 
     }
@@ -790,51 +797,25 @@ public class SC_player : MonoBehaviour
         added_velocity = vel;
     }
     public void Revive()
-    {
-        StopAllCoroutines();
-
-        // Reset mouvements temporaires
-        moveInput = Vector2.zero;
-        added_velocity = Vector2.zero;
-        added_velocity_ = Vector2.zero;
-        knockbackVelocity = Vector2.zero;
-
-        // Reset états
+    {StopAllCoroutines();
         isFrozen = false;
         isStunned = false;
         isInvincible = false;
-        burning = false;
         canTakeDamage = true;
+        anim_.SetBool("Die", false);
 
-        isJumping = false;
-        jumpTimeCounter = 0;
 
-        isClimbing = false;
-        canClimb = false;
-        was_climbing = false;
-        grillage = null;
 
         currentHealth = maxHealth;
 
         foreach (GameObject heart in hearts)
             heart.SetActive(true);
-
         collider.enabled = true;
         spriteRenderer.enabled = true;
 
         rb.bodyType = RigidbodyType2D.Dynamic;
-        rb.gravityScale = base_gravity;
         rb.linearVelocity = Vector2.zero;
         rb.angularVelocity = 0;
-
-        anim.SetBool("Die", false);
-        anim.SetBool("Stun", false);
-        anim.SetBool("Climb", false);
-
-        game_over_screen.SetActive(false);
-
-        Time.timeScale = 1f;
-
-        StartCoroutine(InvincibilityRoutine(2f));
     }
+
 }

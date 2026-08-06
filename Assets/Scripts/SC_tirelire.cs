@@ -1,6 +1,7 @@
 using System.Collections;
 using TMPro;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class SC_tirelire : MonoBehaviour
 {
@@ -49,7 +50,6 @@ public class SC_tirelire : MonoBehaviour
     private Color starOriginalColor;
 
 
-
     private void Start()
     {
         tongueBasePos = tongue.localPosition;
@@ -62,6 +62,13 @@ public class SC_tirelire : MonoBehaviour
         UpdateTexts();
     }
 
+    private void Update()
+    {
+        if (Input.GetKey(KeyCode.Space))
+        {
+            backtohub();
+        }
+    }
     public void start_count()
     {
         if (counting || current_score <= 0)
@@ -176,4 +183,9 @@ public class SC_tirelire : MonoBehaviour
             score_gained2.text = total_score.ToString();
 
     }
-}
+
+    public void backtohub()
+    {
+        SC_screenshot_transition.instance.Capture("HUB");
+    }
+} 

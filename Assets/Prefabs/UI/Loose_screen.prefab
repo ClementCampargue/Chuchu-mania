@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 3108951774903939163}
   - component: {fileID: 4662090462546406061}
   - component: {fileID: 2904351968600507136}
-  m_Layer: 5
+  m_Layer: 0
   m_Name: Text
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -60,7 +60,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 5493907304893502123, guid: 1a3e72d5f834a2a4baa6bdad122aaec8, type: 2}
+  - {fileID: 7286657636275292395, guid: c46be904f5086384ba1c7f77052229ea, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -105,7 +105,7 @@ MonoBehaviour:
   m_text: "\"Alors, on prend le soleil, la gel\xE9e?\""
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: c46be904f5086384ba1c7f77052229ea, type: 2}
-  m_sharedMaterial: {fileID: 5493907304893502123, guid: 1a3e72d5f834a2a4baa6bdad122aaec8, type: 2}
+  m_sharedMaterial: {fileID: 7286657636275292395, guid: c46be904f5086384ba1c7f77052229ea, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -176,6 +176,67 @@ MonoBehaviour:
   m_hasFontAssetChanged: 1
   m_renderer: {fileID: 4662090462546406061}
   m_maskType: 0
+--- !u!1 &2388793352130441469
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3083378475639805537}
+  - component: {fileID: 629869037151124543}
+  m_Layer: 0
+  m_Name: Menu
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3083378475639805537
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2388793352130441469}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 5838775333480685463}
+  - {fileID: 908157521723877517}
+  m_Father: {fileID: 2964519098556300589}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &629869037151124543
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2388793352130441469}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b40decc5f1aaed649bb2322b7c471079, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  buttons: []
+  defaultSelected: 0
+  autoFindButtons: 1
+  move: {fileID: -1680190386980627800, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
+  submit: {fileID: -2099379676528639254, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
+  pointerPosition: {fileID: -5630151704836100654, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
+  sortButtonsByPosition: 1
+  reverseVertical: 1
+  wrapHorizontal: 1
+  wrapVertical: 1
+  useGrid: 0
+  columns: 1
+  initialDelay: 0.2
+  repeatRate: 0.1
+  moveCooldown: 0.05
 --- !u!1 &2545864521009350766
 GameObject:
   m_ObjectHideFlags: 0
@@ -186,7 +247,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5445799029977063253}
   - component: {fileID: 6769878370846972010}
-  m_Layer: 5
+  m_Layer: 0
   m_Name: Illu
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -273,7 +334,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2651371914235984504}
   - component: {fileID: 485628720043140109}
-  m_Layer: 5
+  m_Layer: 0
   m_Name: Illu_mask
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -360,7 +421,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2387613632014926382}
   - component: {fileID: 7723887745395357869}
-  m_Layer: 5
+  m_Layer: 0
   m_Name: bubble
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -448,7 +509,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5967494774328288648}
   - component: {fileID: 107884609337201794}
-  m_Layer: 5
+  m_Layer: 0
   m_Name: Square
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -536,7 +597,7 @@ GameObject:
   - component: {fileID: 2490304711349879737}
   - component: {fileID: 414509698394040261}
   - component: {fileID: 4097103532128446813}
-  m_Layer: 5
+  m_Layer: 0
   m_Name: Text (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -712,7 +773,7 @@ GameObject:
   - component: {fileID: 2964519098556300589}
   - component: {fileID: 8316713700271448684}
   - component: {fileID: 3267805544850775714}
-  m_Layer: 5
+  m_Layer: 0
   m_Name: FakeCanvas
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -737,8 +798,7 @@ Transform:
   - {fileID: 5967494774328288648}
   - {fileID: 5445799029977063253}
   - {fileID: 2651371914235984504}
-  - {fileID: 5838775333480685463}
-  - {fileID: 908157521723877517}
+  - {fileID: 3083378475639805537}
   m_Father: {fileID: 110140366869872106}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!210 &8316713700271448684
@@ -779,7 +839,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1160639167576403097}
   - component: {fileID: 349046587097814212}
-  m_Layer: 5
+  m_Layer: 0
   m_Name: death_overlay
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -867,7 +927,7 @@ GameObject:
   - component: {fileID: 110140366869872106}
   - component: {fileID: 5545671301695350102}
   - component: {fileID: 5035901642332590931}
-  m_Layer: 5
+  m_Layer: 0
   m_Name: Loose_screen
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -903,7 +963,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3204d9a4a7b62af4da9c45167c6c9d64, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ui: {fileID: 0}
   clip: {fileID: 8300000, guid: f326673009ae5a84b8aca5ab45c6c3e9, type: 3}
 --- !u!95 &5035901642332590931
 Animator:
@@ -938,7 +997,7 @@ GameObject:
   - component: {fileID: 7535352961227811975}
   - component: {fileID: 1870152791340219447}
   - component: {fileID: 6699322067897505057}
-  m_Layer: 5
+  m_Layer: 0
   m_Name: Text (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1109,11 +1168,11 @@ PrefabInstance:
   serializedVersion: 2
   m_Modification:
     serializedVersion: 3
-    m_TransformParent: {fileID: 2964519098556300589}
+    m_TransformParent: {fileID: 3083378475639805537}
     m_Modifications:
     - target: {fileID: 362592184335010109, guid: f3c7b956bb8e2ae47a33403dbf3195bc, type: 3}
       propertyPath: m_Layer
-      value: 5
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5641122258638546335, guid: f3c7b956bb8e2ae47a33403dbf3195bc, type: 3}
       propertyPath: m_Pivot.x
@@ -1229,7 +1288,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7162493650667248326, guid: f3c7b956bb8e2ae47a33403dbf3195bc, type: 3}
       propertyPath: m_Layer
-      value: 5
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 9176267513702836998, guid: f3c7b956bb8e2ae47a33403dbf3195bc, type: 3}
       propertyPath: m_fontStyle
@@ -1259,11 +1318,11 @@ PrefabInstance:
   serializedVersion: 2
   m_Modification:
     serializedVersion: 3
-    m_TransformParent: {fileID: 2964519098556300589}
+    m_TransformParent: {fileID: 3083378475639805537}
     m_Modifications:
     - target: {fileID: 362592184335010109, guid: f3c7b956bb8e2ae47a33403dbf3195bc, type: 3}
       propertyPath: m_Layer
-      value: 5
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2959461204918368628, guid: f3c7b956bb8e2ae47a33403dbf3195bc, type: 3}
       propertyPath: m_StringReference.m_TableEntryReference.m_KeyId
@@ -1383,7 +1442,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7162493650667248326, guid: f3c7b956bb8e2ae47a33403dbf3195bc, type: 3}
       propertyPath: m_Layer
-      value: 5
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 9176267513702836998, guid: f3c7b956bb8e2ae47a33403dbf3195bc, type: 3}
       propertyPath: m_text

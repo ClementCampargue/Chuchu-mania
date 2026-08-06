@@ -18,13 +18,4 @@ public class SC_game_master : MonoBehaviour
         DontDestroyOnLoad(gameObject);
     }
 
-    void Start()
-    {
-
-    }
-
-    void Update()
-    {
-
-    }
 }

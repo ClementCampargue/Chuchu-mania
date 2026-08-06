@@ -42,8 +42,13 @@ public class SC_NPC : MonoBehaviour
 
         if (dialogue != null)
             dialogue.onDialogueEnd -= EndTalking;
-    }
 
+        dialogueActive = false;
+    }
+    void OnDestroy()
+    {
+        dialogueActive = false;
+    }
 
     void Start()
     {
@@ -151,10 +156,10 @@ public class SC_NPC : MonoBehaviour
     void DelayEnd()
     {
         dialogueActive = false;
-        player.enabled = true;
 
         if (player != null)
         {
+            player.enabled = true;
             player.rb.constraints = RigidbodyConstraints2D.FreezeRotation;
             player.canMove = true;
         }

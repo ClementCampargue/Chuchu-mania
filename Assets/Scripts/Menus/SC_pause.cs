@@ -52,11 +52,11 @@ public class SC_pause : MonoBehaviour
 
     private void TogglePause(InputAction.CallbackContext context)
     {
-        if (tuto)
+        if (!SC_player.instance.canMove &&!isPaused)
         {
-            Hide_tutorial();
             return;
         }
+  
         UpdateObjectState();
         isPaused = !isPaused;
 
@@ -64,7 +64,7 @@ public class SC_pause : MonoBehaviour
         Hide_tutorial();
 
         Time.timeScale = isPaused ? 0f : 1f;
-        SC_player.instance.canMove = !isPaused;
+        SC_player.instance.enabled = !isPaused;
         SC_player.instance.anim_.updateMode = isPaused
             ? AnimatorUpdateMode.Normal
             : AnimatorUpdateMode.UnscaledTime;
@@ -75,7 +75,7 @@ public class SC_pause : MonoBehaviour
         pauseMenu.SetActive(false);
         Hide_tutorial();
         isPaused = false;
-        SC_player.instance.canMove = true;
+        SC_player.instance.enabled = true;
         SC_player.instance.anim_.updateMode = AnimatorUpdateMode.UnscaledTime;
         Time.timeScale = 1;
     }
@@ -116,7 +116,7 @@ public class SC_pause : MonoBehaviour
 
         isPaused = false;
 
-        SC_player.instance.canMove = true;
+        SC_player.instance.enabled = true;
         SC_player.instance.anim_.updateMode = AnimatorUpdateMode.UnscaledTime;
         Time.timeScale = 1;
         transition.Capture("HUB");

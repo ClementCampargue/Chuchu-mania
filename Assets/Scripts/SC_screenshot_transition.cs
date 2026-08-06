@@ -40,7 +40,14 @@ public class SC_screenshot_transition : MonoBehaviour
         // Nettoyage état
         targetCamera.targetTexture = previousRT;
         RenderTexture.active = null;
-        anim.enabled = true;
+        if (anim.enabled)
+        {
+            anim.SetTrigger("Trigger");
+        }
+        else
+        {
+            anim.enabled = true;
+        }
         SceneManager.LoadScene(scene);
     }
 

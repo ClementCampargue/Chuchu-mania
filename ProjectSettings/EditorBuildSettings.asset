@@ -26,6 +26,12 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/ART.unity
     guid: db35c0ac1a9635043857db9523f4b24a
+  - enabled: 1
+    path: Assets/Scenes/Levels/Moon.unity
+    guid: 1dfcbdc2864702c428ff2031eb0f9bb2
+  - enabled: 1
+    path: Assets/Scenes/Levels/Ruche.unity
+    guid: ef873092ec71d0e4880c1b6d463bc099
   m_configObjects:
     com.unity.addressableassets: {fileID: 11400000, guid: fe00b1b7602f7c445b6dac39cb9bfd06, type: 2}
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}

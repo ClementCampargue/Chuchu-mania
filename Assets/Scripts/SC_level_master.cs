@@ -8,31 +8,41 @@ public class SC_level_master : MonoBehaviour
     public Transform spawn;
     public static SC_level_master instance;
     public float limits;
+    private SC_player player;
     private void Awake()
     {
         instance = this;
     }
     void Start()
     {
+        player = SC_player.instance;
         SC_music_manager.instance.update_music(music);
         GameObject.Find("Overlay").transform.GetChild(0).gameObject.SetActive(overlay_on);
-        SC_player.instance.enabled = true;
+        SC_player.instance.enabled = false;
         if (level)
         {
-            SC_player.instance.gameObject.SetActive(true);
-            SC_player.instance.rb.linearVelocity = Vector2.zero;
-            SC_player.instance.transform.position = spawn.position;
+            player.Revive();
+
+            player.gameObject.SetActive(true);
+            player.rb.linearVelocity = Vector2.zero;
+            player.transform.position = spawn.position;
+            Invoke("delay", 0.1f);
         }
         else
         {
-            SC_player.instance.gameObject.SetActive(false);
-
+            player.gameObject.SetActive(false);
         }
+    }
+
+    void delay()
+    {
+        player.gameObject.SetActive(true);
+        player.enabled = true;
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+
     }
 }

@@ -3,7 +3,6 @@ using UnityEngine.SceneManagement;
 
 public class SC_loose_screen : MonoBehaviour
 {
-    public GameObject ui;
     public AudioClip clip;
     public void ReloadCurrentScene()
     {
@@ -17,7 +16,9 @@ public class SC_loose_screen : MonoBehaviour
 
     public void revive()
     {
-
+        SC_player.instance.Revive();
+        SC_screenshot_transition.instance.Capture(SceneManager.GetActiveScene().name);
+        gameObject.SetActive(false);
     }
     public void music()
     {
@@ -27,7 +28,6 @@ public class SC_loose_screen : MonoBehaviour
     public void give_up()
     {
         SC_screenshot_transition.instance.Capture("MoneyScene");
-        ui.SetActive(false);
         gameObject.SetActive(false);
     }
 }

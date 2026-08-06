@@ -162,6 +162,8 @@ public class SC_dialogue_system : MonoBehaviour
 
     private void NextDialogue()
     {
+        if (dialogues[currentIndex].character.name == string.Empty && !cutscene) return;
+
         currentIndex++;
 
 
@@ -170,7 +172,6 @@ public class SC_dialogue_system : MonoBehaviour
             EndDialogue();
             return;
         }
-
 
         ShowDialogue();
     }
