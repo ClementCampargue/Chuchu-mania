@@ -25,11 +25,11 @@ public class SC_cutscene : MonoBehaviour
         }
         else if (next_level == 3)
         {
-            next_scene = "HUB";
+            next_scene = "MoneyScene";
         }
         transition = SC_screenshot_transition.instance;
         dialogue.enabled = false;
-        Invoke("delay", 1f);
+        Invoke("delay", 0.1f);
     }
 
     void delay()

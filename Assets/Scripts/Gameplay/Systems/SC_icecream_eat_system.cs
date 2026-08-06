@@ -321,4 +321,47 @@ public class SC_icecream_eat_system : MonoBehaviour
             isPowerUpActive = true;
         }
     }
+    public void ResetSystem()
+    {
+        // Stop les coroutines en cours
+        StopAllCoroutines();
+
+        // Détruire toutes les glaces
+        foreach (SC_icecream_fall cream in creams)
+        {
+            if (cream != null)
+                Destroy(cream.gameObject);
+        }
+
+        creams.Clear();
+        selectedCreams.Clear();
+
+        // Reset compteurs
+        currrent_ice_cream = 0;
+        multiplier = 0;
+        eaten_cream = 0;
+
+        // Reset états
+        isEating = false;
+        isSelecting = false;
+        forceEatAll = false;
+        isPowerUpActive = false;
+
+        // Reset phases
+        phase1Triggered = false;
+        phase2Triggered = false;
+
+        // Reset remplissage
+        displayedFill = 0f;
+        mat.SetFloat("_Fill_amount", 0f);
+
+        // Reset UI
+        multiplierText.text = "x0";
+        multiplierText.gameObject.SetActive(false);
+        multiplierText.transform.localScale = Vector3.one;
+
+        // Reset audio/animation
+        eating_sfx.Stop();
+     
+    }
 }

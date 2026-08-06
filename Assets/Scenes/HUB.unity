@@ -2535,6 +2535,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1929659550}
+  - component: {fileID: 1929659551}
   m_Layer: 0
   m_Name: Overlay
   m_TagString: Untagged
@@ -2561,6 +2562,18 @@ Transform:
   - {fileID: 2117704406}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!210 &1929659551
+SortingGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1929659549}
+  m_Enabled: 1
+  m_SortingLayerID: 458446795
+  m_SortingLayer: 1
+  m_SortingOrder: 3
+  m_SortAtRoot: 0
 --- !u!1 &2085114844
 GameObject:
   m_ObjectHideFlags: 0
@@ -2927,7 +2940,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3015709687510439552, guid: 6b3448e9366ca4c489d926ad86cd539b, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 6.1333337
+      value: 3.5333335
       objectReference: {fileID: 0}
     - target: {fileID: 3015709687510439552, guid: 6b3448e9366ca4c489d926ad86cd539b, type: 3}
       propertyPath: m_LocalPosition.z

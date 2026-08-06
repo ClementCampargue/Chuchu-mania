@@ -86,7 +86,7 @@ public class SC_player : MonoBehaviour
     private Vector2 knockbackVelocity;
     public ParticleSystem ps_damage;
 
-    private SC_icecream_eat_system eat_system;
+    public SC_icecream_eat_system eat_system;
     public static SC_player instance;
     public BoxCollider2D collider;
     public float base_gravity;
@@ -111,7 +111,6 @@ public class SC_player : MonoBehaviour
     private void Awake()
     {
         instance = this;
-        this.enabled = false;
     }
 
     private void OnEnable()
@@ -127,8 +126,6 @@ public class SC_player : MonoBehaviour
         Jump.action.performed -= OnJumpStarted;
         Jump.action.canceled -= OnJumpReleased;
 
-        Jump.action.Disable();
-        Move.action.Disable();
     }
 
     void Start()
@@ -138,7 +135,6 @@ public class SC_player : MonoBehaviour
         limit = SC_game_master.instance.limits;
         base_gravity = rb.gravityScale;
         spriteRenderer.material = normalMaterial;
-        eat_system = SC_icecream_eat_system.instance;
         currentHealth = maxHealth;
         anim = anim_;
     }
@@ -797,13 +793,16 @@ public class SC_player : MonoBehaviour
         added_velocity = vel;
     }
     public void Revive()
-    {StopAllCoroutines();
+    {
+        normal.SetActive(true);
+        transformed.SetActive(false);
+
+        StopAllCoroutines();
         isFrozen = false;
         isStunned = false;
         isInvincible = false;
         canTakeDamage = true;
         anim_.SetBool("Die", false);
-
 
 
         currentHealth = maxHealth;
@@ -815,7 +814,9 @@ public class SC_player : MonoBehaviour
 
         rb.bodyType = RigidbodyType2D.Dynamic;
         rb.linearVelocity = Vector2.zero;
+        rb.constraints = RigidbodyConstraints2D.FreezeRotation;
         rb.angularVelocity = 0;
+        eat_system.ResetSystem();
     }
 
 }
