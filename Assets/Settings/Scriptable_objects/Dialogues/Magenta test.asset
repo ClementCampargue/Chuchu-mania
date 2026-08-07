@@ -30,8 +30,9 @@ MonoBehaviour:
     - choiceText: Non
       answer:
       - character: {fileID: 11400000, guid: 201e18955e3c1254fae5fd2b355c5cac, type: 2}
-        text: Ah
-        hasChoices: 0
+        text: Ah pas cool la team vraiment pas sympa sur ce coupAh pas cool la team
+          vraiment pas sympa sur ce coup
+        hasChoices: 1
         choices:
         - choiceText: Je rigooooole
           answer:

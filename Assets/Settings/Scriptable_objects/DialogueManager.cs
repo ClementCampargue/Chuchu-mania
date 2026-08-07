@@ -76,9 +76,9 @@ public class DialogueManager : MonoBehaviour
         if (action == null)
             return;
 
-        if (action.action.WasPressedThisFrame())
+        if (action.action.WasPerformedThisFrame())
         {
-            if (typewriter.IsTyping())
+            if (typewriter.IsTyping() && !playingChoiceAnswer)
             {
                 typewriter.FinishText();
 
@@ -279,7 +279,7 @@ public class DialogueManager : MonoBehaviour
     {
         playingChoiceAnswer = true;
 
-
+        Invoke("delay", 0.1f);
         foreach (DialogueLine answer in choice.answer)
         {
             yield return DisplayLineRoutine(answer);
@@ -296,14 +296,17 @@ public class DialogueManager : MonoBehaviour
                 yield return null;
             }
         }
-
+         
 
         playingChoiceAnswer = false;
 
 
         AdvanceMainDialogue();
     }
-
+    void delay()
+    {
+        playingChoiceAnswer = false;
+    }
 
 
 

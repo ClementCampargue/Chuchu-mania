@@ -18,7 +18,7 @@ public class SC_Button : MonoBehaviour
     public bool isHovered;    // Souris
     private bool isPressed;
     public GameObject indicator;
-
+    public bool accept_input = true;
     private void Awake()
     {
         anim = GetComponent<Animator>();
