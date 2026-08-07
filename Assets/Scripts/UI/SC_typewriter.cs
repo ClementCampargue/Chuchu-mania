@@ -54,14 +54,20 @@ public class SC_typewriter : MonoBehaviour
     Coroutine animateCoroutine;
     public GameObject wait_input_logo;
 
+
+    private void OnDisable()
+    {
+        textMeshPro.text = "";
+    }
     public void TriggerText(string text)
     {
+        textMeshPro.enabled = true;
+
         animateCoroutine = StartCoroutine(AnimateText());
 
-        // si déjà en train de taper, on termine le texte directement
         if (isTyping)
         {
-            FinishText();
+            CompleteTyping();
             return;
         }
 
@@ -89,7 +95,7 @@ public class SC_typewriter : MonoBehaviour
                     if (audioSource != null)
                         audioSource.Pause();
 
-                    yield return new WaitForSeconds(pause.duration);
+                    yield return new WaitForSeconds(pause.duration/10);
 
                     if (audioSource != null)
                         audioSource.UnPause();
@@ -125,41 +131,76 @@ public class SC_typewriter : MonoBehaviour
         if (wait_input_logo != null)
             wait_input_logo.SetActive(visible);
     }
-    public void FinishText()
+    public void CompleteTyping()
     {
         if (!isTyping)
             return;
 
-        // arrêter la coroutine de frappe
         if (typeCoroutine != null)
         {
             StopCoroutine(typeCoroutine);
             typeCoroutine = null;
         }
 
-        // rendre visible toutes les lettres
-        int charCount = textInfo.characterCount;
-        for (int i = 0; i < charCount; i++)
+        isTyping = false;
+
+        // Révéler toutes les lettres
+        for (int i = 0; i < textInfo.characterCount; i++)
         {
             TMP_CharacterInfo charInfo = textInfo.characterInfo[i];
-            if (!charInfo.isVisible) continue;
+
+            if (!charInfo.isVisible)
+                continue;
 
             int matIndex = charInfo.materialReferenceIndex;
             int vertIndex = charInfo.vertexIndex;
-            Color32[] vertexColors = textInfo.meshInfo[matIndex].colors32;
+
+            Color32[] colors = textInfo.meshInfo[matIndex].colors32;
+
             for (int j = 0; j < 4; j++)
-                vertexColors[vertIndex + j].a = 255;
+                colors[vertIndex + j].a = 255;
 
             revealedChars.Add(i);
         }
-        textMeshPro.UpdateVertexData(TMP_VertexDataUpdateFlags.Colors32);
 
-        isTyping = false;
+        textMeshPro.UpdateVertexData(TMP_VertexDataUpdateFlags.Colors32);
 
         if (audioSource != null && audioSource.isPlaying)
             audioSource.Stop();
     }
+    public void FinishText()
+    {
+        if (typeCoroutine != null)
+        {
+            StopCoroutine(typeCoroutine);
+            typeCoroutine = null;
+        }
 
+        isTyping = false;
+
+        for (int i = 0; i < textInfo.characterCount; i++)
+        {
+            TMP_CharacterInfo charInfo = textInfo.characterInfo[i];
+
+            if (!charInfo.isVisible)
+                continue;
+
+            int matIndex = charInfo.materialReferenceIndex;
+            int vertIndex = charInfo.vertexIndex;
+
+            Color32[] colors = textInfo.meshInfo[matIndex].colors32;
+
+            for (int j = 0; j < 4; j++)
+                colors[vertIndex + j].a = 255;
+
+            revealedChars.Add(i);
+        }
+
+        textMeshPro.UpdateVertexData(TMP_VertexDataUpdateFlags.Colors32);
+
+        if (audioSource != null && audioSource.isPlaying)
+            audioSource.Stop();
+    }
     public bool IsTyping()
     {
         return isTyping;

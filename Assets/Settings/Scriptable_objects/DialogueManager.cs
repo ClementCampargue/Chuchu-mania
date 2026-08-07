@@ -7,7 +7,7 @@ public class DialogueManager : MonoBehaviour
 {
     [Header("Dialogue")]
     public DialogueData currentDialogue;
-
+    public float dialogueStartDelay = 0.5f;
     [Header("UI")]
     public TMP_Text characterNameText;
     public SC_typewriter typewriter;
@@ -76,9 +76,18 @@ public class DialogueManager : MonoBehaviour
         if (action == null)
             return;
 
-
         if (action.action.WasPressedThisFrame())
         {
+            if (typewriter.IsTyping())
+            {
+                typewriter.FinishText();
+
+                typewriter.SetWaitInputVisible(true);
+
+                waitingInput = true;
+                return;
+            }
+
             if (waitingInput)
             {
                 NextLine();
@@ -153,8 +162,13 @@ public class DialogueManager : MonoBehaviour
 
         typewriter.typeSound = line.character.typesound;
 
-        typewriter.TriggerText(line.text);
+        // Attente que la popup soit affichée avant le texte
+        if (currentLineIndex == 0)
+        {
+            yield return new WaitForSeconds(dialogueStartDelay);
+        }
 
+        typewriter.TriggerText(line.text);
 
         while (typewriter.IsTyping())
         {
@@ -175,35 +189,18 @@ public class DialogueManager : MonoBehaviour
     }
 
 
-
     private void NextLine()
     {
-        // Si le texte est encore en train de s'écrire
-        if (typewriter.IsTyping())
-        {
-            typewriter.FinishText();
-
-            typewriter.SetWaitInputVisible(true);
-
-            waitingInput = true;
-
+        if (!waitingInput)
             return;
-        }
-
 
         waitingInput = false;
 
-
-        // Les réponses de choix avancent dans leur coroutine
         if (playingChoiceAnswer)
-        {
             return;
-        }
-
 
         AdvanceMainDialogue();
     }
-
 
 
     private void AdvanceMainDialogue()
@@ -342,6 +339,7 @@ public class DialogueManager : MonoBehaviour
         {
             anim.Play("popup_dialogue_hide");
         }
+        typewriter.textMeshPro.enabled = false;
 
 
     }

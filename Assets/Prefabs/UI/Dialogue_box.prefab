@@ -674,6 +674,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   currentDialogue: {fileID: 11400000, guid: c96953d908a48074399c283244bbc96e, type: 2}
+  dialogueStartDelay: 0.25
   characterNameText: {fileID: 18014307801966040}
   typewriter: {fileID: 4288825044838836065}
   portrait: {fileID: 8312149171059929517}
@@ -1113,6 +1114,10 @@ PrefabInstance:
         <p=0,5>Genre<sh> Twin peaks </sh>s\xE9rieux le classique."
       objectReference: {fileID: 0}
     - target: {fileID: 4735648650218365287, guid: 3ce41f75411c41f448f4f822ac6d67b0, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4735648650218365287, guid: 3ce41f75411c41f448f4f822ac6d67b0, type: 3}
       propertyPath: m_margin.w
       value: 0.49173212
       objectReference: {fileID: 0}
@@ -1166,7 +1171,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 4751441203328235556}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5720055017260896125}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9541d86e2fd84c1d9990edf0852d74ab, type: 3}
   m_Name: 
@@ -1189,7 +1194,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   textMeshPro: {fileID: 20518823985305923}
-  typeSpeed: 0.01
+  typeSpeed: 0.02
   shakeAmplitude: 0.05
   shakeFrequency: 0.2
   waveAmplitude: 5
