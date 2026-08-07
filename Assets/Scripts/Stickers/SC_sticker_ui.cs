@@ -1,26 +1,28 @@
 using UnityEngine;
-using UnityEngine.EventSystems;
-using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using UnityEngine.InputSystem;
+using UnityEngine.EventSystems;
+using UnityEngine.SceneManagement;
 
 
 public class SC_sticker_UI : MonoBehaviour,
-    IPointerDownHandler,
     IPointerEnterHandler,
     IPointerExitHandler
 {
-
+    private bool isHovered;
 
     [Header("Input Actions")]
     public InputActionReference mouseScroll;
     public InputActionReference rotateModifier;
     public InputActionReference click;
     public InputActionReference deleteSticker;
+
     public InputActionReference scalePlus;
     public InputActionReference scaleMinus;
     public InputActionReference rotatePlus;
     public InputActionReference rotateMinus;
+
+
 
     [Header("Scale")]
     public float defaultScale = 1f;
@@ -28,9 +30,14 @@ public class SC_sticker_UI : MonoBehaviour,
     public float maxScale = 2.5f;
     public float wheelSpeed = 0.2f;
     public float buttonScaleSpeed = 0.05f;
+
+
+
     [Header("Rotation")]
     public float rotationSpeed = 10f;
     public float buttonRotationSpeed = 10f;
+
+
 
     [Header("UI")]
     public Image img;
@@ -45,15 +52,10 @@ public class SC_sticker_UI : MonoBehaviour,
 
 
     public bool spawnedSticker;
-
-
-
     private RectTransform rect;
     private Canvas canvas;
-
     private bool dragging;
     private bool overDeleteZone;
-
     private Vector2 offset;
 
     private Color baseColor;
@@ -65,13 +67,11 @@ public class SC_sticker_UI : MonoBehaviour,
     void Awake()
     {
         rect = GetComponent<RectTransform>();
-
         canvas = GetComponentInParent<Canvas>();
 
         img = GetComponent<Image>();
 
         baseColor = img.color;
-
 
         rect.localScale =
             Vector3.one * defaultScale;
@@ -84,48 +84,26 @@ public class SC_sticker_UI : MonoBehaviour,
             img.material =
                 new Material(img.material);
     }
-
-
-
-
     void OnEnable()
     {
         click.action.Enable();
         deleteSticker.action.Enable();
+
         mouseScroll.action.Enable();
         rotateModifier.action.Enable();
 
         scalePlus.action.Enable();
         scaleMinus.action.Enable();
+
         rotatePlus.action.Enable();
         rotateMinus.action.Enable();
     }
-
-
-    void OnDisable()
-    {
-        click.action.Disable();
-        deleteSticker.action.Disable();
-        mouseScroll.action.Disable();
-        rotateModifier.action.Disable();
-
-        scalePlus.action.Disable();
-        scaleMinus.action.Disable();
-        rotatePlus.action.Disable();
-        rotateMinus.action.Disable();
-    }
-
-
     void Start()
     {
-
-        if (SceneManager.GetActiveScene().name != "Stickers")
-            return;
 
 
         cursor =
             SC_scursorManager.instance;
-
 
 
         deleteZone =
@@ -137,12 +115,10 @@ public class SC_sticker_UI : MonoBehaviour,
         if (!spawnedSticker)
         {
             dragging = true;
-
             offset = Vector2.zero;
 
             cursor.SetGrabCursor();
         }
-
 
 
         selected.SetActive(true);
@@ -156,18 +132,24 @@ public class SC_sticker_UI : MonoBehaviour,
 
     void Update()
     {
+        if (SceneManager.GetActiveScene().name != "Stickers")
+            return;
 
+        if (deleteSticker.action.WasPressedThisFrame() && isHovered)
+        {
+            DeleteSticker();
+        }
 
         if (dragging)
         {
-
+            HandleScaleRotation();
+       
 
             Vector2 screenPos =
                 RectTransformUtility.WorldToScreenPoint(
                     canvas.worldCamera,
                     cursor.transform.position
                 );
-
 
 
             RectTransformUtility.ScreenPointToLocalPointInRectangle(
@@ -178,31 +160,120 @@ public class SC_sticker_UI : MonoBehaviour,
             );
 
 
-
             rect.anchoredPosition =
                 local + offset;
-
 
 
             CheckDeleteZone();
         }
 
-
-
-        HandleScaleRotation();
-
-
-        if (deleteSticker.action.WasPressedThisFrame())
+        if (click.action.WasPressedThisFrame() && isHovered)
         {
-            DeleteSticker();
+            ToggleDrag();
         }
 
     }
 
+    void ToggleDrag()
+    {
+
+        if (!dragging)
+            StartDrag();
+
+        else
+            StopDrag();
+
+    }
+
+
+    void StartDrag()
+    {
+
+        dragging = true;
+
+
+        selected.SetActive(true);
 
 
 
+        RectTransformUtility.ScreenPointToLocalPointInRectangle(
+            canvas.transform as RectTransform,
+            cursor.transform.position,
+            canvas.worldCamera,
+            out Vector2 local
+        );
 
+
+        offset =
+            rect.anchoredPosition - local;
+
+
+
+        img.maskable = false;
+
+
+        rect.parent.SetAsLastSibling();
+
+
+
+        anim.ResetTrigger("drop");
+        anim.SetTrigger("grab");
+
+
+
+        SC_sticker_menu.instance.start_edit_mode();
+
+
+        cursor.SetGrabCursor();
+
+    }
+
+
+    void StopDrag()
+    {
+
+        dragging = false;
+
+
+        selected.SetActive(false);
+
+
+        img.maskable = true;
+
+
+
+        bool delete =
+            RectTransformUtility.RectangleContainsScreenPoint(
+                deleteZone,
+                cursor.transform.position,
+                canvas.worldCamera
+            );
+
+
+
+        if (delete)
+        {
+            DeleteSticker();
+            return;
+        }
+
+
+
+        anim.ResetTrigger("grab");
+        anim.SetTrigger("drop");
+
+
+
+        SC_sticker_menu.instance.quit_edit_mode();
+
+
+        SC_StickerSaveSystem.instance.AutoSave();
+
+
+
+        cursor.SetHoverCursor();
+
+    }
 
     void HandleScaleRotation()
     {
@@ -212,111 +283,53 @@ public class SC_sticker_UI : MonoBehaviour,
 
 
 
-        // SCROLL SOURIS
         Vector2 scroll =
             mouseScroll.action.ReadValue<Vector2>();
 
 
-        if (Mathf.Abs(scroll.y) > 0.01f)
+
+        if (Mathf.Abs(scroll.y) < 0.01f)
+            return;
+
+
+
+        if (rotateModifier.action.IsPressed())
         {
 
-            bool rotate =
-                rotateModifier.action.IsPressed();
+            rect.Rotate(
+                0,
+                0,
+                -scroll.y * rotationSpeed
+            );
+
+        }
+        else
+        {
+
+            float scale =
+                rect.localScale.x;
 
 
-            if (rotate)
-            {
-                rect.Rotate(
-                    0,
-                    0,
-                    -scroll.y * rotationSpeed
+            scale +=
+                scroll.y * wheelSpeed;
+
+
+
+            scale =
+                Mathf.Clamp(
+                    scale,
+                    minScale,
+                    maxScale
                 );
-            }
-            else
-            {
-                float scale =
-                    rect.localScale.x;
-
-
-                scale +=
-                    scroll.y * wheelSpeed;
-
-
-                scale =
-                    Mathf.Clamp(
-                        scale,
-                        minScale,
-                        maxScale
-                    );
-
-
-                rect.localScale =
-                    Vector3.one * scale;
-            }
-        }
 
 
 
-        // BOUTON SCALE +
-        if (scalePlus.action.IsPressed())
-        {
-            ChangeScale(buttonScaleSpeed);
-        }
+            rect.localScale =
+                Vector3.one * scale;
 
-
-        // BOUTON SCALE -
-        if (scaleMinus.action.IsPressed())
-        {
-            ChangeScale(-buttonScaleSpeed);
-        }
-
-
-
-        // BOUTON ROTATION +
-        if (rotatePlus.action.IsPressed())
-        {
-            rect.Rotate(
-                0,
-                0,
-                buttonRotationSpeed * Time.deltaTime
-            );
-        }
-
-
-
-        // BOUTON ROTATION -
-        if (rotateMinus.action.IsPressed())
-        {
-            rect.Rotate(
-                0,
-                0,
-                -buttonRotationSpeed * Time.deltaTime
-            );
         }
 
     }
-
-    void ChangeScale(float amount)
-    {
-        float scale =
-            rect.localScale.x;
-
-
-        scale += amount;
-
-
-        scale =
-            Mathf.Clamp(
-                scale,
-                minScale,
-                maxScale
-            );
-
-
-        rect.localScale =
-            Vector3.one * scale;
-    }
-
 
 
     void CheckDeleteZone()
@@ -343,7 +356,7 @@ public class SC_sticker_UI : MonoBehaviour,
                 Mathf.Lerp(
                     0.3f,
                     1f,
-                    (Mathf.Sin(Time.time * 12) + 1) / 2
+                    (Mathf.Sin(Time.time * 12f) + 1f) / 2f
                 );
 
 
@@ -364,137 +377,6 @@ public class SC_sticker_UI : MonoBehaviour,
 
     }
 
-
-
-
-
-
-
-    public void OnPointerDown(PointerEventData eventData)
-    {
-
-        eventData.position =
-            SC_scursorManager.instance.transform.position;
-
-
-
-        if (eventData.button ==
-            PointerEventData.InputButton.Right)
-        {
-
-            DeleteSticker();
-
-            return;
-        }
-
-
-
-
-        if (eventData.button !=
-            PointerEventData.InputButton.Left)
-            return;
-
-
-
-        if (!dragging)
-        {
-
-            StartDrag();
-
-        }
-        else
-        {
-
-            StopDrag();
-
-        }
-
-    }
-
-
-
-
-
-
-
-
-    void StartDrag()
-    {
-        dragging = true;
-
-        selected.SetActive(true);
-
-        RectTransformUtility.ScreenPointToLocalPointInRectangle(
-            canvas.transform as RectTransform,
-            cursor.transform.position,
-            canvas.worldCamera,
-            out Vector2 local
-        );
-
-        offset =
-            rect.anchoredPosition - local;
-
-
-        img.maskable = false;
-
-        rect.parent.SetAsLastSibling();
-
-
-        anim.ResetTrigger("drop");
-        anim.SetTrigger("grab");
-
-
-        SC_sticker_menu.instance.start_edit_mode();
-
-        cursor.SetGrabCursor();
-    }
-
-
-
-
-
-
-    void StopDrag()
-    {
-        dragging = false;
-
-
-        selected.SetActive(false);
-
-        img.maskable = true;
-
-
-        bool delete =
-            RectTransformUtility.RectangleContainsScreenPoint(
-                deleteZone,
-                cursor.transform.position,
-                canvas.worldCamera
-            );
-
-
-        if (delete)
-        {
-            DeleteSticker();
-            return;
-        }
-
-
-        anim.ResetTrigger("grab");
-        anim.SetTrigger("drop");
-
-
-        SC_sticker_menu.instance.quit_edit_mode();
-
-        SC_StickerSaveSystem.instance.AutoSave();
-
-        cursor.SetHoverCursor();
-    }
-
-
-
-
-
-
     void DeleteSticker()
     {
 
@@ -504,42 +386,28 @@ public class SC_sticker_UI : MonoBehaviour,
         SC_StickerSaveSystem.instance.AutoSave();
 
 
-
         cursor.SetNormalCursor();
 
 
-        Destroy(gameObject);
+        Destroy(transform.parent.gameObject);
 
     }
-
-
-
-
-
-
 
     public void OnPointerEnter(PointerEventData eventData)
     {
+        isHovered = true;
 
         if (!dragging)
-        {
             cursor.SetHoverCursor();
-        }
-
     }
-
-
-
 
 
     public void OnPointerExit(PointerEventData eventData)
     {
+        isHovered = false;
 
         if (!dragging)
-        {
             cursor.SetNormalCursor();
-        }
-
     }
 
 }

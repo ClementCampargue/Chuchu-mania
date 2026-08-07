@@ -10,8 +10,13 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ea6de9c75de01394888b2a88ef67e772, type: 3}
-  m_Name: SO_Sticker 4
+  m_Name: SO_Sticker 3
   m_EditorClassIdentifier: 
-  sticker_sprite: {fileID: 21300000, guid: 6d0cafc1ee1af1f4ab0263e726c268a3, type: 3}
-  sticker_name: Just chuchu
+  sticker_sprite: {fileID: 21300000, guid: 844464ee91c94f64b8b10d0703949e0c, type: 3}
+  sticker_name: Jpp chuchu
+  description: 
+  unlock_conditions: "pas d\xE9bloqu\xE9 bouffon va"
+  artist: 
+  rarity: 0
+  Price: 0
   unlocked: 1

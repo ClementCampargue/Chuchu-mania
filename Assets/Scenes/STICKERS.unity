@@ -514,13 +514,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 00a72b5c45497ee4da9978ddaea06554, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  stickers:
-  - {fileID: 11400000, guid: 4766159b40db4c249847412aaa1af890, type: 2}
-  - {fileID: 11400000, guid: b98298023e86e374a9443ea1a004efd2, type: 2}
-  - {fileID: 11400000, guid: 68b3af5d84d78d14c936652a763c4bc5, type: 2}
-  - {fileID: 11400000, guid: 22be6fc2b8bda6c4d8db0dd194f3332e, type: 2}
-  - {fileID: 11400000, guid: aef49bf6c79aeea4bb038956ff423525, type: 2}
-  - {fileID: 11400000, guid: 158d166711475304b9ef29d97635f7d3, type: 2}
+  stickers: {fileID: 11400000, guid: 095e909b84e827a4eac34ae6800cd8b0, type: 2}
   list_parent: {fileID: 46585849}
   button: {fileID: 2038871020505038673, guid: 1dd692714f80a1b4388b49553c53eefb, type: 3}
 --- !u!1 &346158023
@@ -783,13 +777,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 00a72b5c45497ee4da9978ddaea06554, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  stickers:
-  - {fileID: 11400000, guid: 4766159b40db4c249847412aaa1af890, type: 2}
-  - {fileID: 11400000, guid: b98298023e86e374a9443ea1a004efd2, type: 2}
-  - {fileID: 11400000, guid: 68b3af5d84d78d14c936652a763c4bc5, type: 2}
-  - {fileID: 11400000, guid: 22be6fc2b8bda6c4d8db0dd194f3332e, type: 2}
-  - {fileID: 11400000, guid: aef49bf6c79aeea4bb038956ff423525, type: 2}
-  - {fileID: 11400000, guid: 158d166711475304b9ef29d97635f7d3, type: 2}
+  stickers: {fileID: 0}
   list_parent: {fileID: 1248793641}
   button: {fileID: 2038871020505038673, guid: 1dd692714f80a1b4388b49553c53eefb, type: 3}
 --- !u!1 &373845477
@@ -1054,13 +1042,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 00a72b5c45497ee4da9978ddaea06554, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  stickers:
-  - {fileID: 11400000, guid: 4766159b40db4c249847412aaa1af890, type: 2}
-  - {fileID: 11400000, guid: b98298023e86e374a9443ea1a004efd2, type: 2}
-  - {fileID: 11400000, guid: 68b3af5d84d78d14c936652a763c4bc5, type: 2}
-  - {fileID: 11400000, guid: 22be6fc2b8bda6c4d8db0dd194f3332e, type: 2}
-  - {fileID: 11400000, guid: aef49bf6c79aeea4bb038956ff423525, type: 2}
-  - {fileID: 11400000, guid: 158d166711475304b9ef29d97635f7d3, type: 2}
+  stickers: {fileID: 0}
   list_parent: {fileID: 963298926}
   button: {fileID: 2038871020505038673, guid: 1dd692714f80a1b4388b49553c53eefb, type: 3}
 --- !u!1 &898458231
@@ -1565,6 +1547,7 @@ MonoBehaviour:
   - {fileID: 1416568830}
   editing: 0
   quit: {fileID: 7727032971491509709, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
+  not_unlocked: {fileID: 2100000, guid: cee3fbe55bcbee4428ede6fb5ad714db, type: 2}
 --- !u!95 &1098395148
 Animator:
   serializedVersion: 7
@@ -1733,13 +1716,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 00a72b5c45497ee4da9978ddaea06554, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  stickers:
-  - {fileID: 11400000, guid: 4766159b40db4c249847412aaa1af890, type: 2}
-  - {fileID: 11400000, guid: b98298023e86e374a9443ea1a004efd2, type: 2}
-  - {fileID: 11400000, guid: 68b3af5d84d78d14c936652a763c4bc5, type: 2}
-  - {fileID: 11400000, guid: 22be6fc2b8bda6c4d8db0dd194f3332e, type: 2}
-  - {fileID: 11400000, guid: aef49bf6c79aeea4bb038956ff423525, type: 2}
-  - {fileID: 11400000, guid: 158d166711475304b9ef29d97635f7d3, type: 2}
+  stickers: {fileID: 0}
   list_parent: {fileID: 1397393507}
   button: {fileID: 2038871020505038673, guid: 1dd692714f80a1b4388b49553c53eefb, type: 3}
 --- !u!1 &1322524100
@@ -1967,13 +1944,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 00a72b5c45497ee4da9978ddaea06554, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  stickers:
-  - {fileID: 11400000, guid: 4766159b40db4c249847412aaa1af890, type: 2}
-  - {fileID: 11400000, guid: b98298023e86e374a9443ea1a004efd2, type: 2}
-  - {fileID: 11400000, guid: 68b3af5d84d78d14c936652a763c4bc5, type: 2}
-  - {fileID: 11400000, guid: 22be6fc2b8bda6c4d8db0dd194f3332e, type: 2}
-  - {fileID: 11400000, guid: aef49bf6c79aeea4bb038956ff423525, type: 2}
-  - {fileID: 11400000, guid: 158d166711475304b9ef29d97635f7d3, type: 2}
+  stickers: {fileID: 0}
   list_parent: {fileID: 1894487264}
   button: {fileID: 2038871020505038673, guid: 1dd692714f80a1b4388b49553c53eefb, type: 3}
 --- !u!1 &1409095326
@@ -2660,13 +2631,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 00a72b5c45497ee4da9978ddaea06554, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  stickers:
-  - {fileID: 11400000, guid: 4766159b40db4c249847412aaa1af890, type: 2}
-  - {fileID: 11400000, guid: b98298023e86e374a9443ea1a004efd2, type: 2}
-  - {fileID: 11400000, guid: 68b3af5d84d78d14c936652a763c4bc5, type: 2}
-  - {fileID: 11400000, guid: 22be6fc2b8bda6c4d8db0dd194f3332e, type: 2}
-  - {fileID: 11400000, guid: aef49bf6c79aeea4bb038956ff423525, type: 2}
-  - {fileID: 11400000, guid: 158d166711475304b9ef29d97635f7d3, type: 2}
+  stickers: {fileID: 0}
   list_parent: {fileID: 729176448}
   button: {fileID: 2038871020505038673, guid: 1dd692714f80a1b4388b49553c53eefb, type: 3}
 --- !u!1 &2065178718

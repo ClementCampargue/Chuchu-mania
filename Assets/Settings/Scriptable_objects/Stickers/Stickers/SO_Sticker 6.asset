@@ -15,6 +15,7 @@ MonoBehaviour:
   sticker_sprite: {fileID: 21300000, guid: c5dc49f6fe0361445bf2426f7872e5eb, type: 3}
   sticker_name: IceCream Chuchu
   description: "Miam miam \xE7a doit etre bon j'ai pas raison la team?"
+  unlock_conditions: "pas d\xE9bloqu\xE9 bouffon va"
   artist: Martin Scorcese
   rarity: 2
   Price: 0

@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fecbad7feb4041d44a76d58efd1efb7e, type: 3}
+  m_Name: SO_sticker_list
+  m_EditorClassIdentifier: 
+  stickers:
+  - {fileID: 11400000, guid: 4766159b40db4c249847412aaa1af890, type: 2}
+  - {fileID: 11400000, guid: b98298023e86e374a9443ea1a004efd2, type: 2}
+  - {fileID: 11400000, guid: 68b3af5d84d78d14c936652a763c4bc5, type: 2}
+  - {fileID: 11400000, guid: 22be6fc2b8bda6c4d8db0dd194f3332e, type: 2}
+  - {fileID: 11400000, guid: aef49bf6c79aeea4bb038956ff423525, type: 2}
+  - {fileID: 11400000, guid: 158d166711475304b9ef29d97635f7d3, type: 2}

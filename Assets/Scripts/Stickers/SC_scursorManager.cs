@@ -124,7 +124,10 @@ public class SC_scursorManager : MonoBehaviour
 
 
 
-
+    private void Start()
+    {
+        gameObject.SetActive(false);
+    }
 
 
 

@@ -1,9 +1,10 @@
 using UnityEngine;
+using UnityEngine.EventSystems;
+using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
 public class SC_sticker_button : MonoBehaviour
 {
-
     public Image image;
 
     public SO_Sticker sticker;
@@ -12,45 +13,68 @@ public class SC_sticker_button : MonoBehaviour
     public Button button;
     public GameObject Sticker_prefab;
 
+    public InputActionReference selectAction; // <-- Ajoute ça dans l'inspecteur
+
+    private bool selected;
+
     private SC_StickerSaveSystem save;
     private SC_sticker_menu menu;
+    public Animator anim;
 
     private void Start()
     {
         save = SC_StickerSaveSystem.instance;
         menu = SC_sticker_menu.instance;
+        image.material = sticker.unlocked ? unlocked : locked;
 
         image.sprite = sticker.sticker_sprite;
         unlocked = image.material;
-
     }
 
 
     private void OnEnable()
     {
+        selectAction.action.Enable();
+
         image.sprite = sticker.sticker_sprite;
         unlocked = image.material;
 
         image.material = sticker.unlocked ? unlocked : locked;
+
     }
+
 
 
     private void Update()
     {
-        image.material = sticker.unlocked ? unlocked : locked;
+
+        if (selected && selectAction.action.WasPressedThisFrame())
+        {
+            anim.SetTrigger("Press");
+            CreateSticker();
+        }
     }
 
+    public void unhover()
+    {
+        selected = false;
+    }
 
     public void update_infos()
     {
+        selected = true;
+
         menu.update_infos(sticker);
     }
+
+
     public void CreateSticker()
     {
         if (!sticker.unlocked)
             return;
 
         menu.start_edit_mode();
+
         Canvas canvas = GameObject.Find("MainCanvas").GetComponent<Canvas>();
         RectTransform canvasRect = canvas.GetComponent<RectTransform>();
 
@@ -61,7 +85,6 @@ public class SC_sticker_button : MonoBehaviour
 
         Image img = obj.GetComponent<Image>();
         RectTransform rect = obj.GetComponent<RectTransform>();
-
 
         RectTransformUtility.ScreenPointToLocalPointInRectangle(
             canvasRect,

@@ -17,12 +17,15 @@ public class SC_sticker_menu : MonoBehaviour
     public List<GameObject> stars;
     public bool editing;
     public InputActionReference quit;
+    private Material unlocked;
+    public Material not_unlocked;
     private void Awake()
     {
         instance = this;
     }
     void Start()
     {
+        unlocked = sprite_image.material;
         SC_scursorManager.instance.gameObject.SetActive(true);
     }
     private void OnDisable()
@@ -58,8 +61,18 @@ public class SC_sticker_menu : MonoBehaviour
 
     public void update_infos(SO_Sticker sticker)
     {
+        if (sticker.unlocked)
+        {
+            sticker_description.text = sticker.description;
+            sprite_image.material = unlocked;
+        }
+        else
+        {
+            sticker_description.text = sticker.unlock_conditions;
+            sprite_image.material = not_unlocked;
+
+        }
         sticker_name.text = sticker.sticker_name;
-        sticker_description.text = sticker.description;
         artist.text = sticker.artist;
         sprite_image.sprite = sticker.sticker_sprite;
         UpdateStars(sticker.rarity);

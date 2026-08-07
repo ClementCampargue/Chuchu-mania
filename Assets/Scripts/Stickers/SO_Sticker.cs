@@ -7,6 +7,8 @@ public class SO_Sticker : ScriptableObject
     public string sticker_name;
     [TextArea(3, 3)]
     public string description;
+    [TextArea(3, 3)]
+    public string unlock_conditions;
     public string artist;
     public int rarity;
     public int Price;

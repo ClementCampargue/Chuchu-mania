@@ -153,6 +153,8 @@ MonoBehaviour:
   locked: {fileID: 2100000, guid: cee3fbe55bcbee4428ede6fb5ad714db, type: 2}
   button: {fileID: 188157584760841024}
   Sticker_prefab: {fileID: 8008883728343687485, guid: c22983ab7ad9e0e4890b88601e2c56f8, type: 3}
+  selectAction: {fileID: -2099379676528639254, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
+  anim: {fileID: 6331282335202960795}
 --- !u!1 &3104003177699539458
 GameObject:
   m_ObjectHideFlags: 0
@@ -331,6 +333,18 @@ MonoBehaviour:
             m_StringArgument: Unhover
             m_BoolArgument: 0
           m_CallState: 2
+        - m_Target: {fileID: 8495628875175200372}
+          m_TargetAssemblyTypeName: SC_sticker_button, Assembly-CSharp
+          m_MethodName: unhover
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
   - eventID: 15
     callback:
       m_PersistentCalls:
@@ -429,6 +443,18 @@ MonoBehaviour:
             m_IntArgument: 0
             m_FloatArgument: 0
             m_StringArgument: Unhover
+            m_BoolArgument: 0
+          m_CallState: 2
+        - m_Target: {fileID: 8495628875175200372}
+          m_TargetAssemblyTypeName: SC_sticker_button, Assembly-CSharp
+          m_MethodName: unhover
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
             m_BoolArgument: 0
           m_CallState: 2
 --- !u!1 &4533720286255645423
@@ -682,3 +708,5 @@ MonoBehaviour:
   locked: {fileID: 0}
   button: {fileID: 0}
   Sticker_prefab: {fileID: 0}
+  selectAction: {fileID: 0}
+  anim: {fileID: 0}
