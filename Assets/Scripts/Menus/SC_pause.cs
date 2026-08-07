@@ -56,7 +56,11 @@ public class SC_pause : MonoBehaviour
         {
             return;
         }
-  
+        else if (SceneManager.GetActiveScene().name =="Stickers")
+        {
+            return;
+        }
+
         UpdateObjectState();
         isPaused = !isPaused;
 

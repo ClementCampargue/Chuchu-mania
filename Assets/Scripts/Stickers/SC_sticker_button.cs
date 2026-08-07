@@ -57,7 +57,7 @@ public class SC_sticker_button : MonoBehaviour
         GameObject obj = Instantiate(
             Sticker_prefab,
             save.parent
-        );
+        ).transform.GetChild(0).gameObject;
 
         Image img = obj.GetComponent<Image>();
         RectTransform rect = obj.GetComponent<RectTransform>();
@@ -74,6 +74,5 @@ public class SC_sticker_button : MonoBehaviour
 
         img.sprite = sticker.sticker_sprite;
         img.maskable = false;
-        img.SetNativeSize();
     }
 }

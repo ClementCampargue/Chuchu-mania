@@ -674,7 +674,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   currentDialogue: {fileID: 11400000, guid: c96953d908a48074399c283244bbc96e, type: 2}
-  dialogueStartDelay: 0.25
+  dialogueStartDelay: 0
   characterNameText: {fileID: 18014307801966040}
   typewriter: {fileID: 4288825044838836065}
   portrait: {fileID: 8312149171059929517}

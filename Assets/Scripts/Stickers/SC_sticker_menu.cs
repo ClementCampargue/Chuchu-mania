@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
 public class SC_sticker_menu : MonoBehaviour
@@ -14,8 +15,8 @@ public class SC_sticker_menu : MonoBehaviour
     public TextMeshProUGUI artist;
     public Image sprite_image;
     public List<GameObject> stars;
-
-
+    public bool editing;
+    public InputActionReference quit;
     private void Awake()
     {
         instance = this;
@@ -28,16 +29,21 @@ public class SC_sticker_menu : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        if (quit.action.WasPerformedThisFrame())
+        {
+            SC_screenshot_transition.instance.Capture("HUB");
+        }
     }
 
     public void start_edit_mode()
     {
+        editing = true;
         anim.SetTrigger("On");
     }
 
     public void quit_edit_mode()
     {
+        editing = false;
         anim.SetTrigger("Off");
     }
 

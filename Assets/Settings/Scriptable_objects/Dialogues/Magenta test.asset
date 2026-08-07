@@ -19,8 +19,10 @@ MonoBehaviour:
     choices:
     - choiceText: 
       answer: []
+      actionID: 
     - choiceText: 
       answer: []
+      actionID: 
   - character: {fileID: 11400000, guid: 201e18955e3c1254fae5fd2b355c5cac, type: 2}
     text: "\xE7a va pas tr\xE8s bien j'ai la chiasse tu peux m'aider?"
     hasChoices: 1
@@ -37,12 +39,14 @@ MonoBehaviour:
             text: ah merci
             hasChoices: 0
             choices: []
+          actionID: 
         - choiceText: "allez d\xE9gage"
           answer:
           - character: {fileID: 11400000, guid: 201e18955e3c1254fae5fd2b355c5cac, type: 2}
             text: Ah
             hasChoices: 0
             choices: []
+          actionID: 
       - character: {fileID: 11400000, guid: 201e18955e3c1254fae5fd2b355c5cac, type: 2}
         text: "Non s\xE9rieux?"
         hasChoices: 1
@@ -51,17 +55,35 @@ MonoBehaviour:
           answer:
           - character: {fileID: 11400000, guid: 201e18955e3c1254fae5fd2b355c5cac, type: 2}
             text: ah merci
-            hasChoices: 0
-            choices: []
+            hasChoices: 1
+            choices:
+            - choiceText: a
+              answer:
+              - character: {fileID: 11400000, guid: 25116a902d5a6794396e07c249d676de, type: 2}
+                text: adzadzadaz
+                hasChoices: 0
+                choices: []
+              actionID: 
+            - choiceText: b
+              answer:
+              - character: {fileID: 11400000, guid: 25116a902d5a6794396e07c249d676de, type: 2}
+                text: dazdazdad
+                hasChoices: 0
+                choices: []
+              actionID: 
+          actionID: 
         - choiceText: "allez d\xE9gage"
           answer:
           - character: {fileID: 11400000, guid: 201e18955e3c1254fae5fd2b355c5cac, type: 2}
             text: Ah
             hasChoices: 0
             choices: []
+          actionID: 
+      actionID: 
     - choiceText: Oui
       answer:
       - character: {fileID: 11400000, guid: 201e18955e3c1254fae5fd2b355c5cac, type: 2}
         text: Merci t'es un soeur
         hasChoices: 0
         choices: []
+      actionID: 

@@ -21,9 +21,14 @@ public class SC_slider : MonoBehaviour
 
     private Vector2 startMouse;
     private float startHandleY;
+    private SC_sticker_menu menu;
 
-    void Update()
+    private void Start()
     {
+        menu = SC_sticker_menu.instance;
+    }
+    void Update()
+    {if (menu.editing) return;
         float wheel = Input.mouseScrollDelta.y;
 
         if (wheel != 0)

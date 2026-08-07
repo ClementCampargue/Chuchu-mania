@@ -39,27 +39,38 @@ public class SC_StickerSaveSystem : MonoBehaviour
     {
         instance = this;
     }
-
     void Start()
     {
-        Load(); 
+        deleteZone = GameObject.Find("TrashZone").GetComponent<RectTransform>();
+        Load();
     }
 
     public void AutoSave()
     {
         Save();
     }
-
+    public RectTransform deleteZone;
     public void Save()
     {
         SC_sticker_UI[] stickers = FindObjectsOfType<SC_sticker_UI>();
-        Debug.Log("Sticker count: " + FindObjectsOfType<SC_sticker_UI>().Length);
         StickerSave save = new StickerSave();
 
         foreach (SC_sticker_UI st in stickers)
         {
-            Image img = st.GetComponent<Image>();
             RectTransform rt = st.GetComponent<RectTransform>();
+
+            // Vérifie si le centre du sticker est dans la TrashZone
+            Vector2 screenPos = RectTransformUtility.WorldToScreenPoint(null, rt.position);
+
+            if (deleteZone != null &&
+                RectTransformUtility.RectangleContainsScreenPoint(deleteZone, screenPos))
+            {
+                Debug.Log("Sticker supprimé (SaveSystem)");
+                Destroy(st.gameObject);
+                continue; // Ne pas sauvegarder ce sticker
+            }
+
+            Image img = st.GetComponent<Image>();
 
             StickerData data = new StickerData();
 
@@ -81,7 +92,6 @@ public class SC_StickerSaveSystem : MonoBehaviour
         PlayerPrefs.SetString(SAVE_KEY, JsonUtility.ToJson(save));
         PlayerPrefs.Save();
     }
-
     public void Load()
     {
         if (!PlayerPrefs.HasKey(SAVE_KEY))
@@ -92,7 +102,7 @@ public class SC_StickerSaveSystem : MonoBehaviour
 
         foreach (StickerData data in save.stickers)
         {
-            GameObject obj = Instantiate(stickerPrefab, parent);
+            GameObject obj = Instantiate(stickerPrefab, parent).transform.GetChild(0).gameObject;
 
             RectTransform rt = obj.GetComponent<RectTransform>();
             Image img = obj.GetComponent<Image>();
@@ -102,7 +112,6 @@ public class SC_StickerSaveSystem : MonoBehaviour
             rt.localScale = new Vector3(data.scaleX, data.scaleY, 1);
 
             img.sprite = sprites.Find(s => s.name == data.spriteName);
-            img.SetNativeSize();
             img.maskable = true;
             obj.transform.SetSiblingIndex(data.siblingIndex);
 

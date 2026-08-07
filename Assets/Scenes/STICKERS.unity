@@ -514,7 +514,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 00a72b5c45497ee4da9978ddaea06554, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  default_selected: {fileID: 0}
   stickers:
   - {fileID: 11400000, guid: 4766159b40db4c249847412aaa1af890, type: 2}
   - {fileID: 11400000, guid: b98298023e86e374a9443ea1a004efd2, type: 2}
@@ -784,7 +783,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 00a72b5c45497ee4da9978ddaea06554, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  default_selected: {fileID: 0}
   stickers:
   - {fileID: 11400000, guid: 4766159b40db4c249847412aaa1af890, type: 2}
   - {fileID: 11400000, guid: b98298023e86e374a9443ea1a004efd2, type: 2}
@@ -1056,7 +1054,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 00a72b5c45497ee4da9978ddaea06554, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  default_selected: {fileID: 0}
   stickers:
   - {fileID: 11400000, guid: 4766159b40db4c249847412aaa1af890, type: 2}
   - {fileID: 11400000, guid: b98298023e86e374a9443ea1a004efd2, type: 2}
@@ -1334,6 +1331,11 @@ MonoBehaviour:
   contentMaxY: 0
   dragSpeed: 1
   wheelSpeed: 30
+--- !u!20 &1058851601 stripped
+Camera:
+  m_CorrespondingSourceObject: {fileID: 9042987386885964439, guid: 894c74b520a88a24e88966d64bc5ea3e, type: 3}
+  m_PrefabInstance: {fileID: 1091308518}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1091308518
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1474,7 +1476,7 @@ Canvas:
   m_Enabled: 1
   serializedVersion: 3
   m_RenderMode: 0
-  m_Camera: {fileID: 0}
+  m_Camera: {fileID: 1058851601}
   m_PlaneDistance: 100
   m_PixelPerfect: 0
   m_ReceivesEvents: 1
@@ -1485,7 +1487,7 @@ Canvas:
   m_AdditionalShaderChannelsFlag: 25
   m_UpdateRectTransformForStandalone: 0
   m_SortingLayerID: 0
-  m_SortingOrder: 8
+  m_SortingOrder: 4
   m_TargetDisplay: 0
 --- !u!224 &1098395146
 RectTransform:
@@ -1532,6 +1534,8 @@ MonoBehaviour:
   - {fileID: 134463486}
   - {fileID: 346158023}
   - {fileID: 1416568830}
+  editing: 0
+  quit: {fileID: 7727032971491509709, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
 --- !u!95 &1098395148
 Animator:
   serializedVersion: 7
@@ -1700,7 +1704,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 00a72b5c45497ee4da9978ddaea06554, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  default_selected: {fileID: 0}
   stickers:
   - {fileID: 11400000, guid: 4766159b40db4c249847412aaa1af890, type: 2}
   - {fileID: 11400000, guid: b98298023e86e374a9443ea1a004efd2, type: 2}
@@ -1935,7 +1938,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 00a72b5c45497ee4da9978ddaea06554, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  default_selected: {fileID: 0}
   stickers:
   - {fileID: 11400000, guid: 4766159b40db4c249847412aaa1af890, type: 2}
   - {fileID: 11400000, guid: b98298023e86e374a9443ea1a004efd2, type: 2}
@@ -2406,7 +2408,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxTilt: 25
   smoothSpeed: 10
-  influenceRadius: 500
+  influenceRadius: 300
 --- !u!1 &1700715980
 GameObject:
   m_ObjectHideFlags: 0
@@ -2629,7 +2631,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 00a72b5c45497ee4da9978ddaea06554, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  default_selected: {fileID: 0}
   stickers:
   - {fileID: 11400000, guid: 4766159b40db4c249847412aaa1af890, type: 2}
   - {fileID: 11400000, guid: b98298023e86e374a9443ea1a004efd2, type: 2}
