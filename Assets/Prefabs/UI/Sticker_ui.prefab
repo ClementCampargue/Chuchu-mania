@@ -9,7 +9,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5803902959170033719}
-  - component: {fileID: 8948538601605785892}
   - component: {fileID: 6000286024671370406}
   - component: {fileID: 4299811421295963564}
   - component: {fileID: 3917524200838684608}
@@ -41,18 +40,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 650.4348, y: 655.65216}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &8948538601605785892
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 700501186023049140}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b4bbd5cf681c74644b8f62a3cdc55b07, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!222 &6000286024671370406
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -73,18 +60,26 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1b37697b217f67748ba94d3d3601b68f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  minScale: 0.25
+  mouseScroll: {fileID: 6240969308177333660, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
+  rotateModifier: {fileID: 7202051123191658014, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
+  click: {fileID: 3001919216989983466, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
+  deleteSticker: {fileID: -4090225696740746782, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
+  scalePlus: {fileID: 7040659881675835329, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
+  scaleMinus: {fileID: 1781555164194001046, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
+  rotatePlus: {fileID: -4758767625168951764, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
+  rotateMinus: {fileID: 6921593519229454973, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
   defaultScale: 0.5
+  minScale: 0.25
   maxScale: 1.5
   wheelSpeed: 0.2
+  buttonScaleSpeed: 0.05
   rotationSpeed: 10
+  buttonRotationSpeed: 10
   img: {fileID: 3917524200838684608}
-  spawnedSticker: 0
-  deleteZone: {fileID: 0}
-  showDebug: 1
-  stick: {fileID: 8948538601605785892}
   selected: {fileID: 2986285596368804374}
   anim: {fileID: 7621659975062488614}
+  deleteZone: {fileID: 0}
+  spawnedSticker: 0
 --- !u!114 &3917524200838684608
 MonoBehaviour:
   m_ObjectHideFlags: 0

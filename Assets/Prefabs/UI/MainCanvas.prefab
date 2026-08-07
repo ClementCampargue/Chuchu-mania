@@ -321,5 +321,7 @@ MonoBehaviour:
   grabSprite: {fileID: 620411775, guid: ebf7fdb968ccac94c9588e590cb45cd6, type: 3}
   cursorRenderer: {fileID: 1053697417819792278}
   cursorRect: {fileID: 5633298293690327910}
+  cursorMoveAction: {fileID: -1680190386980627800, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
+  gamepadCursorSpeed: 1000
   grabbing: 0
   fader: {fileID: 0}
