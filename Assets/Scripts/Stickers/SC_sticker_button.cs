@@ -1,101 +1,79 @@
 using UnityEngine;
 using UnityEngine.UI;
-using UnityEngine.EventSystems;
+
 public class SC_sticker_button : MonoBehaviour
 {
-    [Header("Scale settings")]
-    public float hoverScale = 1.2f;
-    public float scaleSpeed = 10f;
 
-    public SpriteRenderer sprite;
-    public Transform pivot;
-    private Vector3 originalScale;
-    private Vector3 targetScale;
+    public Image image;
+
     public SO_Sticker sticker;
     public Material locked;
     private Material unlocked;
-
-    public GameObject hover;
+    public Button button;
     public GameObject Sticker_prefab;
-    public bool hovered;
+
+    private SC_StickerSaveSystem save;
+    private SC_sticker_menu menu;
+
     private void Start()
     {
-        originalScale = pivot.transform.localScale;
-        targetScale = originalScale;
-        sprite.sprite = sticker.sticker_sprite;
-  
+        save = SC_StickerSaveSystem.instance;
+        menu = SC_sticker_menu.instance;
+
+        image.sprite = sticker.sticker_sprite;
+        unlocked = image.material;
+
     }
+
+
     private void OnEnable()
     {
-        originalScale = pivot.transform.localScale;
-        targetScale = originalScale;
-        sprite.sprite = sticker.sticker_sprite;
-        unlocked = sprite.material;
-        if (!sticker.unlocked)
-        {
-            sprite.material = locked;   
-        }
+        image.sprite = sticker.sticker_sprite;
+        unlocked = image.material;
+
+        image.material = sticker.unlocked ? unlocked : locked;
     }
+
 
     private void Update()
     {
-        pivot.transform.localScale = Vector3.Lerp(pivot.transform.localScale, targetScale, Time.deltaTime * scaleSpeed);
+        image.material = sticker.unlocked ? unlocked : locked;
+    }
+
+
+    public void update_infos()
+    {
+        menu.update_infos(sticker);
+    }
+    public void CreateSticker()
+    {
         if (!sticker.unlocked)
-        {
-            sprite.material = locked;
-        }
-        else
-        {
-            sprite.material = unlocked;
-        }
-    }
-
-    public void OnMouseEnter()
-    {
-        if (sticker.unlocked)
-        {
-            targetScale = originalScale * hoverScale;
-            hover.SetActive(true);
-        }
-        hovered = true;
-    }
-
-    public void OnMouseExit()
-    {
-        targetScale = originalScale;
-        hover.SetActive(false);
-        hovered = false;
-    }
-
-    public void OnMouseDown()
-    {
-        if (EventSystem.current != null && EventSystem.current.IsPointerOverGameObject())
             return;
 
-        if (!sticker.unlocked) return;
-
+        menu.start_edit_mode();
         Canvas canvas = GameObject.Find("MainCanvas").GetComponent<Canvas>();
         RectTransform canvasRect = canvas.GetComponent<RectTransform>();
 
-        GameObject obj = Instantiate(Sticker_prefab, canvas.transform.GetChild(0).transform);
+        GameObject obj = Instantiate(
+            Sticker_prefab,
+            save.parent
+        );
+
         Image img = obj.GetComponent<Image>();
+        RectTransform rect = obj.GetComponent<RectTransform>();
+
 
         RectTransformUtility.ScreenPointToLocalPointInRectangle(
             canvasRect,
             Input.mousePosition,
-            null,
+            canvas.worldCamera,
             out Vector2 localPoint
         );
-        img.maskable = false;
 
-        hovered = false;
-
-        RectTransform rect = obj.GetComponent<RectTransform>();
         rect.anchoredPosition = localPoint;
 
         img.sprite = sticker.sticker_sprite;
+        img.maskable = false;
         img.SetNativeSize();
-
-        hover.SetActive(false);
     }
 }

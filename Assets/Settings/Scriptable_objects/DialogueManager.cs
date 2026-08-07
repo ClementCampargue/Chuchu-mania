@@ -209,7 +209,10 @@ public class DialogueManager : MonoBehaviour
     private void AdvanceMainDialogue()
     {
         currentLineIndex++;
-
+        if (cutscene)
+        {
+            SC_cutscene.instance.ResumeCutscene();
+        }
 
         if (currentLineIndex >= currentDialogue.lines.Length)
         {
@@ -341,9 +344,5 @@ public class DialogueManager : MonoBehaviour
         }
 
 
-        if (cutscene)
-        {
-            SC_cutscene.instance.EndCutscene();
-        }
     }
 }

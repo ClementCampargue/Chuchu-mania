@@ -1,7 +1,8 @@
 using UnityEngine;
-using UnityEngine.UI;
 using UnityEngine.EventSystems;
+using UnityEngine.Localization.SmartFormat.Core.Parsing;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class SC_sticker_UI : MonoBehaviour,
     IPointerDownHandler,
@@ -16,13 +17,13 @@ public class SC_sticker_UI : MonoBehaviour,
     private RectTransform rectTransform;
     private Canvas canvas;
     private Image img;
-
-    public bool spawnedSticker;
+    public bool spawnedSticker; 
 
     [Header("Delete Zone")]
     public RectTransform deleteZone;   // Assigne le rectangle dans l'inspecteur
     public bool showDebug = true;
-
+    public SC_stick_to_mouse stick;
+    public GameObject selected;
     void Awake()
     {
         rectTransform = GetComponent<RectTransform>();
@@ -30,16 +31,22 @@ public class SC_sticker_UI : MonoBehaviour,
 
         canvas = GetComponentInParent<Canvas>();
 
-        // équivalent "mat unique"
         img.material = new Material(img.material);
+
+        // Active le raycast par alpha
+        img.alphaHitTestMinimumThreshold = 0.1f;
     }
     void Start()
     {
+        if (SceneManager.GetActiveScene().name != "Stickers") return;
+
+        selected.SetActive(true);
+
         //deleteZone = GameObject.Find("TrashZone").GetComponent<RectTransform>();
     }
     public void OnPointerEnter(PointerEventData eventData)
     {
-        if (SceneManager.GetActiveScene().name != "StickerMenu") return;
+        if (SceneManager.GetActiveScene().name != "Stickers") return;
 
         if (!dragging)
             SC_scursorManager.instance.SetHoverCursor();
@@ -47,19 +54,19 @@ public class SC_sticker_UI : MonoBehaviour,
 
     public void OnPointerExit(PointerEventData eventData)
     {
-        if (SceneManager.GetActiveScene().name != "StickerMenu") return;
+        if (SceneManager.GetActiveScene().name != "Stickers") return;
     }
 
     public void OnPointerDown(PointerEventData eventData)
     {
-        if (SceneManager.GetActiveScene().name != "StickerMenu") return;
+        if (SceneManager.GetActiveScene().name != "Stickers") return;
 
         if (eventData.button == PointerEventData.InputButton.Left)
         {
+            selected.SetActive(true);
             dragging = true;
             img.maskable = false;
 
-            SC_scursorManager.instance.SetGrabCursor();
 
             RectTransformUtility.ScreenPointToLocalPointInRectangle(
                 canvas.transform as RectTransform,
@@ -72,6 +79,7 @@ public class SC_sticker_UI : MonoBehaviour,
 
             img.transform.SetAsLastSibling();
 
+            stick.enabled = true;
             img.raycastTarget = false;
         }
 
@@ -85,7 +93,7 @@ public class SC_sticker_UI : MonoBehaviour,
 
     public void OnDrag(PointerEventData eventData)
     {
-        if (SceneManager.GetActiveScene().name != "StickerMenu") return;
+        if (SceneManager.GetActiveScene().name != "Stickers") return;
         if (!dragging) return;
 
         RectTransformUtility.ScreenPointToLocalPointInRectangle(
@@ -100,12 +108,12 @@ public class SC_sticker_UI : MonoBehaviour,
 
     public void OnPointerUp(PointerEventData eventData)
     {
-        if (SceneManager.GetActiveScene().name != "StickerMenu") return;
+        if (SceneManager.GetActiveScene().name != "Stickers") return;
+        selected.SetActive(false);
 
         dragging = false;
         img.maskable = true;
 
-        SC_scursorManager.instance.SetNormalCursor();
         img.raycastTarget = true;
 
         // Vérifie si le sticker a été lâché dans la zone de suppression
@@ -121,7 +129,7 @@ public class SC_sticker_UI : MonoBehaviour,
             Destroy(gameObject);
             return;
         }
-
+        stick.enabled = false;
         SC_StickerSaveSystem.instance.AutoSave();
     }
 
