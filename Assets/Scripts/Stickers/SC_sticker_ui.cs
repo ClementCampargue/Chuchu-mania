@@ -1,12 +1,10 @@
 using UnityEngine;
 using UnityEngine.EventSystems;
-using UnityEngine.Localization.SmartFormat.Core.Parsing;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class SC_sticker_UI : MonoBehaviour,
     IPointerDownHandler,
-    IPointerUpHandler,
     IPointerEnterHandler,
     IPointerExitHandler,
     IDragHandler
@@ -120,9 +118,6 @@ public class SC_sticker_UI : MonoBehaviour,
     public void OnPointerEnter(PointerEventData eventData)
     {
         if (SceneManager.GetActiveScene().name != "Stickers") return;
-
-        if (!dragging)
-            SC_scursorManager.instance.SetHoverCursor();
     }
 
     public void OnPointerExit(PointerEventData eventData)
@@ -134,30 +129,63 @@ public class SC_sticker_UI : MonoBehaviour,
     {
         if (SceneManager.GetActiveScene().name != "Stickers") return;
 
-        if (eventData.button == PointerEventData.InputButton.Left)
+        if (dragging)
         {
-            selected.SetActive(true);
-            dragging = true;
-            img.maskable = false;
+            if (eventData.button == PointerEventData.InputButton.Left)
+            {
+
+                if (SceneManager.GetActiveScene().name != "Stickers") return;
+                selected.SetActive(false);
+
+                img.maskable = true;
 
 
-            RectTransformUtility.ScreenPointToLocalPointInRectangle(
-                canvas.transform as RectTransform,
-                eventData.position,
-                canvas.worldCamera,
-                out Vector2 localPoint
-            );
+                // Vérifie si le sticker a été lâché dans la zone de suppression
+                if (deleteZone != null &&
+                    RectTransformUtility.RectangleContainsScreenPoint(
+                        deleteZone,
+                        eventData.position,
+                        canvas.worldCamera))
+                {
+                    Debug.Log("Sticker supprimé");
+                    SC_sticker_menu.instance.quit_edit_mode();
+                    SC_StickerSaveSystem.instance.AutoSave();
+                    Destroy(gameObject);
+                    return;
+                }
+                anim.ResetTrigger("grab");
+                anim.SetTrigger("drop");
+                stick.enabled = false;
+                SC_sticker_menu.instance.quit_edit_mode();
+                SC_StickerSaveSystem.instance.AutoSave();
+            }
+        }
+        else
+        {
+            if (eventData.button == PointerEventData.InputButton.Left)
+            {
+                selected.SetActive(true);
+                img.maskable = false;
 
-            offset = rectTransform.anchoredPosition - localPoint;
 
-            img.transform.SetAsLastSibling();
-            anim.ResetTrigger("drop");
-            anim.SetTrigger("grab");
-            stick.enabled = true;
-            img.raycastTarget = false;
-            transform.parent.SetAsLastSibling();
-    }
+                RectTransformUtility.ScreenPointToLocalPointInRectangle(
+                    canvas.transform as RectTransform,
+                    eventData.position,
+                    canvas.worldCamera,
+                    out Vector2 localPoint
+                );
 
+                offset = rectTransform.anchoredPosition - localPoint;
+
+                img.transform.SetAsLastSibling();
+                anim.ResetTrigger("drop");
+                anim.SetTrigger("grab");
+                stick.enabled = true;
+                transform.parent.SetAsLastSibling();
+                SC_sticker_menu.instance.start_edit_mode();
+            }
+        }
+        dragging = !dragging;
     }
 
     public void OnDrag(PointerEventData eventData)
@@ -175,35 +203,6 @@ public class SC_sticker_UI : MonoBehaviour,
         rectTransform.anchoredPosition = localPoint + offset;
     }
 
-    public void OnPointerUp(PointerEventData eventData)
-    {
-        if (SceneManager.GetActiveScene().name != "Stickers") return;
-        selected.SetActive(false);
-
-        dragging = false;
-        img.maskable = true;
-
-        img.raycastTarget = true;
-
-        // Vérifie si le sticker a été lâché dans la zone de suppression
-        if (deleteZone != null &&
-            RectTransformUtility.RectangleContainsScreenPoint(
-                deleteZone,
-                eventData.position,
-                canvas.worldCamera))
-        {
-            Debug.Log("Sticker supprimé");
-            SC_sticker_menu.instance.quit_edit_mode();
-            SC_StickerSaveSystem.instance.AutoSave();
-            Destroy(gameObject);
-            return;
-        }
-        anim.ResetTrigger("grab");
-        anim.SetTrigger("drop");
-        stick.enabled = false;
-        SC_sticker_menu.instance.quit_edit_mode();
-        SC_StickerSaveSystem.instance.AutoSave();
-    }
 
 #if UNITY_EDITOR
     private void OnDrawGizmos()
