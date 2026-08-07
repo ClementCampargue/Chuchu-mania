@@ -12,8 +12,20 @@ EditorBuildSettings:
     path: Assets/Scenes/HUB.unity
     guid: c9cc964565a553441b29e12e766b84f6
   - enabled: 1
-    path: Assets/Scenes/Menus/Cutscene.unity
+    path: Assets/Scenes/Cutscenes/Cutscene.unity
     guid: 3cc7a31e4a29277469fc24d75b610832
+  - enabled: 1
+    path: Assets/Scenes/Cutscenes/Cutscene1.unity
+    guid: 615040d6999e6c74c8b9ab41b9e73bef
+  - enabled: 1
+    path: Assets/Scenes/Cutscenes/Cutscene2.unity
+    guid: 7e8a3f078b3b88848b0d3b7ce276986b
+  - enabled: 1
+    path: Assets/Scenes/Cutscenes/Cutscene3.unity
+    guid: cb3e4c214f079c742a41ec9258554a4b
+  - enabled: 1
+    path: Assets/Scenes/Cutscenes/Cutscene4.unity
+    guid: 2eb3dc62d28aec3489baef43001a53fb
   - enabled: 1
     path: Assets/Scenes/Stickers.unity
     guid: 17ec1c879f55dcd4f8233087250228fa

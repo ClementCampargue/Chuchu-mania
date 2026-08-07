@@ -6,7 +6,6 @@ public class SC_win_screen : MonoBehaviour
 {
 
     public SC_screenshot_transition transition;
-    public string nextscene;
     public static SC_win_screen instance;
     public Animator anim;
     public InputActionReference confirm;
@@ -35,7 +34,7 @@ public class SC_win_screen : MonoBehaviour
     {
         anim.ResetTrigger("show");
         anim.SetTrigger("hide");
-        transition.Capture(nextscene);
+        transition.Capture("Cutscene"+ PlayerPrefs.GetInt("Level"));
         canact = false;
         once = false;
     }
