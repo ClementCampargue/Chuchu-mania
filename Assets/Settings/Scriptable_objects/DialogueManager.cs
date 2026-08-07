@@ -260,26 +260,22 @@ public class DialogueManager : MonoBehaviour
 
 
 
-
     private void SelectChoice(Choice choice)
     {
         choicePanel.SetActive(false);
-
 
         if (!string.IsNullOrEmpty(choice.actionID))
         {
             DialogueActionManager.instance.Execute(choice.actionID);
         }
 
-
-        StartCoroutine(PlayChoiceAnswer(choice));
+        StartCoroutine(DisplayChoiceAnswer(choice));
     }
 
 
 
 
-
-    private IEnumerator PlayChoiceAnswer(Choice choice)
+    private IEnumerator DisplayChoiceAnswer(Choice choice)
     {
         playingChoiceAnswer = true;
 
@@ -288,18 +284,11 @@ public class DialogueManager : MonoBehaviour
         {
             yield return DisplayLineRoutine(answer);
 
-
-            // Si cette réponse ouvre un nouveau choix
             if (answer.hasChoices)
             {
-                while (choicePanel.activeSelf)
-                {
-                    yield return null;
-                }
-
-                continue;
+                playingChoiceAnswer = false;
+                yield break;
             }
-
 
             // Attente du joueur
             while (waitingInput)
