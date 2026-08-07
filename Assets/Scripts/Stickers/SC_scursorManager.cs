@@ -16,13 +16,12 @@ public class SC_scursorManager : MonoBehaviour
 
     public bool grabbing;
     public GameObject fader;
-
     void Awake()
     {
         instance = this;
 
         Cursor.visible = false;
-
+        gameObject.SetActive(false);
         SetNormalCursor();
     }
 
@@ -34,27 +33,18 @@ public class SC_scursorManager : MonoBehaviour
 
     public void SetNormalCursor()
     {
-        if (fader != null)
-            fader.SetActive(false);
-
-        grabbing = false;
         cursorRenderer.sprite = normalSprite;
     }
 
     public void SetHoverCursor()
     {
-        if (!grabbing)
-        {
-            cursorRenderer.sprite = hoverSprite;
-        }
+        cursorRenderer.sprite = hoverSprite;
+
     }
 
     public void SetGrabCursor()
     {
-        if (fader != null)
-            fader.SetActive(true);
 
-        grabbing = true;
         cursorRenderer.sprite = grabSprite;
     }
 }

@@ -74,11 +74,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   minScale: 0.25
-  defaultScale: 1
+  defaultScale: 0.5
   maxScale: 1.5
   wheelSpeed: 0.2
   rotationSpeed: 10
-  rectTransform: {fileID: 296078526801928923}
   img: {fileID: 3917524200838684608}
   spawnedSticker: 0
   deleteZone: {fileID: 0}

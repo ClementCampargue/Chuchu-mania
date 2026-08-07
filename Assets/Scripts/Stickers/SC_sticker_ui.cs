@@ -38,7 +38,7 @@ public class SC_sticker_UI : MonoBehaviour,
         baseColor = img.color;
         rectTransform = GetComponent<RectTransform>();
         img = GetComponent<Image>();
-
+        rectTransform.localScale = new Vector3(defaultScale, defaultScale,defaultScale);
         canvas = GetComponentInParent<Canvas>();
 
         img.material = new Material(img.material);
@@ -51,9 +51,14 @@ public class SC_sticker_UI : MonoBehaviour,
         if (SceneManager.GetActiveScene().name != "Stickers") return;
         if (!spawnedSticker)
         {
+            SC_scursorManager.instance.SetGrabCursor();
             dragging = true;
             stick.enabled = true;
         }
+        else
+        {
+        }
+
         selected.SetActive(true);
         anim.enabled = true;
         deleteZone = GameObject.Find("TrashZone").GetComponent<RectTransform>();
@@ -67,14 +72,7 @@ public class SC_sticker_UI : MonoBehaviour,
         if (!dragging)
             return;
 
-        if (Input.GetMouseButtonDown(1))
-        {
-            SC_sticker_menu.instance.quit_edit_mode();
-            SC_StickerSaveSystem.instance.AutoSave();
-            Destroy(gameObject);
-            return;
-        }
-
+ 
         if (deleteZone != null)
         {
             overDeleteZone = RectTransformUtility.RectangleContainsScreenPoint(
@@ -128,6 +126,14 @@ public class SC_sticker_UI : MonoBehaviour,
     public void OnPointerDown(PointerEventData eventData)
     {
         if (SceneManager.GetActiveScene().name != "Stickers") return;
+        if (Input.GetMouseButtonDown(1))
+        {
+
+            SC_sticker_menu.instance.quit_edit_mode();
+            SC_StickerSaveSystem.instance.AutoSave();
+            Destroy(gameObject);
+            return;
+        }
 
         if (dragging)
         {
@@ -158,6 +164,7 @@ public class SC_sticker_UI : MonoBehaviour,
                 stick.enabled = false;
                 SC_sticker_menu.instance.quit_edit_mode();
                 SC_StickerSaveSystem.instance.AutoSave();
+                SC_scursorManager.instance.SetHoverCursor();
             }
         }
         else
@@ -183,6 +190,11 @@ public class SC_sticker_UI : MonoBehaviour,
                 stick.enabled = true;
                 transform.parent.SetAsLastSibling();
                 SC_sticker_menu.instance.start_edit_mode();
+                SC_scursorManager.instance.SetGrabCursor();
+            }
+            else
+            {
+
             }
         }
         dragging = !dragging;

@@ -23,9 +23,18 @@ public class SC_sticker_menu : MonoBehaviour
     }
     void Start()
     {
-        
+        SC_scursorManager.instance.gameObject.SetActive(true);
     }
+    private void OnDisable()
+    {
+        SC_scursorManager.instance.gameObject.SetActive(false);
 
+    }
+    private void OnDestroy()
+    {
+        SC_scursorManager.instance.gameObject.SetActive(false);
+
+    }
     // Update is called once per frame
     void Update()
     {
