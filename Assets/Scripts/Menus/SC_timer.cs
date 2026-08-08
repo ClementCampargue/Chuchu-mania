@@ -3,21 +3,22 @@ using UnityEngine;
 
 public class SC_timer : MonoBehaviour
 {
-    public TextMeshPro timerText; // UI Text à assigner dans l'inspecteur
-    public float elapsedTime = 0f;
+    public TextMeshPro timerText;
+    public float base_time = 0f;
+    public static SC_timer instance;
 
+    private void Awake()
+    {
+        instance = this;
+    }
     void Update()
     {
-        // Incrémente le temps
-        elapsedTime += Time.deltaTime;
+        base_time -= Time.deltaTime;
 
-        // Convertit en secondes entières
-        int seconds = Mathf.FloorToInt(elapsedTime);
+        int seconds = Mathf.FloorToInt(base_time);
 
-        // Limite à 999 si tu veux rester sur 3 chiffres
         seconds = Mathf.Clamp(seconds, 0, 999);
 
-        // Format en 3 chiffres (ex: 005, 042, 123)
         timerText.text = seconds.ToString("D3");
     }
 }
