@@ -27,7 +27,7 @@ EditorBuildSettings:
     path: Assets/Scenes/Cutscenes/Cutscene4.unity
     guid: 2eb3dc62d28aec3489baef43001a53fb
   - enabled: 1
-    path: Assets/Scenes/Stickers.unity
+    path: Assets/Scenes/Menus/Stickers.unity
     guid: 17ec1c879f55dcd4f8233087250228fa
   - enabled: 1
     path: Assets/Scenes/Menus/Canvas test.unity
