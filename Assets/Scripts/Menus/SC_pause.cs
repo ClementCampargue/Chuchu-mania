@@ -127,6 +127,13 @@ public class SC_pause : MonoBehaviour
         SC_player.instance.enabled = true;
         SC_player.instance.anim_.updateMode = AnimatorUpdateMode.UnscaledTime;
         Time.timeScale = 1;
-        transition.Capture("MoneyScene");
+        if (PlayerPrefs.GetInt("Score")== 0)
+        {
+            transition.Capture("HUB");
+        }
+        else
+        {
+            transition.Capture("MoneyScene");
+        }
     }
 }
