@@ -13,6 +13,7 @@ public class SC_cutscene : MonoBehaviour
     public static SC_cutscene instance;
     public Animator anim;
 
+    public List<AudioClip> music;
     private void Awake()
     {
         instance = this;
@@ -62,8 +63,8 @@ public class SC_cutscene : MonoBehaviour
     {
         anim.speed = 0;
     }
-    public void change_music(AudioClip audio, bool loop)
+    public void change_music(AudioClip audio)
     {
-        SC_music_manager.instance.update_music(audio, loop);
+        SC_music_manager.instance.update_music(audio, true);
     }
 }
