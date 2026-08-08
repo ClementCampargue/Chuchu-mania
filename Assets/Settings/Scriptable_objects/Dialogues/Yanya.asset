@@ -1,0 +1,68 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 890a21243a4f94d498c5fc6c8bce112f, type: 3}
+  m_Name: Yanya
+  m_EditorClassIdentifier: 
+  lines:
+  - character: {fileID: 11400000, guid: f1b273b5eefe3a6408d92c0f6cb1c256, type: 2}
+    text: Elle regarde dans le vide sans bouger, <p=2>presque en bavant
+    hasChoices: 1
+    choices:
+    - choiceText: La laisser tranquille
+      answer: []
+      actionID: 
+    - choiceText: "L'emb\xEAter"
+      answer:
+      - character: {fileID: 11400000, guid: 358c18f725108b14d9b9efeb15db2fc1, type: 2}
+        text: Tu fais quoi Yanya?
+        hasChoices: 0
+        choices: []
+      - character: {fileID: 11400000, guid: 9bb439f5fd2ff414da01625643e8aff3, type: 2}
+        text: <sh>!!!</sh>
+        hasChoices: 0
+        choices: []
+      - character: {fileID: 11400000, guid: 9bb439f5fd2ff414da01625643e8aff3, type: 2}
+        text: Oh euh...<p=5> salut Chuchu...
+        hasChoices: 0
+        choices: []
+      - character: {fileID: 11400000, guid: 9bb439f5fd2ff414da01625643e8aff3, type: 2}
+        text: "Je...<p=5> J'\xE9tais en train de r\xE9fl\xE9chir"
+        hasChoices: 0
+        choices: []
+      - character: {fileID: 11400000, guid: 358c18f725108b14d9b9efeb15db2fc1, type: 2}
+        text: "Tu avais l'air tr\xE8s concentr\xE9e!"
+        hasChoices: 0
+        choices: []
+      - character: {fileID: 11400000, guid: 9bb439f5fd2ff414da01625643e8aff3, type: 2}
+        text: "C'est du shadow boxing. <p=5>Enfin... <p=5>pas vraiment. <p=5>Je m'entraine
+          dans ma t\xEAte \xE0 mon jeu."
+        hasChoices: 0
+        choices: []
+      - character: {fileID: 11400000, guid: 358c18f725108b14d9b9efeb15db2fc1, type: 2}
+        text: "Oh tu parles de celui o\xF9 tu ramasses les fruits avec les musiques
+          bizarres?"
+        hasChoices: 0
+        choices: []
+      - character: {fileID: 11400000, guid: 9bb439f5fd2ff414da01625643e8aff3, type: 2}
+        text: "Oui! <p=5>Ca me d\xE9tends d'y penser pendant ma pause."
+        hasChoices: 0
+        choices: []
+      - character: {fileID: 11400000, guid: a4442d57da2b0864093b6599e15d9f31, type: 2}
+        text: "<sh>Yanya!</sh> <p=5>Bouge tes fesses toutes p\xE2les au lieu de r\xEAvasser!
+          <p=5>On ouvre bient\xF4t!"
+        hasChoices: 0
+        choices: []
+      - character: {fileID: 11400000, guid: 9bb439f5fd2ff414da01625643e8aff3, type: 2}
+        text: "En parlant de pause... <p=5>La mienne est d\xE9j\xE0 finie..."
+        hasChoices: 0
+        choices: []
+      actionID: 

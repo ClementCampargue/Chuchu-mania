@@ -1,0 +1,518 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 890a21243a4f94d498c5fc6c8bce112f, type: 3}
+  m_Name: PiouPiou
+  m_EditorClassIdentifier: 
+  lines:
+  - character: {fileID: 11400000, guid: b295321cb0513064ab52bcc356403ff7, type: 2}
+    text: <sh>CHUCHU!</sh>
+    hasChoices: 0
+    choices:
+    - choiceText: Non
+      answer:
+      - character: {fileID: 11400000, guid: 201e18955e3c1254fae5fd2b355c5cac, type: 2}
+        text: Ah
+        hasChoices: 0
+        choices:
+        - choiceText: Je rigooooole
+          answer:
+          - character: {fileID: 11400000, guid: 201e18955e3c1254fae5fd2b355c5cac, type: 2}
+            text: ah merci
+            hasChoices: 0
+            choices: []
+          actionID: 
+        - choiceText: "allez d\xE9gage"
+          answer:
+          - character: {fileID: 11400000, guid: 201e18955e3c1254fae5fd2b355c5cac, type: 2}
+            text: Ah
+            hasChoices: 0
+            choices: []
+          actionID: 
+      - character: {fileID: 11400000, guid: 201e18955e3c1254fae5fd2b355c5cac, type: 2}
+        text: "Non s\xE9rieux?"
+        hasChoices: 1
+        choices:
+        - choiceText: Je rigooooole
+          answer:
+          - character: {fileID: 11400000, guid: 201e18955e3c1254fae5fd2b355c5cac, type: 2}
+            text: ah merci
+            hasChoices: 0
+            choices: []
+          actionID: 
+        - choiceText: "allez d\xE9gage"
+          answer:
+          - character: {fileID: 11400000, guid: 201e18955e3c1254fae5fd2b355c5cac, type: 2}
+            text: Ah
+            hasChoices: 0
+            choices: []
+          actionID: 
+      actionID: 
+    - choiceText: Oui
+      answer:
+      - character: {fileID: 11400000, guid: 201e18955e3c1254fae5fd2b355c5cac, type: 2}
+        text: Merci t'es un soeur
+        hasChoices: 0
+        choices: []
+      actionID: 
+  - character: {fileID: 11400000, guid: 358c18f725108b14d9b9efeb15db2fc1, type: 2}
+    text: <w>Coucou!</w>
+    hasChoices: 0
+    choices:
+    - choiceText: Non
+      answer:
+      - character: {fileID: 11400000, guid: 201e18955e3c1254fae5fd2b355c5cac, type: 2}
+        text: Ah
+        hasChoices: 0
+        choices:
+        - choiceText: Je rigooooole
+          answer:
+          - character: {fileID: 11400000, guid: 201e18955e3c1254fae5fd2b355c5cac, type: 2}
+            text: ah merci
+            hasChoices: 0
+            choices: []
+          actionID: 
+        - choiceText: "allez d\xE9gage"
+          answer:
+          - character: {fileID: 11400000, guid: 201e18955e3c1254fae5fd2b355c5cac, type: 2}
+            text: Ah
+            hasChoices: 0
+            choices: []
+          actionID: 
+      - character: {fileID: 11400000, guid: 201e18955e3c1254fae5fd2b355c5cac, type: 2}
+        text: "Non s\xE9rieux?"
+        hasChoices: 1
+        choices:
+        - choiceText: Je rigooooole
+          answer:
+          - character: {fileID: 11400000, guid: 201e18955e3c1254fae5fd2b355c5cac, type: 2}
+            text: ah merci
+            hasChoices: 0
+            choices: []
+          actionID: 
+        - choiceText: "allez d\xE9gage"
+          answer:
+          - character: {fileID: 11400000, guid: 201e18955e3c1254fae5fd2b355c5cac, type: 2}
+            text: Ah
+            hasChoices: 0
+            choices: []
+          actionID: 
+      actionID: 
+    - choiceText: Oui
+      answer:
+      - character: {fileID: 11400000, guid: 201e18955e3c1254fae5fd2b355c5cac, type: 2}
+        text: Merci t'es un soeur
+        hasChoices: 0
+        choices: []
+      actionID: 
+  - character: {fileID: 11400000, guid: b295321cb0513064ab52bcc356403ff7, type: 2}
+    text: "Il faut que tu m'aides \xE0 enfreindre la loi!"
+    hasChoices: 0
+    choices:
+    - choiceText: Non
+      answer:
+      - character: {fileID: 11400000, guid: 201e18955e3c1254fae5fd2b355c5cac, type: 2}
+        text: Ah
+        hasChoices: 0
+        choices:
+        - choiceText: Je rigooooole
+          answer:
+          - character: {fileID: 11400000, guid: 201e18955e3c1254fae5fd2b355c5cac, type: 2}
+            text: ah merci
+            hasChoices: 0
+            choices: []
+          actionID: 
+        - choiceText: "allez d\xE9gage"
+          answer:
+          - character: {fileID: 11400000, guid: 201e18955e3c1254fae5fd2b355c5cac, type: 2}
+            text: Ah
+            hasChoices: 0
+            choices: []
+          actionID: 
+      - character: {fileID: 11400000, guid: 201e18955e3c1254fae5fd2b355c5cac, type: 2}
+        text: "Non s\xE9rieux?"
+        hasChoices: 1
+        choices:
+        - choiceText: Je rigooooole
+          answer:
+          - character: {fileID: 11400000, guid: 201e18955e3c1254fae5fd2b355c5cac, type: 2}
+            text: ah merci
+            hasChoices: 0
+            choices: []
+          actionID: 
+        - choiceText: "allez d\xE9gage"
+          answer:
+          - character: {fileID: 11400000, guid: 201e18955e3c1254fae5fd2b355c5cac, type: 2}
+            text: Ah
+            hasChoices: 0
+            choices: []
+          actionID: 
+      actionID: 
+    - choiceText: Oui
+      answer:
+      - character: {fileID: 11400000, guid: 201e18955e3c1254fae5fd2b355c5cac, type: 2}
+        text: Merci t'es un soeur
+        hasChoices: 0
+        choices: []
+      actionID: 
+  - character: {fileID: 11400000, guid: 358c18f725108b14d9b9efeb15db2fc1, type: 2}
+    text: Q<p=1>-quoi?
+    hasChoices: 0
+    choices:
+    - choiceText: Non
+      answer:
+      - character: {fileID: 11400000, guid: 201e18955e3c1254fae5fd2b355c5cac, type: 2}
+        text: Ah
+        hasChoices: 0
+        choices:
+        - choiceText: Je rigooooole
+          answer:
+          - character: {fileID: 11400000, guid: 201e18955e3c1254fae5fd2b355c5cac, type: 2}
+            text: ah merci
+            hasChoices: 0
+            choices: []
+          actionID: 
+        - choiceText: "allez d\xE9gage"
+          answer:
+          - character: {fileID: 11400000, guid: 201e18955e3c1254fae5fd2b355c5cac, type: 2}
+            text: Ah
+            hasChoices: 0
+            choices: []
+          actionID: 
+      - character: {fileID: 11400000, guid: 201e18955e3c1254fae5fd2b355c5cac, type: 2}
+        text: "Non s\xE9rieux?"
+        hasChoices: 1
+        choices:
+        - choiceText: Je rigooooole
+          answer:
+          - character: {fileID: 11400000, guid: 201e18955e3c1254fae5fd2b355c5cac, type: 2}
+            text: ah merci
+            hasChoices: 0
+            choices: []
+          actionID: 
+        - choiceText: "allez d\xE9gage"
+          answer:
+          - character: {fileID: 11400000, guid: 201e18955e3c1254fae5fd2b355c5cac, type: 2}
+            text: Ah
+            hasChoices: 0
+            choices: []
+          actionID: 
+      actionID: 
+    - choiceText: Oui
+      answer:
+      - character: {fileID: 11400000, guid: 201e18955e3c1254fae5fd2b355c5cac, type: 2}
+        text: Merci t'es un soeur
+        hasChoices: 0
+        choices: []
+      actionID: 
+  - character: {fileID: 11400000, guid: b295321cb0513064ab52bcc356403ff7, type: 2}
+    text: Y a un tournoi d'aventuriers ou j'sais pas quoi et Cuicui y participe et
+      pas moi car on dit que j'suis trop petite!
+    hasChoices: 0
+    choices:
+    - choiceText: Non
+      answer:
+      - character: {fileID: 11400000, guid: 201e18955e3c1254fae5fd2b355c5cac, type: 2}
+        text: Ah
+        hasChoices: 0
+        choices:
+        - choiceText: Je rigooooole
+          answer:
+          - character: {fileID: 11400000, guid: 201e18955e3c1254fae5fd2b355c5cac, type: 2}
+            text: ah merci
+            hasChoices: 0
+            choices: []
+          actionID: 
+        - choiceText: "allez d\xE9gage"
+          answer:
+          - character: {fileID: 11400000, guid: 201e18955e3c1254fae5fd2b355c5cac, type: 2}
+            text: Ah
+            hasChoices: 0
+            choices: []
+          actionID: 
+      - character: {fileID: 11400000, guid: 201e18955e3c1254fae5fd2b355c5cac, type: 2}
+        text: "Non s\xE9rieux?"
+        hasChoices: 1
+        choices:
+        - choiceText: Je rigooooole
+          answer:
+          - character: {fileID: 11400000, guid: 201e18955e3c1254fae5fd2b355c5cac, type: 2}
+            text: ah merci
+            hasChoices: 0
+            choices: []
+          actionID: 
+        - choiceText: "allez d\xE9gage"
+          answer:
+          - character: {fileID: 11400000, guid: 201e18955e3c1254fae5fd2b355c5cac, type: 2}
+            text: Ah
+            hasChoices: 0
+            choices: []
+          actionID: 
+      actionID: 
+    - choiceText: Oui
+      answer:
+      - character: {fileID: 11400000, guid: 201e18955e3c1254fae5fd2b355c5cac, type: 2}
+        text: Merci t'es un soeur
+        hasChoices: 0
+        choices: []
+      actionID: 
+  - character: {fileID: 11400000, guid: b295321cb0513064ab52bcc356403ff7, type: 2}
+    text: Moi aussi je veux ma super bille magique qui donne des pouvoirs!
+    hasChoices: 0
+    choices:
+    - choiceText: Non
+      answer:
+      - character: {fileID: 11400000, guid: 201e18955e3c1254fae5fd2b355c5cac, type: 2}
+        text: Ah
+        hasChoices: 0
+        choices:
+        - choiceText: Je rigooooole
+          answer:
+          - character: {fileID: 11400000, guid: 201e18955e3c1254fae5fd2b355c5cac, type: 2}
+            text: ah merci
+            hasChoices: 0
+            choices: []
+          actionID: 
+        - choiceText: "allez d\xE9gage"
+          answer:
+          - character: {fileID: 11400000, guid: 201e18955e3c1254fae5fd2b355c5cac, type: 2}
+            text: Ah
+            hasChoices: 0
+            choices: []
+          actionID: 
+      - character: {fileID: 11400000, guid: 201e18955e3c1254fae5fd2b355c5cac, type: 2}
+        text: "Non s\xE9rieux?"
+        hasChoices: 1
+        choices:
+        - choiceText: Je rigooooole
+          answer:
+          - character: {fileID: 11400000, guid: 201e18955e3c1254fae5fd2b355c5cac, type: 2}
+            text: ah merci
+            hasChoices: 0
+            choices: []
+          actionID: 
+        - choiceText: "allez d\xE9gage"
+          answer:
+          - character: {fileID: 11400000, guid: 201e18955e3c1254fae5fd2b355c5cac, type: 2}
+            text: Ah
+            hasChoices: 0
+            choices: []
+          actionID: 
+      actionID: 
+    - choiceText: Oui
+      answer:
+      - character: {fileID: 11400000, guid: 201e18955e3c1254fae5fd2b355c5cac, type: 2}
+        text: Merci t'es un soeur
+        hasChoices: 0
+        choices: []
+      actionID: 
+  - character: {fileID: 11400000, guid: 358c18f725108b14d9b9efeb15db2fc1, type: 2}
+    text: "J'aimerais pouvoir t'aider PiouPiou mais mon truc c'est manger et taper
+      sur les m\xE9chants..."
+    hasChoices: 0
+    choices:
+    - choiceText: Non
+      answer:
+      - character: {fileID: 11400000, guid: 201e18955e3c1254fae5fd2b355c5cac, type: 2}
+        text: Ah
+        hasChoices: 0
+        choices:
+        - choiceText: Je rigooooole
+          answer:
+          - character: {fileID: 11400000, guid: 201e18955e3c1254fae5fd2b355c5cac, type: 2}
+            text: ah merci
+            hasChoices: 0
+            choices: []
+          actionID: 
+        - choiceText: "allez d\xE9gage"
+          answer:
+          - character: {fileID: 11400000, guid: 201e18955e3c1254fae5fd2b355c5cac, type: 2}
+            text: Ah
+            hasChoices: 0
+            choices: []
+          actionID: 
+      - character: {fileID: 11400000, guid: 201e18955e3c1254fae5fd2b355c5cac, type: 2}
+        text: "Non s\xE9rieux?"
+        hasChoices: 1
+        choices:
+        - choiceText: Je rigooooole
+          answer:
+          - character: {fileID: 11400000, guid: 201e18955e3c1254fae5fd2b355c5cac, type: 2}
+            text: ah merci
+            hasChoices: 0
+            choices: []
+          actionID: 
+        - choiceText: "allez d\xE9gage"
+          answer:
+          - character: {fileID: 11400000, guid: 201e18955e3c1254fae5fd2b355c5cac, type: 2}
+            text: Ah
+            hasChoices: 0
+            choices: []
+          actionID: 
+      actionID: 
+    - choiceText: Oui
+      answer:
+      - character: {fileID: 11400000, guid: 201e18955e3c1254fae5fd2b355c5cac, type: 2}
+        text: Merci t'es un soeur
+        hasChoices: 0
+        choices: []
+      actionID: 
+  - character: {fileID: 11400000, guid: b295321cb0513064ab52bcc356403ff7, type: 2}
+    text: Grmbl...
+    hasChoices: 0
+    choices:
+    - choiceText: Non
+      answer:
+      - character: {fileID: 11400000, guid: 201e18955e3c1254fae5fd2b355c5cac, type: 2}
+        text: Ah
+        hasChoices: 0
+        choices:
+        - choiceText: Je rigooooole
+          answer:
+          - character: {fileID: 11400000, guid: 201e18955e3c1254fae5fd2b355c5cac, type: 2}
+            text: ah merci
+            hasChoices: 0
+            choices: []
+          actionID: 
+        - choiceText: "allez d\xE9gage"
+          answer:
+          - character: {fileID: 11400000, guid: 201e18955e3c1254fae5fd2b355c5cac, type: 2}
+            text: Ah
+            hasChoices: 0
+            choices: []
+          actionID: 
+      - character: {fileID: 11400000, guid: 201e18955e3c1254fae5fd2b355c5cac, type: 2}
+        text: "Non s\xE9rieux?"
+        hasChoices: 1
+        choices:
+        - choiceText: Je rigooooole
+          answer:
+          - character: {fileID: 11400000, guid: 201e18955e3c1254fae5fd2b355c5cac, type: 2}
+            text: ah merci
+            hasChoices: 0
+            choices: []
+          actionID: 
+        - choiceText: "allez d\xE9gage"
+          answer:
+          - character: {fileID: 11400000, guid: 201e18955e3c1254fae5fd2b355c5cac, type: 2}
+            text: Ah
+            hasChoices: 0
+            choices: []
+          actionID: 
+      actionID: 
+    - choiceText: Oui
+      answer:
+      - character: {fileID: 11400000, guid: 201e18955e3c1254fae5fd2b355c5cac, type: 2}
+        text: Merci t'es un soeur
+        hasChoices: 0
+        choices: []
+      actionID: 
+  - character: {fileID: 11400000, guid: b295321cb0513064ab52bcc356403ff7, type: 2}
+    text: T'es trop nulle en fait
+    hasChoices: 0
+    choices:
+    - choiceText: Non
+      answer:
+      - character: {fileID: 11400000, guid: 201e18955e3c1254fae5fd2b355c5cac, type: 2}
+        text: Ah
+        hasChoices: 0
+        choices:
+        - choiceText: Je rigooooole
+          answer:
+          - character: {fileID: 11400000, guid: 201e18955e3c1254fae5fd2b355c5cac, type: 2}
+            text: ah merci
+            hasChoices: 0
+            choices: []
+          actionID: 
+        - choiceText: "allez d\xE9gage"
+          answer:
+          - character: {fileID: 11400000, guid: 201e18955e3c1254fae5fd2b355c5cac, type: 2}
+            text: Ah
+            hasChoices: 0
+            choices: []
+          actionID: 
+      - character: {fileID: 11400000, guid: 201e18955e3c1254fae5fd2b355c5cac, type: 2}
+        text: "Non s\xE9rieux?"
+        hasChoices: 1
+        choices:
+        - choiceText: Je rigooooole
+          answer:
+          - character: {fileID: 11400000, guid: 201e18955e3c1254fae5fd2b355c5cac, type: 2}
+            text: ah merci
+            hasChoices: 0
+            choices: []
+          actionID: 
+        - choiceText: "allez d\xE9gage"
+          answer:
+          - character: {fileID: 11400000, guid: 201e18955e3c1254fae5fd2b355c5cac, type: 2}
+            text: Ah
+            hasChoices: 0
+            choices: []
+          actionID: 
+      actionID: 
+    - choiceText: Oui
+      answer:
+      - character: {fileID: 11400000, guid: 201e18955e3c1254fae5fd2b355c5cac, type: 2}
+        text: Merci t'es un soeur
+        hasChoices: 0
+        choices: []
+      actionID: 
+  - character: {fileID: 11400000, guid: f1b273b5eefe3a6408d92c0f6cb1c256, type: 2}
+    text: "Etrangement, <p=2>se faire juger par cette morveuse de 5 ans vous fait
+      plus mal que pr\xE9vu..."
+    hasChoices: 0
+    choices:
+    - choiceText: Non
+      answer:
+      - character: {fileID: 11400000, guid: 201e18955e3c1254fae5fd2b355c5cac, type: 2}
+        text: Ah
+        hasChoices: 0
+        choices:
+        - choiceText: Je rigooooole
+          answer:
+          - character: {fileID: 11400000, guid: 201e18955e3c1254fae5fd2b355c5cac, type: 2}
+            text: ah merci
+            hasChoices: 0
+            choices: []
+          actionID: 
+        - choiceText: "allez d\xE9gage"
+          answer:
+          - character: {fileID: 11400000, guid: 201e18955e3c1254fae5fd2b355c5cac, type: 2}
+            text: Ah
+            hasChoices: 0
+            choices: []
+          actionID: 
+      - character: {fileID: 11400000, guid: 201e18955e3c1254fae5fd2b355c5cac, type: 2}
+        text: "Non s\xE9rieux?"
+        hasChoices: 1
+        choices:
+        - choiceText: Je rigooooole
+          answer:
+          - character: {fileID: 11400000, guid: 201e18955e3c1254fae5fd2b355c5cac, type: 2}
+            text: ah merci
+            hasChoices: 0
+            choices: []
+          actionID: 
+        - choiceText: "allez d\xE9gage"
+          answer:
+          - character: {fileID: 11400000, guid: 201e18955e3c1254fae5fd2b355c5cac, type: 2}
+            text: Ah
+            hasChoices: 0
+            choices: []
+          actionID: 
+      actionID: 
+    - choiceText: Oui
+      answer:
+      - character: {fileID: 11400000, guid: 201e18955e3c1254fae5fd2b355c5cac, type: 2}
+        text: Merci t'es un soeur
+        hasChoices: 0
+        choices: []
+      actionID: 

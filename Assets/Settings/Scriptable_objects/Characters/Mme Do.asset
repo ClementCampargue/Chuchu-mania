@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: Mme Do
   m_EditorClassIdentifier: 
   portrait: {fileID: 21300000, guid: 05ec7885b470cd04a871cfc7fb940b65, type: 3}
-  name: Mme Do
+  name: "Mme D\xF4"
   typesound: {fileID: 8300000, guid: c45c76ef04666774bb203ec9db9564d3, type: 3}

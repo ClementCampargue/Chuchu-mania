@@ -1,0 +1,125 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 890a21243a4f94d498c5fc6c8bce112f, type: 3}
+  m_Name: MrDo
+  m_EditorClassIdentifier: 
+  lines:
+  - character: {fileID: 11400000, guid: 358c18f725108b14d9b9efeb15db2fc1, type: 2}
+    text: "Bonjour Mr D\xF4!"
+    hasChoices: 0
+    choices:
+    - choiceText: 
+      answer: []
+      actionID: 
+    - choiceText: 
+      answer: []
+      actionID: 
+  - character: {fileID: 11400000, guid: a4442d57da2b0864093b6599e15d9f31, type: 2}
+    text: <sh>MISTER DOOOOOOOOOOOOOOOOOOOOOOOOOOOOO!!!</sh>
+    hasChoices: 0
+    choices:
+    - choiceText: Non
+      answer:
+      - character: {fileID: 11400000, guid: 201e18955e3c1254fae5fd2b355c5cac, type: 2}
+        text: Ah
+        hasChoices: 0
+        choices:
+        - choiceText: Je rigooooole
+          answer:
+          - character: {fileID: 11400000, guid: 201e18955e3c1254fae5fd2b355c5cac, type: 2}
+            text: ah merci
+            hasChoices: 0
+            choices: []
+          actionID: 
+        - choiceText: "allez d\xE9gage"
+          answer:
+          - character: {fileID: 11400000, guid: 201e18955e3c1254fae5fd2b355c5cac, type: 2}
+            text: Ah
+            hasChoices: 0
+            choices: []
+          actionID: 
+      - character: {fileID: 11400000, guid: 201e18955e3c1254fae5fd2b355c5cac, type: 2}
+        text: "Non s\xE9rieux?"
+        hasChoices: 1
+        choices:
+        - choiceText: Je rigooooole
+          answer:
+          - character: {fileID: 11400000, guid: 201e18955e3c1254fae5fd2b355c5cac, type: 2}
+            text: ah merci
+            hasChoices: 0
+            choices: []
+          actionID: 
+        - choiceText: "allez d\xE9gage"
+          answer:
+          - character: {fileID: 11400000, guid: 201e18955e3c1254fae5fd2b355c5cac, type: 2}
+            text: Ah
+            hasChoices: 0
+            choices: []
+          actionID: 
+      actionID: 
+    - choiceText: Oui
+      answer:
+      - character: {fileID: 11400000, guid: 201e18955e3c1254fae5fd2b355c5cac, type: 2}
+        text: Merci t'es un soeur
+        hasChoices: 0
+        choices: []
+      actionID: 
+  - character: {fileID: 11400000, guid: 358c18f725108b14d9b9efeb15db2fc1, type: 2}
+    text: Euh...<p=2> yes...<p=5> Je vais vous laisser hein...
+    hasChoices: 0
+    choices:
+    - choiceText: Non
+      answer:
+      - character: {fileID: 11400000, guid: 201e18955e3c1254fae5fd2b355c5cac, type: 2}
+        text: Ah
+        hasChoices: 0
+        choices:
+        - choiceText: Je rigooooole
+          answer:
+          - character: {fileID: 11400000, guid: 201e18955e3c1254fae5fd2b355c5cac, type: 2}
+            text: ah merci
+            hasChoices: 0
+            choices: []
+          actionID: 
+        - choiceText: "allez d\xE9gage"
+          answer:
+          - character: {fileID: 11400000, guid: 201e18955e3c1254fae5fd2b355c5cac, type: 2}
+            text: Ah
+            hasChoices: 0
+            choices: []
+          actionID: 
+      - character: {fileID: 11400000, guid: 201e18955e3c1254fae5fd2b355c5cac, type: 2}
+        text: "Non s\xE9rieux?"
+        hasChoices: 1
+        choices:
+        - choiceText: Je rigooooole
+          answer:
+          - character: {fileID: 11400000, guid: 201e18955e3c1254fae5fd2b355c5cac, type: 2}
+            text: ah merci
+            hasChoices: 0
+            choices: []
+          actionID: 
+        - choiceText: "allez d\xE9gage"
+          answer:
+          - character: {fileID: 11400000, guid: 201e18955e3c1254fae5fd2b355c5cac, type: 2}
+            text: Ah
+            hasChoices: 0
+            choices: []
+          actionID: 
+      actionID: 
+    - choiceText: Oui
+      answer:
+      - character: {fileID: 11400000, guid: 201e18955e3c1254fae5fd2b355c5cac, type: 2}
+        text: Merci t'es un soeur
+        hasChoices: 0
+        choices: []
+      actionID: 
