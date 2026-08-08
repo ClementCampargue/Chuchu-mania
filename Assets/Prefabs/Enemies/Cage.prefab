@@ -428,8 +428,8 @@ MonoBehaviour:
   startSpeed: 5
   speedMultiplierOnBounce: 0.85
   minSpeed: 0.5
-  maxX: 7
-  maxY: 4.5
+  screenMin: {x: -5.48, y: -6.1}
+  screenMax: {x: 7.04, y: 3.84}
   minBounceAngle: 30
   maxBounceAngle: 60
 --- !u!50 &2801780988001484021

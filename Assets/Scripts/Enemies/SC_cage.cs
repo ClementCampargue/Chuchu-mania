@@ -29,8 +29,8 @@ public class SC_cage : MonoBehaviour
     public float minSpeed = 0.5f;
 
     [Header("Limites de l'écran")]
-    public float maxX = 8f;
-    public float maxY = 4.5f;
+    public Vector2 screenMin = new Vector2(-8f, -4.5f);
+    public Vector2 screenMax = new Vector2(8f, 4.5f);
 
     [Header("Angle des rebonds")]
     public float minBounceAngle = 30f;
@@ -79,9 +79,9 @@ public class SC_cage : MonoBehaviour
         bool hitWall = false;
 
         // Bord gauche
-        if (position.x <= -maxX)
+        if (position.x <= screenMin.x)
         {
-            position.x = -maxX;
+            position.x = screenMin.x;
 
             direction.x = Mathf.Abs(direction.x);
 
@@ -89,9 +89,9 @@ public class SC_cage : MonoBehaviour
         }
 
         // Bord droit
-        else if (position.x >= maxX)
+        else if (position.x >= screenMax.x)
         {
-            position.x = maxX;
+            position.x = screenMax.x;
 
             direction.x = -Mathf.Abs(direction.x);
 
@@ -99,9 +99,9 @@ public class SC_cage : MonoBehaviour
         }
 
         // Bord bas
-        if (position.y <= -maxY)
+        if (position.y <= screenMin.y)
         {
-            position.y = -maxY;
+            position.y = screenMin.y;
 
             direction.y = Mathf.Abs(direction.y);
 
@@ -109,9 +109,9 @@ public class SC_cage : MonoBehaviour
         }
 
         // Bord haut
-        else if (position.y >= maxY)
+        else if (position.y >= screenMax.y)
         {
-            position.y = maxY;
+            position.y = screenMax.y;
 
             direction.y = -Mathf.Abs(direction.y);
 
@@ -131,18 +131,15 @@ public class SC_cage : MonoBehaviour
         // Réduit la vitesse à chaque rebond
         currentSpeed *= speedMultiplierOnBounce;
 
-        // Nouvel angle aléatoire entre 30° et 60°
         float angle = Random.Range(
             minBounceAngle,
             maxBounceAngle
         );
 
         if (Random.value < 0.5f)
-        {
             angle *= -1f;
-        }
 
-        // Rebond horizontal
+        // Si le mouvement est principalement horizontal
         if (Mathf.Abs(direction.x) > Mathf.Abs(direction.y))
         {
             float x = Mathf.Sign(direction.x);
@@ -150,7 +147,7 @@ public class SC_cage : MonoBehaviour
 
             direction = new Vector2(x, y);
         }
-        // Rebond vertical
+        // Si le mouvement est principalement vertical
         else
         {
             float y = Mathf.Sign(direction.y);
@@ -170,15 +167,36 @@ public class SC_cage : MonoBehaviour
         {
             Debug.Log("Cage frappée !");
 
+            // Direction de l'éjection basée sur la position du joueur
+            SetDirectionFromPlayer();
+
             die();
 
             // Si la cage a encore des points de vie,
-            // elle repart dans une nouvelle direction.
+            // elle repart dans la direction du coup.
             if (Health > 0)
             {
                 StartBouncing();
             }
         }
+    }
+
+    private void SetDirectionFromPlayer()
+    {
+        Vector2 playerPosition = SC_player.instance.transform.position;
+        Vector2 cagePosition = transform.position;
+
+        Vector2 hitDirection = cagePosition - playerPosition;
+
+        // On évite une direction nulle
+        if (hitDirection.sqrMagnitude < 0.01f)
+        {
+            hitDirection = Vector2.right;
+        }
+
+        hitDirection.Normalize();
+
+        direction = hitDirection;
     }
 
     private void StartBouncing()
@@ -188,21 +206,25 @@ public class SC_cage : MonoBehaviour
         // Nouvelle vitesse
         currentSpeed = startSpeed;
 
-        // Nouvelle direction aléatoire
-        float angle = Random.Range(30f, 60f);
+        // Si aucune direction n'a encore été définie,
+        // on crée une direction aléatoire.
+        if (direction.sqrMagnitude < 0.01f)
+        {
+            float angle = Random.Range(30f, 60f);
 
-        float xDirection =
-            Random.value < 0.5f ? -1f : 1f;
+            float xDirection =
+                Random.value < 0.5f ? -1f : 1f;
 
-        float yDirection =
-            Random.value < 0.5f ? -1f : 1f;
+            float yDirection =
+                Random.value < 0.5f ? -1f : 1f;
 
-        direction = new Vector2(
-            Mathf.Cos(angle * Mathf.Deg2Rad) * xDirection,
-            Mathf.Sin(angle * Mathf.Deg2Rad) * yDirection
-        );
+            direction = new Vector2(
+                Mathf.Cos(angle * Mathf.Deg2Rad) * xDirection,
+                Mathf.Sin(angle * Mathf.Deg2Rad) * yDirection
+            );
 
-        direction.Normalize();
+            direction.Normalize();
+        }
     }
 
     private void die()
@@ -244,6 +266,7 @@ public class SC_cage : MonoBehaviour
         else
         {
             anim.SetTrigger("Damage");
+
             SC_player.instance.anim_.SetTrigger("Punch");
 
             juice_damage.PlayJuice();
@@ -268,4 +291,29 @@ public class SC_cage : MonoBehaviour
     {
         SC_music_manager.instance.update_music(clip, false);
     }
+private void OnDrawGizmosSelected()
+    {
+        // Centre de la zone
+        Vector2 center = (screenMin + screenMax) * 0.5f;
+
+        // Taille de la zone
+        Vector2 size = screenMax - screenMin;
+
+        // Dessine la zone
+        Gizmos.color = Color.green;
+        Gizmos.DrawWireCube(center, size);
+
+        // Dessine les 4 coins
+        Gizmos.DrawSphere(screenMin, 0.1f);
+        Gizmos.DrawSphere(
+            new Vector2(screenMax.x, screenMin.y),
+            0.1f
+        );
+        Gizmos.DrawSphere(
+            new Vector2(screenMin.x, screenMax.y),
+            0.1f
+        );
+        Gizmos.DrawSphere(screenMax, 0.1f);
+    }
+
 }

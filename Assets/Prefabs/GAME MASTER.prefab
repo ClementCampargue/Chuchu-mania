@@ -2283,6 +2283,16 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 2875179821275785341, guid: fa3eb1bbe600f3b41bc330bc8b410b0a, type: 3}
   m_PrefabInstance: {fileID: 2824323693909931653}
   m_PrefabAsset: {fileID: 0}
+--- !u!212 &1451900639288003664 stripped
+SpriteRenderer:
+  m_CorrespondingSourceObject: {fileID: 3680615860501019349, guid: fa3eb1bbe600f3b41bc330bc8b410b0a, type: 3}
+  m_PrefabInstance: {fileID: 2824323693909931653}
+  m_PrefabAsset: {fileID: 0}
+--- !u!212 &2136098392577210529 stripped
+SpriteRenderer:
+  m_CorrespondingSourceObject: {fileID: 4221826975819402788, guid: fa3eb1bbe600f3b41bc330bc8b410b0a, type: 3}
+  m_PrefabInstance: {fileID: 2824323693909931653}
+  m_PrefabAsset: {fileID: 0}
 --- !u!114 &3356851276348862139 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 695785375602268222, guid: fa3eb1bbe600f3b41bc330bc8b410b0a, type: 3}
@@ -2294,24 +2304,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 276a0cf751390a14ca2a4a2ed1c71cd2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!1 &3709411060962108211 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 1461553161921975734, guid: fa3eb1bbe600f3b41bc330bc8b410b0a, type: 3}
-  m_PrefabInstance: {fileID: 2824323693909931653}
-  m_PrefabAsset: {fileID: 0}
---- !u!1 &3786879999038743676 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 1423049676332208889, guid: fa3eb1bbe600f3b41bc330bc8b410b0a, type: 3}
-  m_PrefabInstance: {fileID: 2824323693909931653}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &5476135845169314750 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 7839966395573062971, guid: fa3eb1bbe600f3b41bc330bc8b410b0a, type: 3}
   m_PrefabInstance: {fileID: 2824323693909931653}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &7521854109702105114 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 5715346216840289951, guid: fa3eb1bbe600f3b41bc330bc8b410b0a, type: 3}
+--- !u!212 &6428680010016580608 stripped
+SpriteRenderer:
+  m_CorrespondingSourceObject: {fileID: 9080735722411463301, guid: fa3eb1bbe600f3b41bc330bc8b410b0a, type: 3}
   m_PrefabInstance: {fileID: 2824323693909931653}
   m_PrefabAsset: {fileID: 0}
 --- !u!114 &8947775646387108805 stripped
@@ -2417,11 +2417,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3204d9a4a7b62af4da9c45167c6c9d64, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!1 &1717311994485840613 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 6068576223921515791, guid: 2db7621695ee0704faeeef6fac9394ed, type: 3}
-  m_PrefabInstance: {fileID: 4891744571846932458}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &2016168850695633754 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 6347868919978134704, guid: 2db7621695ee0704faeeef6fac9394ed, type: 3}
@@ -2485,57 +2480,29 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1006957879964780658}
     - target: {fileID: 1939792554238048137, guid: 699aef5bce431b945abe8a89d250bc89, type: 3}
-      propertyPath: leftLimit
-      value: -7
-      objectReference: {fileID: 0}
-    - target: {fileID: 1939792554238048137, guid: 699aef5bce431b945abe8a89d250bc89, type: 3}
       propertyPath: eat_system
       value: 
       objectReference: {fileID: 3356851276348862139}
     - target: {fileID: 1939792554238048137, guid: 699aef5bce431b945abe8a89d250bc89, type: 3}
-      propertyPath: rightLimit
-      value: 7
-      objectReference: {fileID: 0}
-    - target: {fileID: 1939792554238048137, guid: 699aef5bce431b945abe8a89d250bc89, type: 3}
-      propertyPath: death_overlay
-      value: 
-      objectReference: {fileID: 1717311994485840613}
-    - target: {fileID: 1939792554238048137, guid: 699aef5bce431b945abe8a89d250bc89, type: 3}
       propertyPath: game_over_screen
       value: 
       objectReference: {fileID: 2016168850695633754}
-    - target: {fileID: 1939792554238048137, guid: 699aef5bce431b945abe8a89d250bc89, type: 3}
-      propertyPath: 'hearts.Array.data[0]'
-      value: 
-      objectReference: {fileID: 3709411060962108211}
-    - target: {fileID: 1939792554238048137, guid: 699aef5bce431b945abe8a89d250bc89, type: 3}
-      propertyPath: 'hearts.Array.data[1]'
-      value: 
-      objectReference: {fileID: 7521854109702105114}
-    - target: {fileID: 1939792554238048137, guid: 699aef5bce431b945abe8a89d250bc89, type: 3}
-      propertyPath: 'hearts.Array.data[2]'
-      value: 
-      objectReference: {fileID: 3786879999038743676}
-    - target: {fileID: 3794890088865274154, guid: 699aef5bce431b945abe8a89d250bc89, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3794890088865274154, guid: 699aef5bce431b945abe8a89d250bc89, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3794890088865274154, guid: 699aef5bce431b945abe8a89d250bc89, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4167154217632997446, guid: 699aef5bce431b945abe8a89d250bc89, type: 3}
-      propertyPath: 'm_Materials.Array.data[0]'
-      value: 
-      objectReference: {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
     - target: {fileID: 8165713803702597279, guid: 699aef5bce431b945abe8a89d250bc89, type: 3}
       propertyPath: m_Name
       value: Player
       objectReference: {fileID: 0}
+    - target: {fileID: 8440433961212022318, guid: 699aef5bce431b945abe8a89d250bc89, type: 3}
+      propertyPath: 'hearts.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2136098392577210529}
+    - target: {fileID: 8440433961212022318, guid: 699aef5bce431b945abe8a89d250bc89, type: 3}
+      propertyPath: 'hearts.Array.data[1]'
+      value: 
+      objectReference: {fileID: 1451900639288003664}
+    - target: {fileID: 8440433961212022318, guid: 699aef5bce431b945abe8a89d250bc89, type: 3}
+      propertyPath: 'hearts.Array.data[2]'
+      value: 
+      objectReference: {fileID: 6428680010016580608}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

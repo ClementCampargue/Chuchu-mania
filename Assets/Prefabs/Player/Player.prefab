@@ -88,7 +88,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 423602839044829748}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: -0.5, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -10058,7 +10058,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: a97c105638bdf8b4a8650670310a4cd3, type: 2}
+  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -21471,6 +21471,7 @@ GameObject:
   - component: {fileID: 1906161946050759491}
   - component: {fileID: 636408113826853957}
   - component: {fileID: 2725807796225816800}
+  - component: {fileID: 8440433961212022318}
   m_Layer: 6
   m_Name: Player
   m_TagString: Player
@@ -21546,12 +21547,7 @@ MonoBehaviour:
   maxJumpTime: 0.3
   canJump: 1
   climbSpeed: 0.52
-  maxHealth: 3
   hitFreezeTime: 0.51
-  hearts:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
   hitKnockback: {x: 10, y: 5}
   normalMaterial: {fileID: 2100000, guid: a97c105638bdf8b4a8650670310a4cd3, type: 2}
   lowHealthMaterial: {fileID: 2100000, guid: dab62154501204d48b91a6f1cc99c506, type: 2}
@@ -21742,6 +21738,26 @@ SortingGroup:
   m_SortingLayer: 0
   m_SortingOrder: 10
   m_SortAtRoot: 0
+--- !u!114 &8440433961212022318
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8165713803702597279}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 017b8ca457c0b1344b4986b2caa0bd08, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  hearts:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  heart_on: {fileID: 21300000, guid: 3f31bc9901764244eb6d87215773d07f, type: 3}
+  heart_off: {fileID: 21300000, guid: b08982da156c7d745b9186a03cdad930, type: 3}
+  current_health: 3
+  max_health: 3
 --- !u!1 &8178604890168123396
 GameObject:
   m_ObjectHideFlags: 0

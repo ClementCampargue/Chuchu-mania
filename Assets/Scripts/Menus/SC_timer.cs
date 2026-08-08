@@ -4,7 +4,7 @@ using UnityEngine;
 public class SC_timer : MonoBehaviour
 {
     public TextMeshPro timerText; // UI Text à assigner dans l'inspecteur
-    private float elapsedTime = 0f;
+    public float elapsedTime = 0f;
 
     void Update()
     {

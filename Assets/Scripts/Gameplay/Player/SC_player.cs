@@ -24,11 +24,8 @@ public class SC_player : MonoBehaviour
     private bool isClimbing;
     private bool canClimb;
     private SC_grillage grillage;
-    [Header("Health")]
-    public int maxHealth = 3;
-    private int currentHealth;
+    private sc_health_system health;
     public float hitFreezeTime = 0.15f;
-    public List<GameObject> hearts;
     public Vector2 hitKnockback = new Vector2(5f, 3f);
     [Header("Low Health Warning")]
     public Material normalMaterial;
@@ -130,12 +127,12 @@ public class SC_player : MonoBehaviour
 
     void Start()
     {
+        health = sc_health_system.instance;
         normal.SetActive(true);
         transformed.SetActive(false);
         limit = SC_game_master.instance.limits;
         base_gravity = rb.gravityScale;
         spriteRenderer.material = normalMaterial;
-        currentHealth = maxHealth;
         anim = anim_;
     }
 
@@ -304,13 +301,13 @@ public class SC_player : MonoBehaviour
     }
     void CheckDamage()
     {
-        if (!canTakeDamage || currentHealth == 0) return;
+        if (!canTakeDamage || health.current_health == 0) return;
 
         hit = Physics2D.OverlapCircle(damageCheck.position, damageRadius, damageLayer);
         if (hit != null)
         {
             TakeDamage(1, hit.transform.position);
-            if(currentHealth == 0)
+            if(health.current_health == 0)
             {
                 hit.GetComponentInParent<SortingGroup>().sortingLayerName = "UI";
                 StartCoroutine(delay_death_enemy());
@@ -350,7 +347,7 @@ public class SC_player : MonoBehaviour
     }
     void HandleLowHealthBlink()
     {
-        if (currentHealth == 1)
+        if (health.current_health == 1)
         {
             if (lowHealthCoroutine == null)
                 lowHealthCoroutine = StartCoroutine(LowHealthBlink());
@@ -370,7 +367,7 @@ public class SC_player : MonoBehaviour
     {
         bool toggle = false;
 
-        while (currentHealth == 1)
+        while (health.current_health == 1)
         {
             spriteRenderer.material = toggle ? normalMaterial : lowHealthMaterial;
             toggle = !toggle;
@@ -447,29 +444,69 @@ public class SC_player : MonoBehaviour
         isJumping = false;
     }
 
-    void LateUpdate()
+void LateUpdate()
     {
         float x = transform.position.x;
 
+        // --- Ghost pour le screen wrap ---
         if (x > (limit - levelWidth / 2))
         {
             ghost.gameObject.SetActive(true);
-            ghost.position = new Vector3(x - levelWidth, transform.position.y, transform.position.z);
+            ghost.position = new Vector3(
+                x - levelWidth,
+                transform.position.y,
+                transform.position.z
+            );
         }
         else if (x < (-limit + levelWidth / 2))
         {
             ghost.gameObject.SetActive(true);
-            ghost.position = new Vector3(x + levelWidth, transform.position.y, transform.position.z);
+            ghost.position = new Vector3(
+                x + levelWidth,
+                transform.position.y,
+                transform.position.z
+            );
         }
         else
         {
             ghost.gameObject.SetActive(false);
         }
 
+        // --- Screen wrap ---
         if (x > limit)
-            transform.position = new Vector3(-limit, transform.position.y, transform.position.z);
+        {
+            transform.position = new Vector3(
+                -limit,
+                transform.position.y,
+                transform.position.z
+            );
+
+            // Repart vers la gauche
+            if (rb.linearVelocity.x > 0)
+            {
+                rb.linearVelocity = new Vector2(
+                    -Mathf.Abs(rb.linearVelocity.x),
+                    rb.linearVelocity.y
+                );
+            }
+        }
         else if (x < -limit)
-            transform.position = new Vector3(limit, transform.position.y, transform.position.z);
+        {
+            transform.position = new Vector3(
+                limit,
+                transform.position.y,
+                transform.position.z
+            );
+
+            // Repart vers la droite
+            if (rb.linearVelocity.x < 0)
+            {
+                rb.linearVelocity = new Vector2(
+                    Mathf.Abs(rb.linearVelocity.x),
+                    rb.linearVelocity.y
+                );
+            }
+        }
     }
 
 
@@ -485,13 +522,12 @@ public class SC_player : MonoBehaviour
         }
         damage_sfx.PlayJuice();
 
-        hearts[currentHealth-1].SetActive(false);
         isStunned = false;
         ps_damage.Play();
-        currentHealth -= damage;
+        health.take_damage(damage);
         eat_system.take_damage();
 
-        if (currentHealth > 0)
+        if (health.current_health > 0)
         {
             if (hitCoroutine != null) StopCoroutine(hitCoroutine);
             hitCoroutine = StartCoroutine(HitFreezeWithKnockback(sourcePosition));
@@ -521,7 +557,6 @@ public class SC_player : MonoBehaviour
 
 
         anim.SetBool("Stun", false);
-        hearts[currentHealth - 1].SetActive(false);
         isStunned = false;
         ps_damage.Play();
 
@@ -532,10 +567,10 @@ public class SC_player : MonoBehaviour
 
 
         eat_system.take_damage();
-        currentHealth -= 1;
+        health.take_damage(1);
 
 
-        if (currentHealth > 0)
+        if (health.current_health > 0)
         {
             if (hitCoroutine != null) StopCoroutine(hitCoroutine);
             StartCoroutine(InvincibilityCoroutine());
@@ -803,12 +838,12 @@ public class SC_player : MonoBehaviour
         isInvincible = false;
         canTakeDamage = true;
         anim_.SetBool("Die", false);
+        if (health != null)
+        {
+            health.revive();
+        }
 
 
-        currentHealth = maxHealth;
-
-        foreach (GameObject heart in hearts)
-            heart.SetActive(true);
         collider.enabled = true;
         spriteRenderer.enabled = true;
 
