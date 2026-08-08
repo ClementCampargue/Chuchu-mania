@@ -14,14 +14,22 @@ public class SC_tirelire : MonoBehaviour
     public AudioSource starAudio;
 
     [Header("Audio")]
-    public AudioClip particleSound; 
+    public AudioClip particleSound;
 
     [Header("Score")]
+    public int score_for_one_coin;
     public int total_score;
-    public int current_score;
+    public int total_money_;
+    public int money_won;
 
-    [Tooltip("Nombre de points transférés par seconde")]
-    public float decrease_speed = 100f;
+    [Header("Vitesse d'incrémentation")]
+    [Tooltip("Vitesse minimale de transfert des points par seconde")]
+    public float increase_speed_min = 50f;
+
+    [Tooltip("Vitesse maximale de transfert des points par seconde")]
+    public float increase_speed_max = 100f;
+
+    private float increase_speed;
 
     [Tooltip("Une particule émise tous les X points transférés")]
     public int score_per_star = 10;
@@ -37,10 +45,11 @@ public class SC_tirelire : MonoBehaviour
     public Vector2 anim_speed_range = new Vector2(1f, 2f);
 
     [Header("UI")]
+    public TextMeshPro score_total;
     public TextMeshPro score_toadd;
-    public TextMeshPro score_gained;
-    public TextMeshPro score_gained2;
+    public TextMeshPro total_money;
 
+    private bool canquit;
     private bool counting;
 
     private Vector3 tongueBasePos;
@@ -49,32 +58,58 @@ public class SC_tirelire : MonoBehaviour
 
     private Color starOriginalColor;
 
+    public InputActionReference skip;
 
     private void Start()
     {
+        Debug.Log("MONEYY  " + PlayerPrefs.GetInt("Score"));
+
+        total_money.text = SC_money_manager.instance.money.ToString();
+
+        total_score = PlayerPrefs.GetInt("Score");
+        total_money_ = SC_money_manager.instance.money;
+
+        score_total.text = total_score.ToString("D6");
+
         tongueBasePos = tongue.localPosition;
+
+        money_won = (int)(total_score / score_for_one_coin);
 
         starOriginalColor = star.color;
 
         cat_anim.speed = anim_speed_range.x;
         cat_anim.enabled = false;
 
+        PlayerPrefs.SetInt("Money", total_money_ + money_won);
+
         UpdateTexts();
     }
 
     private void Update()
     {
-        if (Input.GetKey(KeyCode.Space))
+        if (skip.action.WasPerformedThisFrame())
         {
-            backtohub();
+            if (canquit)
+            {
+                backtohub();
+            }
         }
     }
+
     public void start_count()
     {
-        if (counting || current_score <= 0)
+        if (counting || money_won <= 0)
             return;
 
         counting = true;
+
+        // Choisit une vitesse aléatoire dans la range
+        increase_speed = Random.Range(
+            increase_speed_min,
+            increase_speed_max
+        );
+
+        Debug.Log("Vitesse de comptage : " + increase_speed);
 
         cat_anim.enabled = true;
         stars.Play();
@@ -93,13 +128,17 @@ public class SC_tirelire : MonoBehaviour
         stars.Stop();
     }
 
-    private IEnumerator CountRoutine()
+private IEnumerator CountRoutine()
     {
-        int initialScore = current_score;
+        int initialScore = money_won;
 
-        while (current_score > 0)
+        // On s'assure que les particules sont arrêtées au début
+        stars.Stop();
+        stars.Clear();
+
+        while (money_won > 0)
         {
-            scoreAccumulator += decrease_speed * Time.deltaTime;
+            scoreAccumulator += increase_speed * Time.deltaTime;
 
             int amount = Mathf.FloorToInt(scoreAccumulator);
 
@@ -109,13 +148,14 @@ public class SC_tirelire : MonoBehaviour
                 continue;
             }
 
-            amount = Mathf.Min(amount, current_score);
+            amount = Mathf.Min(amount, money_won);
 
             scoreAccumulator -= amount;
 
-            current_score -= amount;
-            total_score += amount;
+            money_won -= amount;
+            total_money_ += amount;
 
+            // Particules pendant l'incrémentation
             particleCounter += amount;
 
             while (particleCounter >= score_per_star)
@@ -130,7 +170,7 @@ public class SC_tirelire : MonoBehaviour
                 }
             }
 
-            float progress = 1f - ((float)current_score / initialScore);
+            float progress = 1f - ((float)money_won / initialScore);
 
             star.color = Color.Lerp(
                 starOriginalColor,
@@ -139,9 +179,10 @@ public class SC_tirelire : MonoBehaviour
             );
 
             Vector3 pos = tongueBasePos;
+
             pos.y = Mathf.Lerp(
                 tongueBasePos.y,
-                tongueBasePos.y + (tongue_max_abs),
+                tongueBasePos.y + tongue_max_abs,
                 progress
             );
 
@@ -158,15 +199,21 @@ public class SC_tirelire : MonoBehaviour
             yield return null;
         }
 
+        // Fin du comptage : arrêt immédiat des particules
+        stars.Stop();
+        stars.Clear();
+
         star.color = star_color_max;
 
         Vector3 finalPos = tongueBasePos;
-        finalPos.y = tongueBasePos.y +(tongue_max_abs);
+        finalPos.y = tongueBasePos.y + tongue_max_abs;
+
         tongue.localPosition = finalPos;
 
         cat_anim.speed = anim_speed_range.y;
 
         UpdateTexts();
+
         end_count();
         counting = false;
     }
@@ -174,18 +221,19 @@ public class SC_tirelire : MonoBehaviour
     private void UpdateTexts()
     {
         if (score_toadd != null)
-            score_toadd.text = current_score.ToString();
+            score_toadd.text = money_won.ToString();
 
-        if (score_gained != null)
-            score_gained.text = total_score.ToString();
+        if (total_money != null)
+            total_money.text = total_money_.ToString();
+    }
 
-        if (score_gained2 != null)
-            score_gained2.text = total_score.ToString();
-
+    public void can_quit()
+    {
+        canquit = true;
     }
 
     public void backtohub()
     {
         SC_screenshot_transition.instance.Capture("HUB");
     }
-} 
+}

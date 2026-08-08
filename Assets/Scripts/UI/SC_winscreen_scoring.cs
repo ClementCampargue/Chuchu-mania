@@ -218,5 +218,6 @@ public class SC_winscreen_scoring : MonoBehaviour
         bestRank = Mathf.Clamp(bestRank, 0, ranks.Count - 1);
 
         rank.sprite = ranks[bestRank];
+        PlayerPrefs.SetInt("Score", base_score + PlayerPrefs.GetInt("Score"));
     }
 }

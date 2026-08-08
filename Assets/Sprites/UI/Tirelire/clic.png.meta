@@ -1,13 +1,7 @@
 fileFormatVersion: 2
-guid: df002b1dce6bf234cba2f9d50bf23023
+guid: 34eb597072539a646adfa95dbe6920d5
 TextureImporter:
-  internalIDToNameTable:
-  - first:
-      213: -5109848184576378471
-    second: Tirelire_0
-  - first:
-      213: -3832959425865243355
-    second: Tirelire_1
+  internalIDToNameTable: []
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -49,7 +43,7 @@ TextureImporter:
   nPOTScale: 0
   lightmap: 0
   compressionQuality: 50
-  spriteMode: 2
+  spriteMode: 1
   spriteExtrude: 1
   spriteMeshType: 1
   alignment: 0
@@ -103,67 +97,23 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Tirelire_0
+      name: HUD_0
       rect:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 98
-        height: 101
+        width: 448
+        height: 336
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 9997626362c2619b0800000000000000
-      internalID: -5109848184576378471
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Tirelire_1
-      rect:
-        serializedVersion: 2
-        x: 98
-        y: 0
-        width: 100
-        height: 101
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 52521d6c5b79ecac0800000000000000
-      internalID: -3832959425865243355
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Tirelire_2
-      rect:
-        serializedVersion: 2
-        x: 202
-        y: 0
-        width: 98
-        height: 101
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 590743541ae555144b89a1b0fa9b10f1
-      internalID: -377218085
+      spriteID: 505e2544db04ba0a0800000000000000
+      internalID: -6869325624984279803
       vertices: []
       indices: 
       edges: []
@@ -172,7 +122,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: a54c35e21acc0af46b0eea6157d6e8fc
+    spriteID: 5e97eb03825dee720800000000000000
     internalID: 0
     vertices: []
     indices: 
@@ -182,9 +132,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      Tirelire_0: -5109848184576378471
-      Tirelire_1: -3832959425865243355
-      Tirelire_2: -377218085
+      HUD_0: -6869325624984279803
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

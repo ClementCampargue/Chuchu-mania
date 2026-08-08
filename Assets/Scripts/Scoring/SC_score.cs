@@ -65,7 +65,6 @@ public class SC_score : MonoBehaviour
 
     public void reset_score_level()
     {
-        PlayerPrefs.SetInt("Score",score + PlayerPrefs.GetInt("Score"));
         score = 0;
         displayedScore = 0;
         UpdateScoreUI();

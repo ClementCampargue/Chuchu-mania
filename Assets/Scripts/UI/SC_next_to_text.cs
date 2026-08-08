@@ -37,6 +37,11 @@ public class SC_next_to_text : MonoBehaviour
         // Décalage vers la gauche
         Vector3 gauche = -textMesh.transform.right * distance;
 
-        sprite.position = positionMonde + gauche;
+        Vector3 nouvellePosition = positionMonde + gauche;
+
+        // Garde le Y actuel du sprite
+        nouvellePosition.y = sprite.position.y;
+
+        sprite.position = nouvellePosition;
     }
 }
