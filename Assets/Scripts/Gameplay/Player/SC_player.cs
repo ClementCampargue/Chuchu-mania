@@ -127,6 +127,7 @@ public class SC_player : MonoBehaviour
 
     void Start()
     {
+        canTakeDamage = true;
         health = sc_health_system.instance;
         normal.SetActive(true);
         transformed.SetActive(false);

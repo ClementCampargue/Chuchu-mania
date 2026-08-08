@@ -34,7 +34,7 @@ public class SC_win_screen : MonoBehaviour
     {
         anim.ResetTrigger("show");
         anim.SetTrigger("hide");
-        transition.Capture("Cutscene"+ PlayerPrefs.GetInt("Level"));
+        transition.Capture("Cutscene"+ (PlayerPrefs.GetInt("Level")+1));
         canact = false;
         once = false;
     }

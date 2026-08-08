@@ -304,7 +304,17 @@ public class SC_icecream_eat_system : MonoBehaviour
     void calculate_score()
     {
         Debug.Log("calculated");
-        SC_score.Instance.AddScore((int)(100 * eaten_cream * multiplier * SC_point_boost.Instance.boostMultiplier));
+
+        int score = (int)(
+            10
+            * eaten_cream
+            * eaten_cream
+            //* SC_point_boost.Instance.boostMultiplier
+        );
+
+        SC_score.Instance.AddScore(score);
+
+        Debug.Log("Crèmes mangées : " + eaten_cream + " | Score : " + score);
     }
 
     public void ActivatePowerUpInstant()

@@ -9,34 +9,51 @@ public class sc_health_system : MonoBehaviour
 
     public int current_health;
     public int max_health;
+
     public static sc_health_system instance;
+
     private void Awake()
     {
         instance = this;
     }
-    void Start()
+
+    private void Start()
     {
         current_health = max_health;
+        UpdateHearts();
     }
 
-    // Update is called once per frame
-    void Update()
+    public void take_damage(int damage)
     {
+        if (damage <= 0)
+            return;
 
+        current_health = Mathf.Max(current_health - damage, 0);
+
+        UpdateHearts();
     }
-    public void take_damage(int i)
+
+    private void UpdateHearts()
     {
-        hearts[current_health].sprite = heart_off;
-        current_health = current_health -i;
+        for (int i = 0; i < hearts.Count; i++)
+        {
+            if (hearts[i] == null)
+                continue;
+
+            // Exemple :
+            // 3 vies -> hearts[0], hearts[1], hearts[2] allumés
+            // 2 vies -> hearts[0], hearts[1] allumés
+            // 1 vie  -> hearts[0] allumé
+            // 0 vie  -> tous éteints
+            hearts[i].sprite = i < current_health
+                ? heart_on
+                : heart_off;
+        }
     }
 
     public void revive()
     {
         current_health = max_health;
-
-        foreach (SpriteRenderer spr in hearts)
-        {
-            spr.sprite = heart_on;
-        }
+        UpdateHearts();
     }
 }
