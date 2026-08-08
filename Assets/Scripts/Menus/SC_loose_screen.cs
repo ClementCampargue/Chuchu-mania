@@ -42,7 +42,14 @@ public class SC_loose_screen : MonoBehaviour
 
     public void give_up()
     {
-        SC_screenshot_transition.instance.Capture("MoneyScene");
+        if (PlayerPrefs.GetInt("Score") == 0)
+        {
+            SC_screenshot_transition.instance.Capture("HUB");
+        }
+        else
+        {
+            SC_screenshot_transition.instance.Capture("MoneyScene");
+        }
         gameObject.SetActive(false);
     }
 

@@ -84,6 +84,8 @@ public class SC_icecream_eat_system : MonoBehaviour
             return;
         if (eat_input.action.IsPressed() && currrent_ice_cream > 0 && !isPowerUpActive && player.isGrounded && !isEating)
         {
+            if (!player.canMove) return;
+            if (sc_health_system.instance.current_health ==0) return;
             if (!isSelecting)
                 StartCoroutine(SelectionCoroutine());
         }
