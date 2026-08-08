@@ -28,9 +28,6 @@ public class SC_Button : MonoBehaviour
     // Appelé par EventSystem Select()
     public void Select()
     {
-        if (isSelected)
-            return;
-
         isSelected = true;
         indicator.SetActive(true);
         PlayAnimation(hover);
@@ -40,6 +37,7 @@ public class SC_Button : MonoBehaviour
     {
         indicator.SetActive(false);
         isSelected = false;
+        isPressed = false;
         isHovered = false;
     }
 

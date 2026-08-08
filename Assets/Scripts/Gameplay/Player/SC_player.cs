@@ -653,7 +653,7 @@ void LateUpdate()
         rb.bodyType = RigidbodyType2D.Dynamic;
         isFrozen = false;
     }
-    private void Die()
+    public void Die()
     {
         canMove = false;
         if (hitCoroutine != null) StopCoroutine(hitCoroutine);

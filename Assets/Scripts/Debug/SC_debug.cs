@@ -35,7 +35,7 @@ public class SC_debug : MonoBehaviour
         }
         if (Input.GetKeyDown(KeyCode.K))
         {
-            SC_player.instance.TakeDamage(1, SC_player.instance.transform.position);
+            SC_player.instance.Die();
 
         }
     }
