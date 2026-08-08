@@ -37,7 +37,7 @@ public class DialogueManager : MonoBehaviour
     public static DialogueManager instance;
 
     public bool cutscene;
-
+    private bool blockingInput;
 
     private void Awake()
     {
@@ -73,15 +73,14 @@ public class DialogueManager : MonoBehaviour
 
     private void Update()
     {
-        if (action == null)
+        if (action == null || blockingInput)
             return;
 
         if (action.action.WasPerformedThisFrame())
         {
-            if (typewriter.IsTyping() && !playingChoiceAnswer)
+            if (typewriter.IsTyping())
             {
                 typewriter.FinishText();
-
                 typewriter.SetWaitInputVisible(true);
 
                 waitingInput = true;
@@ -94,8 +93,6 @@ public class DialogueManager : MonoBehaviour
             }
         }
     }
-
-
 
     public void StartDialogue()
     {
@@ -263,6 +260,9 @@ public class DialogueManager : MonoBehaviour
     private void SelectChoice(Choice choice)
     {
         choicePanel.SetActive(false);
+        Invoke("delay",0.1f);
+        // Bloque temporairement l'input de dialogue
+        blockingInput = true;
 
         if (!string.IsNullOrEmpty(choice.actionID))
         {
@@ -271,44 +271,45 @@ public class DialogueManager : MonoBehaviour
 
         StartCoroutine(DisplayChoiceAnswer(choice));
     }
-
-
+    void delay()
+    {
+        blockingInput = false;
+    }
 
 
     private IEnumerator DisplayChoiceAnswer(Choice choice)
     {
         playingChoiceAnswer = true;
+        waitingInput = false;
 
-        Invoke("delay", 0.1f);
         foreach (DialogueLine answer in choice.answer)
         {
-            yield return DisplayLineRoutine(answer);
+            // Affiche la réponse
+            yield return StartCoroutine(DisplayLineRoutine(answer));
 
+            // Si cette réponse possède de nouveaux choix,
+            // on laisse le joueur choisir.
             if (answer.hasChoices)
             {
                 playingChoiceAnswer = false;
+                blockingInput = false;
                 yield break;
             }
 
-            // Attente du joueur
+            // Attendre que le joueur appuie pour passer à la réponse suivante
             while (waitingInput)
             {
                 yield return null;
             }
         }
-         
 
         playingChoiceAnswer = false;
+        waitingInput = false;
+        blockingInput = false;
 
-
+        // Reprendre le dialogue principal
         AdvanceMainDialogue();
     }
-    void delay()
-    {
-        playingChoiceAnswer = false;
-    }
-
-
 
     private void EndDialogue()
     {

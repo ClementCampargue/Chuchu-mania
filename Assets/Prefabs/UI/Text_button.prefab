@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1373838605285184528}
   - component: {fileID: 8830645293944662422}
+  - component: {fileID: 8208730871406999190}
   m_Layer: 0
   m_Name: Selected
   m_TagString: Untagged
@@ -91,6 +92,21 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &8208730871406999190
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 362592184335010109}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 77c1baac82b07774290d914cfdb8aed4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  textMesh: {fileID: 9176267513702836998}
+  sprite: {fileID: 1373838605285184528}
+  distance: 0.51
 --- !u!1 &7162493650667248326
 GameObject:
   m_ObjectHideFlags: 0
@@ -154,6 +170,7 @@ MonoBehaviour:
       m_Calls: []
   isHovered: 0
   indicator: {fileID: 362592184335010109}
+  accept_input: 1
 --- !u!23 &4167066562878217251
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -284,7 +301,7 @@ MonoBehaviour:
   m_VertexBufferAutoSizeReduction: 0
   m_useMaxVisibleDescender: 1
   m_pageToDisplay: 1
-  m_margin: {x: 0, y: 0, z: 0, w: 0}
+  m_margin: {x: 7.4476986, y: 0, z: 7.3135643, w: 0}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
   _SortingLayer: 0

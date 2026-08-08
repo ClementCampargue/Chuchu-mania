@@ -1201,7 +1201,7 @@ MonoBehaviour:
   typeSpeed: 0.02
   shakeAmplitude: 0.05
   shakeFrequency: 0.2
-  waveAmplitude: 5
+  waveAmplitude: 0.07
   waveFrequency: 5
   scaleAmplitude: 0.2
   scaleFrequency: 5
