@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 
@@ -11,6 +12,7 @@ public class SC_cutscene : MonoBehaviour
     public DialogueData dialogue_to_play;
     public static SC_cutscene instance;
     public Animator anim;
+
     private void Awake()
     {
         instance = this;
@@ -59,5 +61,9 @@ public class SC_cutscene : MonoBehaviour
     public void PauseCutscene()
     {
         anim.speed = 0;
+    }
+    public void change_music(AudioClip audio)
+    {
+        SC_music_manager.instance.update_music(audio, true);
     }
 }

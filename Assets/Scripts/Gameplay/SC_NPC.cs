@@ -72,7 +72,7 @@ public class SC_NPC : MonoBehaviour
                 interaction_popup.SetActive(true);
 
 
-            if (interactAction.action.ReadValue<Vector2>().y > 0.5f && !dialogueActive)
+            if (interactAction.action.ReadValue<Vector2>().y > 0.5f && !dialogueActive && player.enabled && player.canMove)
             {
                 StartTalking();
             }
