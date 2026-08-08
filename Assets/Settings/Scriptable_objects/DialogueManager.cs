@@ -53,6 +53,7 @@ public class DialogueManager : MonoBehaviour
 
     private void OnEnable()
     {
+        StopAllCoroutines();
         if (action != null)
             action.action.Enable();
     }
@@ -60,10 +61,14 @@ public class DialogueManager : MonoBehaviour
 
     private void OnDisable()
     {
+        StopAllCoroutines();
         if (action != null)
             action.action.Disable();
     }
-
+    private void OnDestroy()
+    {
+        StopAllCoroutines();
+    }
 
     private void Start()
     {
@@ -315,7 +320,10 @@ public class DialogueManager : MonoBehaviour
     {
         StopAllCoroutines();
         waitingInput = false;
-
+        if (cutscene)
+        {
+            SC_cutscene.instance.EndCutscene();
+        }
         playingChoiceAnswer = false;
 
 

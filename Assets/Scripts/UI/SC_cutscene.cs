@@ -5,7 +5,7 @@ using UnityEngine;
 public class SC_cutscene : MonoBehaviour
 {
     private SC_screenshot_transition transition;
-    private string next_scene;
+    public string next_scene;
     public int next_level;
     public DialogueManager dialogue;
 
