@@ -14,8 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   lines:
   - character: {fileID: 11400000, guid: f1b273b5eefe3a6408d92c0f6cb1c256, type: 2}
-    text: "Apr\xE8s avoir suav\xE9 l'esprit \xE9toile de la ruche, Chuchu se dirige
-      vers la Lune, mais..."
+    text: "Apr\xE8s avoir suav\xE9 l'esprit \xE9toile de la ruche,<p=2> Chuchu se
+      dirige vers la Lune!"
     hasChoices: 0
     choices:
     - choiceText: Oui
@@ -25,7 +25,7 @@ MonoBehaviour:
       answer: []
       actionID: 
   - character: {fileID: 11400000, guid: 999170bf34540294a957e7f2408c8a18, type: 2}
-    text: "Haaaa... C'est le pied d'\xEAtre reine..."
+    text: "Haaaa...<p=5> C'est le pied d'\xEAtre reine..."
     hasChoices: 0
     choices:
     - choiceText: Oui
@@ -35,7 +35,7 @@ MonoBehaviour:
       answer: []
       actionID: 
   - character: {fileID: 11400000, guid: 25116a902d5a6794396e07c249d676de, type: 2}
-    text: VOTRE MAJESTE!!!
+    text: <sh>VOTRE MAJESTE!!!</sh>
     hasChoices: 0
     choices:
     - choiceText: Oui
@@ -45,7 +45,7 @@ MonoBehaviour:
       answer: []
       actionID: 
   - character: {fileID: 11400000, guid: 999170bf34540294a957e7f2408c8a18, type: 2}
-    text: Quoi encore, Lubin?!
+    text: Quoi encore,<p=2> Lubin?!
     hasChoices: 0
     choices:
     - choiceText: Oui
@@ -55,8 +55,8 @@ MonoBehaviour:
       answer: []
       actionID: 
   - character: {fileID: 11400000, guid: 25116a902d5a6794396e07c249d676de, type: 2}
-    text: "C'est une catastrophe! Chuchu est en train de lib\xE9rer tous les esprits
-      \xE9toiles!"
+    text: "C'est une catastrophe!<p=5> Chuchu est en train de lib\xE9rer tous les
+      esprits \xE9toiles!"
     hasChoices: 0
     choices:
     - choiceText: Oui
@@ -66,7 +66,7 @@ MonoBehaviour:
       answer: []
       actionID: 
   - character: {fileID: 11400000, guid: 999170bf34540294a957e7f2408c8a18, type: 2}
-    text: Que dis-tu?!
+    text: <sh>Que dis-tu?!</sh>
     hasChoices: 0
     choices:
     - choiceText: Oui
@@ -76,7 +76,7 @@ MonoBehaviour:
       answer: []
       actionID: 
   - character: {fileID: 11400000, guid: 25116a902d5a6794396e07c249d676de, type: 2}
-    text: "Que faisons-nous? Doit-on annuler la f\xEAte?..."
+    text: "Que faisons-nous?<p=5> Doit-on annuler la f\xEAte?..."
     hasChoices: 0
     choices:
     - choiceText: Oui
@@ -86,7 +86,7 @@ MonoBehaviour:
       answer: []
       actionID: 
   - character: {fileID: 11400000, guid: 999170bf34540294a957e7f2408c8a18, type: 2}
-    text: Hmpf, il n'en est pas question.
+    text: Hmpf,<p=2> il n'en est pas question.
     hasChoices: 0
     choices:
     - choiceText: Oui
@@ -106,8 +106,8 @@ MonoBehaviour:
     - choiceText: Non
       answer: []
       actionID: 
-  - character: {fileID: 11400000, guid: 25116a902d5a6794396e07c249d676de, type: 2}
-    text: ...
+  - character: {fileID: 11400000, guid: 999170bf34540294a957e7f2408c8a18, type: 2}
+    text: <w>OHOHOHOHOHOHOH!</w>
     hasChoices: 0
     choices:
     - choiceText: Oui
@@ -116,8 +116,8 @@ MonoBehaviour:
     - choiceText: Non
       answer: []
       actionID: 
-  - character: {fileID: 11400000, guid: 999170bf34540294a957e7f2408c8a18, type: 2}
-    text: OHOHOHOHOHOHOH!
+  - character: {fileID: 11400000, guid: 25116a902d5a6794396e07c249d676de, type: 2}
+    text: <p=5>.<p=5>.<p=5>.
     hasChoices: 0
     choices:
     - choiceText: Oui

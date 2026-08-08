@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   lines:
   - character: {fileID: 11400000, guid: 358c18f725108b14d9b9efeb15db2fc1, type: 2}
-    text: "Litchi, arr\xEAte d'emb\xEAter les gentils!"
+    text: "Litchi,<p=2> arr\xEAte d'emb\xEAter les gentils!"
     hasChoices: 0
     choices:
     - choiceText: Oui
@@ -24,8 +24,8 @@ MonoBehaviour:
       answer: []
       actionID: 
   - character: {fileID: 11400000, guid: 999170bf34540294a957e7f2408c8a18, type: 2}
-    text: "Nous verrons bien qui de nous deux est la plus l\xE2che! S\xE2che que
-      ton heure a sonn\xE9! Lubin!"
+    text: "Nous verrons bien qui de nous deux est la plus l\xE2che!<p=5> S\xE2che
+      que ton heure a sonn\xE9! <p=5>Lubin!"
     hasChoices: 0
     choices:
     - choiceText: Oui
@@ -35,7 +35,7 @@ MonoBehaviour:
       answer: []
       actionID: 
   - character: {fileID: 11400000, guid: 25116a902d5a6794396e07c249d676de, type: 2}
-    text: "Roger, votre s\xE9rnissime!"
+    text: "Roger, <p=2>votre s\xE9rnissime!"
     hasChoices: 0
     choices:
     - choiceText: Oui
@@ -45,7 +45,7 @@ MonoBehaviour:
       answer: []
       actionID: 
   - character: {fileID: 11400000, guid: 999170bf34540294a957e7f2408c8a18, type: 2}
-    text: ...
+    text: .<p=2>.<p=2>.
     hasChoices: 0
     choices:
     - choiceText: Oui
@@ -55,7 +55,7 @@ MonoBehaviour:
       answer: []
       actionID: 
   - character: {fileID: 11400000, guid: 999170bf34540294a957e7f2408c8a18, type: 2}
-    text: "Ben alors! Il est o\xF9 le robot?!"
+    text: "Ben alors!<p=5> Il est o\xF9 le robot?!"
     hasChoices: 0
     choices:
     - choiceText: Oui
@@ -65,8 +65,8 @@ MonoBehaviour:
       answer: []
       actionID: 
   - character: {fileID: 11400000, guid: 25116a902d5a6794396e07c249d676de, type: 2}
-    text: "Euh, altesse... On a plus de budget pour le robot, c'est la fin de la
-      d\xE9mo..."
+    text: "Euh,<p=2> altesse...<p=5> On a plus de budget pour le robot,<p=2> c'est
+      la fin de la d\xE9mo..."
     hasChoices: 0
     choices:
     - choiceText: Oui
@@ -76,7 +76,7 @@ MonoBehaviour:
       answer: []
       actionID: 
   - character: {fileID: 11400000, guid: 999170bf34540294a957e7f2408c8a18, type: 2}
-    text: "Ptn journ\xE9e de merde..."
+    text: "Ptn<p=2> journ\xE9e de merde..."
     hasChoices: 0
     choices:
     - choiceText: Oui
@@ -96,7 +96,7 @@ MonoBehaviour:
       answer: []
       actionID: 
   - character: {fileID: 11400000, guid: f1b273b5eefe3a6408d92c0f6cb1c256, type: 2}
-    text: "F\xE9licitations! Vous avez atteint le bout de l'aventure!"
+    text: "F\xE9licitations!<p=5> Vous avez atteint le bout de l'aventure!"
     hasChoices: 0
     choices:
     - choiceText: Oui
