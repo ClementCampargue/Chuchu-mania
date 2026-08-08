@@ -13,7 +13,6 @@ public class SC_cutscene : MonoBehaviour
     public static SC_cutscene instance;
     public Animator anim;
 
-    public List<AudioClip> music;
     private void Awake()
     {
         instance = this;

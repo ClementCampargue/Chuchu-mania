@@ -234,8 +234,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   next_level: 0
   dialogue: {fileID: 974702575}
-  dialogue_to_play: {fileID: 11400000, guid: 4485b7838f4e7cc4da0e0ffc41ea83c7, type: 2}
+  dialogue_to_play: {fileID: 11400000, guid: aebc437a64bf48f42a1587ea859ab300, type: 2}
   anim: {fileID: 255835188}
+  music: []
 --- !u!95 &255835188
 Animator:
   serializedVersion: 7
