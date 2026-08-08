@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class SC_winscreen_scoring : MonoBehaviour
 {
@@ -28,16 +29,46 @@ public class SC_winscreen_scoring : MonoBehaviour
 
     public Animator anim;
 
-    // Durée TOTALE de l'animation du décompte, en secondes.
-    // Peu importe le nombre de points à ajouter, l'animation
-    // prendra toujours cette durée.
+    // Durée totale de l'animation du décompte
     public float score_animation_duration = 2f;
 
-    void Start()
+    [Header("Skip")]
+    public InputActionReference skipAction;
+
+    // Coroutine actuellement en train d'ajouter un bonus
+    private Coroutine currentBonusCoroutine;
+
+    // Permet d'éviter plusieurs déclenchements du skip
+    private bool skipRequested = false;
+
+    private void OnEnable()
+    {
+        if (skipAction != null)
+        {
+            skipAction.action.Enable();
+            skipAction.action.performed += OnSkipPerformed;
+        }
+    }
+
+    private void OnDisable()
+    {
+        if (skipAction != null)
+        {
+            skipAction.action.performed -= OnSkipPerformed;
+            skipAction.action.Disable();
+        }
+    }
+
+    private void Start()
     {
         time = SC_timer.instance;
         score = SC_score.Instance;
         health = sc_health_system.instance;
+    }
+
+    private void OnSkipPerformed(InputAction.CallbackContext context)
+    {
+        skipRequested = true;
     }
 
     public void calculate_score()
@@ -60,8 +91,7 @@ public class SC_winscreen_scoring : MonoBehaviour
         }
 
         life_score.text = health_bonus.ToString();
-
-        // Affiche le score de base avant le décompte
+        time_remaining.text = Mathf.Round(time.base_time).ToString();
         final_score.text = base_score.ToString();
     }
 
@@ -69,18 +99,18 @@ public class SC_winscreen_scoring : MonoBehaviour
     {
         pause();
 
-        // Le bonus sera ajouté progressivement
-        // sur une durée fixe.
-        StartCoroutine(AddBonusToScore(time_bonus, time_score));
+        currentBonusCoroutine = StartCoroutine(
+            AddBonusToScore(time_bonus, time_score)
+        );
     }
 
     public void calculate_haelth()
     {
         pause();
 
-        // Le bonus sera ajouté progressivement
-        // sur une durée fixe.
-        StartCoroutine(AddBonusToScore(health_bonus, life_score));
+        currentBonusCoroutine = StartCoroutine(
+            AddBonusToScore(health_bonus, life_score)
+        );
     }
 
     private IEnumerator AddBonusToScore(int bonus, TextMeshPro bonusText)
@@ -94,17 +124,40 @@ public class SC_winscreen_scoring : MonoBehaviour
         int startingScore = base_score;
         float elapsedTime = 0f;
 
+        skipRequested = false;
+
         while (elapsedTime < score_animation_duration)
         {
+            // =========================
+            // SKIP DU DÉCOMPTE
+            // =========================
+            if (skipRequested)
+            {
+                base_score = startingScore + bonus;
+
+                bonusText.text = "0";
+                final_score.text = base_score.ToString();
+
+                skipRequested = false;
+
+                resume();
+
+                currentBonusCoroutine = null;
+
+                yield break;
+            }
+
             elapsedTime += Time.deltaTime;
 
             // Progression de 0 à 1 pendant la durée définie
-            float progress = Mathf.Clamp01(elapsedTime / score_animation_duration);
+            float progress = Mathf.Clamp01(
+                elapsedTime / score_animation_duration
+            );
 
             // Nombre de points qui doivent avoir été ajoutés
             int addedScore = Mathf.FloorToInt(bonus * progress);
 
-            // Évite les doublons et permet de reprendre correctement
+            // Évite les doublons
             int currentAdded = base_score - startingScore;
 
             if (addedScore > currentAdded)
@@ -129,8 +182,8 @@ public class SC_winscreen_scoring : MonoBehaviour
         bonusText.text = "0";
         final_score.text = base_score.ToString();
 
-        // Une fois le bonus entièrement transféré,
-        // on reprend l'animation.
+        currentBonusCoroutine = null;
+
         resume();
     }
 
@@ -146,7 +199,8 @@ public class SC_winscreen_scoring : MonoBehaviour
 
     public void CalculateRank()
     {
-        if (ranks == null || ranks.Count == 0 || rank_scores == null || rank_scores.Count == 0)
+        if (ranks == null || ranks.Count == 0 ||
+            rank_scores == null || rank_scores.Count == 0)
             return;
 
         int bestRank = 0;

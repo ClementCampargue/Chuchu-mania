@@ -239,7 +239,7 @@ public class SC_cage : MonoBehaviour
         if (Health <= 0)
         {
             Health = 0;
-
+            SC_timer.instance.pause();
             anim.SetTrigger("Die");
 
             fire_system.SetActive(false);
@@ -250,7 +250,6 @@ public class SC_cage : MonoBehaviour
 
             spr.material = player_green;
 
-            SC_player.instance.enabled = false;
 
             SC_player.instance.collider.enabled = false;
 
@@ -260,6 +259,7 @@ public class SC_cage : MonoBehaviour
                 RigidbodyConstraints2D.FreezeAll;
 
             SC_player.instance.anim_.SetTrigger("End");
+            SC_player.instance.enabled = false;
 
             SC_music_manager.instance.stop_music();
         }

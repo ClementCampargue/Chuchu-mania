@@ -17,6 +17,8 @@ public class SC_level_intro : MonoBehaviour
 
     public void StartGame()
     {
+        SC_timer.instance.resume();
+
         spawning.Spawn_collectibles();
         SC_player.instance.canMove = true;
 

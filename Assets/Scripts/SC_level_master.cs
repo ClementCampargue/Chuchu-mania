@@ -19,6 +19,8 @@ public class SC_level_master : MonoBehaviour
         SC_music_manager.instance.update_music(music);
         GameObject.Find("Overlay").transform.GetChild(0).gameObject.SetActive(overlay_on);
         SC_player.instance.enabled = false;
+        SC_timer.instance.reset_timer();
+        SC_timer.instance.pause();
         if (level)
         {
             player.Revive();

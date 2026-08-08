@@ -60,6 +60,10 @@ public class SC_pause : MonoBehaviour
         {
             return;
         }
+        else if (!SC_player.instance.enabled && !isPaused)
+        {
+            return;
+        }
 
         UpdateObjectState();
         isPaused = !isPaused;
@@ -123,6 +127,6 @@ public class SC_pause : MonoBehaviour
         SC_player.instance.enabled = true;
         SC_player.instance.anim_.updateMode = AnimatorUpdateMode.UnscaledTime;
         Time.timeScale = 1;
-        transition.Capture("HUB");
+        transition.Capture("MoneyScene");
     }
 }
