@@ -7,6 +7,7 @@ using UnityEngine.Rendering;
 
 public class SC_player : MonoBehaviour
 {
+    private Coroutine invincibilityCoroutine;
     [Header("Power_up_stats")]
     public float PowermoveSpeed = 5f;
     public float PowerJump = 5f;
@@ -530,9 +531,12 @@ void LateUpdate()
 
         if (health.current_health > 0)
         {
-            if (hitCoroutine != null) StopCoroutine(hitCoroutine);
+            if (hitCoroutine != null)
+                StopCoroutine(hitCoroutine);
+
             hitCoroutine = StartCoroutine(HitFreezeWithKnockback(sourcePosition));
-            StartCoroutine(InvincibilityCoroutine());
+
+            StartInvincibility(invincibilityTime);
         }
         else
         {
@@ -541,7 +545,6 @@ void LateUpdate()
     }
     public void LavaHit(Vector2 launchVelocity, float controlMultiplier, float controlTime)
     {
-
 
         burning = true;
 
@@ -571,10 +574,14 @@ void LateUpdate()
         health.take_damage(1);
 
 
+
         if (health.current_health > 0)
         {
-            if (hitCoroutine != null) StopCoroutine(hitCoroutine);
-            StartCoroutine(InvincibilityCoroutine());
+            if (hitCoroutine != null)
+                StopCoroutine(hitCoroutine);
+
+
+            StartInvincibility(invincibilityTime);
         }
         else
         {
@@ -598,23 +605,11 @@ void LateUpdate()
         moveSpeed = originalMove;
         PowermoveSpeed = originalPower;
     }
-    private IEnumerator InvincibilityCoroutine()
+    public void TriggerInvincibility(float duration)
     {
-        isInvincible = true;
-        float elapsed = 0f;
-        bool visible = true;
-
-        while (elapsed < invincibilityTime)
-        {
-            elapsed += 0.1f;
-            visible = !visible;
-            spriteRenderer.enabled = visible;
-            yield return new WaitForSecondsRealtime(0.1f);
-        }
-
-        spriteRenderer.enabled = true;
-        isInvincible = false;
+        StartInvincibility(duration);
     }
+
 
     private IEnumerator HitFreezeWithKnockback(Vector3 sourcePosition)
     {
@@ -701,28 +696,39 @@ void LateUpdate()
         transformed.SetActive(false);
         StartCoroutine(PowerupFreeze(false));
     }
-    public void TriggerInvincibility(float duration)
+    public void StartInvincibility(float duration)
     {
-        if (hitCoroutine != null) StopCoroutine(hitCoroutine);
-        StartCoroutine(InvincibilityRoutine(duration));
+        if (invincibilityCoroutine != null)
+            StopCoroutine(invincibilityCoroutine);
+
+        invincibilityCoroutine = StartCoroutine(InvincibilityRoutine(duration));
     }
 
     private IEnumerator InvincibilityRoutine(float duration)
     {
         isInvincible = true;
+
         float elapsed = 0f;
         bool visible = true;
-
+        Invoke("delay", invincibilityTime+0.1f);
         while (elapsed < duration)
         {
-            elapsed += 0.1f;
             visible = !visible;
             spriteRenderer.enabled = visible;
+
             yield return new WaitForSecondsRealtime(0.1f);
+            elapsed += 0.1f;
         }
 
         spriteRenderer.enabled = true;
         isInvincible = false;
+        invincibilityCoroutine = null;
+    }
+
+    void delay()
+    {
+        spriteRenderer.enabled = true;
+
     }
     private void OnTriggerEnter2D(Collider2D other)
     {

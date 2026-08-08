@@ -21566,7 +21566,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 2048
   stunDuration: 2
-  invincibilityTime: 1.5
+  invincibilityTime: 1
   spriteRenderer: {fileID: 4167154217632997446}
   spriteRendererPower: {fileID: 9120311054899858401}
   isInvincible: 0
