@@ -75,7 +75,7 @@ public class SC_winscreen_scoring : MonoBehaviour
     {
         base_score = score.score;
 
-        time_bonus = (int)(time.base_time * score_per_time);
+        time_bonus = Mathf.Max(0, Mathf.RoundToInt(time.base_time * score_per_time)); 
         time_score.text = time_bonus.ToString();
 
         health_bonus = score_per_heart * health.current_health;
@@ -91,7 +91,7 @@ public class SC_winscreen_scoring : MonoBehaviour
         }
 
         life_score.text = health_bonus.ToString();
-        time_remaining.text = Mathf.Round(time.base_time).ToString();
+        time_remaining.text = Mathf.Max(0, Mathf.RoundToInt(time.base_time)).ToString(); 
         final_score.text = base_score.ToString();
     }
 

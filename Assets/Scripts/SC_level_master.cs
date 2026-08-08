@@ -21,6 +21,7 @@ public class SC_level_master : MonoBehaviour
         SC_player.instance.enabled = false;
         SC_timer.instance.reset_timer();
         SC_timer.instance.pause();
+        SC_score.Instance.reset_score_level();
         if (level)
         {
             player.Revive();

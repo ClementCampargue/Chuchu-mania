@@ -11,6 +11,7 @@ public class SC_timer : MonoBehaviour
     private void Awake()
     {
         instance = this;
+        base_time_ = base_time;
     }
     private void Start()
     {
