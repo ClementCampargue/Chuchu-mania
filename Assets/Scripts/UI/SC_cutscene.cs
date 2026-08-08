@@ -62,8 +62,8 @@ public class SC_cutscene : MonoBehaviour
     {
         anim.speed = 0;
     }
-    public void change_music(AudioClip audio)
+    public void change_music(AudioClip audio, bool loop)
     {
-        SC_music_manager.instance.update_music(audio, true);
+        SC_music_manager.instance.update_music(audio, loop);
     }
 }
