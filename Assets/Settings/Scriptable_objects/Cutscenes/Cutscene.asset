@@ -43,3 +43,13 @@ MonoBehaviour:
     - choiceText: Non
       answer: []
       actionID: 
+  - character: {fileID: 11400000, guid: 999170bf34540294a957e7f2408c8a18, type: 2}
+    text: test
+    hasChoices: 0
+    choices:
+    - choiceText: Oui
+      answer: []
+      actionID: LOAD_GAME
+    - choiceText: Non
+      answer: []
+      actionID: 

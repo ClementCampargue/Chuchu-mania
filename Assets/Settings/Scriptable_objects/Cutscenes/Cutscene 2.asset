@@ -13,8 +13,9 @@ MonoBehaviour:
   m_Name: Cutscene 2
   m_EditorClassIdentifier: 
   lines:
-  - character: {fileID: 11400000, guid: 999170bf34540294a957e7f2408c8a18, type: 2}
-    text: Yo Lubin toujours des harpions au fion?
+  - character: {fileID: 11400000, guid: f1b273b5eefe3a6408d92c0f6cb1c256, type: 2}
+    text: "Apr\xE8s avoir sauv\xE9 l'esprit \xE9toile de Bubble Beach, Chuchu se
+      dirige vers Honey Hoop Galaxy!"
     hasChoices: 0
     choices:
     - choiceText: Oui
@@ -23,8 +24,9 @@ MonoBehaviour:
     - choiceText: Non
       answer: []
       actionID: 
-  - character: {fileID: 11400000, guid: 25116a902d5a6794396e07c249d676de, type: 2}
-    text: "ouais \xE7a pique \xE7a pique ouille ouille"
+  - character: {fileID: 11400000, guid: f1b273b5eefe3a6408d92c0f6cb1c256, type: 2}
+    text: "Dans le chaleureux royaume des abeilles, la voici faisant face \xE0 la
+      reine Api-Api"
     hasChoices: 0
     choices:
     - choiceText: Oui
@@ -33,8 +35,60 @@ MonoBehaviour:
     - choiceText: Non
       answer: []
       actionID: 
-  - character: {fileID: 11400000, guid: 999170bf34540294a957e7f2408c8a18, type: 2}
-    text: "mais c'est vraiment \xE9norme ce qu'il se passe!"
+  - character: {fileID: 11400000, guid: b1ce399ef06d9a5419786dbbca23aee3, type: 2}
+    text: "Hey, bienvenue dans mon \xE9den, petite gel\xE9e. Mets-toi \xE0 l'aise"
+    hasChoices: 0
+    choices:
+    - choiceText: Oui
+      answer: []
+      actionID: LOAD_GAME
+    - choiceText: Non
+      answer: []
+      actionID: 
+  - character: {fileID: 11400000, guid: 358c18f725108b14d9b9efeb15db2fc1, type: 2}
+    text: "Je recherche un esprit \xE9toile qui se trouverait dans votre ruche. Ca
+      vous dit quelque chose?"
+    hasChoices: 0
+    choices:
+    - choiceText: Oui
+      answer: []
+      actionID: LOAD_GAME
+    - choiceText: Non
+      answer: []
+      actionID: 
+  - character: {fileID: 11400000, guid: b1ce399ef06d9a5419786dbbca23aee3, type: 2}
+    text: Ca a un rapport avec du miel?
+    hasChoices: 0
+    choices:
+    - choiceText: Oui
+      answer: []
+      actionID: LOAD_GAME
+    - choiceText: Non
+      answer: []
+      actionID: 
+  - character: {fileID: 11400000, guid: 358c18f725108b14d9b9efeb15db2fc1, type: 2}
+    text: Euh... non?
+    hasChoices: 0
+    choices:
+    - choiceText: Oui
+      answer: []
+      actionID: LOAD_GAME
+    - choiceText: Non
+      answer: []
+      actionID: 
+  - character: {fileID: 11400000, guid: b1ce399ef06d9a5419786dbbca23aee3, type: 2}
+    text: "Alors \xE7a ne m'int\xE9resse pas. Allez, houste. C'est l'heure de mon
+      neuvi\xE8me go\xFBter."
+    hasChoices: 0
+    choices:
+    - choiceText: Oui
+      answer: []
+      actionID: LOAD_GAME
+    - choiceText: Non
+      answer: []
+      actionID: 
+  - character: {fileID: 11400000, guid: 358c18f725108b14d9b9efeb15db2fc1, type: 2}
+    text: "(et moi qui pensait \xEAtre une grosse goinfre...)"
     hasChoices: 0
     choices:
     - choiceText: Oui

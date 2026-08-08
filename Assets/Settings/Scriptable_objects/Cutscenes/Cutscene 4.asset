@@ -13,8 +13,19 @@ MonoBehaviour:
   m_Name: Cutscene 4
   m_EditorClassIdentifier: 
   lines:
+  - character: {fileID: 11400000, guid: 358c18f725108b14d9b9efeb15db2fc1, type: 2}
+    text: "Litchi, arr\xEAte d'emb\xEAter les gentils!"
+    hasChoices: 0
+    choices:
+    - choiceText: Oui
+      answer: []
+      actionID: LOAD_GAME
+    - choiceText: Non
+      answer: []
+      actionID: 
   - character: {fileID: 11400000, guid: 999170bf34540294a957e7f2408c8a18, type: 2}
-    text: Yo Lubin toujours des harpions au fion?
+    text: "Nous verrons bien qui de nous deux est la plus l\xE2che! S\xE2che que
+      ton heure a sonn\xE9! Lubin!"
     hasChoices: 0
     choices:
     - choiceText: Oui
@@ -24,7 +35,7 @@ MonoBehaviour:
       answer: []
       actionID: 
   - character: {fileID: 11400000, guid: 25116a902d5a6794396e07c249d676de, type: 2}
-    text: "ouais \xE7a pique \xE7a pique ouille ouille"
+    text: "Roger, votre s\xE9rnissime!"
     hasChoices: 0
     choices:
     - choiceText: Oui
@@ -34,7 +45,58 @@ MonoBehaviour:
       answer: []
       actionID: 
   - character: {fileID: 11400000, guid: 999170bf34540294a957e7f2408c8a18, type: 2}
-    text: "mais c'est vraiment \xE9norme ce qu'il se passe!"
+    text: ...
+    hasChoices: 0
+    choices:
+    - choiceText: Oui
+      answer: []
+      actionID: LOAD_GAME
+    - choiceText: Non
+      answer: []
+      actionID: 
+  - character: {fileID: 11400000, guid: 999170bf34540294a957e7f2408c8a18, type: 2}
+    text: "Ben alors! Il est o\xF9 le robot?!"
+    hasChoices: 0
+    choices:
+    - choiceText: Oui
+      answer: []
+      actionID: LOAD_GAME
+    - choiceText: Non
+      answer: []
+      actionID: 
+  - character: {fileID: 11400000, guid: 25116a902d5a6794396e07c249d676de, type: 2}
+    text: "Euh, altesse... On a plus de budget pour le robot, c'est la fin de la
+      d\xE9mo..."
+    hasChoices: 0
+    choices:
+    - choiceText: Oui
+      answer: []
+      actionID: LOAD_GAME
+    - choiceText: Non
+      answer: []
+      actionID: 
+  - character: {fileID: 11400000, guid: 999170bf34540294a957e7f2408c8a18, type: 2}
+    text: "Ptn journ\xE9e de merde..."
+    hasChoices: 0
+    choices:
+    - choiceText: Oui
+      answer: []
+      actionID: LOAD_GAME
+    - choiceText: Non
+      answer: []
+      actionID: 
+  - character: {fileID: 11400000, guid: 358c18f725108b14d9b9efeb15db2fc1, type: 2}
+    text: Victoire!
+    hasChoices: 0
+    choices:
+    - choiceText: Oui
+      answer: []
+      actionID: LOAD_GAME
+    - choiceText: Non
+      answer: []
+      actionID: 
+  - character: {fileID: 11400000, guid: f1b273b5eefe3a6408d92c0f6cb1c256, type: 2}
+    text: "F\xE9licitations! Vous avez atteint le bout de l'aventure!"
     hasChoices: 0
     choices:
     - choiceText: Oui

@@ -13,8 +13,19 @@ MonoBehaviour:
   m_Name: Cutscene 3
   m_EditorClassIdentifier: 
   lines:
+  - character: {fileID: 11400000, guid: f1b273b5eefe3a6408d92c0f6cb1c256, type: 2}
+    text: "Apr\xE8s avoir suav\xE9 l'esprit \xE9toile de la ruche, Chuchu se dirige
+      vers la Lune, mais..."
+    hasChoices: 0
+    choices:
+    - choiceText: Oui
+      answer: []
+      actionID: LOAD_GAME
+    - choiceText: Non
+      answer: []
+      actionID: 
   - character: {fileID: 11400000, guid: 999170bf34540294a957e7f2408c8a18, type: 2}
-    text: Yo Lubin toujours des harpions au fion?
+    text: "Haaaa... C'est le pied d'\xEAtre reine..."
     hasChoices: 0
     choices:
     - choiceText: Oui
@@ -24,7 +35,7 @@ MonoBehaviour:
       answer: []
       actionID: 
   - character: {fileID: 11400000, guid: 25116a902d5a6794396e07c249d676de, type: 2}
-    text: "ouais \xE7a pique \xE7a pique ouille ouille"
+    text: VOTRE MAJESTE!!!
     hasChoices: 0
     choices:
     - choiceText: Oui
@@ -34,7 +45,79 @@ MonoBehaviour:
       answer: []
       actionID: 
   - character: {fileID: 11400000, guid: 999170bf34540294a957e7f2408c8a18, type: 2}
-    text: "mais c'est vraiment \xE9norme ce qu'il se passe!"
+    text: Quoi encore, Lubin?!
+    hasChoices: 0
+    choices:
+    - choiceText: Oui
+      answer: []
+      actionID: LOAD_GAME
+    - choiceText: Non
+      answer: []
+      actionID: 
+  - character: {fileID: 11400000, guid: 25116a902d5a6794396e07c249d676de, type: 2}
+    text: "C'est une catastrophe! Chuchu est en train de lib\xE9rer tous les esprits
+      \xE9toiles!"
+    hasChoices: 0
+    choices:
+    - choiceText: Oui
+      answer: []
+      actionID: LOAD_GAME
+    - choiceText: Non
+      answer: []
+      actionID: 
+  - character: {fileID: 11400000, guid: 999170bf34540294a957e7f2408c8a18, type: 2}
+    text: Que dis-tu?!
+    hasChoices: 0
+    choices:
+    - choiceText: Oui
+      answer: []
+      actionID: LOAD_GAME
+    - choiceText: Non
+      answer: []
+      actionID: 
+  - character: {fileID: 11400000, guid: 25116a902d5a6794396e07c249d676de, type: 2}
+    text: "Que faisons-nous? Doit-on annuler la f\xEAte?..."
+    hasChoices: 0
+    choices:
+    - choiceText: Oui
+      answer: []
+      actionID: LOAD_GAME
+    - choiceText: Non
+      answer: []
+      actionID: 
+  - character: {fileID: 11400000, guid: 999170bf34540294a957e7f2408c8a18, type: 2}
+    text: Hmpf, il n'en est pas question.
+    hasChoices: 0
+    choices:
+    - choiceText: Oui
+      answer: []
+      actionID: LOAD_GAME
+    - choiceText: Non
+      answer: []
+      actionID: 
+  - character: {fileID: 11400000, guid: 999170bf34540294a957e7f2408c8a18, type: 2}
+    text: "Jamais une pauvre gel\xE9e rondouillarde comme elle ne pourra suivre le
+      ryhtme d'une reine de la lune!"
+    hasChoices: 0
+    choices:
+    - choiceText: Oui
+      answer: []
+      actionID: LOAD_GAME
+    - choiceText: Non
+      answer: []
+      actionID: 
+  - character: {fileID: 11400000, guid: 25116a902d5a6794396e07c249d676de, type: 2}
+    text: ...
+    hasChoices: 0
+    choices:
+    - choiceText: Oui
+      answer: []
+      actionID: LOAD_GAME
+    - choiceText: Non
+      answer: []
+      actionID: 
+  - character: {fileID: 11400000, guid: 999170bf34540294a957e7f2408c8a18, type: 2}
+    text: OHOHOHOHOHOHOH!
     hasChoices: 0
     choices:
     - choiceText: Oui

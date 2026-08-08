@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: Cutscene 1
   m_EditorClassIdentifier: 
   lines:
-  - character: {fileID: 11400000, guid: 999170bf34540294a957e7f2408c8a18, type: 2}
-    text: Yo Lubin toujours des harpions au fion?
+  - character: {fileID: 11400000, guid: f1b273b5eefe3a6408d92c0f6cb1c256, type: 2}
+    text: Au centre de l'univers,<p=2> il existe un lieu magique dans lequel...
     hasChoices: 0
     choices:
     - choiceText: Oui
@@ -23,8 +23,50 @@ MonoBehaviour:
     - choiceText: Non
       answer: []
       actionID: 
-  - character: {fileID: 11400000, guid: 25116a902d5a6794396e07c249d676de, type: 2}
-    text: "ouais \xE7a pique \xE7a pique ouille ouille"
+  - character: {fileID: 11400000, guid: f1b273b5eefe3a6408d92c0f6cb1c256, type: 2}
+    text: "On peut go\xFBter les saveurs les plus exotiques et exquises de la galaxie!"
+    hasChoices: 0
+    choices:
+    - choiceText: Oui
+      answer: []
+      actionID: LOAD_GAME
+    - choiceText: Non
+      answer: []
+      actionID: 
+  - character: {fileID: 11400000, guid: 5cc7475fadc274743a90d03b3f3285de, type: 2}
+    text: <sh>A l'aide!!!</sh>
+    hasChoices: 0
+    choices:
+    - choiceText: Oui
+      answer: []
+      actionID: LOAD_GAME
+    - choiceText: Non
+      answer: []
+      actionID: 
+  - character: {fileID: 11400000, guid: f1b273b5eefe3a6408d92c0f6cb1c256, type: 2}
+    text: "Une petite \xE9toile apparut soudainement et s'\xE9crasa contre le stand
+      de Chuchu!"
+    hasChoices: 0
+    choices:
+    - choiceText: Oui
+      answer: []
+      actionID: LOAD_GAME
+    - choiceText: Non
+      answer: []
+      actionID: 
+  - character: {fileID: 11400000, guid: 358c18f725108b14d9b9efeb15db2fc1, type: 2}
+    text: "H\xE9 bienvenue!<p=5> Tu veux une glace?<p=5> Quel parfum?"
+    hasChoices: 0
+    choices:
+    - choiceText: Oui
+      answer: []
+      actionID: LOAD_GAME
+    - choiceText: Non
+      answer: []
+      actionID: 
+  - character: {fileID: 11400000, guid: 5cc7475fadc274743a90d03b3f3285de, type: 2}
+    text: "Je ne suis pas venu pour manger!<p=5> Mes amies ont \xE9t\xE9 captur\xE9es
+      par la Reine Litchi pour sa grande f\xEAte!"
     hasChoices: 0
     choices:
     - choiceText: Oui
@@ -34,7 +76,59 @@ MonoBehaviour:
       answer: []
       actionID: 
   - character: {fileID: 11400000, guid: 999170bf34540294a957e7f2408c8a18, type: 2}
-    text: "mais c'est vraiment \xE9norme ce qu'il se passe!"
+    text: "<w>Oh<p=2>oh<p=2>oh<p=2>oh!<p=5></w> Ces petites peluches sont la pi\xE8ce
+      ma\xEEtresse pour que ma grande f\xEAte soit parfaite!"
+    hasChoices: 0
+    choices:
+    - choiceText: Oui
+      answer: []
+      actionID: LOAD_GAME
+    - choiceText: Non
+      answer: []
+      actionID: 
+  - character: {fileID: 11400000, guid: 5cc7475fadc274743a90d03b3f3285de, type: 2}
+    text: "Piti\xE9,<p=2> viens nous en aide,<p=2> stellanaute Chuchu!"
+    hasChoices: 0
+    choices:
+    - choiceText: Oui
+      answer: []
+      actionID: LOAD_GAME
+    - choiceText: Non
+      answer: []
+      actionID: 
+  - character: {fileID: 11400000, guid: f1b273b5eefe3a6408d92c0f6cb1c256, type: 2}
+    text: "Il n'en fallu pas plus pour convaincre la petite gel\xE9e!"
+    hasChoices: 0
+    choices:
+    - choiceText: Oui
+      answer: []
+      actionID: LOAD_GAME
+    - choiceText: Non
+      answer: []
+      actionID: 
+  - character: {fileID: 11400000, guid: 358c18f725108b14d9b9efeb15db2fc1, type: 2}
+    text: Tu peux compter sur moi!
+    hasChoices: 0
+    choices:
+    - choiceText: Oui
+      answer: []
+      actionID: LOAD_GAME
+    - choiceText: Non
+      answer: []
+      actionID: 
+  - character: {fileID: 11400000, guid: f1b273b5eefe3a6408d92c0f6cb1c256, type: 2}
+    text: "Ainsi,<p=2> Chuchu partit \xE0 la rescousse des esprits \xE9toiles captur\xE9s
+      par les lapins lunaires dans toute la galaxie!"
+    hasChoices: 0
+    choices:
+    - choiceText: Oui
+      answer: []
+      actionID: LOAD_GAME
+    - choiceText: Non
+      answer: []
+      actionID: 
+  - character: {fileID: 11400000, guid: f1b273b5eefe3a6408d92c0f6cb1c256, type: 2}
+    text: 'Direction: <p=2> Bubble Beach Galaxy!'
     hasChoices: 0
     choices:
     - choiceText: Oui

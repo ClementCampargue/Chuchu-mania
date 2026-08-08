@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: Lychee
   m_EditorClassIdentifier: 
   portrait: {fileID: 21300000, guid: e72419fbb7c46cf4ba0cd21c58e6ed4a, type: 3}
-  name: Lychee
+  name: Reine Litchi
   typesound: {fileID: 8300000, guid: 87b244b98ee159040b27424e348e3ca7, type: 3}

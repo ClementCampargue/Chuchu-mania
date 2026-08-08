@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   lines:
   - character: {fileID: 11400000, guid: b295321cb0513064ab52bcc356403ff7, type: 2}
-    text: <sh>CHUCHU!</sh>
+    text: <sh>CHUCHUUUUUUUUUUUUUUUUUUUU!</sh>
     hasChoices: 0
     choices:
     - choiceText: Non

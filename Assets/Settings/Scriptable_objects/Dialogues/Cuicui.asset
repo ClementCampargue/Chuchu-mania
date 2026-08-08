@@ -38,7 +38,7 @@ MonoBehaviour:
             choices: []
           actionID: 
       - character: {fileID: 11400000, guid: d545f39ec73e8a94f874387ac2d04a27, type: 2}
-        text: Attends...
+        text: Attends<p=5>.<p=5>.<p=5>.
         hasChoices: 0
         choices:
         - choiceText: Je rigooooole
@@ -74,7 +74,7 @@ MonoBehaviour:
             choices: []
           actionID: 
       - character: {fileID: 11400000, guid: 358c18f725108b14d9b9efeb15db2fc1, type: 2}
-        text: Il faut vraiment que tu te calmes avec Stellaman, Cuicui...
+        text: Il faut vraiment que tu te calmes avec Stellaman,<p=2> Cuicui...
         hasChoices: 0
         choices:
         - choiceText: Je rigooooole

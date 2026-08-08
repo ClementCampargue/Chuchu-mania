@@ -425,7 +425,7 @@ MonoBehaviour:
   player_green: {fileID: 2100000, guid: 4a14cdf686b9e0d4288140ab84d83279, type: 2}
   anim: {fileID: 6895808571220485109}
   clip: {fileID: 8300000, guid: 13d118522dd436a47b642f745c6111ce, type: 3}
-  startSpeed: 5
+  startSpeed: 15
   speedMultiplierOnBounce: 0.85
   minSpeed: 0.5
   screenMin: {x: -5.48, y: -6.1}
