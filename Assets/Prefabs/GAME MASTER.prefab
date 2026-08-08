@@ -2100,16 +2100,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   stickerPrefab: {fileID: 8008883728343687485, guid: c22983ab7ad9e0e4890b88601e2c56f8, type: 3}
   parent: {fileID: 7581482434920043970}
-  sprites:
-  - {fileID: 21300000, guid: 31fc616d418d7614ea8a1b53a422a3f4, type: 3}
-  - {fileID: 21300000, guid: 5c73760a17ff0d84194b9b15beb4f1ce, type: 3}
-  - {fileID: 21300000, guid: c5dc49f6fe0361445bf2426f7872e5eb, type: 3}
-  - {fileID: 21300000, guid: dc2f83f01bd024c4794d891007819044, type: 3}
-  - {fileID: 21300000, guid: f26f3962758580c428ed8162ca01f4d8, type: 3}
-  - {fileID: 21300000, guid: 844464ee91c94f64b8b10d0703949e0c, type: 3}
-  - {fileID: 21300000, guid: 6d0cafc1ee1af1f4ab0263e726c268a3, type: 3}
-  - {fileID: 21300000, guid: 16ce023b403e1b443948c80cd6784cae, type: 3}
-  - {fileID: 21300000, guid: 36546ad5dd5c27842a67e01820aa8d85, type: 3}
+  stickers: {fileID: 11400000, guid: 095e909b84e827a4eac34ae6800cd8b0, type: 2}
   deleteZone: {fileID: 0}
 --- !u!1001 &473633856933728839
 PrefabInstance:
