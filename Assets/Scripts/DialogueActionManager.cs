@@ -45,7 +45,7 @@ public class DialogueActionManager : MonoBehaviour
 
     private void Load_game()
     {
-        SC_screenshot_transition.instance.Capture("Cutscene");
+        SC_screenshot_transition.instance.Capture("Cutscene1");
         SC_player.instance.rb.constraints = RigidbodyConstraints2D.FreezeRotation;
         SC_player.instance.enabled = true;
         SC_player.instance.canMove = true;

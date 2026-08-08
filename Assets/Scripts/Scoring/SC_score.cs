@@ -63,6 +63,13 @@ public class SC_score : MonoBehaviour
         }
     }
 
+    public void reset_score_level()
+    {
+        PlayerPrefs.SetInt("Score",score + PlayerPrefs.GetInt("Score"));
+        score = 0;
+        UpdateScoreUI();
+    }
+
     private void UpdateScoreUI()
     {
         if (scoreText != null)
@@ -77,5 +84,6 @@ public class SC_score : MonoBehaviour
     public void AddScore(int amount)
     {
         score += amount;
+        UpdateScoreUI();
     }
 }
