@@ -211,7 +211,6 @@ public class SC_cage : MonoBehaviour
         // le mouvement est toujours arrêté au moment du coup.
         isBouncing = false;
         currentSpeed = 0f;
-        SC_player.instance.anim_.SetTrigger("Punch");
 
         Health--;
 
@@ -245,6 +244,7 @@ public class SC_cage : MonoBehaviour
         else
         {
             anim.SetTrigger("Damage");
+            SC_player.instance.anim_.SetTrigger("Punch");
 
             juice_damage.PlayJuice();
         }
