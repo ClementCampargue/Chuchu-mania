@@ -97,6 +97,23 @@ public class DialogueManager : MonoBehaviour
                 NextLine();
             }
         }
+
+        if (Input.GetKeyDown(KeyCode.Mouse0) && !choicePanel.activeInHierarchy)
+        {
+            if (typewriter.IsTyping())
+            {
+                typewriter.FinishText();
+                typewriter.SetWaitInputVisible(true);
+
+                waitingInput = true;
+                return;
+            }
+
+            if (waitingInput)
+            {
+                NextLine();
+            }
+        }
     }
 
     public void StartDialogue()
@@ -228,6 +245,7 @@ public class DialogueManager : MonoBehaviour
 
     private void ShowChoices(Choice[] choices)
     {
+        SC_scursorManager.instance.gameObject.SetActive(true);
         choicePanel.SetActive(true);
 
         typewriter.SetWaitInputVisible(false);
@@ -264,6 +282,8 @@ public class DialogueManager : MonoBehaviour
 
     private void SelectChoice(Choice choice)
     {
+        SC_scursorManager.instance.gameObject.SetActive(false);
+
         choicePanel.SetActive(false);
         Invoke("delay",0.1f);
         // Bloque temporairement l'input de dialogue

@@ -68,6 +68,7 @@ MonoBehaviour:
   scaleMinus: {fileID: 1781555164194001046, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
   rotatePlus: {fileID: -4758767625168951764, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
   rotateMinus: {fileID: 6921593519229454973, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
+  flip: {fileID: -2185481485913320682, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
   defaultScale: 0.5
   minScale: 0.25
   maxScale: 1.5

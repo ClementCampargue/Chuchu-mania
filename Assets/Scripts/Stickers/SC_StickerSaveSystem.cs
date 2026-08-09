@@ -51,7 +51,16 @@ public class SC_StickerSaveSystem : MonoBehaviour
 
         instance = this;
     }
+    private void OnDisable()
+    {
+        AutoSave();
 
+    }
+    private void OnDestroy()
+    {
+        AutoSave();
+
+    }
     private void Start()
     {
         // Cherche automatiquement la TrashZone

@@ -63,16 +63,17 @@ public class SC_sticker_menu : MonoBehaviour
     {
         if (sticker.unlocked)
         {
+            sticker_name.text = sticker.sticker_name;
             sticker_description.text = sticker.description;
             sprite_image.material = unlocked;
         }
         else
         {
+            sticker_name.text = "???";
             sticker_description.text = sticker.unlock_conditions;
             sprite_image.material = not_unlocked;
 
         }
-        sticker_name.text = sticker.sticker_name;
         artist.text = sticker.artist;
         sprite_image.sprite = sticker.sticker_sprite;
         UpdateStars(sticker.rarity);

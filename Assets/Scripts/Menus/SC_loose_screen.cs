@@ -12,6 +12,8 @@ public class SC_loose_screen : MonoBehaviour
 
     public void ReloadCurrentScene()
     {
+        SC_scursorManager.instance.gameObject.SetActive(false);
+
         Time.timeScale = 1.0f;
 
         // Récupère le nom de la scène actuelle
@@ -23,6 +25,8 @@ public class SC_loose_screen : MonoBehaviour
 
     public void revive()
     {
+        SC_scursorManager.instance.gameObject.SetActive(false);
+
         int index = Mathf.Min(number_of_death, score_losses.Count - 1);
 
         SC_score.Instance.score -= score_losses[index];
@@ -42,6 +46,8 @@ public class SC_loose_screen : MonoBehaviour
 
     public void give_up()
     {
+        SC_scursorManager.instance.gameObject.SetActive(false);
+
         if (PlayerPrefs.GetInt("Score") == 0)
         {
             SC_screenshot_transition.instance.Capture("HUB");
@@ -58,6 +64,7 @@ public class SC_loose_screen : MonoBehaviour
         // Évite une erreur si la liste est vide
         if (score_losses.Count == 0)
             return;
+        SC_scursorManager.instance.gameObject.SetActive(true);
 
         // Reste sur le dernier élément une fois arrivé au maximum
         int index = Mathf.Min(number_of_death, score_losses.Count - 1);

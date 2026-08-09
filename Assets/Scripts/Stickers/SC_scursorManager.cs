@@ -1,14 +1,14 @@
+using System.Collections;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.LowLevel;
-
-
 public class SC_scursorManager : MonoBehaviour
 {
     public static SC_scursorManager instance;
 
-
+    public Animator anim;
 
     [Header("Sprites curseur")]
     public Sprite normalSprite;
@@ -33,9 +33,7 @@ public class SC_scursorManager : MonoBehaviour
 
     private Mouse virtualMouse;
 
-
     private Vector2 cursorPosition;
-
 
     private bool usingGamepad;
 
@@ -49,9 +47,6 @@ public class SC_scursorManager : MonoBehaviour
             return cursorPosition;
         }
     }
-
-
-
 
 
 
@@ -97,11 +92,8 @@ public class SC_scursorManager : MonoBehaviour
 
 
         SetNormalCursor();
+
     }
-
-
-
-
 
 
 
@@ -113,14 +105,10 @@ public class SC_scursorManager : MonoBehaviour
 
 
 
-
-
     void OnDisable()
     {
         cursorMoveAction.action.Disable();
     }
-
-
 
 
 
@@ -134,17 +122,28 @@ public class SC_scursorManager : MonoBehaviour
     void Update()
     {
 
+        if (Input.GetKeyDown(KeyCode.Mouse0))
+        {
+            if (anim.enabled)
+            {
+                anim.SetTrigger("click");
+            }
+            else
+            {
+                anim.enabled = true;
+            }
+        }
 
 
         // =========================
         // SOURIS PHYSIQUE
         // =========================
 
-        if(Mouse.current != null)
+        if (Mouse.current != null)
         {
 
 
-            if(Mouse.current.delta.ReadValue()
+            if (Mouse.current.delta.ReadValue()
                 .sqrMagnitude > 0.01f)
             {
                 usingGamepad = false;
@@ -152,7 +151,7 @@ public class SC_scursorManager : MonoBehaviour
 
 
 
-            if(!usingGamepad)
+            if (!usingGamepad)
             {
 
                 cursorPosition =
@@ -162,7 +161,6 @@ public class SC_scursorManager : MonoBehaviour
                 UpdateCursor();
             }
         }
-
 
 
 
@@ -181,7 +179,7 @@ public class SC_scursorManager : MonoBehaviour
 
 
 
-        if(stick.sqrMagnitude > 0.01f)
+        if (stick.sqrMagnitude > 0.01f)
         {
 
             usingGamepad = true;
@@ -224,16 +222,7 @@ public class SC_scursorManager : MonoBehaviour
         // CLIC VIRTUEL
         // =========================
 
-
-
-
     }
-
-
-
-
-
-
 
 
 
@@ -251,43 +240,34 @@ public class SC_scursorManager : MonoBehaviour
             virtualMouse.position,
             cursorPosition
         );
+
     }
-
-
-
-
-
-
-
 
 
 
     public void SetNormalCursor()
     {
-        if(cursorRenderer != null)
+        if (cursorRenderer != null)
             cursorRenderer.sprite =
                 normalSprite;
     }
 
 
 
-
-
     public void SetHoverCursor()
     {
-        if(cursorRenderer != null)
+        if (cursorRenderer != null)
             cursorRenderer.sprite =
                 hoverSprite;
     }
 
 
 
-
-
     public void SetGrabCursor()
     {
-        if(cursorRenderer != null)
+        if (cursorRenderer != null)
             cursorRenderer.sprite =
                 grabSprite;
     }
+
 }

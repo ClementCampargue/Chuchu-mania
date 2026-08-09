@@ -1,8 +1,8 @@
 using UnityEngine;
-using UnityEngine.UI;
-using UnityEngine.InputSystem;
 using UnityEngine.EventSystems;
+using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 
 public class SC_sticker_UI : MonoBehaviour,
@@ -22,6 +22,8 @@ public class SC_sticker_UI : MonoBehaviour,
     public InputActionReference rotatePlus;
     public InputActionReference rotateMinus;
 
+    // Flip du sticker
+    public InputActionReference flip;
 
 
     [Header("Scale")]
@@ -32,11 +34,9 @@ public class SC_sticker_UI : MonoBehaviour,
     public float buttonScaleSpeed = 0.05f;
 
 
-
     [Header("Rotation")]
     public float rotationSpeed = 10f;
     public float buttonRotationSpeed = 10f;
-
 
 
     [Header("UI")]
@@ -45,17 +45,18 @@ public class SC_sticker_UI : MonoBehaviour,
     public Animator anim;
 
 
-
     [Header("Delete")]
     public RectTransform deleteZone;
 
 
-
     public bool spawnedSticker;
+
     private RectTransform rect;
     private Canvas canvas;
+
     private bool dragging;
     private bool overDeleteZone;
+
     private Vector2 offset;
 
     private Color baseColor;
@@ -63,27 +64,31 @@ public class SC_sticker_UI : MonoBehaviour,
     private SC_scursorManager cursor;
 
 
-
     void Awake()
     {
         rect = GetComponent<RectTransform>();
+
         canvas = GetComponentInParent<Canvas>();
 
         img = GetComponent<Image>();
 
         baseColor = img.color;
 
+        // Scale initial
         rect.localScale =
             Vector3.one * defaultScale;
 
-
+        // Permet de détecter uniquement les pixels visibles
         img.alphaHitTestMinimumThreshold = 0.1f;
 
-
+        // Copie du material pour éviter de modifier
+        // le material partagé par les autres stickers
         if (img.material != null)
             img.material =
                 new Material(img.material);
     }
+
+
     void OnEnable()
     {
         click.action.Enable();
@@ -97,11 +102,14 @@ public class SC_sticker_UI : MonoBehaviour,
 
         rotatePlus.action.Enable();
         rotateMinus.action.Enable();
+
+        // Flip
+        flip.action.Enable();
     }
+
+
     void Start()
     {
-
-
         cursor =
             SC_scursorManager.instance;
 
@@ -111,10 +119,12 @@ public class SC_sticker_UI : MonoBehaviour,
             .GetComponent<RectTransform>();
 
 
-
+        // Si le sticker vient d'être créé,
+        // il commence directement en mode drag
         if (!spawnedSticker)
         {
             dragging = true;
+
             offset = Vector2.zero;
 
             cursor.SetGrabCursor();
@@ -127,23 +137,40 @@ public class SC_sticker_UI : MonoBehaviour,
     }
 
 
-
-
-
     void Update()
     {
         if (SceneManager.GetActiveScene().name != "Stickers")
             return;
+
+
+        // =========================
+        // DELETE
+        // =========================
 
         if (deleteSticker.action.WasPressedThisFrame() && isHovered)
         {
             DeleteSticker();
         }
 
+
+        // =========================
+        // FLIP
+        // =========================
+
+        if (flip.action.WasPressedThisFrame() && isHovered)
+        {
+            FlipSticker();
+        }
+
+
+        // =========================
+        // DRAG
+        // =========================
+
         if (dragging)
         {
             HandleScaleRotation();
-       
+
 
             Vector2 screenPos =
                 RectTransformUtility.WorldToScreenPoint(
@@ -167,33 +194,37 @@ public class SC_sticker_UI : MonoBehaviour,
             CheckDeleteZone();
         }
 
+
+        // =========================
+        // CLICK
+        // =========================
+
         if (click.action.WasPressedThisFrame() && isHovered)
         {
             ToggleDrag();
         }
-
     }
+
+
+    // =========================================================
+    // DRAG
+    // =========================================================
 
     void ToggleDrag()
     {
-
         if (!dragging)
             StartDrag();
 
         else
             StopDrag();
-
     }
 
 
     void StartDrag()
     {
-
         dragging = true;
 
-
         selected.SetActive(true);
-
 
 
         RectTransformUtility.ScreenPointToLocalPointInRectangle(
@@ -208,30 +239,25 @@ public class SC_sticker_UI : MonoBehaviour,
             rect.anchoredPosition - local;
 
 
-
         img.maskable = false;
 
 
         rect.parent.SetAsLastSibling();
 
 
-
         anim.ResetTrigger("drop");
         anim.SetTrigger("grab");
-
 
 
         SC_sticker_menu.instance.start_edit_mode();
 
 
         cursor.SetGrabCursor();
-
     }
 
 
     void StopDrag()
     {
-
         dragging = false;
 
 
@@ -239,7 +265,6 @@ public class SC_sticker_UI : MonoBehaviour,
 
 
         img.maskable = true;
-
 
 
         bool delete =
@@ -250,7 +275,6 @@ public class SC_sticker_UI : MonoBehaviour,
             );
 
 
-
         if (delete)
         {
             DeleteSticker();
@@ -258,10 +282,8 @@ public class SC_sticker_UI : MonoBehaviour,
         }
 
 
-
         anim.ResetTrigger("grab");
         anim.SetTrigger("drop");
-
 
 
         SC_sticker_menu.instance.quit_edit_mode();
@@ -270,49 +292,57 @@ public class SC_sticker_UI : MonoBehaviour,
         SC_StickerSaveSystem.instance.AutoSave();
 
 
-
         cursor.SetHoverCursor();
-
     }
+
+
+    // =========================================================
+    // SCALE + ROTATION
+    // =========================================================
 
     void HandleScaleRotation()
     {
-
         if (!dragging)
             return;
-
 
 
         Vector2 scroll =
             mouseScroll.action.ReadValue<Vector2>();
 
 
-
         if (Mathf.Abs(scroll.y) < 0.01f)
             return;
 
 
+        // =========================
+        // ROTATION
+        // =========================
 
         if (rotateModifier.action.IsPressed())
         {
-
             rect.Rotate(
                 0,
                 0,
                 -scroll.y * rotationSpeed
             );
-
         }
+
+
+        // =========================
+        // SCALE
+        // =========================
+
         else
         {
-
+            // On récupère la valeur absolue
+            // pour ne pas casser le scale
+            // lorsque le sticker est retourné.
             float scale =
-                rect.localScale.x;
+                Mathf.Abs(rect.localScale.x);
 
 
             scale +=
                 scroll.y * wheelSpeed;
-
 
 
             scale =
@@ -323,21 +353,53 @@ public class SC_sticker_UI : MonoBehaviour,
                 );
 
 
+            // On conserve le flip horizontal
+            float flipX =
+                Mathf.Sign(rect.localScale.x);
+
+            // On conserve également le flip vertical
+            float flipY =
+                Mathf.Sign(rect.localScale.y);
+
 
             rect.localScale =
-                Vector3.one * scale;
-
+                new Vector3(
+                    flipX * scale,
+                    flipY * scale,
+                    1f
+                );
         }
-
     }
 
 
+    // =========================================================
+    // FLIP
+    // =========================================================
+
+    void FlipSticker()
+    {
+        Vector3 scale =
+            rect.localScale;
+
+
+        // Inverse le sens horizontal
+        scale.x *= -1f;
+
+
+        rect.localScale =
+            scale;
+        SC_StickerSaveSystem.instance.AutoSave();
+    }
+
+
+    // =========================================================
+    // DELETE ZONE
+    // =========================================================
+
     void CheckDeleteZone()
     {
-
         if (deleteZone == null)
             return;
-
 
 
         overDeleteZone =
@@ -348,17 +410,14 @@ public class SC_sticker_UI : MonoBehaviour,
             );
 
 
-
         if (overDeleteZone)
         {
-
             float alpha =
                 Mathf.Lerp(
                     0.3f,
                     1f,
                     (Mathf.Sin(Time.time * 12f) + 1f) / 2f
                 );
-
 
 
             img.color =
@@ -368,18 +427,21 @@ public class SC_sticker_UI : MonoBehaviour,
                     baseColor.b,
                     alpha
                 );
-
         }
         else
         {
-            img.color = baseColor;
+            img.color =
+                baseColor;
         }
-
     }
+
+
+    // =========================================================
+    // DELETE
+    // =========================================================
 
     void DeleteSticker()
     {
-
         SC_sticker_menu.instance.quit_edit_mode();
 
 
@@ -390,24 +452,32 @@ public class SC_sticker_UI : MonoBehaviour,
 
 
         Destroy(transform.parent.gameObject);
-
+        SC_StickerSaveSystem.instance.AutoSave();
     }
 
-    public void OnPointerEnter(PointerEventData eventData)
+
+    // =========================================================
+    // POINTER
+    // =========================================================
+
+    public void OnPointerEnter(
+        PointerEventData eventData)
     {
         isHovered = true;
+
 
         if (!dragging)
             cursor.SetHoverCursor();
     }
 
 
-    public void OnPointerExit(PointerEventData eventData)
+    public void OnPointerExit(
+        PointerEventData eventData)
     {
         isHovered = false;
+
 
         if (!dragging)
             cursor.SetNormalCursor();
     }
-
 }

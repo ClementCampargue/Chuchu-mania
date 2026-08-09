@@ -431,4 +431,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   textMesh: {fileID: 9176267513702836998}
-  padding: {x: 0.2, y: 0.2}
+  padding: {x: 0.5, y: 0.5}
