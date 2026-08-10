@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   lines:
   - character: {fileID: 11400000, guid: f1b273b5eefe3a6408d92c0f6cb1c256, type: 2}
-    text: "Apr\xE8s avoir suav\xE9 l'esprit \xE9toile de la ruche,<p=2> Chuchu se
+    text: "Apr\xE8s avoir sauv\xE9 l'esprit \xE9toile de la ruche,<p=2> Chuchu se
       dirige vers la Lune!"
     hasChoices: 0
     choices:

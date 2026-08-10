@@ -14,9 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   sticker_sprite: {fileID: 21300000, guid: 16ce023b403e1b443948c80cd6784cae, type: 3}
   sticker_name: Magenta
-  description: 
+  description: "Pourquoi m\xEAme en appesanteur elle fait toujours la tronche?"
   unlock_conditions: "pas d\xE9bloqu\xE9 bouffon va"
-  artist: 
+  artist: Edwin Porng
   rarity: 0
   Price: 0
   unlocked: 0
