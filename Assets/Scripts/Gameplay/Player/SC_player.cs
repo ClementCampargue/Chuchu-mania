@@ -235,13 +235,16 @@ public class SC_player : MonoBehaviour
             }
         }
 
-        if (!wasGrounded && isGrounded)
+        if (IsAnimationPlaying("jump_idle") && isGrounded  && rb.linearVelocity.y ==0)
         {
             anim.ResetTrigger("Jump");
+            anim.SetTrigger("Land");
+            land.PlayJuice();
 
-
-
-            if (!wasGrounded && isGrounded && rb.linearVelocity.y <= 0.5f)
+        }
+        if (!wasGrounded && isGrounded)
+        {
+            if (rb.linearVelocity.y <= 0.5f)
             {
                 anim.ResetTrigger("Jump");
                 anim.SetTrigger("Land");
@@ -256,6 +259,8 @@ public class SC_player : MonoBehaviour
             }
 
         }
+
+
         float yScale = transform.localScale.y;
 
         if (moveInput.x > 0)
@@ -284,6 +289,11 @@ public class SC_player : MonoBehaviour
             }
         }
 
+    }
+    bool IsAnimationPlaying( string animationName)
+    {
+        AnimatorStateInfo stateInfo = anim.GetCurrentAnimatorStateInfo(0);
+        return stateInfo.IsName(animationName);
     }
     void CheckStun()
     {
