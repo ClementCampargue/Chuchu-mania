@@ -9,7 +9,7 @@ public class SC_sticker_UI : MonoBehaviour,
     IPointerEnterHandler,
     IPointerExitHandler
 {
-    private bool isHovered;
+private bool isHovered;
 
     [Header("Input Actions")]
     public InputActionReference mouseScroll;
@@ -24,7 +24,7 @@ public class SC_sticker_UI : MonoBehaviour,
 
     // Flip du sticker
     public InputActionReference flip;
-
+    public SC_alpha_cut_button cut;
 
     [Header("Scale")]
     public float defaultScale = 1f;
@@ -84,27 +84,40 @@ public class SC_sticker_UI : MonoBehaviour,
         // Copie du material pour éviter de modifier
         // le material partagé par les autres stickers
         if (img.material != null)
-            img.material =
-                new Material(img.material);
+            img.material = new Material(img.material);
     }
 
 
     void OnEnable()
     {
-        click.action.Enable();
-        deleteSticker.action.Enable();
+        EnableAction(click);
+        EnableAction(deleteSticker);
 
-        mouseScroll.action.Enable();
-        rotateModifier.action.Enable();
+        EnableAction(mouseScroll);
+        EnableAction(rotateModifier);
 
-        scalePlus.action.Enable();
-        scaleMinus.action.Enable();
+        EnableAction(scalePlus);
+        EnableAction(scaleMinus);
 
-        rotatePlus.action.Enable();
-        rotateMinus.action.Enable();
+        EnableAction(rotatePlus);
+        EnableAction(rotateMinus);
 
-        // Flip
-        flip.action.Enable();
+        EnableAction(flip);
+    }
+
+
+
+    void EnableAction(InputActionReference action)
+    {
+        if (action != null && action.action != null)
+            action.action.Enable();
+    }
+
+
+    void DisableAction(InputActionReference action)
+    {
+        if (action != null && action.action != null)
+            action.action.Disable();
     }
 
 
@@ -147,9 +160,10 @@ public class SC_sticker_UI : MonoBehaviour,
         // DELETE
         // =========================
 
-        if (deleteSticker.action.WasPressedThisFrame() && isHovered)
+        if (IsPressed(deleteSticker) && isHovered)
         {
             DeleteSticker();
+            return;
         }
 
 
@@ -157,9 +171,11 @@ public class SC_sticker_UI : MonoBehaviour,
         // FLIP
         // =========================
 
-        if (flip.action.WasPressedThisFrame() && isHovered)
+        if (IsPressed(flip) && isHovered)
         {
-            FlipSticker();
+            if (dragging)
+
+                FlipSticker();
         }
 
 
@@ -199,7 +215,7 @@ public class SC_sticker_UI : MonoBehaviour,
         // CLICK
         // =========================
 
-        if (click.action.WasPressedThisFrame() && isHovered)
+        if (IsPressed(click) && isHovered)
         {
             ToggleDrag();
         }
@@ -222,6 +238,7 @@ public class SC_sticker_UI : MonoBehaviour,
 
     void StartDrag()
     {
+        cut.uncut();
         dragging = true;
 
         selected.SetActive(true);
@@ -258,6 +275,8 @@ public class SC_sticker_UI : MonoBehaviour,
 
     void StopDrag()
     {
+        cut.cut();
+
         dragging = false;
 
 
@@ -295,80 +314,151 @@ public class SC_sticker_UI : MonoBehaviour,
         cursor.SetHoverCursor();
     }
 
+// =========================================================
+// SCALE + ROTATION
+// =========================================================
 
-    // =========================================================
-    // SCALE + ROTATION
-    // =========================================================
-
-    void HandleScaleRotation()
+void HandleScaleRotation()
     {
         if (!dragging)
             return;
 
+        // =========================
+        // MOUSE WHEEL
+        // =========================
 
         Vector2 scroll =
             mouseScroll.action.ReadValue<Vector2>();
 
-
-        if (Mathf.Abs(scroll.y) < 0.01f)
-            return;
-
-
-        // =========================
-        // ROTATION
-        // =========================
-
-        if (rotateModifier.action.IsPressed())
+        if (Mathf.Abs(scroll.y) > 0.01f)
         {
-            rect.Rotate(
-                0,
-                0,
-                -scroll.y * rotationSpeed
+            // Rotation avec CTRL / modifier
+            if (IsHeld(rotateModifier))
+            {
+                RotateSticker(
+                    -scroll.y * rotationSpeed
+                );
+            }
+            // Sinon scale
+            else
+            {
+                ScaleSticker(
+                    scroll.y * wheelSpeed
+                );
+            }
+        }
+
+
+        // =========================
+        // SCALE BUTTONS
+        // =========================
+
+        // Tant que la gâchette est maintenue,
+        // le scale continue progressivement.
+        if (IsHeld(scalePlus))
+        {
+            ScaleSticker(
+                buttonScaleSpeed * Time.deltaTime
+            );
+        }
+
+        if (IsHeld(scaleMinus))
+        {
+            ScaleSticker(
+                -buttonScaleSpeed * Time.deltaTime
             );
         }
 
 
         // =========================
-        // SCALE
+        // ROTATION BUTTONS
         // =========================
 
-        else
+        // Tant que la gâchette est maintenue,
+        // la rotation continue progressivement.
+        if (IsHeld(rotatePlus))
         {
-            // On récupère la valeur absolue
-            // pour ne pas casser le scale
-            // lorsque le sticker est retourné.
-            float scale =
-                Mathf.Abs(rect.localScale.x);
-
-
-            scale +=
-                scroll.y * wheelSpeed;
-
-
-            scale =
-                Mathf.Clamp(
-                    scale,
-                    minScale,
-                    maxScale
-                );
-
-
-            // On conserve le flip horizontal
-            float flipX =
-                Mathf.Sign(rect.localScale.x);
-
-            // On conserve également le flip vertical
-            float flipY =
-                Mathf.Sign(rect.localScale.y);
-
-
-            rect.localScale =
-                new Vector3(
-                    flipX * scale,
-                    flipY * scale,
-                    1f
-                );
+            RotateSticker(
+                buttonRotationSpeed * Time.deltaTime
+            );
         }
+
+        if (IsHeld(rotateMinus))
+        {
+            RotateSticker(
+                -buttonRotationSpeed * Time.deltaTime
+            );
+        }
+    }
+
+
+    // =========================================================
+    // INPUT HELPER
+    // =========================================================
+
+    bool IsHeld(InputActionReference action)
+    {
+        return action != null &&
+               action.action != null &&
+               action.action.IsPressed();
+    }
+
+
+
+    // =========================================================
+    // SCALE
+    // =========================================================
+
+    void ScaleSticker(float amount)
+    {
+        // On récupère la valeur absolue
+        // pour ne pas casser le scale
+        // lorsque le sticker est retourné.
+        float scale =
+            Mathf.Abs(rect.localScale.x);
+
+
+        scale += amount;
+
+
+        scale =
+            Mathf.Clamp(
+                scale,
+                minScale,
+                maxScale
+            );
+
+
+        // On conserve le flip horizontal
+        float flipX =
+            Mathf.Sign(rect.localScale.x);
+
+
+        // On conserve également le flip vertical
+        float flipY =
+            Mathf.Sign(rect.localScale.y);
+
+
+        rect.localScale =
+            new Vector3(
+                flipX * scale,
+                flipY * scale,
+                1f
+            );
+    }
+
+
+    // =========================================================
+    // ROTATION
+    // =========================================================
+
+    void RotateSticker(float amount)
+    {
+        rect.Rotate(
+            0,
+            0,
+            amount
+        );
     }
 
 
@@ -388,10 +478,22 @@ public class SC_sticker_UI : MonoBehaviour,
 
         rect.localScale =
             scale;
+
+        if(!dragging)
         SC_StickerSaveSystem.instance.AutoSave();
     }
 
 
+    // =========================================================
+    // INPUT HELPER
+    // =========================================================
+
+    bool IsPressed(InputActionReference action)
+    {
+        return action != null &&
+               action.action != null &&
+               action.action.WasPressedThisFrame();
+    }
     // =========================================================
     // DELETE ZONE
     // =========================================================

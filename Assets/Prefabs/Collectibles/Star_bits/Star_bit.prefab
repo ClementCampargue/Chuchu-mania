@@ -5040,7 +5040,7 @@ MonoBehaviour:
   flashMaterial: {fileID: 10306, guid: 0000000000000000f000000000000000, type: 0}
   rumble: 1
   rumbleLow: 0.1
-  rumbleHigh: 0.3
+  rumbleHigh: 0.18
   rumbleDuration: 0.1
   shakeAmplitude: 0
   shakeFrequency: 0
@@ -5060,7 +5060,6 @@ MonoBehaviour:
   freeze: 0
   freezeDuration: 0.05
   slowMoScale: 0.05
-  freezeRecoverDuration: 0.15
   fovCurve:
     serializedVersion: 2
     m_Curve:

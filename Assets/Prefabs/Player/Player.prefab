@@ -10550,10 +10550,10 @@ MonoBehaviour:
   trs: {fileID: 0}
   spriteRenderer: {fileID: 0}
   flashMaterial: {fileID: 0}
-  rumble: 1
-  rumbleLow: 0.1
-  rumbleHigh: 0.3
-  rumbleDuration: 0.1
+  rumble: 0
+  rumbleLow: 11
+  rumbleHigh: 12.7
+  rumbleDuration: 0.09
   shakeAmplitude: 0
   shakeFrequency: 0
   shakeScreenDuration: 0
@@ -20529,10 +20529,10 @@ MonoBehaviour:
   trs: {fileID: 0}
   spriteRenderer: {fileID: 0}
   flashMaterial: {fileID: 0}
-  rumble: 1
-  rumbleLow: 0.1
-  rumbleHigh: 0.3
-  rumbleDuration: 0.1
+  rumble: 0
+  rumbleLow: 0
+  rumbleHigh: 0
+  rumbleDuration: 0.05
   shakeAmplitude: 0
   shakeFrequency: 0
   shakeScreenDuration: 0
@@ -20745,9 +20745,9 @@ MonoBehaviour:
   spriteRenderer: {fileID: 0}
   flashMaterial: {fileID: 0}
   rumble: 1
-  rumbleLow: 0.1
-  rumbleHigh: 0.3
-  rumbleDuration: 0.1
+  rumbleLow: 0.42
+  rumbleHigh: 0.69
+  rumbleDuration: 0.24
   shakeAmplitude: 0
   shakeFrequency: 0
   shakeScreenDuration: 0
@@ -20960,9 +20960,9 @@ MonoBehaviour:
   spriteRenderer: {fileID: 0}
   flashMaterial: {fileID: 0}
   rumble: 1
-  rumbleLow: 0.1
-  rumbleHigh: 0.3
-  rumbleDuration: 0.1
+  rumbleLow: 0.42
+  rumbleHigh: 0.69
+  rumbleDuration: 0.24
   shakeAmplitude: 0
   shakeFrequency: 0
   shakeScreenDuration: 0
@@ -21208,9 +21208,9 @@ MonoBehaviour:
   spriteRenderer: {fileID: 0}
   flashMaterial: {fileID: 0}
   rumble: 1
-  rumbleLow: 0.1
-  rumbleHigh: 0.3
-  rumbleDuration: 0.1
+  rumbleLow: 0.42
+  rumbleHigh: 0.69
+  rumbleDuration: 0.24
   shakeAmplitude: 0
   shakeFrequency: 0
   shakeScreenDuration: 0
@@ -21904,9 +21904,9 @@ MonoBehaviour:
   spriteRenderer: {fileID: 0}
   flashMaterial: {fileID: 0}
   rumble: 1
-  rumbleLow: 0.1
-  rumbleHigh: 0.3
-  rumbleDuration: 0.1
+  rumbleLow: 0.42
+  rumbleHigh: 0.69
+  rumbleDuration: 0.24
   shakeAmplitude: 0
   shakeFrequency: 0
   shakeScreenDuration: 0

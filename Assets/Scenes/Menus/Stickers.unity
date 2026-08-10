@@ -1390,6 +1390,10 @@ PrefabInstance:
       propertyPath: m_SortingLayerID
       value: 1156306921
       objectReference: {fileID: 0}
+    - target: {fileID: 9042987386885964439, guid: 894c74b520a88a24e88966d64bc5ea3e, type: 3}
+      propertyPath: orthographic size
+      value: 8.533334
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -2146,7 +2150,7 @@ PrefabInstance:
     - target: {fileID: 8035928732895759023, guid: fc0a4bc2aae082741b1aa749cf6a68ed, type: 3}
       propertyPath: music
       value: 
-      objectReference: {fileID: 8300000, guid: a1fbd93f6f82cf0429715d4ece47eafb, type: 3}
+      objectReference: {fileID: 8300000, guid: 54ec30fc604508f40a36541cc2c1e8f2, type: 3}
     - target: {fileID: 8035928732895759023, guid: fc0a4bc2aae082741b1aa749cf6a68ed, type: 3}
       propertyPath: overlay_on
       value: 0

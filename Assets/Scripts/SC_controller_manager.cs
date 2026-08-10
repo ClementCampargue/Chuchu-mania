@@ -36,17 +36,7 @@ public class SC_controller_manager : MonoBehaviour
             EventSystem.current.SetSelectedGameObject(null);
             using_controller = false;
         }
-        if (using_controller)
-        {
-            Cursor.lockState = CursorLockMode.Locked;
-         //   Cursor.visible = false;
-        }
-        else
-        {
-            Cursor.lockState = CursorLockMode.Confined;
 
-            //     Cursor.visible = true;
-        }
     }
     private bool IsKeyboardOrMouseInput()
     {

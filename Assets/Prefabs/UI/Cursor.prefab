@@ -52,7 +52,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1649245329322939603}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
   m_Name: 
@@ -139,11 +139,14 @@ MonoBehaviour:
   normalSprite: {fileID: 5041371431967476107, guid: ebf7fdb968ccac94c9588e590cb45cd6, type: 3}
   hoverSprite: {fileID: 5041371431967476107, guid: ebf7fdb968ccac94c9588e590cb45cd6, type: 3}
   grabSprite: {fileID: 620411775, guid: ebf7fdb968ccac94c9588e590cb45cd6, type: 3}
+  cursor_enabled: 0
   cursorRenderer: {fileID: 6774181437987681303}
   cursorRect: {fileID: 1129510590008978738}
   cursorMoveAction: {fileID: -1680190386980627800, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
   cursorClickAction: {fileID: 3001919216989983466, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
   gamepadCursorSpeed: 1000
+  img: {fileID: 6774181437987681303}
+  img2: {fileID: 8295724216345029487}
 --- !u!95 &2940046680373498543
 Animator:
   serializedVersion: 7

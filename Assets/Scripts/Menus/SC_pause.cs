@@ -67,9 +67,18 @@ public class SC_pause : MonoBehaviour
 
         UpdateObjectState();
         isPaused = !isPaused;
+        if (isPaused)
+        {
+            SC_scursorManager.instance.enable_cursor();
 
+        }
+        if (!isPaused)
+        {
+            SC_scursorManager.instance.disable_cursor();
+
+        }
         pauseMenu.SetActive(isPaused);
-        SC_scursorManager.instance.gameObject.SetActive(isPaused);
+    
         Hide_tutorial();
 
         Time.timeScale = isPaused ? 0f : 1f;
@@ -79,9 +88,10 @@ public class SC_pause : MonoBehaviour
             : AnimatorUpdateMode.UnscaledTime;
     }
 
+
     public void close()
     {
-        SC_scursorManager.instance.gameObject.SetActive(false);
+        SC_scursorManager.instance.disable_cursor();
         pauseMenu.SetActive(false);
         Hide_tutorial();
         isPaused = false;
@@ -92,7 +102,7 @@ public class SC_pause : MonoBehaviour
 
     public void Retry()
     {
-        SC_scursorManager.instance.gameObject.SetActive(false);
+        SC_scursorManager.instance.disable_cursor();
         pauseMenu.SetActive(false);
 
         isPaused = false;
@@ -123,7 +133,7 @@ public class SC_pause : MonoBehaviour
 
     public void Give_up()
     {
-        SC_scursorManager.instance.gameObject.SetActive(false);
+        SC_scursorManager.instance.disable_cursor();
         pauseMenu.SetActive(false);
 
         isPaused = false;

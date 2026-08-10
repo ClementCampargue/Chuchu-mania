@@ -25,8 +25,17 @@ public class SC_sticker_menu : MonoBehaviour
     }
     void Start()
     {
+        SC_scursorManager.instance.gameObject.SetActive(false);
+        SC_scursorManager.instance.enable_cursor();
+        Invoke("delay",0.25f);
         unlocked = sprite_image.material;
         SC_scursorManager.instance.gameObject.SetActive(true);
+    }
+
+    void delay()
+    {
+        SC_scursorManager.instance.gameObject.SetActive(true);
+
     }
     private void OnDisable()
     {

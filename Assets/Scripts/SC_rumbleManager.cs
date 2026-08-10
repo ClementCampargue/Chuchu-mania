@@ -25,10 +25,7 @@ public class SC_rumbleManager : MonoBehaviour
     {
         if (!SC_controller_manager.instance.using_controller)
             return;
-        if (!SC_controller_manager.instance.using_controller)
-        {
-            return;
-        }
+
 
         var gamepad = Gamepad.current;
         if (gamepad == null)

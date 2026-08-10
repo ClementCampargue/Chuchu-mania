@@ -21,6 +21,9 @@ public class SC_sticker_button : MonoBehaviour
     private SC_sticker_menu menu;
     public Animator anim;
 
+    public SC_juiciness juice;
+    public SC_juiciness juice2;
+
     private void Start()
     {
         save = SC_StickerSaveSystem.instance;
@@ -63,6 +66,7 @@ public class SC_sticker_button : MonoBehaviour
     public void update_infos()
     {
         selected = true;
+        juice.PlayJuice();
 
         menu.update_infos(sticker);
     }
@@ -72,7 +76,7 @@ public class SC_sticker_button : MonoBehaviour
     {
         if (!sticker.unlocked)
             return;
-
+        juice2.PlayJuice();
         menu.start_edit_mode();
 
         Canvas canvas = GameObject.Find("MainCanvas").GetComponent<Canvas>();

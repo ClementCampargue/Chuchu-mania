@@ -105,9 +105,27 @@
                     "initialStateCheck": false
                 },
                 {
+                    "name": "R_bump",
+                    "type": "Button",
+                    "id": "2f40e7f9-7a7b-4400-84cf-257aef19ff23",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
                     "name": "L_trigger",
                     "type": "Button",
                     "id": "b67fb90d-428a-4644-bd30-1171b82b28c3",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "L_bump",
+                    "type": "Button",
+                    "id": "d27d2739-2993-4551-b00a-cdd94befb8cc",
                     "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
@@ -243,6 +261,17 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "Joystick",
+                    "action": "Move",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "735e21da-bbcc-45f7-bde2-1887454fcf99",
+                    "path": "<Gamepad>/dpad",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
                     "action": "Move",
                     "isComposite": false,
                     "isPartOfComposite": false
@@ -546,12 +575,34 @@
                 },
                 {
                     "name": "",
+                    "id": "8d54cd28-debe-488a-86e6-dce42b4c34c4",
+                    "path": "<Gamepad>/rightShoulder",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "R_bump",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
                     "id": "9cd5ba37-7f94-4a0d-aec6-e9be55f74dc3",
                     "path": "<Gamepad>/leftTrigger",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
                     "action": "L_trigger",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "5015df62-812b-45d3-9b57-5817d74073ca",
+                    "path": "<Gamepad>/leftShoulder",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "L_bump",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
@@ -1098,6 +1149,17 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "Keyboard&Mouse",
+                    "action": "MiddleClick",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "6a406b8d-0a04-4285-90d9-b27503e850c3",
+                    "path": "<Gamepad>/buttonNorth",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
                     "action": "MiddleClick",
                     "isComposite": false,
                     "isPartOfComposite": false

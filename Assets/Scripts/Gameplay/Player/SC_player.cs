@@ -14,6 +14,7 @@ public class SC_player : MonoBehaviour
     public SC_juiciness juice;
     [Header("Movement")]
     public float moveSpeed = 5f;
+   [HideInInspector] public float base_speed;
     public float jumpForce = 10f;
     public float maxJumpTime = 0.3f;
     private float jumpTimeCounter;
@@ -108,6 +109,8 @@ public class SC_player : MonoBehaviour
     private Collider2D hit;
     private void Awake()
     {
+        base_speed = moveSpeed;
+
         instance = this;
     }
 
@@ -155,7 +158,7 @@ public class SC_player : MonoBehaviour
         {
             float verticalInput = moveInput.y;
 
-            if (Mathf.Abs(verticalInput) > 0.1f)
+            if (Mathf.Abs(verticalInput) > 0.5f)
             {
                 StartClimbing(verticalInput);
             }
@@ -165,11 +168,19 @@ public class SC_player : MonoBehaviour
             }
         }
 
-        if (!isFrozen  && canMove && Time.timeScale != 0)
-            moveInput = Move.action.ReadValue<Vector2>();
-        else
-            moveInput = Vector2.zero;
+        if (!isFrozen && canMove && Time.timeScale != 0)
+        {
+            Vector2 input = Move.action.ReadValue<Vector2>();
 
+            moveInput = new Vector2(
+                Mathf.Abs(input.x) > 0.1f ? Mathf.Sign(input.x) : 0f,
+                Mathf.Abs(input.y) > 0.1f ? Mathf.Sign(input.y) : 0f
+            );
+        }
+        else
+        {
+            moveInput = Vector2.zero;
+        }
 
 
         isGrounded = Physics2D.OverlapCircle(

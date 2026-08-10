@@ -589,6 +589,7 @@ MonoBehaviour:
   wrapVertical: 0
   useGrid: 0
   columns: 2
+  navigationAxis: 1
   initialDelay: 0.4
   repeatRate: 0.1
   moveCooldown: 0.1
@@ -779,6 +780,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5641122258638546335, guid: f3c7b956bb8e2ae47a33403dbf3195bc, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6583515353590309091, guid: f3c7b956bb8e2ae47a33403dbf3195bc, type: 3}
+      propertyPath: clickable
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6583515353590309091, guid: f3c7b956bb8e2ae47a33403dbf3195bc, type: 3}
@@ -1308,6 +1313,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5641122258638546335, guid: f3c7b956bb8e2ae47a33403dbf3195bc, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6583515353590309091, guid: f3c7b956bb8e2ae47a33403dbf3195bc, type: 3}
+      propertyPath: clickable
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6583515353590309091, guid: f3c7b956bb8e2ae47a33403dbf3195bc, type: 3}

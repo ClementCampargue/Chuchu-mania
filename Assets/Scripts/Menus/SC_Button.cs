@@ -19,15 +19,18 @@ public class SC_Button : MonoBehaviour
     private bool isPressed;
     public GameObject indicator;
     public bool accept_input = true;
+    public SC_juiciness juice;
+    public SC_juiciness juice2;
+    public bool clickable = true;
     private void Awake()
     {
         anim = GetComponent<Animator>();
     }
 
 
-    // Appelé par EventSystem Select()
     public void Select()
     {
+        juice.PlayJuice();
         isSelected = true;
         indicator.SetActive(true);
         PlayAnimation(hover);
@@ -61,6 +64,15 @@ public class SC_Button : MonoBehaviour
 
     private void OnMouseEnter()
     {
+        if (SC_controller_manager.instance != null &&
+            SC_controller_manager.instance.using_controller)
+            return;
+        if (!clickable)
+            {
+                return;
+            }
+        juice.PlayJuice();
+
         isPressed = false;
         isHovered = true;
         indicator.SetActive(true);
@@ -68,38 +80,57 @@ public class SC_Button : MonoBehaviour
         PlayAnimation(hover);
     }
 
-
     private void OnMouseExit()
     {
+        if (!clickable)
+        {
+            return;
+        }
+        if (SC_controller_manager.instance != null &&
+            SC_controller_manager.instance.using_controller)
+            return;
+
         isHovered = false;
         indicator.SetActive(false);
 
-        // Si la navigation garde le bouton sélectionné,
-        // on ne joue pas l'unhover
         if (!isSelected)
         {
             PlayAnimation(unhover);
         }
     }
 
-
     private void OnMouseDown()
     {
+        if (!clickable)
+        {
+            return;
+        }
+        if (SC_controller_manager.instance != null &&
+            SC_controller_manager.instance.using_controller)
+            return;
+
         PressAnimation();
     }
 
-
     private void OnMouseUp()
     {
-        // Clic valide seulement si on relâche sur le bouton
+        if (!clickable)
+        {
+            return;
+        }
+        if (SC_controller_manager.instance != null &&
+            SC_controller_manager.instance.using_controller)
+            return;
+
         if (isHovered)
         {
             Click();
         }
-        indicator.SetActive(false);
 
+        indicator.SetActive(false);
         isPressed = false;
     }
+
 
 
     public void Press()
@@ -113,10 +144,9 @@ public class SC_Button : MonoBehaviour
     {
         if (isPressed)
             return;
-
         isPressed = true;
         indicator.SetActive(false);
-
+        juice2.PlayJuice();
         PlayAnimation(press);
     }
 
@@ -131,6 +161,8 @@ public class SC_Button : MonoBehaviour
     {
         if (anim == null || string.IsNullOrEmpty(trigger))
             return;
+        anim.ResetTrigger("Hover");
+        anim.ResetTrigger("Unhover");
 
         anim.ResetTrigger(trigger);
         anim.SetTrigger(trigger);

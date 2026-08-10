@@ -13,9 +13,9 @@ public class SC_juiciness : MonoBehaviour
 
     [Header("Controller Rumble")]
     public bool rumble = true;
-    public float rumbleLow = 0.1f;
-    public float rumbleHigh = 0.3f;
-    public float rumbleDuration = 0.1f;
+    public float rumbleLow = 0f;
+    public float rumbleHigh = 0f;
+    public float rumbleDuration = 0f;
 
     [Header("Screen Shake")]
     public float shakeAmplitude = 0f;
@@ -110,7 +110,7 @@ public class SC_juiciness : MonoBehaviour
     }
 
 
-    public void PlayJuice()
+public void PlayJuice()
     {
         if (this == null || gameObject == null)
             return;
@@ -136,6 +136,16 @@ public class SC_juiciness : MonoBehaviour
                 if (source != null)
                     source.Play();
             }
+        }
+
+        // Controller Rumble
+        if (rumble && SC_rumbleManager.instance != null)
+        {
+            SC_rumbleManager.instance.PlayRumble(
+                rumbleLow,
+                rumbleHigh,
+                rumbleDuration
+            );
         }
 
         // Squash & Stretch

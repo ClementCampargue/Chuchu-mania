@@ -124,28 +124,9 @@ public class SC_winscreen_scoring : MonoBehaviour
         int startingScore = base_score;
         float elapsedTime = 0f;
 
-        skipRequested = false;
 
         while (elapsedTime < score_animation_duration)
         {
-            // =========================
-            // SKIP DU DÉCOMPTE
-            // =========================
-            if (skipRequested)
-            {
-                base_score = startingScore + bonus;
-
-                bonusText.text = "0";
-                final_score.text = base_score.ToString();
-
-                skipRequested = false;
-
-                resume();
-
-                currentBonusCoroutine = null;
-
-                yield break;
-            }
 
             elapsedTime += Time.deltaTime;
 

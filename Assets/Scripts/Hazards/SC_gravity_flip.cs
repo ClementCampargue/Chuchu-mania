@@ -46,6 +46,21 @@ public class SC_gravity_flip : MonoBehaviour
 
         }
     }
+
+    private void OnDestroy()
+    {
+        if (!gravityInverted)
+        {
+            // Gravité normale
+            player.rb.gravityScale = player.base_gravity;
+
+            player.transform.localScale = new Vector3(
+                player.transform.localScale.x,
+                Mathf.Abs(player.transform.localScale.y),
+                player.transform.localScale.z
+            );
+        }
+    }
     public void FlipGravity()
     {
         gravityInverted = !gravityInverted;

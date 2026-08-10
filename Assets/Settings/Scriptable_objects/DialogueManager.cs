@@ -245,7 +245,8 @@ public class DialogueManager : MonoBehaviour
 
     private void ShowChoices(Choice[] choices)
     {
-        SC_scursorManager.instance.gameObject.SetActive(true);
+      //  SC_scursorManager.instance.enable_cursor();
+
         choicePanel.SetActive(true);
 
         typewriter.SetWaitInputVisible(false);
@@ -282,7 +283,7 @@ public class DialogueManager : MonoBehaviour
 
     private void SelectChoice(Choice choice)
     {
-        SC_scursorManager.instance.gameObject.SetActive(false);
+        //    SC_scursorManager.instance.disable_cursor();
 
         choicePanel.SetActive(false);
         Invoke("delay",0.1f);

@@ -64,18 +64,19 @@ MonoBehaviour:
   rotateModifier: {fileID: 7202051123191658014, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
   click: {fileID: 3001919216989983466, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
   deleteSticker: {fileID: -4090225696740746782, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
-  scalePlus: {fileID: 7040659881675835329, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
-  scaleMinus: {fileID: 1781555164194001046, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
-  rotatePlus: {fileID: -4758767625168951764, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
-  rotateMinus: {fileID: 6921593519229454973, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
+  scalePlus: {fileID: -4758767625168951764, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
+  scaleMinus: {fileID: 6921593519229454973, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
+  rotatePlus: {fileID: -4474765853807807423, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
+  rotateMinus: {fileID: 609496122343822130, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
   flip: {fileID: -2185481485913320682, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
+  cut: {fileID: 5894737561107347724}
   defaultScale: 0.5
   minScale: 0.25
   maxScale: 1.5
   wheelSpeed: 0.2
-  buttonScaleSpeed: 0.05
+  buttonScaleSpeed: 2
   rotationSpeed: 10
-  buttonRotationSpeed: 10
+  buttonRotationSpeed: 100
   img: {fileID: 3917524200838684608}
   selected: {fileID: 2986285596368804374}
   anim: {fileID: 7621659975062488614}
@@ -212,7 +213,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8008883728343687485}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 530609cdae5c05b4bacebeea2eb3d60f, type: 3}
   m_Name: 

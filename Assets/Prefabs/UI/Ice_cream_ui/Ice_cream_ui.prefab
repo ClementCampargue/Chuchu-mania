@@ -5279,7 +5279,7 @@ MonoBehaviour:
   trs: {fileID: 0}
   spriteRenderer: {fileID: 3432287915386421383}
   flashMaterial: {fileID: 2100000, guid: 778865bbd08486043a01aeb31184e581, type: 2}
-  rumble: 1
+  rumble: 0
   rumbleLow: 0.1
   rumbleHigh: 0.3
   rumbleDuration: 0.1
@@ -5299,7 +5299,6 @@ MonoBehaviour:
   freeze: 0
   freezeDuration: 0
   slowMoScale: 0.05
-  freezeRecoverDuration: 0.15
   fovCurve:
     serializedVersion: 2
     m_Curve:

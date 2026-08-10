@@ -1,9 +1,8 @@
-using System.Collections;
-using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.LowLevel;
+using UnityEngine.SceneManagement;
 public class SC_scursorManager : MonoBehaviour
 {
     public static SC_scursorManager instance;
@@ -15,7 +14,7 @@ public class SC_scursorManager : MonoBehaviour
     public Sprite hoverSprite;
     public Sprite grabSprite;
 
-
+    public bool cursor_enabled;
 
     [Header("UI Curseur")]
     public Image cursorRenderer;
@@ -30,12 +29,12 @@ public class SC_scursorManager : MonoBehaviour
     public float gamepadCursorSpeed = 1200f;
 
 
-
+    public Image img;
+    public Image img2;
     private Mouse virtualMouse;
 
     private Vector2 cursorPosition;
 
-    private bool usingGamepad;
 
 
 
@@ -111,28 +110,50 @@ public class SC_scursorManager : MonoBehaviour
     }
 
 
-
-    private void Start()
-    {
-        gameObject.SetActive(false);
-    }
-
-
-
     void Update()
     {
-
-        if (Input.GetKeyDown(KeyCode.Mouse0))
+        if(SceneManager.GetActiveScene().name != "Stickers")
         {
-            if (anim.enabled)
+            if (cursor_enabled)
             {
-                anim.SetTrigger("click");
+                if (!SC_controller_manager.instance.using_controller)
+                {
+                    img2.enabled = true;
+                    img.enabled = true;
+                }
+                else
+                {
+                    img2.enabled = false;
+                    img.enabled = false;
+                    return;
+                }
+
             }
             else
             {
-                anim.enabled = true;
+                img2.enabled = false;
+                img.enabled = false;
+                return;
+            }
+            if (Input.GetKeyDown(KeyCode.Mouse0))
+            {
+                if (anim.enabled)
+                {
+                    anim.SetTrigger("click");
+                }
+                else
+                {
+                    anim.enabled = true;
+                }
             }
         }
+        else
+        {
+            cursor_enabled = true;
+            img.enabled = true;
+            img2.enabled = true;
+        }
+
 
 
         // =========================
@@ -143,15 +164,9 @@ public class SC_scursorManager : MonoBehaviour
         {
 
 
-            if (Mouse.current.delta.ReadValue()
-                .sqrMagnitude > 0.01f)
-            {
-                usingGamepad = false;
-            }
+     
 
-
-
-            if (!usingGamepad)
+            if (!SC_controller_manager.instance.using_controller)
             {
 
                 cursorPosition =
@@ -172,49 +187,47 @@ public class SC_scursorManager : MonoBehaviour
         // MANETTE
         // =========================
 
+        if (SC_controller_manager.instance.using_controller)
+        {
 
-        Vector2 stick =
+            Vector2 stick =
             cursorMoveAction.action
             .ReadValue<Vector2>();
 
 
 
-        if (stick.sqrMagnitude > 0.01f)
-        {
+            if (stick.sqrMagnitude > 0.01f)
+            {
 
-            usingGamepad = true;
-
-
-
-            cursorPosition +=
-                stick *
-                gamepadCursorSpeed *
-                Time.unscaledDeltaTime;
+                cursorPosition +=
+                    stick *
+                    gamepadCursorSpeed *
+                    Time.unscaledDeltaTime;
 
 
 
-            cursorPosition.x =
-                Mathf.Clamp(
-                    cursorPosition.x,
-                    0,
-                    Screen.width
-                );
+                cursorPosition.x =
+                    Mathf.Clamp(
+                        cursorPosition.x,
+                        0,
+                        Screen.width
+                    );
 
 
-            cursorPosition.y =
-                Mathf.Clamp(
-                    cursorPosition.y,
-                    0,
-                    Screen.height
-                );
+                cursorPosition.y =
+                    Mathf.Clamp(
+                        cursorPosition.y,
+                        0,
+                        Screen.height
+                    );
 
 
 
-            UpdateCursor();
+                UpdateCursor();
+            }
+
+
         }
-
-
-
 
 
 
@@ -268,6 +281,16 @@ public class SC_scursorManager : MonoBehaviour
         if (cursorRenderer != null)
             cursorRenderer.sprite =
                 grabSprite;
+    }
+
+    public void enable_cursor()
+    {
+        cursor_enabled = true;
+    }
+
+    public void disable_cursor()
+    {
+        cursor_enabled = false;
     }
 
 }

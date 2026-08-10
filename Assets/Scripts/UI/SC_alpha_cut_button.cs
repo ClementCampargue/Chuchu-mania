@@ -3,12 +3,19 @@ using UnityEngine.UI;
 
 public class SC_alpha_cut_button : MonoBehaviour
 {
+    Image img;
     void Start()
     {
-        Image img = GetComponent<Image>();
+        img = GetComponent<Image>();
+        cut();
+    }
 
-        // 0 = tout est cliquable
-        // 1 = seuls les pixels totalement opaques sont cliquables
+    public void uncut()
+    {
+        img.alphaHitTestMinimumThreshold = 0f;
+    }
+    public void cut()
+    {
         img.alphaHitTestMinimumThreshold = 1f;
     }
 }

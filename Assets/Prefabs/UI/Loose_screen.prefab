@@ -236,6 +236,7 @@ MonoBehaviour:
   wrapVertical: 1
   useGrid: 0
   columns: 1
+  navigationAxis: 2
   initialDelay: 0.2
   repeatRate: 0.1
   moveCooldown: 0.05

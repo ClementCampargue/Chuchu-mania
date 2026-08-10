@@ -229,6 +229,7 @@ private IEnumerator CountRoutine()
 
     public void can_quit()
     {
+        skip.action.Enable();
         canquit = true;
     }
 
