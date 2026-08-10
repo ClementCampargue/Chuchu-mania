@@ -291,7 +291,7 @@ public class SC_sticker_UI : MonoBehaviour,
         // CLICK
         // =====================================================
 
-        if (IsPressed(click) && isHovered)
+        if (IsPressed(click))
         {
             ToggleDrag();
         }
@@ -586,7 +586,7 @@ public class SC_sticker_UI : MonoBehaviour,
 
     void ToggleDrag()
     {
-        if (!dragging)
+        if (!dragging && isHovered)
             StartDrag();
 
         else
