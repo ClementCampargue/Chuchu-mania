@@ -74,7 +74,14 @@ public class SC_sticker_menu : MonoBehaviour
         {
             sticker_name.text = sticker.sticker_name;
             sticker_description.text = sticker.description;
-            sprite_image.material = unlocked;
+            if (sticker.special_mat)
+            {
+                sprite_image.material = sticker.special_mat;
+            }
+            else
+            {
+                sprite_image.material = unlocked;
+            }
         }
         else
         {

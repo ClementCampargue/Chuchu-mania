@@ -23,6 +23,9 @@ public class SC_StickerSaveSystem : MonoBehaviour
     {
         public string spriteName;
 
+        // Nom du Material spécial
+        public string specialMatName;
+
         public float posX;
         public float posY;
 
@@ -51,16 +54,17 @@ public class SC_StickerSaveSystem : MonoBehaviour
 
         instance = this;
     }
+
     private void OnDisable()
     {
         AutoSave();
-
     }
+
     private void OnDestroy()
     {
         AutoSave();
-
     }
+
     private void Start()
     {
         // Cherche automatiquement la TrashZone
@@ -167,20 +171,45 @@ public class SC_StickerSaveSystem : MonoBehaviour
 
             StickerData data = new StickerData();
 
-            // Sprite
+            // ==========================================
+            // SPRITE
+            // ==========================================
+
             data.spriteName =
                 img.sprite != null
                     ? img.sprite.name
                     : "";
 
-            // Position
+            // ==========================================
+            // SPECIAL MATERIAL
+            // ==========================================
+
+            SO_Sticker stickerData =
+                FindSticker(data.spriteName);
+
+            data.specialMatName =
+                stickerData != null &&
+                stickerData.special_mat != null
+                    ? stickerData.special_mat.name
+                    : "";
+
+            // ==========================================
+            // POSITION
+            // ==========================================
+
             data.posX = rt.anchoredPosition.x;
             data.posY = rt.anchoredPosition.y;
 
-            // Rotation
+            // ==========================================
+            // ROTATION
+            // ==========================================
+
             data.rotZ = rt.localEulerAngles.z;
 
-            // Scale
+            // ==========================================
+            // SCALE
+            // ==========================================
+
             data.scaleX = rt.localScale.x;
             data.scaleY = rt.localScale.y;
 
@@ -276,7 +305,10 @@ public class SC_StickerSaveSystem : MonoBehaviour
 
         foreach (StickerData data in save.stickers)
         {
-            // Création du prefab
+            // ==========================================
+            // CRÉATION DU PREFAB
+            // ==========================================
+
             GameObject prefabInstance =
                 Instantiate(
                     stickerPrefab,
@@ -315,14 +347,20 @@ public class SC_StickerSaveSystem : MonoBehaviour
                 continue;
             }
 
-            // Position
+            // ==========================================
+            // POSITION
+            // ==========================================
+
             rt.anchoredPosition =
                 new Vector2(
                     data.posX,
                     data.posY
                 );
 
-            // Rotation
+            // ==========================================
+            // ROTATION
+            // ==========================================
+
             rt.localEulerAngles =
                 new Vector3(
                     0f,
@@ -330,7 +368,10 @@ public class SC_StickerSaveSystem : MonoBehaviour
                     data.rotZ
                 );
 
-            // Scale
+            // ==========================================
+            // SCALE
+            // ==========================================
+
             rt.localScale =
                 new Vector3(
                     data.scaleX,
@@ -338,7 +379,10 @@ public class SC_StickerSaveSystem : MonoBehaviour
                     1f
                 );
 
-            // Recherche du sprite
+            // ==========================================
+            // RECHERCHE DU SPRITE
+            // ==========================================
+
             Sprite loadedSprite =
                 FindSprite(data.spriteName);
 
@@ -355,7 +399,25 @@ public class SC_StickerSaveSystem : MonoBehaviour
                 );
             }
 
-            // Sticker provenant d'une sauvegarde
+            // ==========================================
+            // RECHERCHE DU SPECIAL MATERIAL
+            // ==========================================
+
+            Material specialMat =
+                FindSpecialMaterial(data.specialMatName);
+
+            if (specialMat != null)
+            {
+                img.material = specialMat;
+            }
+
+            // ==========================================
+            // STICKER UI
+            // ==========================================
+
+            /*
+             * Sticker provenant d'une sauvegarde.
+             */
             SC_sticker_UI stickerUI =
                 stickerObject.GetComponent<SC_sticker_UI>();
 
@@ -398,6 +460,10 @@ public class SC_StickerSaveSystem : MonoBehaviour
         );
     }
 
+    // ==========================================
+    // FIND SPRITE
+    // ==========================================
+
     private Sprite FindSprite(string spriteName)
     {
         if (string.IsNullOrEmpty(spriteName))
@@ -424,6 +490,70 @@ public class SC_StickerSaveSystem : MonoBehaviour
         return null;
     }
 
+    // ==========================================
+    // FIND STICKER
+    // ==========================================
+
+    private SO_Sticker FindSticker(string spriteName)
+    {
+        if (string.IsNullOrEmpty(spriteName))
+            return null;
+
+        if (stickers == null ||
+            stickers.stickers == null)
+            return null;
+
+        foreach (SO_Sticker sticker in stickers.stickers)
+        {
+            if (sticker == null)
+                continue;
+
+            if (sticker.sticker_sprite == null)
+                continue;
+
+            if (sticker.sticker_sprite.name == spriteName)
+            {
+                return sticker;
+            }
+        }
+
+        return null;
+    }
+
+    // ==========================================
+    // FIND SPECIAL MATERIAL
+    // ==========================================
+
+    private Material FindSpecialMaterial(string materialName)
+    {
+        if (string.IsNullOrEmpty(materialName))
+            return null;
+
+        if (stickers == null ||
+            stickers.stickers == null)
+            return null;
+
+        foreach (SO_Sticker sticker in stickers.stickers)
+        {
+            if (sticker == null)
+                continue;
+
+            if (sticker.special_mat == null)
+                continue;
+
+            if (sticker.special_mat.name == materialName)
+            {
+                return sticker.special_mat;
+            }
+        }
+
+        return null;
+    }
+
+    // ==========================================
+    // CLEAR
+    // ==========================================
+
     public void Clear()
     {
         PlayerPrefs.DeleteKey(SAVE_KEY);
@@ -433,6 +563,10 @@ public class SC_StickerSaveSystem : MonoBehaviour
             "Sauvegarde des stickers supprimée."
         );
     }
+
+    // ==========================================
+    // HAS SAVE
+    // ==========================================
 
     public bool HasSave()
     {

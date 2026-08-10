@@ -77,8 +77,7 @@ public class SC_loose_screen : MonoBehaviour
     }
 
     public void show_cursor()
-    {if(!SC_controller_manager.instance.using_controller)
+    {
         SC_scursorManager.instance.enable_cursor();
-
     }
 }

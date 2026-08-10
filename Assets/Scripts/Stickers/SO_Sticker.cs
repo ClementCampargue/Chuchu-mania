@@ -13,4 +13,6 @@ public class SO_Sticker : ScriptableObject
     public int rarity;
     public int Price;
     public bool unlocked;
+
+    public Material special_mat;
 }

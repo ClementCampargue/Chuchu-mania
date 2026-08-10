@@ -9,7 +9,7 @@ public class SC_sticker_button : MonoBehaviour
 
     public SO_Sticker sticker;
     public Material locked;
-    private Material unlocked;
+    public Material unlocked;
     public Button button;
     public GameObject Sticker_prefab;
 
@@ -29,7 +29,10 @@ public class SC_sticker_button : MonoBehaviour
         save = SC_StickerSaveSystem.instance;
         menu = SC_sticker_menu.instance;
         image.material = sticker.unlocked ? unlocked : locked;
-
+        if(sticker.special_mat != null)
+        {
+            image.material = sticker.special_mat;
+        }
         image.sprite = sticker.sticker_sprite;
         unlocked = image.material;
     }
@@ -60,6 +63,8 @@ public class SC_sticker_button : MonoBehaviour
 
     public void unhover()
     {
+
+
         selected = false;
     }
 
@@ -67,6 +72,7 @@ public class SC_sticker_button : MonoBehaviour
     {
         selected = true;
         juice.PlayJuice();
+       
 
         menu.update_infos(sticker);
     }
@@ -100,6 +106,10 @@ public class SC_sticker_button : MonoBehaviour
         rect.anchoredPosition = localPoint;
 
         img.sprite = sticker.sticker_sprite;
+        if(sticker.special_mat != null)
+        {
+            img.material = sticker.special_mat;
+        }
         img.maskable = false;
     }
 }

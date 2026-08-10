@@ -1,15 +1,14 @@
 using UnityEngine;
+using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
-using UnityEngine.UI;
-
 
 public class SC_sticker_UI : MonoBehaviour,
     IPointerEnterHandler,
     IPointerExitHandler
 {
-private bool isHovered;
+    private bool isHovered;
 
     [Header("Input Actions")]
     public InputActionReference mouseScroll;
@@ -33,21 +32,40 @@ private bool isHovered;
     public float wheelSpeed = 0.2f;
     public float buttonScaleSpeed = 0.05f;
 
-
     [Header("Rotation")]
     public float rotationSpeed = 10f;
     public float buttonRotationSpeed = 10f;
 
+    [Header("Balatro Card Effect")]
+    [Tooltip("Inclinaison maximale sur X/Y.")]
+    public float maxTilt = 12f;
+
+    [Tooltip("Sensibilité du tilt par rapport à la vitesse de déplacement.")]
+    public float tiltSensitivity = 0.08f;
+
+    [Tooltip("Vitesse à laquelle le tilt suit le mouvement.")]
+    public float tiltSmoothSpeed = 12f;
+
+    [Tooltip("Vitesse de retour à plat quand la carte s'arrête.")]
+    public float tiltReturnSpeed = 8f;
+
+    [Tooltip("Vitesse maximale prise en compte pour le tilt.")]
+    public float maxTiltVelocity = 1000f;
+
+    [Header("Balatro Scale Punch")]
+    [Tooltip("Petit agrandissement pendant le déplacement.")]
+    public float dragScaleMultiplier = 1.02f;
+
+    [Tooltip("Vitesse d'application du scale pendant le drag.")]
+    public float dragScaleSmoothSpeed = 8f;
 
     [Header("UI")]
     public Image img;
     public GameObject selected;
     public Animator anim;
 
-
     [Header("Delete")]
     public RectTransform deleteZone;
-
 
     public bool spawnedSticker;
 
@@ -63,6 +81,30 @@ private bool isHovered;
 
     private SC_scursorManager cursor;
 
+    // =========================================================
+    // ROTATION UTILISATEUR
+    // =========================================================
+
+    // Rotation Z réelle du sticker.
+    // Le tilt Balatro ne touche jamais cette valeur.
+    private float stickerRotationZ;
+
+    // =========================================================
+    // BALATRO TILT
+    // =========================================================
+
+    private Vector2 lastDragPosition;
+    private Vector2 dragVelocity;
+
+    private float currentTiltX;
+    private float currentTiltY;
+
+    // Scale de base contrôlé par le système de scale.
+    private float stickerScale;
+
+    // =========================================================
+    // AWAKE
+    // =========================================================
 
     void Awake()
     {
@@ -74,19 +116,40 @@ private bool isHovered;
 
         baseColor = img.color;
 
-        // Scale initial
-        rect.localScale =
-            Vector3.one * defaultScale;
+        // -----------------------------------------------------
+        // SCALE INITIAL
+        // -----------------------------------------------------
 
-        // Permet de détecter uniquement les pixels visibles
+        stickerScale = defaultScale;
+
+        rect.localScale =
+            Vector3.one * stickerScale;
+
+        // -----------------------------------------------------
+        // ROTATION INITIAL
+        // -----------------------------------------------------
+
+        stickerRotationZ =
+            rect.localEulerAngles.z;
+
+        // -----------------------------------------------------
+        // ALPHA HIT TEST
+        // -----------------------------------------------------
+
         img.alphaHitTestMinimumThreshold = 0.1f;
 
-        // Copie du material pour éviter de modifier
-        // le material partagé par les autres stickers
+        // -----------------------------------------------------
+        // MATERIAL UNIQUE
+        // -----------------------------------------------------
+
         if (img.material != null)
             img.material = new Material(img.material);
     }
 
+
+    // =========================================================
+    // ENABLE
+    // =========================================================
 
     void OnEnable()
     {
@@ -106,7 +169,6 @@ private bool isHovered;
     }
 
 
-
     void EnableAction(InputActionReference action)
     {
         if (action != null && action.action != null)
@@ -121,11 +183,14 @@ private bool isHovered;
     }
 
 
+    // =========================================================
+    // START
+    // =========================================================
+
     void Start()
     {
         cursor =
             SC_scursorManager.instance;
-
 
         deleteZone =
             GameObject.Find("TrashZone")
@@ -133,7 +198,7 @@ private bool isHovered;
 
 
         // Si le sticker vient d'être créé,
-        // il commence directement en mode drag
+        // il commence directement en mode drag.
         if (!spawnedSticker)
         {
             dragging = true;
@@ -141,6 +206,9 @@ private bool isHovered;
             offset = Vector2.zero;
 
             cursor.SetGrabCursor();
+
+            lastDragPosition =
+                rect.anchoredPosition;
         }
 
 
@@ -150,15 +218,19 @@ private bool isHovered;
     }
 
 
+    // =========================================================
+    // UPDATE
+    // =========================================================
+
     void Update()
     {
         if (SceneManager.GetActiveScene().name != "Stickers")
             return;
 
 
-        // =========================
+        // =====================================================
         // DELETE
-        // =========================
+        // =====================================================
 
         if (IsPressed(deleteSticker) && isHovered)
         {
@@ -167,53 +239,42 @@ private bool isHovered;
         }
 
 
-        // =========================
+        // =====================================================
         // FLIP
-        // =========================
+        // =====================================================
 
         if (IsPressed(flip) && isHovered)
         {
             if (dragging)
-
                 FlipSticker();
         }
 
 
-        // =========================
+        // =====================================================
         // DRAG
-        // =========================
+        // =====================================================
 
         if (dragging)
         {
             HandleScaleRotation();
 
+            HandleDrag();
 
-            Vector2 screenPos =
-                RectTransformUtility.WorldToScreenPoint(
-                    canvas.worldCamera,
-                    cursor.transform.position
-                );
-
-
-            RectTransformUtility.ScreenPointToLocalPointInRectangle(
-                canvas.transform as RectTransform,
-                screenPos,
-                canvas.worldCamera,
-                out Vector2 local
-            );
-
-
-            rect.anchoredPosition =
-                local + offset;
-
+            HandleBalatroEffect();
 
             CheckDeleteZone();
         }
+        else
+        {
+            // Même hors drag, on remet progressivement
+            // le tilt à zéro.
+            ResetBalatroTilt();
+        }
 
 
-        // =========================
+        // =====================================================
         // CLICK
-        // =========================
+        // =====================================================
 
         if (IsPressed(click) && isHovered)
         {
@@ -226,6 +287,288 @@ private bool isHovered;
     // DRAG
     // =========================================================
 
+    void HandleDrag()
+    {
+        Vector2 screenPos =
+            RectTransformUtility.WorldToScreenPoint(
+                canvas.worldCamera,
+                cursor.transform.position
+            );
+
+
+        RectTransformUtility.ScreenPointToLocalPointInRectangle(
+            canvas.transform as RectTransform,
+            screenPos,
+            canvas.worldCamera,
+            out Vector2 local
+        );
+
+
+        Vector2 newPosition =
+            local + offset;
+
+
+        // -----------------------------------------------------
+        // CALCUL DE LA VITESSE
+        // -----------------------------------------------------
+
+        if (Time.deltaTime > 0f)
+        {
+            dragVelocity =
+                (newPosition - rect.anchoredPosition)
+                / Time.deltaTime;
+        }
+
+
+        // -----------------------------------------------------
+        // POSITION
+        // -----------------------------------------------------
+
+        rect.anchoredPosition =
+            newPosition;
+    }
+
+
+    // =========================================================
+    // BALATRO EFFECT
+    // =========================================================
+
+    void HandleBalatroEffect()
+    {
+        if (!dragging)
+        {
+            ResetBalatroTilt();
+            return;
+        }
+
+
+        // -----------------------------------------------------
+        // VITESSE
+        // -----------------------------------------------------
+
+        Vector2 velocity =
+            Vector2.ClampMagnitude(
+                dragVelocity,
+                maxTiltVelocity
+            );
+
+
+        // -----------------------------------------------------
+        // TARGET TILT
+        // -----------------------------------------------------
+
+        // Déplacement horizontal
+        // => rotation Y
+        //
+        // Déplacement vertical
+        // => rotation X
+
+        float targetTiltY =
+            velocity.x *
+            tiltSensitivity;
+
+        float targetTiltX =
+            -velocity.y *
+            tiltSensitivity;
+
+
+        targetTiltX =
+            Mathf.Clamp(
+                targetTiltX,
+                -maxTilt,
+                maxTilt
+            );
+
+
+        targetTiltY =
+            Mathf.Clamp(
+                targetTiltY,
+                -maxTilt,
+                maxTilt
+            );
+
+
+        // -----------------------------------------------------
+        // SMOOTH TILT
+        // -----------------------------------------------------
+
+        float smooth =
+            1f -
+            Mathf.Exp(
+                -tiltSmoothSpeed *
+                Time.deltaTime
+            );
+
+
+        currentTiltX =
+            Mathf.Lerp(
+                currentTiltX,
+                targetTiltX,
+                smooth
+            );
+
+
+        currentTiltY =
+            Mathf.Lerp(
+                currentTiltY,
+                targetTiltY,
+                smooth
+            );
+
+
+        // -----------------------------------------------------
+        // SCALE PUNCH
+        // -----------------------------------------------------
+
+        float targetScale =
+            stickerScale *
+            dragScaleMultiplier;
+
+
+        float currentAbsScale =
+            Mathf.Abs(rect.localScale.x);
+
+
+        float scaleSmooth =
+            1f -
+            Mathf.Exp(
+                -dragScaleSmoothSpeed *
+                Time.deltaTime
+            );
+
+
+        float visualScale =
+            Mathf.Lerp(
+                currentAbsScale,
+                targetScale,
+                scaleSmooth
+            );
+
+
+        // -----------------------------------------------------
+        // CONSERVE LE FLIP
+        // -----------------------------------------------------
+
+        float flipX =
+            Mathf.Sign(rect.localScale.x);
+
+        float flipY =
+            Mathf.Sign(rect.localScale.y);
+
+
+        rect.localScale =
+            new Vector3(
+                flipX * visualScale,
+                flipY * visualScale,
+                1f
+            );
+
+
+        // -----------------------------------------------------
+        // ROTATION VISUELLE
+        // -----------------------------------------------------
+
+        // IMPORTANT :
+        // stickerRotationZ reste la vraie rotation
+        // définie par l'utilisateur.
+        //
+        // currentTiltX/Y sont uniquement visuels.
+
+        rect.localRotation =
+            Quaternion.Euler(
+                currentTiltX,
+                currentTiltY,
+                stickerRotationZ
+            );
+    }
+
+
+    // =========================================================
+    // RESET BALATRO
+    // =========================================================
+
+    void ResetBalatroTilt()
+    {
+        float smooth =
+            1f -
+            Mathf.Exp(
+                -tiltReturnSpeed *
+                Time.deltaTime
+            );
+
+
+        currentTiltX =
+            Mathf.Lerp(
+                currentTiltX,
+                0f,
+                smooth
+            );
+
+
+        currentTiltY =
+            Mathf.Lerp(
+                currentTiltY,
+                0f,
+                smooth
+            );
+
+
+        // -----------------------------------------------------
+        // SCALE RETOUR À LA VALEUR NORMALE
+        // -----------------------------------------------------
+
+        float currentAbsScale =
+            Mathf.Abs(rect.localScale.x);
+
+
+        float scaleSmooth =
+            1f -
+            Mathf.Exp(
+                -dragScaleSmoothSpeed *
+                Time.deltaTime
+            );
+
+
+        float visualScale =
+            Mathf.Lerp(
+                currentAbsScale,
+                stickerScale,
+                scaleSmooth
+            );
+
+
+        float flipX =
+            Mathf.Sign(rect.localScale.x);
+
+        float flipY =
+            Mathf.Sign(rect.localScale.y);
+
+
+        rect.localScale =
+            new Vector3(
+                flipX * visualScale,
+                flipY * visualScale,
+                1f
+            );
+
+
+        // -----------------------------------------------------
+        // ROTATION
+        // -----------------------------------------------------
+
+        rect.localRotation =
+            Quaternion.Euler(
+                currentTiltX,
+                currentTiltY,
+                stickerRotationZ
+            );
+    }
+
+
+    // =========================================================
+    // DRAG TOGGLE
+    // =========================================================
+
     void ToggleDrag()
     {
         if (!dragging)
@@ -236,9 +579,14 @@ private bool isHovered;
     }
 
 
+    // =========================================================
+    // START DRAG
+    // =========================================================
+
     void StartDrag()
     {
         cut.uncut();
+
         dragging = true;
 
         selected.SetActive(true);
@@ -254,6 +602,13 @@ private bool isHovered;
 
         offset =
             rect.anchoredPosition - local;
+
+
+        // Reset vitesse
+        dragVelocity = Vector2.zero;
+
+        lastDragPosition =
+            rect.anchoredPosition;
 
 
         img.maskable = false;
@@ -272,6 +627,10 @@ private bool isHovered;
         cursor.SetGrabCursor();
     }
 
+
+    // =========================================================
+    // STOP DRAG
+    // =========================================================
 
     void StopDrag()
     {
@@ -301,6 +660,13 @@ private bool isHovered;
         }
 
 
+        // -----------------------------------------------------
+        // RESET TILT
+        // -----------------------------------------------------
+
+        dragVelocity = Vector2.zero;
+
+
         anim.ResetTrigger("grab");
         anim.SetTrigger("drop");
 
@@ -314,21 +680,24 @@ private bool isHovered;
         cursor.SetHoverCursor();
     }
 
-// =========================================================
-// SCALE + ROTATION
-// =========================================================
 
-void HandleScaleRotation()
+    // =========================================================
+    // SCALE + ROTATION
+    // =========================================================
+
+    void HandleScaleRotation()
     {
         if (!dragging)
             return;
 
-        // =========================
+
+        // =====================================================
         // MOUSE WHEEL
-        // =========================
+        // =====================================================
 
         Vector2 scroll =
             mouseScroll.action.ReadValue<Vector2>();
+
 
         if (Mathf.Abs(scroll.y) > 0.01f)
         {
@@ -339,6 +708,7 @@ void HandleScaleRotation()
                     -scroll.y * rotationSpeed
                 );
             }
+
             // Sinon scale
             else
             {
@@ -349,60 +719,49 @@ void HandleScaleRotation()
         }
 
 
-        // =========================
+        // =====================================================
         // SCALE BUTTONS
-        // =========================
+        // =====================================================
 
-        // Tant que la gâchette est maintenue,
-        // le scale continue progressivement.
         if (IsHeld(scalePlus))
         {
             ScaleSticker(
-                buttonScaleSpeed * Time.deltaTime
+                buttonScaleSpeed *
+                Time.deltaTime
             );
         }
+
 
         if (IsHeld(scaleMinus))
         {
             ScaleSticker(
-                -buttonScaleSpeed * Time.deltaTime
+                -buttonScaleSpeed *
+                Time.deltaTime
             );
         }
 
 
-        // =========================
+        // =====================================================
         // ROTATION BUTTONS
-        // =========================
+        // =====================================================
 
-        // Tant que la gâchette est maintenue,
-        // la rotation continue progressivement.
         if (IsHeld(rotatePlus))
         {
             RotateSticker(
-                buttonRotationSpeed * Time.deltaTime
+                buttonRotationSpeed *
+                Time.deltaTime
             );
         }
+
 
         if (IsHeld(rotateMinus))
         {
             RotateSticker(
-                -buttonRotationSpeed * Time.deltaTime
+                -buttonRotationSpeed *
+                Time.deltaTime
             );
         }
     }
-
-
-    // =========================================================
-    // INPUT HELPER
-    // =========================================================
-
-    bool IsHeld(InputActionReference action)
-    {
-        return action != null &&
-               action.action != null &&
-               action.action.IsPressed();
-    }
-
 
 
     // =========================================================
@@ -411,38 +770,36 @@ void HandleScaleRotation()
 
     void ScaleSticker(float amount)
     {
-        // On récupère la valeur absolue
-        // pour ne pas casser le scale
-        // lorsque le sticker est retourné.
-        float scale =
-            Mathf.Abs(rect.localScale.x);
+        // On utilise notre valeur de scale réelle
+        // plutôt que la valeur visuelle affectée
+        // par le Balatro effect.
+
+        stickerScale += amount;
 
 
-        scale += amount;
-
-
-        scale =
+        stickerScale =
             Mathf.Clamp(
-                scale,
+                stickerScale,
                 minScale,
                 maxScale
             );
 
 
-        // On conserve le flip horizontal
+        // -----------------------------------------------------
+        // CONSERVE LE FLIP
+        // -----------------------------------------------------
+
         float flipX =
             Mathf.Sign(rect.localScale.x);
 
-
-        // On conserve également le flip vertical
         float flipY =
             Mathf.Sign(rect.localScale.y);
 
 
         rect.localScale =
             new Vector3(
-                flipX * scale,
-                flipY * scale,
+                flipX * stickerScale,
+                flipY * stickerScale,
                 1f
             );
     }
@@ -454,11 +811,18 @@ void HandleScaleRotation()
 
     void RotateSticker(float amount)
     {
-        rect.Rotate(
-            0,
-            0,
-            amount
-        );
+        stickerRotationZ += amount;
+
+
+        // On applique immédiatement la rotation,
+        // tout en conservant le tilt X/Y.
+
+        rect.localRotation =
+            Quaternion.Euler(
+                currentTiltX,
+                currentTiltY,
+                stickerRotationZ
+            );
     }
 
 
@@ -479,8 +843,9 @@ void HandleScaleRotation()
         rect.localScale =
             scale;
 
-        if(!dragging)
-        SC_StickerSaveSystem.instance.AutoSave();
+
+        if (!dragging)
+            SC_StickerSaveSystem.instance.AutoSave();
     }
 
 
@@ -488,12 +853,22 @@ void HandleScaleRotation()
     // INPUT HELPER
     // =========================================================
 
+    bool IsHeld(InputActionReference action)
+    {
+        return action != null &&
+               action.action != null &&
+               action.action.IsPressed();
+    }
+
+
     bool IsPressed(InputActionReference action)
     {
         return action != null &&
                action.action != null &&
                action.action.WasPressedThisFrame();
     }
+
+
     // =========================================================
     // DELETE ZONE
     // =========================================================
@@ -554,12 +929,14 @@ void HandleScaleRotation()
 
 
         Destroy(transform.parent.gameObject);
+
+
         SC_StickerSaveSystem.instance.AutoSave();
     }
 
 
     // =========================================================
-    // POINTER
+    // POINTER ENTER
     // =========================================================
 
     public void OnPointerEnter(
@@ -572,6 +949,10 @@ void HandleScaleRotation()
             cursor.SetHoverCursor();
     }
 
+
+    // =========================================================
+    // POINTER EXIT
+    // =========================================================
 
     public void OnPointerExit(
         PointerEventData eventData)
