@@ -105,7 +105,22 @@ public class SC_sticker_UI : MonoBehaviour,
     // =========================================================
     // AWAKE
     // =========================================================
+    public void SetSavedScale(float scaleX, float scaleY)
+    {
+        float absScale = Mathf.Abs(scaleX);
 
+        stickerScale = Mathf.Clamp(
+            absScale,
+            minScale,
+            maxScale
+        );
+
+        rect.localScale = new Vector3(
+            scaleX,
+            scaleY,
+            1f
+        );
+    }
     void Awake()
     {
         rect = GetComponent<RectTransform>();

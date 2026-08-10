@@ -372,13 +372,27 @@ public class SC_StickerSaveSystem : MonoBehaviour
             // SCALE
             // ==========================================
 
-            rt.localScale =
-                new Vector3(
-                    data.scaleX,
-                    data.scaleY,
-                    1f
-                );
+            SC_sticker_UI stickerUI =
+           stickerObject.GetComponent<SC_sticker_UI>();
 
+            if (stickerUI != null)
+            {
+                stickerUI.spawnedSticker = true;
+
+                stickerUI.SetSavedScale(
+                    data.scaleX,
+                    data.scaleY
+                );
+            }
+            else
+            {
+                rt.localScale =
+                    new Vector3(
+                        data.scaleX,
+                        data.scaleY,
+                        1f
+                    );
+            }
             // ==========================================
             // RECHERCHE DU SPRITE
             // ==========================================
@@ -416,10 +430,6 @@ public class SC_StickerSaveSystem : MonoBehaviour
             // ==========================================
 
             /*
-             * Sticker provenant d'une sauvegarde.
-             */
-            SC_sticker_UI stickerUI =
-                stickerObject.GetComponent<SC_sticker_UI>();
 
             if (stickerUI != null)
             {
