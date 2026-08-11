@@ -6,6 +6,7 @@ public class SpriteShake : MonoBehaviour
     [Header("Shake Settings")]
     [SerializeField] private float strength = 0.1f;
     [SerializeField] private float duration = 0.2f;
+    [SerializeField] private float frequency = 20f;
 
     [Header("Loop")]
     [SerializeField] private bool loop = false;
@@ -63,12 +64,20 @@ public class SpriteShake : MonoBehaviour
     private IEnumerator ShakeCoroutine(float shakeDuration)
     {
         float elapsed = 0f;
+        float timer = 0f;
+        float interval = 1f / Mathf.Max(frequency, 0.01f);
 
         while (elapsed < shakeDuration)
         {
-            ShakePosition();
-
             elapsed += Time.deltaTime;
+            timer += Time.deltaTime;
+
+            if (timer >= interval)
+            {
+                timer -= interval;
+                ShakePosition();
+            }
+
             yield return null;
         }
 
@@ -78,9 +87,19 @@ public class SpriteShake : MonoBehaviour
 
     private IEnumerator ShakeLoopCoroutine()
     {
+        float timer = 0f;
+        float interval = 1f / Mathf.Max(frequency, 0.01f);
+
         while (true)
         {
-            ShakePosition();
+            timer += Time.deltaTime;
+
+            if (timer >= interval)
+            {
+                timer -= interval;
+                ShakePosition();
+            }
+
             yield return null;
         }
     }
