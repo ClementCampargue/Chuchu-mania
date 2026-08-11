@@ -14,6 +14,7 @@ public class SC_pause : MonoBehaviour
 
     [Header("Objet à masquer")]
     public GameObject objectToDisable;
+    public GameObject objectToEnable;
     public List<string> scenesToDisableObject = new List<string>();
 
     private bool isPaused = false;
@@ -48,6 +49,7 @@ public class SC_pause : MonoBehaviour
 
         // Désactive l'objet si la scène est dans la liste
         objectToDisable.SetActive(!scenesToDisableObject.Contains(currentScene));
+        objectToEnable.SetActive(scenesToDisableObject.Contains(currentScene));
     }
 
     private void TogglePause(InputAction.CallbackContext context)
@@ -124,6 +126,11 @@ public class SC_pause : MonoBehaviour
     {
         tuto = false;
         tuto_window.SetActive(true);
+    }
+
+    public void Quit_game()
+    {
+     Application.Quit();
     }
 
     public void Hide_tutorial()

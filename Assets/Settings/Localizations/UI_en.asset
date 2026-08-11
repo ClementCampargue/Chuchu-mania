@@ -90,6 +90,10 @@ MonoBehaviour:
     m_Localized: Let"s go!
     m_Metadata:
       m_Items: []
+  - m_Id: 23188660556152832
+    m_Localized: Quit game
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds: []

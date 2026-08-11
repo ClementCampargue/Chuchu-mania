@@ -90,6 +90,10 @@ MonoBehaviour:
     m_Localized: Allons-y!
     m_Metadata:
       m_Items: []
+  - m_Id: 23188660556152832
+    m_Localized: Quitter le jeu
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds: []
