@@ -40,20 +40,20 @@ public class SC_sticker_UI : MonoBehaviour,
     [Tooltip("Inclinaison maximale sur X/Y.")]
     public float maxTilt = 12f;
 
-    [Tooltip("Sensibilité du tilt par rapport à la vitesse de déplacement.")]
+    [Tooltip("Sensibilit? du tilt par rapport ? la vitesse de d?placement.")]
     public float tiltSensitivity = 0.08f;
 
-    [Tooltip("Vitesse à laquelle le tilt suit le mouvement.")]
+    [Tooltip("Vitesse ? laquelle le tilt suit le mouvement.")]
     public float tiltSmoothSpeed = 12f;
 
-    [Tooltip("Vitesse de retour à plat quand la carte s'arrête.")]
+    [Tooltip("Vitesse de retour ? plat quand la carte s'arr?te.")]
     public float tiltReturnSpeed = 8f;
 
     [Tooltip("Vitesse maximale prise en compte pour le tilt.")]
     public float maxTiltVelocity = 1000f;
 
     [Header("Balatro Scale Punch")]
-    [Tooltip("Petit agrandissement pendant le déplacement.")]
+    [Tooltip("Petit agrandissement pendant le d?placement.")]
     public float dragScaleMultiplier = 1.02f;
 
     [Tooltip("Vitesse d'application du scale pendant le drag.")]
@@ -85,7 +85,7 @@ public class SC_sticker_UI : MonoBehaviour,
     // ROTATION UTILISATEUR
     // =========================================================
 
-    // Rotation Z réelle du sticker.
+    // Rotation Z r?elle du sticker.
     // Le tilt Balatro ne touche jamais cette valeur.
     private float stickerRotationZ;
 
@@ -99,7 +99,7 @@ public class SC_sticker_UI : MonoBehaviour,
     private float currentTiltX;
     private float currentTiltY;
 
-    // Scale de base contrôlé par le système de scale.
+    // Scale de base contr?l? par le syst?me de scale.
     private float stickerScale;
 
     // =========================================================
@@ -212,7 +212,7 @@ public class SC_sticker_UI : MonoBehaviour,
             .GetComponent<RectTransform>();
 
 
-        // Si le sticker vient d'être créé,
+        // Si le sticker vient d'?tre cr??,
         // il commence directement en mode drag.
         if (!spawnedSticker)
         {
@@ -281,8 +281,8 @@ public class SC_sticker_UI : MonoBehaviour,
         }
         else
         {
-            // Même hors drag, on remet progressivement
-            // le tilt à zéro.
+            // M?me hors drag, on remet progressivement
+            // le tilt ? z?ro.
             ResetBalatroTilt();
         }
 
@@ -292,9 +292,10 @@ public class SC_sticker_UI : MonoBehaviour,
         // =====================================================
 
         if (IsPressed(click))
-        {
-            ToggleDrag();
-        }
+            if (IsPressed(click))
+            {
+                ToggleDrag();
+            }
     }
 
 
@@ -372,10 +373,10 @@ public class SC_sticker_UI : MonoBehaviour,
         // TARGET TILT
         // -----------------------------------------------------
 
-        // Déplacement horizontal
+        // D?placement horizontal
         // => rotation Y
         //
-        // Déplacement vertical
+        // D?placement vertical
         // => rotation X
 
         float targetTiltY =
@@ -485,7 +486,7 @@ public class SC_sticker_UI : MonoBehaviour,
 
         // IMPORTANT :
         // stickerRotationZ reste la vraie rotation
-        // définie par l'utilisateur.
+        // d?finie par l'utilisateur.
         //
         // currentTiltX/Y sont uniquement visuels.
 
@@ -529,7 +530,7 @@ public class SC_sticker_UI : MonoBehaviour,
 
 
         // -----------------------------------------------------
-        // SCALE RETOUR À LA VALEUR NORMALE
+        // SCALE RETOUR ? LA VALEUR NORMALE
         // -----------------------------------------------------
 
         float currentAbsScale =
@@ -586,11 +587,12 @@ public class SC_sticker_UI : MonoBehaviour,
 
     void ToggleDrag()
     {
-        if (!dragging && isHovered)
-            StartDrag();
+        
+            if (!dragging && isHovered)
+                StartDrag();
 
-        else
-            StopDrag();
+            else if(dragging)
+                StopDrag();
     }
 
 
@@ -785,8 +787,8 @@ public class SC_sticker_UI : MonoBehaviour,
 
     void ScaleSticker(float amount)
     {
-        // On utilise notre valeur de scale réelle
-        // plutôt que la valeur visuelle affectée
+        // On utilise notre valeur de scale r?elle
+        // plut?t que la valeur visuelle affect?e
         // par le Balatro effect.
 
         stickerScale += amount;
@@ -829,7 +831,7 @@ public class SC_sticker_UI : MonoBehaviour,
         stickerRotationZ += amount;
 
 
-        // On applique immédiatement la rotation,
+        // On applique imm?diatement la rotation,
         // tout en conservant le tilt X/Y.
 
         rect.localRotation =
