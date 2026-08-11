@@ -258,7 +258,7 @@ public class SC_sticker_UI : MonoBehaviour,
         // FLIP
         // =====================================================
 
-        if (IsPressed(flip) && isHovered)
+        if (IsPressed(flip) )
         {
             if (dragging)
                 FlipSticker();
