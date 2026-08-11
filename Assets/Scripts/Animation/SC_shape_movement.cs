@@ -10,7 +10,9 @@ public class SC_shape_movement : MonoBehaviour
         Figure8,
         Line
     }
+
     public bool randomStartOnShape = true;
+
     [Header("Shape Settings")]
     public ShapeType shape = ShapeType.RoundedSquare;
     public float radius = 2f;
@@ -18,6 +20,10 @@ public class SC_shape_movement : MonoBehaviour
 
     [Range(0.01f, 0.5f)]
     public float resolution = 0.05f;
+
+    [Header("Line Settings")]
+    [Tooltip("Rotation de la ligne en degrés. 0 = horizontale, 90 = verticale.")]
+    public float lineRotation = 0f;
 
     [Header("Gizmos")]
     public bool showGizmos = true;
@@ -54,9 +60,9 @@ public class SC_shape_movement : MonoBehaviour
         t += Time.deltaTime * speed;
 
         Vector2 pos = EvaluateUniform(t);
+
         transform.position = origin + new Vector3(pos.x, pos.y, 0f);
     }
-
 
     void BuildCurve()
     {
@@ -86,7 +92,6 @@ public class SC_shape_movement : MonoBehaviour
         totalLength = Mathf.Max(dist, 0.0001f);
     }
 
-
     Vector2 EvaluateUniform(float time)
     {
         float tNorm = time % totalLength;
@@ -110,7 +115,6 @@ public class SC_shape_movement : MonoBehaviour
 
         return points[^1];
     }
-
 
     Vector2 EvaluateRaw(float time)
     {
@@ -136,7 +140,6 @@ public class SC_shape_movement : MonoBehaviour
         }
     }
 
-
     Vector2 Circle(float t)
     {
         return new Vector2(
@@ -144,7 +147,6 @@ public class SC_shape_movement : MonoBehaviour
             Mathf.Sin(t)
         ) * radius;
     }
-
 
     Vector2 SuperShape(float t, float n)
     {
@@ -161,7 +163,6 @@ public class SC_shape_movement : MonoBehaviour
 
         return new Vector2(x, y);
     }
-
 
     Vector2 Triangle(float t)
     {
@@ -186,7 +187,6 @@ public class SC_shape_movement : MonoBehaviour
         return Vector2.Lerp(a, b, lerp);
     }
 
-
     Vector2 Figure8(float t)
     {
         return new Vector2(
@@ -195,17 +195,27 @@ public class SC_shape_movement : MonoBehaviour
         ) * radius;
     }
 
-
     Vector2 Line(float t)
     {
         float value = (Mathf.Sin(t) + 1f) * 0.5f;
 
-        return new Vector2(
+        // Ligne horizontale
+        Vector2 line = new Vector2(
             Mathf.Lerp(-radius, radius, value),
             0f
         );
-    }
 
+        // Rotation de la ligne
+        float angle = lineRotation * Mathf.Deg2Rad;
+
+        float cos = Mathf.Cos(angle);
+        float sin = Mathf.Sin(angle);
+
+        return new Vector2(
+            line.x * cos - line.y * sin,
+            line.x * sin + line.y * cos
+        );
+    }
 
     void OnDrawGizmos()
     {
