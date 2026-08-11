@@ -24,6 +24,7 @@ public class SC_gravity_flip : MonoBehaviour
         {
             StartCoroutine(GravityLoop());
         }
+
     }
 
     private IEnumerator GravityLoop()
@@ -49,10 +50,10 @@ public class SC_gravity_flip : MonoBehaviour
 
     private void OnDestroy()
     {
-        if (!gravityInverted)
+        if (gravityInverted)
         {
-            // Gravité normale
-            player.rb.gravityScale = player.base_gravity;
+            // Gravité inversée
+            player.rb.gravityScale = -player.base_gravity;
 
             player.transform.localScale = new Vector3(
                 player.transform.localScale.x,

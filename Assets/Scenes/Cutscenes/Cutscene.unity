@@ -232,6 +232,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 04eb92a3ead3bc74ca49663ad51b9d8b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  next_scene: 
   next_level: 0
   dialogue: {fileID: 974702575}
   dialogue_to_play: {fileID: 11400000, guid: 4485b7838f4e7cc4da0e0ffc41ea83c7, type: 2}

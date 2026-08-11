@@ -1,6 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.Rendering;
@@ -34,11 +32,19 @@ public class SC_player : MonoBehaviour
 
     [Header("Climbing")]
     public float climbSpeed = 4f;
-    private bool justLanded;
+
+    [Range(0f, 1f)]
+    public float climbAttachUpThreshold = 0.6f;
+
+    [Range(0f, 1f)]
+    public float climbAttachDiagonalLimit = 0.5f;
+
+    public float climbReattachDelay = 0.2f;
+    private float climbReattachTimer;
+
     private bool isClimbing;
     private bool canClimb;
     private SC_grillage grillage;
-    private sc_health_system health;
 
     public float hitFreezeTime = 0.15f;
     public Vector2 hitKnockback = new Vector2(5f, 3f);
@@ -94,7 +100,7 @@ public class SC_player : MonoBehaviour
     public InputActionReference Move;
 
     [Header("Screen Wrap")]
-    private Vector2 limit ;
+    private Vector2 limit;
     public Transform ghost;
 
     private Coroutine hitCoroutine;
@@ -110,7 +116,6 @@ public class SC_player : MonoBehaviour
     public GameObject game_over_screen;
     public bool canMove;
     public bool burning;
-    private bool was_climbing;
 
     private Vector2 added_velocity;
     private Vector2 added_velocity_;
@@ -129,6 +134,12 @@ public class SC_player : MonoBehaviour
 
     private Collider2D hit;
 
+    private sc_health_system health;
+
+
+    // =========================================================
+    // AWAKE
+    // =========================================================
 
     private void Awake()
     {
@@ -136,6 +147,10 @@ public class SC_player : MonoBehaviour
         instance = this;
     }
 
+
+    // =========================================================
+    // ENABLE / DISABLE INPUTS
+    // =========================================================
 
     private void OnEnable()
     {
@@ -154,6 +169,10 @@ public class SC_player : MonoBehaviour
     }
 
 
+    // =========================================================
+    // START
+    // =========================================================
+
     void Start()
     {
         canTakeDamage = true;
@@ -163,7 +182,6 @@ public class SC_player : MonoBehaviour
         normal.SetActive(true);
         transformed.SetActive(false);
 
-
         base_gravity = rb.gravityScale;
 
         spriteRenderer.material = normalMaterial;
@@ -171,6 +189,10 @@ public class SC_player : MonoBehaviour
         anim = anim_;
     }
 
+
+    // =========================================================
+    // UPDATE
+    // =========================================================
 
     void Update()
     {
@@ -180,6 +202,22 @@ public class SC_player : MonoBehaviour
         CheckDamage();
         HandleLowHealthBlink();
 
+
+        // =====================================================
+        // TIMER DE RÉACCROCHE
+        // =====================================================
+
+        if (climbReattachTimer > 0f)
+        {
+            climbReattachTimer -= Time.deltaTime;
+
+            if (climbReattachTimer < 0f)
+            {
+                climbReattachTimer = 0f;
+            }
+        }
+
+
         if (isStunned)
         {
             moveInput = Vector2.zero;
@@ -187,29 +225,39 @@ public class SC_player : MonoBehaviour
         }
 
 
-        if (canClimb)
+        // =====================================================
+        // INPUT
+        // =====================================================
+
+        if (!isFrozen &&
+            canMove &&
+            Time.timeScale != 0)
         {
-            float verticalInput = moveInput.y;
+            Vector2 input =
+                Move.action.ReadValue<Vector2>();
 
-            if (Mathf.Abs(verticalInput) > 0.5f)
-            {
-                StartClimbing(verticalInput);
-            }
-            else if (isClimbing)
-            {
-                rb.linearVelocity = Vector2.zero;
-            }
-        }
-
-
-        if (!isFrozen && canMove && Time.timeScale != 0)
-        {
-            Vector2 input = Move.action.ReadValue<Vector2>();
 
             moveInput = new Vector2(
-                Mathf.Abs(input.x) > 0.1f ? Mathf.Sign(input.x) : 0f,
-                Mathf.Abs(input.y) > 0.1f ? Mathf.Sign(input.y) : 0f
+                Mathf.Abs(input.x) > 0.1f
+                    ? Mathf.Sign(input.x)
+                    : 0f,
+
+                Mathf.Abs(input.y) > 0.1f
+                    ? Mathf.Sign(input.y)
+                    : 0f
             );
+
+
+            // =================================================
+            // TENTATIVE D'ACCROCHE
+            // =================================================
+
+            if (!isClimbing &&
+                canClimb &&
+                climbReattachTimer <= 0f)
+            {
+                TryStartClimbing(input);
+            }
         }
         else
         {
@@ -217,20 +265,21 @@ public class SC_player : MonoBehaviour
         }
 
 
-        // =========================
+        // =====================================================
         // GROUND CHECK
-        // =========================
+        // =====================================================
 
-        isGrounded = Physics2D.OverlapCircle(
-            groundCheckBottom.position,
-            groundCheckRadius,
-            groundLayer
-        );
+        isGrounded =
+            Physics2D.OverlapCircle(
+                groundCheckBottom.position,
+                groundCheckRadius,
+                groundLayer
+            );
 
 
-        // =========================
+        // =====================================================
         // COYOTE TIME
-        // =========================
+        // =====================================================
 
         if (isGrounded)
         {
@@ -242,9 +291,9 @@ public class SC_player : MonoBehaviour
         }
 
 
-        // =========================
+        // =====================================================
         // JUMP INPUT BUFFER
-        // =========================
+        // =====================================================
 
         if (jumpBufferCounter > 0f)
         {
@@ -252,9 +301,9 @@ public class SC_player : MonoBehaviour
         }
 
 
-        // =========================
+        // =====================================================
         // BUFFER + COYOTE JUMP
-        // =========================
+        // =====================================================
 
         if (jumpBufferCounter > 0f)
         {
@@ -262,10 +311,13 @@ public class SC_player : MonoBehaviour
         }
 
 
+        // =====================================================
+        // ANIMATION / AUDIO CLIMB
+        // =====================================================
+
         if (isClimbing)
         {
-            if (Mathf.Abs(moveInput.y) > 0.1f ||
-                Mathf.Abs(moveInput.x) > 0.1f)
+            if (moveInput.sqrMagnitude > 0.01f)
             {
                 if (!grid.isPlaying)
                 {
@@ -277,11 +329,16 @@ public class SC_player : MonoBehaviour
             else
             {
                 grid.Stop();
+
                 anim.SetBool("Run", false);
             }
         }
         else
         {
+            // =================================================
+            // RUN NORMAL
+            // =================================================
+
             if (Mathf.Abs(moveInput.x) > 0.1f)
             {
                 if (isGrounded)
@@ -301,10 +358,15 @@ public class SC_player : MonoBehaviour
             else
             {
                 run.Stop();
+
                 anim.SetBool("Run", false);
             }
         }
 
+
+        // =====================================================
+        // LANDING
+        // =====================================================
 
         if (IsAnimationPlaying("jump_idle") &&
             isGrounded &&
@@ -312,6 +374,7 @@ public class SC_player : MonoBehaviour
         {
             anim.ResetTrigger("Jump");
             anim.SetTrigger("Land");
+
             land.PlayJuice();
         }
 
@@ -322,17 +385,24 @@ public class SC_player : MonoBehaviour
             {
                 anim.ResetTrigger("Jump");
                 anim.SetTrigger("Land");
+
                 land.PlayJuice();
             }
-            else if (transform.localScale.y == -1 &&
-                     rb.linearVelocity.y >= -0.5f)
+            else if (
+                transform.localScale.y == -1 &&
+                rb.linearVelocity.y >= -0.5f)
             {
                 anim.ResetTrigger("Jump");
                 anim.SetTrigger("Land");
+
                 land.PlayJuice();
             }
         }
 
+
+        // =====================================================
+        // FACING
+        // =====================================================
 
         float yScale = transform.localScale.y;
 
@@ -351,22 +421,27 @@ public class SC_player : MonoBehaviour
         wasGrounded = isGrounded;
 
 
+        // =====================================================
+        // JUMP
+        // =====================================================
+
         if (isJumping)
         {
             if (jumpTimeCounter > 0)
             {
                 float jumpPower =
                     eat_system.isPowerUpActive
-                    ? PowerJump
-                    : jumpForce;
+                        ? PowerJump
+                        : jumpForce;
 
                 float direction =
                     Mathf.Sign(rb.gravityScale);
 
-                rb.linearVelocity = new Vector2(
-                    rb.linearVelocity.x,
-                    jumpPower * direction
-                );
+                rb.linearVelocity =
+                    new Vector2(
+                        rb.linearVelocity.x,
+                        jumpPower * direction
+                    );
 
                 jumpTimeCounter -= Time.deltaTime;
             }
@@ -397,9 +472,9 @@ public class SC_player : MonoBehaviour
             return;
 
 
-        // =========================
+        // =====================================================
         // SAUT DEPUIS UNE GRILLE
-        // =========================
+        // =====================================================
 
         if (isClimbing)
         {
@@ -409,28 +484,26 @@ public class SC_player : MonoBehaviour
 
             jumpTimeCounter = maxJumpTime;
 
-            rb.linearVelocity = new Vector2(
-                rb.linearVelocity.x,
-                jumpForce
-            );
+            rb.linearVelocity =
+                new Vector2(
+                    rb.linearVelocity.x,
+                    jumpForce
+                );
 
             anim.SetTrigger("Jump");
 
             jump.PlayJuice();
 
-            // On consomme le buffer
             jumpBufferCounter = 0f;
-
-            // On consomme également le coyote
             coyoteTimeCounter = 0f;
 
             return;
         }
 
 
-        // =========================
+        // =====================================================
         // SAUT NORMAL
-        // =========================
+        // =====================================================
 
         if (rb.linearVelocity.y < 0.5f)
         {
@@ -447,22 +520,20 @@ public class SC_player : MonoBehaviour
 
                 float jumpPower =
                     eat_system.isPowerUpActive
-                    ? PowerJump
-                    : jumpForce;
+                        ? PowerJump
+                        : jumpForce;
 
-                rb.linearVelocity = new Vector2(
-                    rb.linearVelocity.x,
-                    jumpPower
-                );
+                rb.linearVelocity =
+                    new Vector2(
+                        rb.linearVelocity.x,
+                        jumpPower
+                    );
 
                 anim.SetTrigger("Jump");
 
                 jump.PlayJuice();
 
-                // Le buffer est consommé
                 jumpBufferCounter = 0f;
-
-                // Le coyote time est consommé
                 coyoteTimeCounter = 0f;
             }
         }
@@ -485,13 +556,8 @@ public class SC_player : MonoBehaviour
         if (isStunned)
             return;
 
-
-        // On enregistre immédiatement l'appui
-        // même si le joueur ne peut pas encore sauter.
         jumpBufferCounter = jumpBufferTime;
 
-
-        // On essaye immédiatement de faire le saut.
         TryJump();
     }
 
@@ -503,6 +569,10 @@ public class SC_player : MonoBehaviour
     }
 
 
+    // =========================================================
+    // ANIMATION CHECK
+    // =========================================================
+
     bool IsAnimationPlaying(string animationName)
     {
         AnimatorStateInfo stateInfo =
@@ -511,6 +581,10 @@ public class SC_player : MonoBehaviour
         return stateInfo.IsName(animationName);
     }
 
+
+    // =========================================================
+    // STUN
+    // =========================================================
 
     void CheckStun()
     {
@@ -549,17 +623,29 @@ public class SC_player : MonoBehaviour
     }
 
 
+    // =========================================================
+    // DAMAGE DETECTION
+    // =========================================================
+
     void CheckDamage()
     {
+        // IMPORTANT :
+        // L'invincibilité bloque TOUS les dégâts normaux.
         if (!canTakeDamage ||
+            isInvincible ||
             health.current_health == 0)
+        {
             return;
+        }
 
-        hit = Physics2D.OverlapCircle(
-            damageCheck.position,
-            damageRadius,
-            damageLayer
-        );
+
+        hit =
+            Physics2D.OverlapCircle(
+                damageCheck.position,
+                damageRadius,
+                damageLayer
+            );
+
 
         if (hit != null)
         {
@@ -568,14 +654,18 @@ public class SC_player : MonoBehaviour
                 hit.transform.position
             );
 
+
             if (health.current_health == 0)
             {
-                hit.GetComponentInParent<SortingGroup>()
-                    .sortingLayerName = "UI";
+                SortingGroup sortingGroup =
+                    hit.GetComponentInParent<SortingGroup>();
 
-                StartCoroutine(
-                    delay_death_enemy()
-                );
+                if (sortingGroup != null)
+                {
+                    sortingGroup.sortingLayerName = "UI";
+                }
+
+                StartCoroutine(delay_death_enemy());
             }
         }
     }
@@ -585,17 +675,32 @@ public class SC_player : MonoBehaviour
     {
         yield return new WaitForSecondsRealtime(1.5f);
 
-        hit.GetComponentInParent<SortingGroup>()
-            .sortingLayerName = "Default";
+
+        if (hit != null)
+        {
+            SortingGroup sortingGroup =
+                hit.GetComponentInParent<SortingGroup>();
+
+            if (sortingGroup != null)
+            {
+                sortingGroup.sortingLayerName = "Default";
+            }
+        }
     }
 
+
+    // =========================================================
+    // STUN PLAYER
+    // =========================================================
 
     public void stun_player()
     {
         if (isStunned ||
             isInvincible ||
             eat_system.isPowerUpActive)
+        {
             return;
+        }
 
         StartCoroutine(StunCoroutine());
     }
@@ -619,6 +724,10 @@ public class SC_player : MonoBehaviour
     }
 
 
+    // =========================================================
+    // LOW HEALTH
+    // =========================================================
+
     void HandleLowHealthBlink()
     {
         if (health.current_health == 1)
@@ -626,9 +735,7 @@ public class SC_player : MonoBehaviour
             if (lowHealthCoroutine == null)
             {
                 lowHealthCoroutine =
-                    StartCoroutine(
-                        LowHealthBlink()
-                    );
+                    StartCoroutine(LowHealthBlink());
             }
         }
         else
@@ -640,8 +747,7 @@ public class SC_player : MonoBehaviour
                 lowHealthCoroutine = null;
             }
 
-            spriteRenderer.material =
-                normalMaterial;
+            spriteRenderer.material = normalMaterial;
         }
     }
 
@@ -650,26 +756,29 @@ public class SC_player : MonoBehaviour
     {
         bool toggle = false;
 
+
         while (health.current_health == 1)
         {
             spriteRenderer.material =
                 toggle
-                ? normalMaterial
-                : lowHealthMaterial;
+                    ? normalMaterial
+                    : lowHealthMaterial;
 
             toggle = !toggle;
 
-            yield return new WaitForSeconds(
-                lowHealthBlinkRate
-            );
+            yield return new WaitForSeconds(lowHealthBlinkRate);
         }
 
-        spriteRenderer.material =
-            normalMaterial;
+
+        spriteRenderer.material = normalMaterial;
 
         lowHealthCoroutine = null;
     }
 
+
+    // =========================================================
+    // FIXED UPDATE
+    // =========================================================
 
     void FixedUpdate()
     {
@@ -681,15 +790,6 @@ public class SC_player : MonoBehaviour
             );
 
 
-        if (isClimbing && grillage != null)
-        {
-            Vector2 clamped =
-                grillage.ClampPosition(rb.position);
-
-            rb.position = clamped;
-        }
-
-
         if (!canMove)
             return;
 
@@ -697,14 +797,66 @@ public class SC_player : MonoBehaviour
             return;
 
 
+        // =====================================================
+        // CLIMB
+        // =====================================================
+
+        if (isClimbing)
+        {
+            if (grillage == null)
+            {
+                StopClimbing();
+                return;
+            }
+
+
+            Vector2 climbInput =
+                Move.action.ReadValue<Vector2>();
+
+
+            if (climbInput.magnitude < 0.1f)
+            {
+                climbInput = Vector2.zero;
+            }
+            else
+            {
+                climbInput.Normalize();
+            }
+
+
+            Vector2 climbVelocity =
+                climbInput * climbSpeed;
+
+
+            rb.linearVelocity = climbVelocity;
+
+
+            Vector2 nextPosition =
+                rb.position +
+                climbVelocity *
+                Time.fixedDeltaTime;
+
+
+            rb.position =
+                grillage.ClampPosition(nextPosition);
+
+
+            return;
+        }
+
+
+        // =====================================================
+        // MOVEMENT NORMAL
+        // =====================================================
+
         if (!isFrozen)
         {
             float horizontalSpeed =
                 moveInput.x *
                 (
                     eat_system.isPowerUpActive
-                    ? PowermoveSpeed
-                    : moveSpeed
+                        ? PowermoveSpeed
+                        : moveSpeed
                 )
                 + knockbackVelocity.x;
 
@@ -742,45 +894,64 @@ public class SC_player : MonoBehaviour
     }
 
 
-void LateUpdate()
+    // =========================================================
+    // LATE UPDATE
+    // =========================================================
+
+    void LateUpdate()
     {
         float x = transform.position.x;
 
-        // --- Ghost pour le screen wrap ---
+
+        // =====================================================
+        // GHOST SCREEN WRAP
+        // =====================================================
 
         if (x > (limit.y - 0.2f))
         {
             ghost.gameObject.SetActive(true);
-            ghost.localScale = transform.localScale;
 
-            // Distance du joueur par rapport à la limite droite
-            float distance = limit.y - x;
+            ghost.localScale =
+                transform.localScale;
 
-            // Même distance par rapport à la limite gauche
-            float ghostX = limit.x - distance;
 
-            ghost.position = new Vector3(
-                ghostX,
-                transform.position.y,
-                transform.position.z
-            );
+            float distance =
+                limit.y - x;
+
+
+            float ghostX =
+                limit.x - distance;
+
+
+            ghost.position =
+                new Vector3(
+                    ghostX,
+                    transform.position.y,
+                    transform.position.z
+                );
         }
         else if (x < (limit.x + 0.2f))
         {
             ghost.gameObject.SetActive(true);
-            ghost.localScale = transform.localScale;
 
-            // Distance du joueur par rapport à la limite gauche
-            float distance = x - limit.x;
+            ghost.localScale =
+                transform.localScale;
 
-            // Même distance par rapport à la limite droite
-            float ghostX = limit.y + distance;
 
-            ghost.position = new Vector3(
-                ghostX,
-                transform.position.y,
-                transform.position.z
-            );
+            float distance =
+                x - limit.x;
+
+
+            float ghostX =
+                limit.y + distance;
+
+
+            ghost.position =
+                new Vector3(
+                    ghostX,
+                    transform.position.y,
+                    transform.position.z
+                );
         }
         else
         {
@@ -788,55 +959,78 @@ void LateUpdate()
         }
 
 
-        // --- Screen wrap ---
+        // =====================================================
+        // SCREEN WRAP
+        // =====================================================
 
         if (x > limit.y)
         {
-            transform.position = new Vector3(
-                limit.x,
-                transform.position.y,
-                transform.position.z
-            );
+            transform.position =
+                new Vector3(
+                    limit.x,
+                    transform.position.y,
+                    transform.position.z
+                );
+
 
             if (rb.linearVelocity.x > 0)
             {
-                rb.linearVelocity = new Vector2(
-                    -Mathf.Abs(rb.linearVelocity.x),
-                    rb.linearVelocity.y
-                );
+                rb.linearVelocity =
+                    new Vector2(
+                        -Mathf.Abs(
+                            rb.linearVelocity.x
+                        ),
+                        rb.linearVelocity.y
+                    );
             }
         }
         else if (x < limit.x)
         {
-            transform.position = new Vector3(
-                limit.y,
-                transform.position.y,
-                transform.position.z
-            );
+            transform.position =
+                new Vector3(
+                    limit.y,
+                    transform.position.y,
+                    transform.position.z
+                );
+
 
             if (rb.linearVelocity.x < 0)
             {
-                rb.linearVelocity = new Vector2(
-                    Mathf.Abs(rb.linearVelocity.x),
-                    rb.linearVelocity.y
-                );
+                rb.linearVelocity =
+                    new Vector2(
+                        Mathf.Abs(
+                            rb.linearVelocity.x
+                        ),
+                        rb.linearVelocity.y
+                    );
             }
         }
     }
 
 
+    // =========================================================
+    // TAKE DAMAGE
+    // =========================================================
+
     public void TakeDamage(
         int damage,
-        Vector3 sourcePosition
-    )
+        Vector3 sourcePosition)
     {
-        if (!canTakeDamage)
+        // Double sécurité.
+        if (!canTakeDamage ||
+            isInvincible||
+            burning)
+        {
             return;
+        }
+
 
         if (isFrozen ||
-            isInvincible ||
             eat_system.isPowerUpActive)
+        {
             return;
+        }
+
 
         anim.SetBool("Stun", false);
 
@@ -853,6 +1047,7 @@ void LateUpdate()
 
         ps_damage.Play();
 
+
         health.take_damage(damage);
 
         eat_system.take_damage();
@@ -861,7 +1056,10 @@ void LateUpdate()
         if (health.current_health > 0)
         {
             if (hitCoroutine != null)
+            {
                 StopCoroutine(hitCoroutine);
+            }
+
 
             hitCoroutine =
                 StartCoroutine(
@@ -870,9 +1068,11 @@ void LateUpdate()
                     )
                 );
 
-            StartInvincibility(
-                invincibilityTime
-            );
+
+            // IMPORTANT :
+            // L'invincibilité démarre immédiatement,
+            // avant même la fin du hit freeze.
+            StartInvincibility(invincibilityTime);
         }
         else
         {
@@ -881,21 +1081,26 @@ void LateUpdate()
     }
 
 
+    // =========================================================
+    // LAVA HIT
+    // =========================================================
+
     public void LavaHit(
         Vector2 launchVelocity,
         float controlMultiplier,
-        float controlTime
-    )
+        float controlTime)
     {
+        
         burning = true;
 
-        StopAllCoroutines();
 
         rb.bodyType =
             RigidbodyType2D.Dynamic;
 
+
         rb.linearVelocity =
             launchVelocity;
+
 
         StartCoroutine(
             LavaControlLock(
@@ -905,16 +1110,33 @@ void LateUpdate()
         );
 
 
-        if (!canTakeDamage)
+        if (isInvincible ||
+            !canTakeDamage)
+        {
+            return;
+        }
+
+        if (eat_system.isPowerUpActive )
+        {
+            return;
+        }
+
+
+        if (health.current_health == 0)
             return;
 
-        if (isFrozen ||
-            isInvincible ||
-            eat_system.isPowerUpActive)
-            return;
 
 
-        anim.SetBool("Stun", false);
+        anim.SetBool(
+            "Stun",
+            false
+        );
+
+
+        anim.SetTrigger(
+            "Hit"
+        );
+
 
         isStunned = false;
 
@@ -922,7 +1144,7 @@ void LateUpdate()
 
         isFrozen = false;
         isStunned = false;
-        canTakeDamage = true;
+
 
         eat_system.take_damage();
 
@@ -932,8 +1154,13 @@ void LateUpdate()
         if (health.current_health > 0)
         {
             if (hitCoroutine != null)
+            {
                 StopCoroutine(hitCoroutine);
+            }
 
+
+            // IMPORTANT :
+            // Même système d'invincibilité que les dégâts normaux.
             StartInvincibility(
                 invincibilityTime
             );
@@ -943,17 +1170,22 @@ void LateUpdate()
             Die();
         }
 
+
         damage_lava_sfx.PlayJuice();
     }
 
 
+    // =========================================================
+    // LAVA CONTROL
+    // =========================================================
+
     private IEnumerator LavaControlLock(
         float multiplier,
-        float time
-    )
+        float time)
     {
         float originalMove =
             moveSpeed;
+
 
         float originalPower =
             PowermoveSpeed;
@@ -968,7 +1200,7 @@ void LateUpdate()
 
 
         yield return new WaitUntil(
-            () => isGrounded
+            () => isGrounded || isClimbing
         );
 
 
@@ -978,31 +1210,104 @@ void LateUpdate()
         moveSpeed =
             originalMove;
 
+
         PowermoveSpeed =
             originalPower;
     }
 
 
+    // =========================================================
+    // INVINCIBILITY
+    // =========================================================
+
     public void TriggerInvincibility(
-        float duration
-    )
+        float duration)
     {
         StartInvincibility(duration);
     }
 
 
+    public void StartInvincibility(
+        float duration)
+    {
+        if (invincibilityCoroutine != null)
+        {
+            StopCoroutine(invincibilityCoroutine);
+        }
+
+
+        invincibilityCoroutine =
+            StartCoroutine(
+                InvincibilityRoutine(duration)
+            );
+    }
+
+
+    private IEnumerator InvincibilityRoutine(
+        float duration)
+    {
+        // =====================================================
+        // IMPORTANT :
+        // Les deux protections sont activées ensemble.
+        // =====================================================
+
+        isInvincible = true;
+        canTakeDamage = false;
+
+
+        float elapsed = 0f;
+        bool visible = true;
+
+
+        while (elapsed < duration)
+        {
+            visible = !visible;
+
+
+            spriteRenderer.enabled =
+                visible;
+
+
+            yield return new WaitForSecondsRealtime(0.1f);
+
+
+            elapsed += 0.1f;
+        }
+
+
+        spriteRenderer.enabled = true;
+
+
+        isInvincible = false;
+
+
+        // On ne réactive les dégâts qu'une fois
+        // l'invincibilité complètement terminée.
+        canTakeDamage = true;
+
+
+        invincibilityCoroutine = null;
+    }
+
+
+    // =========================================================
+    // HIT FREEZE + KNOCKBACK
+    // =========================================================
+
     private IEnumerator HitFreezeWithKnockback(
-        Vector3 sourcePosition
-    )
+        Vector3 sourcePosition)
     {
         isFrozen = true;
 
         canTakeDamage = false;
 
+
         anim.SetTrigger("Hit");
+
 
         rb.linearVelocity =
             Vector2.zero;
+
 
         rb.bodyType =
             RigidbodyType2D.Kinematic;
@@ -1010,6 +1315,7 @@ void LateUpdate()
 
         float originalTimeScale =
             Time.timeScale;
+
 
         Time.timeScale = 0f;
 
@@ -1022,8 +1328,10 @@ void LateUpdate()
         rb.bodyType =
             RigidbodyType2D.Dynamic;
 
+
         Time.timeScale =
             originalTimeScale;
+
 
         isFrozen = false;
 
@@ -1047,18 +1355,33 @@ void LateUpdate()
 
         yield return new WaitForSeconds(0.1f);
 
-        canTakeDamage = true;
+
+        // =====================================================
+        // IMPORTANT :
+        // Ne jamais réactiver les dégâts pendant
+        // une invincibilité encore active.
+        // =====================================================
+
+        if (!isInvincible)
+        {
+            canTakeDamage = true;
+        }
     }
 
 
+    // =========================================================
+    // POWERUP FREEZE
+    // =========================================================
+
     private IEnumerator PowerupFreeze(
-        bool isActivating
-    )
+        bool isActivating)
     {
         isFrozen = true;
 
+
         rb.linearVelocity =
             Vector2.zero;
+
 
         rb.bodyType =
             RigidbodyType2D.Kinematic;
@@ -1066,8 +1389,8 @@ void LateUpdate()
 
         string trigger =
             isActivating
-            ? transformAnimTrigger
-            : detransformAnimTrigger;
+                ? transformAnimTrigger
+                : detransformAnimTrigger;
 
 
         anim.SetTrigger(trigger);
@@ -1075,6 +1398,7 @@ void LateUpdate()
 
         float originalTimeScale =
             Time.timeScale;
+
 
         Time.timeScale = 0f;
 
@@ -1087,19 +1411,28 @@ void LateUpdate()
         Time.timeScale =
             originalTimeScale;
 
+
         rb.bodyType =
             RigidbodyType2D.Dynamic;
+
 
         isFrozen = false;
     }
 
 
+    // =========================================================
+    // DIE
+    // =========================================================
+
     public void Die()
     {
         canMove = false;
 
+
         if (hitCoroutine != null)
+        {
             StopCoroutine(hitCoroutine);
+        }
 
 
         GetComponent<SortingGroup>()
@@ -1108,32 +1441,46 @@ void LateUpdate()
 
         isFrozen = true;
 
+
         anim.SetBool("Die", true);
 
         anim.SetBool("Eat", false);
 
+
         eat_system.eating_sfx.Stop();
+
 
         game_over_screen.SetActive(true);
 
-        SC_music_manager.instance.stop_music();
+
+        SC_music_manager.instance
+            .stop_music();
+
 
         collider.enabled = false;
 
+
         die.PlayJuice();
+
 
         knockbackVelocity =
             Vector2.zero;
 
+
         Time.timeScale = 0;
     }
 
+
+    // =========================================================
+    // GIZMOS
+    // =========================================================
 
     void OnDrawGizmosSelected()
     {
         if (damageCheck != null)
         {
             Gizmos.color = Color.red;
+
 
             Gizmos.DrawWireSphere(
                 damageCheck.position,
@@ -1143,15 +1490,24 @@ void LateUpdate()
     }
 
 
+    // =========================================================
+    // POWERUP
+    // =========================================================
+
     public void powerup()
     {
+        anim.ResetTrigger("Punch");
+
         anim.SetTrigger("Transform");
 
+
         transformation.PlayJuice();
+
 
         normal.SetActive(false);
 
         transformed.SetActive(true);
+
 
         StartCoroutine(
             PowerupFreeze(true)
@@ -1165,86 +1521,24 @@ void LateUpdate()
 
         transformed.SetActive(false);
 
+
         StartCoroutine(
             PowerupFreeze(false)
         );
     }
 
 
-    public void StartInvincibility(
-        float duration
-    )
-    {
-        if (invincibilityCoroutine != null)
-        {
-            StopCoroutine(
-                invincibilityCoroutine
-            );
-        }
-
-        invincibilityCoroutine =
-            StartCoroutine(
-                InvincibilityRoutine(
-                    duration
-                )
-            );
-    }
-
-
-    private IEnumerator InvincibilityRoutine(
-        float duration
-    )
-    {
-        isInvincible = true;
-
-        float elapsed = 0f;
-
-        bool visible = true;
-
-        Invoke(
-            "delay",
-            invincibilityTime + 0.1f
-        );
-
-
-        while (elapsed < duration)
-        {
-            visible = !visible;
-
-            spriteRenderer.enabled =
-                visible;
-
-
-            yield return new WaitForSecondsRealtime(
-                0.1f
-            );
-
-
-            elapsed += 0.1f;
-        }
-
-
-        spriteRenderer.enabled = true;
-
-        isInvincible = false;
-
-        invincibilityCoroutine = null;
-    }
-
-
-    void delay()
-    {
-        spriteRenderer.enabled = true;
-    }
-
+    // =========================================================
+    // CLIMB TRIGGERS
+    // =========================================================
 
     private void OnTriggerEnter2D(
-        Collider2D other
-    )
+        Collider2D other)
     {
         if (other.CompareTag("Climb"))
         {
             canClimb = true;
+
 
             grillage =
                 other.GetComponent<SC_grillage>();
@@ -1253,70 +1547,108 @@ void LateUpdate()
 
 
     private void OnTriggerStay2D(
-        Collider2D other
-    )
+        Collider2D other)
     {
         if (other.CompareTag("Climb"))
         {
-            if (was_climbing)
+            canClimb = true;
+
+
+            if (grillage == null)
             {
-                StartClimbing(0);
+                grillage =
+                    other.GetComponent<SC_grillage>();
             }
         }
     }
 
 
     private void OnTriggerExit2D(
-        Collider2D other
-    )
+        Collider2D other)
     {
         if (other.CompareTag("Climb"))
         {
-            grillage = null;
+            SC_grillage exitedGrillage =
+                other.GetComponent<SC_grillage>();
 
-            StopClimbing();
 
-            canClimb = false;
+            if (grillage == exitedGrillage)
+            {
+                StopClimbing();
+
+
+                grillage = null;
+
+
+                canClimb = false;
+            }
         }
     }
 
 
-    void StartClimbing(
-        float verticalInput
-    )
+    // =========================================================
+    // TRY START CLIMBING
+    // =========================================================
+
+    private void TryStartClimbing(
+        Vector2 input)
     {
+        if (!canClimb)
+            return;
+
+        if (isClimbing)
+            return;
+
+        if (grillage == null)
+            return;
+
+        if (climbReattachTimer > 0f)
+            return;
+
+
+        if (input.y <
+            climbAttachUpThreshold)
+        {
+            return;
+        }
+
+
+        if (Mathf.Abs(input.x) >
+            input.y *
+            climbAttachDiagonalLimit)
+        {
+            return;
+        }
+
+
+        StartClimbing();
+    }
+
+
+    // =========================================================
+    // START CLIMBING
+    // =========================================================
+
+    void StartClimbing()
+    {
+        if (!canClimb)
+            return;
+
+        if (grillage == null)
+            return;
+
+        if (climbReattachTimer > 0f)
+            return;
+
+
         isClimbing = true;
+
 
         rb.gravityScale = 0;
 
 
-        Vector2 velocity =
-            new Vector2(
-                0,
-                verticalInput * climbSpeed
-            );
-
-
-        if (grillage != null)
-        {
-            Vector2 clamped =
-                grillage.ClampPosition(
-                    rb.position +
-                    velocity *
-                    Time.fixedDeltaTime
-                );
-
-
-            rb.position = clamped;
-
-            rb.linearVelocity =
-                velocity;
-        }
-        else
-        {
-            rb.linearVelocity =
-                velocity;
-        }
+        rb.linearVelocity =
+            Vector2.zero;
 
 
         anim.SetBool(
@@ -1326,25 +1658,29 @@ void LateUpdate()
     }
 
 
+    // =========================================================
+    // STOP CLIMBING
+    // =========================================================
+
     void StopClimbing()
     {
-        canClimb = false;
+        if (!isClimbing)
+            return;
 
-        was_climbing = true;
-
-        grillage = null;
-
-        grid.Stop();
 
         isClimbing = false;
 
-        Invoke(
-            "Delay_climb",
-            0.02f
-        );
 
         rb.gravityScale =
             base_gravity;
+
+
+        rb.linearVelocity =
+            Vector2.zero;
+
+
+        grid.Stop();
+
 
         anim.SetBool(
             "Climb",
@@ -1353,9 +1689,47 @@ void LateUpdate()
     }
 
 
+    // =========================================================
+    // STOP CLIMBING POUR SAUT
+    // =========================================================
+
+    void StopClimbingJump()
+    {
+        if (!isClimbing)
+            return;
+
+
+        isClimbing = false;
+
+
+        climbReattachTimer =
+            climbReattachDelay;
+
+
+        rb.gravityScale =
+            base_gravity;
+
+
+        rb.linearVelocity =
+            Vector2.zero;
+
+
+        grid.Stop();
+
+
+        anim.SetBool(
+            "Climb",
+            false
+        );
+    }
+
+
+    // =========================================================
+    // FACE TARGET
+    // =========================================================
+
     public void FaceTarget(
-        Transform target
-    )
+        Transform target)
     {
         if (target == null)
             return;
@@ -1391,35 +1765,20 @@ void LateUpdate()
     }
 
 
-    void StopClimbingJump()
-    {
-        canClimb = false;
-
-        isClimbing = false;
-
-        rb.gravityScale =
-            base_gravity;
-
-        anim.SetBool(
-            "Climb",
-            false
-        );
-    }
-
-
-    void Delay_climb()
-    {
-        was_climbing = false;
-    }
-
+    // =========================================================
+    // GROUND VELOCITY
+    // =========================================================
 
     public void SetGroundVelocity(
-        Vector2 vel
-    )
+        Vector2 vel)
     {
         added_velocity = vel;
     }
 
+
+    // =========================================================
+    // REVIVE
+    // =========================================================
 
     public void Revive()
     {
@@ -1427,22 +1786,33 @@ void LateUpdate()
 
         transformed.SetActive(false);
 
+
         StopAllCoroutines();
+
 
         isFrozen = false;
         isStunned = false;
         isInvincible = false;
         canTakeDamage = true;
 
-        // Reset des systèmes de saut
+
+        isClimbing = false;
+        canClimb = false;
+        grillage = null;
+
+
+        climbReattachTimer = 0f;
+
+
+        rb.gravityScale =
+            base_gravity;
+
+
+     
+
         coyoteTimeCounter = 0f;
         jumpBufferCounter = 0f;
         isJumping = false;
-
-        anim_.SetBool(
-            "Die",
-            false
-        );
 
 
         if (health != null)
@@ -1453,11 +1823,13 @@ void LateUpdate()
 
         collider.enabled = true;
 
+
         spriteRenderer.enabled = true;
 
 
         rb.bodyType =
             RigidbodyType2D.Dynamic;
+
 
         rb.linearVelocity =
             Vector2.zero;
@@ -1466,9 +1838,20 @@ void LateUpdate()
         rb.constraints =
             RigidbodyConstraints2D.FreezeRotation;
 
+
         rb.angularVelocity = 0;
 
 
         eat_system.ResetSystem();
+
+
+        anim_.SetBool(
+            "Die",
+            false
+        );
+        anim_.SetBool(
+         "Climb",
+         false
+     );
     }
 }

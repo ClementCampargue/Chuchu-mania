@@ -1431,7 +1431,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: -1
+  m_SortingOrder: -41
   m_Sprite: {fileID: 21300000, guid: c2ef4386e57b0a247839b97d424754b8, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -2960,46 +2960,7 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 6447277789245288704, guid: 894c74b520a88a24e88966d64bc5ea3e, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 0}
-    - targetCorrespondingSourceObject: {fileID: 6173315337661460051, guid: 894c74b520a88a24e88966d64bc5ea3e, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 0}
-    - targetCorrespondingSourceObject: {fileID: 5848698941648007285, guid: 894c74b520a88a24e88966d64bc5ea3e, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 0}
-    - targetCorrespondingSourceObject: {fileID: 4798243761728814768, guid: 894c74b520a88a24e88966d64bc5ea3e, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 0}
-    - targetCorrespondingSourceObject: {fileID: 6736564106902142633, guid: 894c74b520a88a24e88966d64bc5ea3e, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 0}
-    - targetCorrespondingSourceObject: {fileID: 8705860142880130716, guid: 894c74b520a88a24e88966d64bc5ea3e, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 0}
-    - targetCorrespondingSourceObject: {fileID: 3965467174580317392, guid: 894c74b520a88a24e88966d64bc5ea3e, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 0}
-    - targetCorrespondingSourceObject: {fileID: 1078532428888744043, guid: 894c74b520a88a24e88966d64bc5ea3e, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 0}
-    - targetCorrespondingSourceObject: {fileID: 75098859835766510, guid: 894c74b520a88a24e88966d64bc5ea3e, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 0}
-    - targetCorrespondingSourceObject: {fileID: 5047893164416911775, guid: 894c74b520a88a24e88966d64bc5ea3e, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 0}
-    - targetCorrespondingSourceObject: {fileID: 8639944550070907281, guid: 894c74b520a88a24e88966d64bc5ea3e, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 0}
-    - targetCorrespondingSourceObject: {fileID: 7928316746876315565, guid: 894c74b520a88a24e88966d64bc5ea3e, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 0}
-    - targetCorrespondingSourceObject: {fileID: 6428017958080635280, guid: 894c74b520a88a24e88966d64bc5ea3e, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 0}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 894c74b520a88a24e88966d64bc5ea3e, type: 3}
 --- !u!1 &1663587257
 GameObject:
@@ -3233,6 +3194,7 @@ GameObject:
   - component: {fileID: 1710306341}
   - component: {fileID: 1710306340}
   - component: {fileID: 1710306342}
+  - component: {fileID: 1710306343}
   m_Layer: 0
   m_Name: SC_gravity_flip
   m_TagString: Untagged
@@ -3298,6 +3260,18 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!210 &1710306343
+SortingGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1710306339}
+  m_Enabled: 1
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: -3
+  m_SortAtRoot: 0
 --- !u!1 &1794622014
 GameObject:
   m_ObjectHideFlags: 0

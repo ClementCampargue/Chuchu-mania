@@ -21547,8 +21547,12 @@ MonoBehaviour:
   jumpForce: 6
   maxJumpTime: 0.3
   coyoteTime: 0.2
+  jumpBufferTime: 0.1
   canJump: 1
-  climbSpeed: 0.52
+  climbSpeed: 2
+  climbAttachUpThreshold: 0.6
+  climbAttachDiagonalLimit: 0.5
+  climbReattachDelay: 0.2
   hitFreezeTime: 0.51
   hitKnockback: {x: 10, y: 5}
   normalMaterial: {fileID: 2100000, guid: a97c105638bdf8b4a8650670310a4cd3, type: 2}
@@ -21568,7 +21572,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 2048
   stunDuration: 2
-  invincibilityTime: 1
+  invincibilityTime: 1.34
   spriteRenderer: {fileID: 4167154217632997446}
   spriteRendererPower: {fileID: 9120311054899858401}
   isInvincible: 0
