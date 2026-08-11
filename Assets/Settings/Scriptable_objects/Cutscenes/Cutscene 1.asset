@@ -34,7 +34,7 @@ MonoBehaviour:
       answer: []
       actionID: 
   - character: {fileID: 11400000, guid: 5cc7475fadc274743a90d03b3f3285de, type: 2}
-    text: <sh>A l'aide!!!</sh>
+    text: <sh>A l'aaaaaaaiiiiiiiiiide!!!</sh>
     hasChoices: 0
     choices:
     - choiceText: Oui
