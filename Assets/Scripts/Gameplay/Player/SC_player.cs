@@ -8,18 +8,30 @@ using UnityEngine.Rendering;
 public class SC_player : MonoBehaviour
 {
     private Coroutine invincibilityCoroutine;
+
     [Header("Power_up_stats")]
     public float PowermoveSpeed = 5f;
     public float PowerJump = 5f;
     public SC_juiciness juice;
+
     [Header("Movement")]
     public float moveSpeed = 5f;
-   [HideInInspector] public float base_speed;
+    [HideInInspector] public float base_speed;
     public float jumpForce = 10f;
     public float maxJumpTime = 0.3f;
+
+    [Header("Coyote Time")]
+    public float coyoteTime = 0.1f;
+    private float coyoteTimeCounter;
+
+    [Header("Jump Input Buffer")]
+    public float jumpBufferTime = 0.1f;
+    private float jumpBufferCounter;
+
     private float jumpTimeCounter;
     private bool isJumping;
     public bool canJump = true;
+
     [Header("Climbing")]
     public float climbSpeed = 4f;
     private bool justLanded;
@@ -27,14 +39,17 @@ public class SC_player : MonoBehaviour
     private bool canClimb;
     private SC_grillage grillage;
     private sc_health_system health;
+
     public float hitFreezeTime = 0.15f;
     public Vector2 hitKnockback = new Vector2(5f, 3f);
+
     [Header("Low Health Warning")]
     public Material normalMaterial;
     public Material lowHealthMaterial;
     public float lowHealthBlinkRate = 0.2f;
 
     private Coroutine lowHealthCoroutine;
+
     [Header("Ground Check")]
     public Transform groundCheckBottom;
     public float groundCheckRadius = 0.2f;
@@ -45,11 +60,13 @@ public class SC_player : MonoBehaviour
     public float damageRadius = 0.5f;
     public LayerMask damageLayer;
     private bool canTakeDamage = true;
+
     [Header("Stun")]
     public LayerMask stunLayer;
     public float stunDuration = 2f;
 
     private bool isStunned = false;
+
     [Header("Invincibility")]
     public float invincibilityTime = 1f;
     public SpriteRenderer spriteRenderer;
@@ -86,13 +103,16 @@ public class SC_player : MonoBehaviour
     public ParticleSystem ps_damage;
 
     public SC_icecream_eat_system eat_system;
+
     public static SC_player instance;
+
     public BoxCollider2D collider;
     public float base_gravity;
     public GameObject game_over_screen;
     public bool canMove;
     public bool burning;
-    private bool was_climbing; 
+    private bool was_climbing;
+
     private Vector2 added_velocity;
     private Vector2 added_velocity_;
 
@@ -104,15 +124,19 @@ public class SC_player : MonoBehaviour
     public SC_juiciness transformation;
     public SC_juiciness die;
     public SC_juiciness land;
+
     public AudioSource grid;
     public AudioSource run;
+
     private Collider2D hit;
+
+
     private void Awake()
     {
         base_speed = moveSpeed;
-
         instance = this;
     }
+
 
     private void OnEnable()
     {
@@ -122,24 +146,33 @@ public class SC_player : MonoBehaviour
         Jump.action.performed += OnJumpStarted;
         Jump.action.canceled += OnJumpReleased;
     }
+
+
     private void OnDisable()
     {
         Jump.action.performed -= OnJumpStarted;
         Jump.action.canceled -= OnJumpReleased;
-
     }
+
 
     void Start()
     {
         canTakeDamage = true;
+
         health = sc_health_system.instance;
+
         normal.SetActive(true);
         transformed.SetActive(false);
+
         limit = SC_game_master.instance.limits;
+
         base_gravity = rb.gravityScale;
+
         spriteRenderer.material = normalMaterial;
+
         anim = anim_;
     }
+
 
     void Update()
     {
@@ -148,12 +181,14 @@ public class SC_player : MonoBehaviour
         CheckStun();
         CheckDamage();
         HandleLowHealthBlink();
+
         if (isStunned)
         {
             moveInput = Vector2.zero;
             return;
         }
-  
+
+
         if (canClimb)
         {
             float verticalInput = moveInput.y;
@@ -167,6 +202,7 @@ public class SC_player : MonoBehaviour
                 rb.linearVelocity = Vector2.zero;
             }
         }
+
 
         if (!isFrozen && canMove && Time.timeScale != 0)
         {
@@ -183,14 +219,55 @@ public class SC_player : MonoBehaviour
         }
 
 
+        // =========================
+        // GROUND CHECK
+        // =========================
+
         isGrounded = Physics2D.OverlapCircle(
             groundCheckBottom.position,
             groundCheckRadius,
             groundLayer
         );
+
+
+        // =========================
+        // COYOTE TIME
+        // =========================
+
+        if (isGrounded)
+        {
+            coyoteTimeCounter = coyoteTime;
+        }
+        else
+        {
+            coyoteTimeCounter -= Time.deltaTime;
+        }
+
+
+        // =========================
+        // JUMP INPUT BUFFER
+        // =========================
+
+        if (jumpBufferCounter > 0f)
+        {
+            jumpBufferCounter -= Time.deltaTime;
+        }
+
+
+        // =========================
+        // BUFFER + COYOTE JUMP
+        // =========================
+
+        if (jumpBufferCounter > 0f)
+        {
+            TryJump();
+        }
+
+
         if (isClimbing)
         {
-            if (Mathf.Abs(moveInput.y) > 0.1f || Mathf.Abs(moveInput.x) > 0.1f)
+            if (Mathf.Abs(moveInput.y) > 0.1f ||
+                Mathf.Abs(moveInput.x) > 0.1f)
             {
                 if (!grid.isPlaying)
                 {
@@ -204,12 +281,9 @@ public class SC_player : MonoBehaviour
                 grid.Stop();
                 anim.SetBool("Run", false);
             }
-
         }
         else
         {
-
-
             if (Mathf.Abs(moveInput.x) > 0.1f)
             {
                 if (isGrounded)
@@ -218,30 +292,32 @@ public class SC_player : MonoBehaviour
                     {
                         run.Play();
                     }
-                 
                 }
                 else
                 {
                     run.Stop();
-
                 }
+
                 anim.SetBool("Run", true);
             }
             else
             {
                 run.Stop();
-
                 anim.SetBool("Run", false);
             }
         }
 
-        if (IsAnimationPlaying("jump_idle") && isGrounded  && rb.linearVelocity.y ==0)
+
+        if (IsAnimationPlaying("jump_idle") &&
+            isGrounded &&
+            rb.linearVelocity.y == 0)
         {
             anim.ResetTrigger("Jump");
             anim.SetTrigger("Land");
             land.PlayJuice();
-
         }
+
+
         if (!wasGrounded && isGrounded)
         {
             if (rb.linearVelocity.y <= 0.5f)
@@ -250,37 +326,50 @@ public class SC_player : MonoBehaviour
                 anim.SetTrigger("Land");
                 land.PlayJuice();
             }
-            else if (transform.localScale.y == -1 && rb.linearVelocity.y >= -0.5f)
-
+            else if (transform.localScale.y == -1 &&
+                     rb.linearVelocity.y >= -0.5f)
             {
                 anim.ResetTrigger("Jump");
                 anim.SetTrigger("Land");
                 land.PlayJuice();
             }
-
         }
 
 
         float yScale = transform.localScale.y;
 
         if (moveInput.x > 0)
-            transform.localScale = new Vector3(1, yScale, 1);
+        {
+            transform.localScale =
+                new Vector3(1, yScale, 1);
+        }
         else if (moveInput.x < 0)
-            transform.localScale = new Vector3(-1, yScale, 1);
+        {
+            transform.localScale =
+                new Vector3(-1, yScale, 1);
+        }
+
 
         wasGrounded = isGrounded;
+
 
         if (isJumping)
         {
             if (jumpTimeCounter > 0)
             {
-                float jumpPower = eat_system.isPowerUpActive ? PowerJump : jumpForce;
-                float direction = Mathf.Sign(rb.gravityScale);
+                float jumpPower =
+                    eat_system.isPowerUpActive
+                    ? PowerJump
+                    : jumpForce;
+
+                float direction =
+                    Mathf.Sign(rb.gravityScale);
 
                 rb.linearVelocity = new Vector2(
                     rb.linearVelocity.x,
-                    jumpForce * direction
+                    jumpPower * direction
                 );
+
                 jumpTimeCounter -= Time.deltaTime;
             }
             else
@@ -288,19 +377,153 @@ public class SC_player : MonoBehaviour
                 isJumping = false;
             }
         }
-
     }
-    bool IsAnimationPlaying( string animationName)
+
+
+    // =========================================================
+    // TRY JUMP
+    // =========================================================
+
+    private void TryJump()
     {
-        AnimatorStateInfo stateInfo = anim.GetCurrentAnimatorStateInfo(0);
+        if (Time.timeScale == 0)
+            return;
+
+        if (!canJump)
+            return;
+
+        if (isStunned)
+            return;
+
+        if (isFrozen || !canMove)
+            return;
+
+
+        // =========================
+        // SAUT DEPUIS UNE GRILLE
+        // =========================
+
+        if (isClimbing)
+        {
+            StopClimbingJump();
+
+            isJumping = true;
+
+            jumpTimeCounter = maxJumpTime;
+
+            rb.linearVelocity = new Vector2(
+                rb.linearVelocity.x,
+                jumpForce
+            );
+
+            anim.SetTrigger("Jump");
+
+            jump.PlayJuice();
+
+            // On consomme le buffer
+            jumpBufferCounter = 0f;
+
+            // On consomme également le coyote
+            coyoteTimeCounter = 0f;
+
+            return;
+        }
+
+
+        // =========================
+        // SAUT NORMAL
+        // =========================
+
+        if (rb.linearVelocity.y < 0.5f)
+        {
+            bool canPerformJump =
+                isGrounded ||
+                coyoteTimeCounter > 0f ||
+                eat_system.isPowerUpActive;
+
+            if (canPerformJump)
+            {
+                isJumping = true;
+
+                jumpTimeCounter = maxJumpTime;
+
+                float jumpPower =
+                    eat_system.isPowerUpActive
+                    ? PowerJump
+                    : jumpForce;
+
+                rb.linearVelocity = new Vector2(
+                    rb.linearVelocity.x,
+                    jumpPower
+                );
+
+                anim.SetTrigger("Jump");
+
+                jump.PlayJuice();
+
+                // Le buffer est consommé
+                jumpBufferCounter = 0f;
+
+                // Le coyote time est consommé
+                coyoteTimeCounter = 0f;
+            }
+        }
+    }
+
+
+    // =========================================================
+    // JUMP INPUT
+    // =========================================================
+
+    private void OnJumpStarted(
+        InputAction.CallbackContext context)
+    {
+        if (Time.timeScale == 0)
+            return;
+
+        if (!canJump)
+            return;
+
+        if (isStunned)
+            return;
+
+
+        // On enregistre immédiatement l'appui
+        // même si le joueur ne peut pas encore sauter.
+        jumpBufferCounter = jumpBufferTime;
+
+
+        // On essaye immédiatement de faire le saut.
+        TryJump();
+    }
+
+
+    private void OnJumpReleased(
+        InputAction.CallbackContext context)
+    {
+        isJumping = false;
+    }
+
+
+    bool IsAnimationPlaying(string animationName)
+    {
+        AnimatorStateInfo stateInfo =
+            anim.GetCurrentAnimatorStateInfo(0);
+
         return stateInfo.IsName(animationName);
     }
+
+
     void CheckStun()
     {
         if (isStunned)
             return;
-        if (isInvincible) return;
-        if (eat_system.isPowerUpActive) return;
+
+        if (isInvincible)
+            return;
+
+        if (eat_system.isPowerUpActive)
+            return;
 
         Collider2D hit =
             Physics2D.OverlapCircle(
@@ -315,285 +538,394 @@ public class SC_player : MonoBehaviour
         }
     }
 
+
     public void Stun()
     {
-        if (eat_system.isPowerUpActive) return;
+        if (eat_system.isPowerUpActive)
+            return;
 
-        if (isInvincible) return;
+        if (isInvincible)
+            return;
+
         StartCoroutine(StunCoroutine());
     }
+
+
     void CheckDamage()
     {
-        if (!canTakeDamage || health.current_health == 0) return;
+        if (!canTakeDamage ||
+            health.current_health == 0)
+            return;
 
-        hit = Physics2D.OverlapCircle(damageCheck.position, damageRadius, damageLayer);
+        hit = Physics2D.OverlapCircle(
+            damageCheck.position,
+            damageRadius,
+            damageLayer
+        );
+
         if (hit != null)
         {
-            TakeDamage(1, hit.transform.position);
-            if(health.current_health == 0)
+            TakeDamage(
+                1,
+                hit.transform.position
+            );
+
+            if (health.current_health == 0)
             {
-                hit.GetComponentInParent<SortingGroup>().sortingLayerName = "UI";
-                StartCoroutine(delay_death_enemy());
+                hit.GetComponentInParent<SortingGroup>()
+                    .sortingLayerName = "UI";
+
+                StartCoroutine(
+                    delay_death_enemy()
+                );
             }
         }
     }
+
+
     IEnumerator delay_death_enemy()
     {
         yield return new WaitForSecondsRealtime(1.5f);
 
-
-        hit.GetComponentInParent<SortingGroup>().sortingLayerName = "Default";
-
-
+        hit.GetComponentInParent<SortingGroup>()
+            .sortingLayerName = "Default";
     }
+
 
     public void stun_player()
     {
-        if (isStunned || isInvincible || eat_system.isPowerUpActive)
+        if (isStunned ||
+            isInvincible ||
+            eat_system.isPowerUpActive)
             return;
-        StartCoroutine(StunCoroutine());
 
+        StartCoroutine(StunCoroutine());
     }
+
+
     IEnumerator StunCoroutine()
     {
         juice.PlayJuice();
+
         isStunned = true;
+
         anim.SetBool("Stun", true);
+
         rb.linearVelocity = Vector2.zero;
 
-
         yield return new WaitForSeconds(stunDuration);
-        anim.SetBool("Stun", false);
 
+        anim.SetBool("Stun", false);
 
         isStunned = false;
     }
+
+
     void HandleLowHealthBlink()
     {
         if (health.current_health == 1)
         {
             if (lowHealthCoroutine == null)
-                lowHealthCoroutine = StartCoroutine(LowHealthBlink());
+            {
+                lowHealthCoroutine =
+                    StartCoroutine(
+                        LowHealthBlink()
+                    );
+            }
         }
         else
         {
             if (lowHealthCoroutine != null)
             {
                 StopCoroutine(lowHealthCoroutine);
+
                 lowHealthCoroutine = null;
             }
 
-            spriteRenderer.material = normalMaterial;
+            spriteRenderer.material =
+                normalMaterial;
         }
     }
+
+
     IEnumerator LowHealthBlink()
     {
         bool toggle = false;
 
         while (health.current_health == 1)
         {
-            spriteRenderer.material = toggle ? normalMaterial : lowHealthMaterial;
+            spriteRenderer.material =
+                toggle
+                ? normalMaterial
+                : lowHealthMaterial;
+
             toggle = !toggle;
 
-            yield return new WaitForSeconds(lowHealthBlinkRate);
+            yield return new WaitForSeconds(
+                lowHealthBlinkRate
+            );
         }
 
-        spriteRenderer.material = normalMaterial;
-        lowHealthCoroutine = null;
+        spriteRenderer.material =
+            normalMaterial;
 
+        lowHealthCoroutine = null;
     }
+
+
     void FixedUpdate()
     {
-        added_velocity_ = Vector2.Lerp(added_velocity_, added_velocity, 0.2f);
+        added_velocity_ =
+            Vector2.Lerp(
+                added_velocity_,
+                added_velocity,
+                0.2f
+            );
+
+
         if (isClimbing && grillage != null)
         {
-            Vector2 clamped = grillage.ClampPosition(rb.position);
+            Vector2 clamped =
+                grillage.ClampPosition(rb.position);
+
             rb.position = clamped;
         }
-        if (!canMove) return;
-        if (Time.timeScale ==0) return;
+
+
+        if (!canMove)
+            return;
+
+        if (Time.timeScale == 0)
+            return;
+
+
         if (!isFrozen)
         {
-            float horizontalSpeed = moveInput.x * (eat_system.isPowerUpActive ? PowermoveSpeed : moveSpeed) + knockbackVelocity.x;
+            float horizontalSpeed =
+                moveInput.x *
+                (
+                    eat_system.isPowerUpActive
+                    ? PowermoveSpeed
+                    : moveSpeed
+                )
+                + knockbackVelocity.x;
 
 
-            float verticalSpeed = rb.linearVelocity.y;
+            float verticalSpeed =
+                rb.linearVelocity.y;
+
+
             if (knockbackVelocity.y != 0)
             {
-                verticalSpeed = knockbackVelocity.y;
+                verticalSpeed =
+                    knockbackVelocity.y;
+
                 knockbackVelocity.y = 0;
             }
 
-            rb.linearVelocity = new Vector2(
-                horizontalSpeed + added_velocity_.x,
-                verticalSpeed + added_velocity_.y
-            );
-            knockbackVelocity.x = Mathf.Lerp(knockbackVelocity.x, 0, 0.15f);
-        }
-    }
-    private void OnJumpStarted(InputAction.CallbackContext context)
-    {
-        if (Time.timeScale == 0) return;
 
-        if (!canJump) return;
+            rb.linearVelocity =
+                new Vector2(
+                    horizontalSpeed +
+                    added_velocity_.x,
 
-        if (isStunned) return;
-        if (isClimbing)
-        {
-            StopClimbingJump();
+                    verticalSpeed +
+                    added_velocity_.y
+                );
 
-            isJumping = true;
-            jumpTimeCounter = maxJumpTime;
-            rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpForce);
-            anim.SetTrigger("Jump");
-            jump.PlayJuice();
-            return;
-        }
-        if (!isFrozen && canMove && rb.linearVelocity.y <0.5f)
-        {
-            if (isGrounded || eat_system.isPowerUpActive)
-            {
-                isJumping = true;
-                jumpTimeCounter = maxJumpTime;
-                rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpForce);
-                anim.SetTrigger("Jump");
-                jump.PlayJuice();
-            }
+
+            knockbackVelocity.x =
+                Mathf.Lerp(
+                    knockbackVelocity.x,
+                    0,
+                    0.15f
+                );
         }
     }
 
-    private void OnJumpReleased(InputAction.CallbackContext context)
-    {
-        isJumping = false;
-    }
 
-void LateUpdate()
+    void LateUpdate()
     {
         float x = transform.position.x;
 
+
         // --- Ghost pour le screen wrap ---
+
         if (x > (limit - levelWidth / 2))
         {
             ghost.gameObject.SetActive(true);
-            ghost.position = new Vector3(
-                x - levelWidth,
-                transform.position.y,
-                transform.position.z
-            );
+
+            ghost.position =
+                new Vector3(
+                    x - levelWidth,
+                    transform.position.y,
+                    transform.position.z
+                );
         }
         else if (x < (-limit + levelWidth / 2))
         {
             ghost.gameObject.SetActive(true);
-            ghost.position = new Vector3(
-                x + levelWidth,
-                transform.position.y,
-                transform.position.z
-            );
+
+            ghost.position =
+                new Vector3(
+                    x + levelWidth,
+                    transform.position.y,
+                    transform.position.z
+                );
         }
         else
         {
             ghost.gameObject.SetActive(false);
         }
 
+
         // --- Screen wrap ---
+
         if (x > limit)
         {
-            transform.position = new Vector3(
-                -limit,
-                transform.position.y,
-                transform.position.z
-            );
+            transform.position =
+                new Vector3(
+                    -limit,
+                    transform.position.y,
+                    transform.position.z
+                );
 
-            // Repart vers la gauche
             if (rb.linearVelocity.x > 0)
             {
-                rb.linearVelocity = new Vector2(
-                    -Mathf.Abs(rb.linearVelocity.x),
-                    rb.linearVelocity.y
-                );
+                rb.linearVelocity =
+                    new Vector2(
+                        -Mathf.Abs(
+                            rb.linearVelocity.x
+                        ),
+                        rb.linearVelocity.y
+                    );
             }
         }
         else if (x < -limit)
         {
-            transform.position = new Vector3(
-                limit,
-                transform.position.y,
-                transform.position.z
-            );
+            transform.position =
+                new Vector3(
+                    limit,
+                    transform.position.y,
+                    transform.position.z
+                );
 
-            // Repart vers la droite
             if (rb.linearVelocity.x < 0)
             {
-                rb.linearVelocity = new Vector2(
-                    Mathf.Abs(rb.linearVelocity.x),
-                    rb.linearVelocity.y
-                );
+                rb.linearVelocity =
+                    new Vector2(
+                        Mathf.Abs(
+                            rb.linearVelocity.x
+                        ),
+                        rb.linearVelocity.y
+                    );
             }
         }
     }
 
 
-    public void TakeDamage(int damage, Vector3 sourcePosition)
+    public void TakeDamage(
+        int damage,
+        Vector3 sourcePosition
+    )
     {
-        if (!canTakeDamage) return;
+        if (!canTakeDamage)
+            return;
 
-        if (isFrozen || isInvincible || eat_system.isPowerUpActive) return;
+        if (isFrozen ||
+            isInvincible ||
+            eat_system.isPowerUpActive)
+            return;
+
         anim.SetBool("Stun", false);
+
+
         if (isClimbing)
         {
             StopClimbingJump();
         }
+
+
         damage_sfx.PlayJuice();
 
         isStunned = false;
+
         ps_damage.Play();
+
         health.take_damage(damage);
+
         eat_system.take_damage();
+
 
         if (health.current_health > 0)
         {
             if (hitCoroutine != null)
                 StopCoroutine(hitCoroutine);
 
-            hitCoroutine = StartCoroutine(HitFreezeWithKnockback(sourcePosition));
+            hitCoroutine =
+                StartCoroutine(
+                    HitFreezeWithKnockback(
+                        sourcePosition
+                    )
+                );
 
-            StartInvincibility(invincibilityTime);
+            StartInvincibility(
+                invincibilityTime
+            );
         }
         else
         {
             Die();
         }
     }
-    public void LavaHit(Vector2 launchVelocity, float controlMultiplier, float controlTime)
-    {
 
+
+    public void LavaHit(
+        Vector2 launchVelocity,
+        float controlMultiplier,
+        float controlTime
+    )
+    {
         burning = true;
 
         StopAllCoroutines();
-        rb.bodyType = RigidbodyType2D.Dynamic;
 
-        rb.linearVelocity = launchVelocity;
+        rb.bodyType =
+            RigidbodyType2D.Dynamic;
 
-        StartCoroutine(LavaControlLock(controlMultiplier, controlTime));
+        rb.linearVelocity =
+            launchVelocity;
+
+        StartCoroutine(
+            LavaControlLock(
+                controlMultiplier,
+                controlTime
+            )
+        );
 
 
-        if (!canTakeDamage) return;
-        if (isFrozen || isInvincible || eat_system.isPowerUpActive) return;
+        if (!canTakeDamage)
+            return;
+
+        if (isFrozen ||
+            isInvincible ||
+            eat_system.isPowerUpActive)
+            return;
 
 
         anim.SetBool("Stun", false);
+
         isStunned = false;
+
         ps_damage.Play();
 
         isFrozen = false;
         isStunned = false;
         canTakeDamage = true;
 
-
-
         eat_system.take_damage();
-        health.take_damage(1);
 
+        health.take_damage(1);
 
 
         if (health.current_health > 0)
@@ -601,95 +933,198 @@ void LateUpdate()
             if (hitCoroutine != null)
                 StopCoroutine(hitCoroutine);
 
-
-            StartInvincibility(invincibilityTime);
+            StartInvincibility(
+                invincibilityTime
+            );
         }
         else
         {
             Die();
         }
+
         damage_lava_sfx.PlayJuice();
     }
-    private IEnumerator LavaControlLock(float multiplier, float time)
+
+
+    private IEnumerator LavaControlLock(
+        float multiplier,
+        float time
+    )
     {
-        float originalMove = moveSpeed;
-        float originalPower = PowermoveSpeed;
+        float originalMove =
+            moveSpeed;
+
+        float originalPower =
+            PowermoveSpeed;
+
 
         moveSpeed *= multiplier;
+
         PowermoveSpeed *= multiplier;
+
 
         yield return new WaitForSeconds(time);
 
-        yield return new WaitUntil(() => isGrounded);
+
+        yield return new WaitUntil(
+            () => isGrounded
+        );
+
+
         burning = false;
 
-        moveSpeed = originalMove;
-        PowermoveSpeed = originalPower;
+
+        moveSpeed =
+            originalMove;
+
+        PowermoveSpeed =
+            originalPower;
     }
-    public void TriggerInvincibility(float duration)
+
+
+    public void TriggerInvincibility(
+        float duration
+    )
     {
         StartInvincibility(duration);
     }
 
 
-    private IEnumerator HitFreezeWithKnockback(Vector3 sourcePosition)
+    private IEnumerator HitFreezeWithKnockback(
+        Vector3 sourcePosition
+    )
     {
         isFrozen = true;
-        canTakeDamage = false;
-        anim.SetTrigger("Hit");
-        rb.linearVelocity = Vector2.zero;
-        rb.bodyType = RigidbodyType2D.Kinematic;
 
-        float originalTimeScale = Time.timeScale;
+        canTakeDamage = false;
+
+        anim.SetTrigger("Hit");
+
+        rb.linearVelocity =
+            Vector2.zero;
+
+        rb.bodyType =
+            RigidbodyType2D.Kinematic;
+
+
+        float originalTimeScale =
+            Time.timeScale;
+
         Time.timeScale = 0f;
 
-        yield return new WaitForSecondsRealtime(hitFreezeTime);
 
-        rb.bodyType = RigidbodyType2D.Dynamic;
-        Time.timeScale = originalTimeScale;
+        yield return new WaitForSecondsRealtime(
+            hitFreezeTime
+        );
+
+
+        rb.bodyType =
+            RigidbodyType2D.Dynamic;
+
+        Time.timeScale =
+            originalTimeScale;
+
         isFrozen = false;
 
-        Vector2 direction = (transform.position - sourcePosition).normalized;
-        knockbackVelocity = new Vector2(direction.x * hitKnockback.x, hitKnockback.y * transform.localScale.y);
+
+        Vector2 direction =
+            (
+                transform.position -
+                sourcePosition
+            ).normalized;
+
+
+        knockbackVelocity =
+            new Vector2(
+                direction.x *
+                hitKnockback.x,
+
+                hitKnockback.y *
+                transform.localScale.y
+            );
+
 
         yield return new WaitForSeconds(0.1f);
+
         canTakeDamage = true;
     }
 
-    private IEnumerator PowerupFreeze(bool isActivating)
+
+    private IEnumerator PowerupFreeze(
+        bool isActivating
+    )
     {
         isFrozen = true;
-        rb.linearVelocity = Vector2.zero;
-        rb.bodyType = RigidbodyType2D.Kinematic;
 
-        string trigger = isActivating ? transformAnimTrigger : detransformAnimTrigger;
+        rb.linearVelocity =
+            Vector2.zero;
+
+        rb.bodyType =
+            RigidbodyType2D.Kinematic;
+
+
+        string trigger =
+            isActivating
+            ? transformAnimTrigger
+            : detransformAnimTrigger;
+
+
         anim.SetTrigger(trigger);
 
-        float originalTimeScale = Time.timeScale;
+
+        float originalTimeScale =
+            Time.timeScale;
+
         Time.timeScale = 0f;
 
-        yield return new WaitForSecondsRealtime(transformFreezeTime);
 
-        Time.timeScale = originalTimeScale;
-        rb.bodyType = RigidbodyType2D.Dynamic;
+        yield return new WaitForSecondsRealtime(
+            transformFreezeTime
+        );
+
+
+        Time.timeScale =
+            originalTimeScale;
+
+        rb.bodyType =
+            RigidbodyType2D.Dynamic;
+
         isFrozen = false;
     }
+
+
     public void Die()
     {
         canMove = false;
-        if (hitCoroutine != null) StopCoroutine(hitCoroutine);
-        GetComponent<SortingGroup>().sortingLayerName = "UI";
-        isFrozen = true;
-        anim.SetBool("Die",true);
-        anim.SetBool("Eat", false);
-        eat_system.eating_sfx.Stop();
-        game_over_screen.SetActive(true);
-        SC_music_manager.instance.stop_music();
-        collider.enabled = false;
-        die.PlayJuice();
-        knockbackVelocity = Vector2.zero;
-        Time.timeScale = 0;
 
+        if (hitCoroutine != null)
+            StopCoroutine(hitCoroutine);
+
+
+        GetComponent<SortingGroup>()
+            .sortingLayerName = "UI";
+
+
+        isFrozen = true;
+
+        anim.SetBool("Die", true);
+
+        anim.SetBool("Eat", false);
+
+        eat_system.eating_sfx.Stop();
+
+        game_over_screen.SetActive(true);
+
+        SC_music_manager.instance.stop_music();
+
+        collider.enabled = false;
+
+        die.PlayJuice();
+
+        knockbackVelocity =
+            Vector2.zero;
+
+        Time.timeScale = 0;
     }
 
 
@@ -698,69 +1133,127 @@ void LateUpdate()
         if (damageCheck != null)
         {
             Gizmos.color = Color.red;
-            Gizmos.DrawWireSphere(damageCheck.position, damageRadius);
+
+            Gizmos.DrawWireSphere(
+                damageCheck.position,
+                damageRadius
+            );
         }
     }
+
 
     public void powerup()
     {
         anim.SetTrigger("Transform");
+
         transformation.PlayJuice();
+
         normal.SetActive(false);
+
         transformed.SetActive(true);
-        StartCoroutine(PowerupFreeze(true));
+
+        StartCoroutine(
+            PowerupFreeze(true)
+        );
     }
+
 
     public void end_powerup()
     {
         normal.SetActive(true);
+
         transformed.SetActive(false);
-        StartCoroutine(PowerupFreeze(false));
+
+        StartCoroutine(
+            PowerupFreeze(false)
+        );
     }
-    public void StartInvincibility(float duration)
+
+
+    public void StartInvincibility(
+        float duration
+    )
     {
         if (invincibilityCoroutine != null)
-            StopCoroutine(invincibilityCoroutine);
+        {
+            StopCoroutine(
+                invincibilityCoroutine
+            );
+        }
 
-        invincibilityCoroutine = StartCoroutine(InvincibilityRoutine(duration));
+        invincibilityCoroutine =
+            StartCoroutine(
+                InvincibilityRoutine(
+                    duration
+                )
+            );
     }
 
-    private IEnumerator InvincibilityRoutine(float duration)
+
+    private IEnumerator InvincibilityRoutine(
+        float duration
+    )
     {
         isInvincible = true;
 
         float elapsed = 0f;
+
         bool visible = true;
-        Invoke("delay", invincibilityTime+0.1f);
+
+        Invoke(
+            "delay",
+            invincibilityTime + 0.1f
+        );
+
+
         while (elapsed < duration)
         {
             visible = !visible;
-            spriteRenderer.enabled = visible;
 
-            yield return new WaitForSecondsRealtime(0.1f);
+            spriteRenderer.enabled =
+                visible;
+
+
+            yield return new WaitForSecondsRealtime(
+                0.1f
+            );
+
+
             elapsed += 0.1f;
         }
 
+
         spriteRenderer.enabled = true;
+
         isInvincible = false;
+
         invincibilityCoroutine = null;
     }
+
 
     void delay()
     {
         spriteRenderer.enabled = true;
-
     }
-    private void OnTriggerEnter2D(Collider2D other)
+
+
+    private void OnTriggerEnter2D(
+        Collider2D other
+    )
     {
         if (other.CompareTag("Climb"))
         {
             canClimb = true;
-            grillage = other.GetComponent<SC_grillage>();
+
+            grillage =
+                other.GetComponent<SC_grillage>();
         }
     }
 
-    private void OnTriggerStay2D(Collider2D other)
+
+    private void OnTriggerStay2D(
+        Collider2D other
+    )
     {
         if (other.CompareTag("Climb"))
         {
@@ -771,101 +1264,186 @@ void LateUpdate()
         }
     }
 
-    private void OnTriggerExit2D(Collider2D other)
+
+    private void OnTriggerExit2D(
+        Collider2D other
+    )
     {
         if (other.CompareTag("Climb"))
         {
             grillage = null;
+
             StopClimbing();
+
             canClimb = false;
         }
     }
-    void StartClimbing(float verticalInput)
+
+
+    void StartClimbing(
+        float verticalInput
+    )
     {
         isClimbing = true;
 
         rb.gravityScale = 0;
 
-        Vector2 velocity = new Vector2(0, verticalInput * climbSpeed);
+
+        Vector2 velocity =
+            new Vector2(
+                0,
+                verticalInput * climbSpeed
+            );
+
 
         if (grillage != null)
         {
-            Vector2 clamped = grillage.ClampPosition(rb.position + velocity * Time.fixedDeltaTime);
+            Vector2 clamped =
+                grillage.ClampPosition(
+                    rb.position +
+                    velocity *
+                    Time.fixedDeltaTime
+                );
+
+
             rb.position = clamped;
-            rb.linearVelocity = velocity;
+
+            rb.linearVelocity =
+                velocity;
         }
         else
         {
-            rb.linearVelocity = velocity;
+            rb.linearVelocity =
+                velocity;
         }
 
-        anim.SetBool("Climb", true);
+
+        anim.SetBool(
+            "Climb",
+            true
+        );
     }
+
+
     void StopClimbing()
     {
         canClimb = false;
+
         was_climbing = true;
+
         grillage = null;
+
         grid.Stop();
 
         isClimbing = false;
-        Invoke("Delay_climb",0.02f);
-        rb.gravityScale = base_gravity;
-        anim.SetBool("Climb", false);
-    }
-    public void FaceTarget(Transform target)
-    {
-        if (target == null) return;
 
-        float direction = target.position.x - transform.position.x;
+        Invoke(
+            "Delay_climb",
+            0.02f
+        );
+
+        rb.gravityScale =
+            base_gravity;
+
+        anim.SetBool(
+            "Climb",
+            false
+        );
+    }
+
+
+    public void FaceTarget(
+        Transform target
+    )
+    {
+        if (target == null)
+            return;
+
+
+        float direction =
+            target.position.x -
+            transform.position.x;
+
 
         if (direction > 0)
         {
-            // Le PNJ est à droite
-            transform.localScale = new Vector3(
-                Mathf.Abs(transform.localScale.x),
-                transform.localScale.y,
-                transform.localScale.z
-            );
+            transform.localScale =
+                new Vector3(
+                    Mathf.Abs(
+                        transform.localScale.x
+                    ),
+                    transform.localScale.y,
+                    transform.localScale.z
+                );
         }
         else if (direction < 0)
         {
-            // Le PNJ est à gauche
-            transform.localScale = new Vector3(
-                -Mathf.Abs(transform.localScale.x),
-                transform.localScale.y,
-                transform.localScale.z
-            );
+            transform.localScale =
+                new Vector3(
+                    -Mathf.Abs(
+                        transform.localScale.x
+                    ),
+                    transform.localScale.y,
+                    transform.localScale.z
+                );
         }
     }
+
+
     void StopClimbingJump()
     {
         canClimb = false;
 
         isClimbing = false;
-        rb.gravityScale = base_gravity;
-        anim.SetBool("Climb", false);
+
+        rb.gravityScale =
+            base_gravity;
+
+        anim.SetBool(
+            "Climb",
+            false
+        );
     }
+
 
     void Delay_climb()
     {
         was_climbing = false;
     }
-    public void SetGroundVelocity(Vector2 vel)
+
+
+    public void SetGroundVelocity(
+        Vector2 vel
+    )
     {
         added_velocity = vel;
     }
+
+
     public void Revive()
     {
         normal.SetActive(true);
+
         transformed.SetActive(false);
 
         StopAllCoroutines();
+
         isFrozen = false;
         isStunned = false;
         isInvincible = false;
         canTakeDamage = true;
-        anim_.SetBool("Die", false);
+
+        // Reset des systèmes de saut
+        coyoteTimeCounter = 0f;
+        jumpBufferCounter = 0f;
+        isJumping = false;
+
+        anim_.SetBool(
+            "Die",
+            false
+        );
+
+
         if (health != null)
         {
             health.revive();
@@ -873,13 +1451,23 @@ void LateUpdate()
 
 
         collider.enabled = true;
+
         spriteRenderer.enabled = true;
 
-        rb.bodyType = RigidbodyType2D.Dynamic;
-        rb.linearVelocity = Vector2.zero;
-        rb.constraints = RigidbodyConstraints2D.FreezeRotation;
+
+        rb.bodyType =
+            RigidbodyType2D.Dynamic;
+
+        rb.linearVelocity =
+            Vector2.zero;
+
+
+        rb.constraints =
+            RigidbodyConstraints2D.FreezeRotation;
+
         rb.angularVelocity = 0;
+
+
         eat_system.ResetSystem();
     }
-
 }

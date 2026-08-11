@@ -3387,6 +3387,10 @@ PrefabInstance:
       propertyPath: overlay_on
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8035928732895759023, guid: fc0a4bc2aae082741b1aa749cf6a68ed, type: 3}
+      propertyPath: discordState
+      value: Stickers
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

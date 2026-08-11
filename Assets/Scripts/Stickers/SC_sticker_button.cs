@@ -83,6 +83,7 @@ public class SC_sticker_button : MonoBehaviour
     {
         if (!sticker.unlocked)
             return;
+        SC_scursorManager.instance.grabing = true;
         juice2.PlayJuice();
         menu.start_edit_mode();
         SC_scursorManager.instance.enable_cursor();

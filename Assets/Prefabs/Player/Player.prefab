@@ -21543,8 +21543,10 @@ MonoBehaviour:
   PowerJump: 6
   juice: {fileID: 1906161946050759491}
   moveSpeed: 4
+  base_speed: 0
   jumpForce: 6
   maxJumpTime: 0.3
+  coyoteTime: 0.2
   canJump: 1
   climbSpeed: 0.52
   hitFreezeTime: 0.51

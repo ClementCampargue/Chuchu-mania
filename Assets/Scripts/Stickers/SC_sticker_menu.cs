@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
@@ -59,17 +60,24 @@ public class SC_sticker_menu : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (edit.action.IsPressed())
+        {
+            Debug.Log("EDIT PRESSED");
+        }
+
         number_of_stickers.text = SC_StickerSaveSystem.instance.stickerCount.ToString("D2");
-        if (edit.action.WasPerformedThisFrame())
+
+        if (edit.action.WasPressedThisFrame() && !editing)
         {
             start_edit_mode();
         }
+
         if (quit.action.WasPerformedThisFrame() && !SC_scursorManager.instance.grabing)
         {
             SC_screenshot_transition.instance.Capture("HUB");
         }
 
-        if(!editing )
+        if (!editing)
         {
             if (SC_controller_manager.instance.using_controller)
             {
@@ -79,18 +87,28 @@ public class SC_sticker_menu : MonoBehaviour
             {
                 SC_scursorManager.instance.enable_cursor();
             }
+            if (SC_controller_manager.instance.using_controller &&
+          EventSystem.current.currentSelectedGameObject == null)
+            {
+                if (button != null)
+                {
+                    button.Select();
+                }
+            }
         }
         else
         {
             SC_scursorManager.instance.enable_cursor();
 
+            // Si on est en édition, à la manette,
+            // et qu'aucun bouton n'est sélectionné, on resélectionne le bouton actuel.
+
         }
-
     }
-
 
     public void start_edit_mode()
     {
+        EventSystem.current.SetSelectedGameObject(null);
         SC_scursorManager.instance.enable_cursor();
         editing = true;
         anim.SetTrigger("On");

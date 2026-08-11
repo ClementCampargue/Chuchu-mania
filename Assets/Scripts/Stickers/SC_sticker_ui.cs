@@ -291,7 +291,7 @@ public class SC_sticker_UI : MonoBehaviour,
         // CLICK
         // =====================================================
 
-            if (IsPressed(click))
+            if (IsPressed(click) )
             {
                 ToggleDrag();
             }
@@ -587,8 +587,10 @@ public class SC_sticker_UI : MonoBehaviour,
     void ToggleDrag()
     {
         
-            if (!dragging && isHovered)
+            if (!dragging && isHovered && !SC_scursorManager.instance.grabing)
                 StartDrag();
+        
+   
 
             else if(dragging)
                 StopDrag();
@@ -602,7 +604,7 @@ public class SC_sticker_UI : MonoBehaviour,
     void StartDrag()
     {
         cut.uncut();
-        SC_sticker_menu.instance.start_edit_mode();
+                SC_sticker_menu.instance.start_edit_mode();
 
         dragging = true;
 

@@ -1767,6 +1767,10 @@ PrefabInstance:
       propertyPath: discordSprite
       value: 
       objectReference: {fileID: 1704593394053503569, guid: 46cc75fab56c93945bde473f907dc24a, type: 3}
+    - target: {fileID: 8035928732895759023, guid: fc0a4bc2aae082741b1aa749cf6a68ed, type: 3}
+      propertyPath: discordLargeImage
+      value: hub
+      objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 5699712924724418744, guid: fc0a4bc2aae082741b1aa749cf6a68ed, type: 3}
     m_RemovedGameObjects: []
