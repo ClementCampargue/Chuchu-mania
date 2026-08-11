@@ -128,7 +128,7 @@ MonoBehaviour:
   score_per_heart: 5000
   score_per_time: 50
   anim: {fileID: 4051403310912639978}
-  score_animation_duration: 2
+  score_animation_duration: 1
   skipAction: {fileID: -2099379676528639254, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
 --- !u!1 &878933328346845557
 GameObject:
@@ -1513,6 +1513,9 @@ MonoBehaviour:
   isHovered: 0
   indicator: {fileID: 0}
   accept_input: 1
+  juice: {fileID: 0}
+  juice2: {fileID: 0}
+  clickable: 1
 --- !u!1 &3823650806254352815
 GameObject:
   m_ObjectHideFlags: 0
