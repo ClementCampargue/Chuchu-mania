@@ -24,7 +24,7 @@ MonoBehaviour:
       answer: []
       actionID: 
   - character: {fileID: 11400000, guid: 201e18955e3c1254fae5fd2b355c5cac, type: 2}
-    text: "Yo Marshmallow, <p=2>t'as un truc de pr\xE9vu ce soir?"
+    text: "Yo Marshmallow, <p=2>t'as un truc de pr\xE9vu ce soir? \u2665"
     hasChoices: 1
     choices:
     - choiceText: Et si on se faisait un restau?
