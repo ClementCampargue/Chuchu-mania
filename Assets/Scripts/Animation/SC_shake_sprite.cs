@@ -9,6 +9,7 @@ public class SpriteShake : MonoBehaviour
 
     [Header("Loop")]
     [SerializeField] private bool loop = false;
+    [SerializeField] private bool onStart = false;
 
     private Vector3 originalPosition;
     private Coroutine shakeCoroutine;
@@ -18,13 +19,22 @@ public class SpriteShake : MonoBehaviour
         originalPosition = transform.localPosition;
     }
 
-    // Shake pendant la durée définie dans l'Inspector
+    private void Start()
+    {
+        if (onStart)
+        {
+            if (loop)
+                StartLoop();
+            else
+                Shake();
+        }
+    }
+
     public void Shake()
     {
         Shake(duration);
     }
 
-    // Shake pendant une durée précise
     public void Shake(float customDuration)
     {
         StopShake();
@@ -32,7 +42,6 @@ public class SpriteShake : MonoBehaviour
         shakeCoroutine = StartCoroutine(ShakeCoroutine(customDuration));
     }
 
-    // Lance un shake en boucle
     public void StartLoop()
     {
         StopShake();
@@ -40,7 +49,6 @@ public class SpriteShake : MonoBehaviour
         shakeCoroutine = StartCoroutine(ShakeLoopCoroutine());
     }
 
-    // Arrête le loop
     public void StopShake()
     {
         if (shakeCoroutine != null)
@@ -73,7 +81,6 @@ public class SpriteShake : MonoBehaviour
         while (true)
         {
             ShakePosition();
-
             yield return null;
         }
     }
