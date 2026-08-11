@@ -1,5 +1,7 @@
 {
   "dependencies": {
+    "com.discord.game-sdk": "file:C:/Users/ccamp/Downloads/Discord-Game-SDK-master/Discord-Game-SDK-master",
+    "com.discord.partnersdk": "file:C:/Users/ccamp/Downloads/DiscordSocialSdk-UnityPlugin-1.10.18369/com.discord.partnersdk",
     "com.unity.2d.animation": "11.0.0",
     "com.unity.2d.aseprite": "1.2.5",
     "com.unity.2d.psdimporter": "10.1.1",

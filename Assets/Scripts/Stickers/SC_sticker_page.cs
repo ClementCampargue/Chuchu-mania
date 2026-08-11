@@ -1,5 +1,8 @@
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.EventSystems;
 
 public class SC_sticker_page : MonoBehaviour
 {
@@ -8,15 +11,18 @@ public class SC_sticker_page : MonoBehaviour
     public SO_sticker_list stickers;
     public Transform list_parent;
     public GameObject button;
+    public List<SC_sticker_button> buttons;
 
     private void Start()
     {
+        buttons.Clear();
         CreateButtons();
+
+        StartCoroutine(SelectDefaultButton());
     }
 
     private void CreateButtons()
     {
-        // Supprime les anciens boutons
         foreach (Transform child in list_parent)
         {
             Destroy(child.gameObject);
@@ -30,7 +36,6 @@ public class SC_sticker_page : MonoBehaviour
             return;
         }
 
-        // Crée un bouton pour chaque sticker
         foreach (SO_Sticker sticker in stickers.stickers)
         {
             GameObject go = Instantiate(button, list_parent, false);
@@ -45,6 +50,8 @@ public class SC_sticker_page : MonoBehaviour
                 {
                     default_selected = stickerButton.button;
                 }
+
+                buttons.Add(stickerButton);
             }
             else
             {
@@ -53,10 +60,23 @@ public class SC_sticker_page : MonoBehaviour
         }
     }
 
+    private IEnumerator SelectDefaultButton()
+    {
+        // Attend que Unity ait terminé de construire le Canvas
+        yield return null;
+
+        if (default_selected != null && default_selected.gameObject.activeInHierarchy)
+        {
+            EventSystem.current.SetSelectedGameObject(default_selected.gameObject);
+            default_selected.Select();
+        }
+    }
+
     private void OnEnable()
     {
         if (default_selected != null)
         {
+            EventSystem.current.SetSelectedGameObject(default_selected.gameObject);
             default_selected.Select();
         }
     }

@@ -13,12 +13,16 @@ public class SC_sticker_menu : MonoBehaviour
     public TextMeshProUGUI sticker_name;
     public TextMeshProUGUI sticker_description;
     public TextMeshProUGUI artist;
+    public TextMeshProUGUI number_of_stickers;
     public Image sprite_image;
     public List<GameObject> stars;
     public bool editing;
     public InputActionReference quit;
+    public InputActionReference edit;
     private Material unlocked;
     public Material not_unlocked;
+
+    public Button button;
     private void Awake()
     {
         instance = this;
@@ -37,6 +41,11 @@ public class SC_sticker_menu : MonoBehaviour
         SC_scursorManager.instance.gameObject.SetActive(true);
 
     }
+    private void OnEnable()
+    {
+        edit.action.Enable();
+        quit.action.Enable();
+    }
     private void OnDisable()
     {
         SC_scursorManager.instance.gameObject.SetActive(false);
@@ -50,28 +59,60 @@ public class SC_sticker_menu : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (quit.action.WasPerformedThisFrame())
+        number_of_stickers.text = SC_StickerSaveSystem.instance.stickerCount.ToString("D2");
+        if (edit.action.WasPerformedThisFrame())
+        {
+            start_edit_mode();
+        }
+        if (quit.action.WasPerformedThisFrame() && !SC_scursorManager.instance.grabing)
         {
             SC_screenshot_transition.instance.Capture("HUB");
         }
+
+        if(!editing )
+        {
+            if (SC_controller_manager.instance.using_controller)
+            {
+                SC_scursorManager.instance.disable_cursor();
+            }
+            else
+            {
+                SC_scursorManager.instance.enable_cursor();
+            }
+        }
+        else
+        {
+            SC_scursorManager.instance.enable_cursor();
+
+        }
+
     }
+
 
     public void start_edit_mode()
     {
+        SC_scursorManager.instance.enable_cursor();
         editing = true;
         anim.SetTrigger("On");
     }
 
     public void quit_edit_mode()
     {
+        
+        SC_scursorManager.instance.disable_cursor();
+        if (SC_controller_manager.instance.using_controller)
+        {
+            button.Select();
+        }
         editing = false;
         anim.SetTrigger("Off");
     }
 
-    public void update_infos(SO_Sticker sticker)
+    public void update_infos(SO_Sticker sticker, Button but)
     {
         if (sticker.unlocked)
         {
+            button = but;
             sticker_name.text = sticker.sticker_name;
             sticker_description.text = sticker.description;
             if (sticker.special_mat)
@@ -108,4 +149,6 @@ public class SC_sticker_menu : MonoBehaviour
             stars[i].SetActive(true);
         }
     }
+
+    
 }

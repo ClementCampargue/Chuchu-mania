@@ -764,7 +764,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5641122258638546335, guid: f3c7b956bb8e2ae47a33403dbf3195bc, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: -1.1793337
+      value: -1.186
       objectReference: {fileID: 0}
     - target: {fileID: 5641122258638546335, guid: f3c7b956bb8e2ae47a33403dbf3195bc, type: 3}
       propertyPath: m_AnchoredPosition.y
@@ -1205,7 +1205,7 @@ MonoBehaviour:
   textMeshPro: {fileID: 20518823985305923}
   typeSpeed: 0.02
   shakeAmplitude: 0.05
-  shakeFrequency: 0.2
+  shakeFrequency: 0.05
   waveAmplitude: 0.07
   waveFrequency: 5
   scaleAmplitude: 0.2
@@ -1297,7 +1297,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5641122258638546335, guid: f3c7b956bb8e2ae47a33403dbf3195bc, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 5.254
+      value: 5.274
       objectReference: {fileID: 0}
     - target: {fileID: 5641122258638546335, guid: f3c7b956bb8e2ae47a33403dbf3195bc, type: 3}
       propertyPath: m_AnchoredPosition.y

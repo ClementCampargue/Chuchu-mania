@@ -247,7 +247,7 @@ public class SC_sticker_UI : MonoBehaviour,
         // DELETE
         // =====================================================
 
-        if (IsPressed(deleteSticker) && isHovered)
+        if (IsReleased(deleteSticker) && isHovered)
         {
             DeleteSticker();
             return;
@@ -291,7 +291,6 @@ public class SC_sticker_UI : MonoBehaviour,
         // CLICK
         // =====================================================
 
-        if (IsPressed(click))
             if (IsPressed(click))
             {
                 ToggleDrag();
@@ -603,6 +602,7 @@ public class SC_sticker_UI : MonoBehaviour,
     void StartDrag()
     {
         cut.uncut();
+        SC_sticker_menu.instance.start_edit_mode();
 
         dragging = true;
 
@@ -636,9 +636,6 @@ public class SC_sticker_UI : MonoBehaviour,
 
         anim.ResetTrigger("drop");
         anim.SetTrigger("grab");
-
-
-        SC_sticker_menu.instance.start_edit_mode();
 
 
         cursor.SetGrabCursor();
@@ -883,6 +880,13 @@ public class SC_sticker_UI : MonoBehaviour,
         return action != null &&
                action.action != null &&
                action.action.WasPressedThisFrame();
+    }
+
+    bool IsReleased(InputActionReference action)
+    {
+        return action != null &&
+               action.action != null &&
+               action.action.WasReleasedThisFrame();
     }
 
 

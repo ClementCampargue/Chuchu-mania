@@ -1,5 +1,17 @@
 {
   "dependencies": {
+    "com.discord.game-sdk": {
+      "version": "file:C:/Users/ccamp/Downloads/Discord-Game-SDK-master/Discord-Game-SDK-master",
+      "depth": 0,
+      "source": "local",
+      "dependencies": {}
+    },
+    "com.discord.partnersdk": {
+      "version": "file:C:/Users/ccamp/Downloads/DiscordSocialSdk-UnityPlugin-1.10.18369/com.discord.partnersdk",
+      "depth": 0,
+      "source": "local",
+      "dependencies": {}
+    },
     "com.unity.2d.animation": {
       "version": "11.0.0",
       "depth": 0,

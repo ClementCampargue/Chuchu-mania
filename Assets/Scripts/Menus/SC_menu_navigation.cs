@@ -201,8 +201,7 @@ public class SC_menu_navigation : MonoBehaviour
                     currentIndex < buttons.Length &&
                     IsButtonAvailable(buttons[currentIndex]))
                 {
-                    if (buttons[currentIndex].clickable)
-                    buttons[currentIndex].UnSelect();
+            
                 }
             }
 
@@ -390,8 +389,10 @@ public class SC_menu_navigation : MonoBehaviour
         if (!IsButtonAvailable(buttons[index]))
             return;
 
+
         if (IsButtonAvailable(buttons[currentIndex]))
         {
+   
             buttons[currentIndex].UnSelect();
         }
 

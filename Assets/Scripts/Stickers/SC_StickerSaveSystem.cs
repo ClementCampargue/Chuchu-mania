@@ -16,6 +16,9 @@ public class SC_StickerSaveSystem : MonoBehaviour
     [Header("Delete Zone")]
     public RectTransform deleteZone;
 
+    [Header("Sticker Count")]
+    public int stickerCount;
+
     private const string SAVE_KEY = "ui_stickers_save";
 
     [System.Serializable]
@@ -79,18 +82,68 @@ public class SC_StickerSaveSystem : MonoBehaviour
         }
 
         Load();
+
+        UpdateStickerCount();
     }
+
+    // ==========================================
+    // UPDATE STICKER COUNT
+    // ==========================================
+
+    public void UpdateStickerCount()
+    {
+        if (parent == null)
+        {
+            stickerCount = 0;
+            return;
+        }
+
+        int count = 0;
+
+        for (int i = 0; i < parent.childCount; i++)
+        {
+            Transform child = parent.GetChild(i);
+
+            if (child == null)
+                continue;
+
+            SC_sticker_UI stickerUI =
+                child.GetComponent<SC_sticker_UI>();
+
+            if (stickerUI == null)
+            {
+                stickerUI =
+                    child.GetComponentInChildren<SC_sticker_UI>();
+            }
+
+            if (stickerUI != null)
+            {
+                count++;
+            }
+        }
+
+        stickerCount = count;
+    }
+
+    // ==========================================
+    // AUTO SAVE
+    // ==========================================
 
     public void AutoSave()
     {
         Save();
     }
 
+    // ==========================================
+    // SAVE
+    // ==========================================
+
     public void Save()
     {
         if (parent == null)
         {
             Debug.LogError("Parent n'est pas assigné.");
+            stickerCount = 0;
             return;
         }
 
@@ -133,18 +186,23 @@ public class SC_StickerSaveSystem : MonoBehaviour
 
             if (rt == null)
             {
-                rt = stickerUI.GetComponentInChildren<RectTransform>();
+                rt =
+                    stickerUI.GetComponentInChildren<RectTransform>();
             }
 
             if (img == null)
             {
-                img = stickerUI.GetComponentInChildren<Image>();
+                img =
+                    stickerUI.GetComponentInChildren<Image>();
             }
 
             if (rt == null || img == null)
                 continue;
 
-            // Position écran du centre du sticker
+            // ==========================================
+            // POSITION ÉCRAN
+            // ==========================================
+
             Vector2 screenPos =
                 RectTransformUtility.WorldToScreenPoint(
                     null,
@@ -234,12 +292,20 @@ public class SC_StickerSaveSystem : MonoBehaviour
         );
 
         PlayerPrefs.Save();
+                    UpdateStickerCount();
+
+        // Mise à jour du nombre de stickers
+        stickerCount = save.stickers.Count;
 
         Debug.Log(
             "Stickers sauvegardés : " +
-            save.stickers.Count
+            stickerCount
         );
     }
+
+    // ==========================================
+    // LOAD
+    // ==========================================
 
     public void Load()
     {
@@ -249,6 +315,7 @@ public class SC_StickerSaveSystem : MonoBehaviour
                 "Aucune sauvegarde de stickers trouvée."
             );
 
+            UpdateStickerCount();
             return;
         }
 
@@ -373,7 +440,7 @@ public class SC_StickerSaveSystem : MonoBehaviour
             // ==========================================
 
             SC_sticker_UI stickerUI =
-           stickerObject.GetComponent<SC_sticker_UI>();
+                stickerObject.GetComponent<SC_sticker_UI>();
 
             if (stickerUI != null)
             {
@@ -393,6 +460,7 @@ public class SC_StickerSaveSystem : MonoBehaviour
                         1f
                     );
             }
+
             // ==========================================
             // RECHERCHE DU SPRITE
             // ==========================================
@@ -418,22 +486,13 @@ public class SC_StickerSaveSystem : MonoBehaviour
             // ==========================================
 
             Material specialMat =
-                FindSpecialMaterial(data.specialMatName);
+                FindSpecialMaterial(
+                    data.specialMatName
+                );
 
             if (specialMat != null)
             {
                 img.material = specialMat;
-            }
-
-            // ==========================================
-            // STICKER UI
-            // ==========================================
-
-            /*
-
-            if (stickerUI != null)
-            {
-                stickerUI.spawnedSticker = true;
             }
 
             /*
@@ -444,11 +503,11 @@ public class SC_StickerSaveSystem : MonoBehaviour
             loadedObjects.Add(prefabInstance);
         }
 
+        // ==========================================
+        // RESTAURATION DE L'ORDRE
+        // ==========================================
+
         /*
-         * ==========================================
-         * RESTAURATION DE L'ORDRE
-         * ==========================================
-         *
          * Les stickers sont dans save.stickers
          * dans le même ordre que lors du Save().
          *
@@ -464,9 +523,12 @@ public class SC_StickerSaveSystem : MonoBehaviour
                 .SetSiblingIndex(i);
         }
 
+        // Mise à jour du nombre de stickers
+        UpdateStickerCount();
+
         Debug.Log(
             "Stickers chargés : " +
-            loadedObjects.Count
+            stickerCount
         );
     }
 
@@ -568,6 +630,8 @@ public class SC_StickerSaveSystem : MonoBehaviour
     {
         PlayerPrefs.DeleteKey(SAVE_KEY);
         PlayerPrefs.Save();
+
+        stickerCount = 0;
 
         Debug.Log(
             "Sauvegarde des stickers supprimée."

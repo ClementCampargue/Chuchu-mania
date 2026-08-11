@@ -70,11 +70,12 @@ public class SC_sticker_button : MonoBehaviour
 
     public void update_infos()
     {
+
         selected = true;
         juice.PlayJuice();
        
 
-        menu.update_infos(sticker);
+        menu.update_infos(sticker, button);
     }
 
 
@@ -84,6 +85,9 @@ public class SC_sticker_button : MonoBehaviour
             return;
         juice2.PlayJuice();
         menu.start_edit_mode();
+        SC_scursorManager.instance.enable_cursor();
+        // Désactive toute sélection/navigation UI
+        EventSystem.current.SetSelectedGameObject(null);
 
         Canvas canvas = GameObject.Find("MainCanvas").GetComponent<Canvas>();
         RectTransform canvasRect = canvas.GetComponent<RectTransform>();
@@ -106,10 +110,12 @@ public class SC_sticker_button : MonoBehaviour
         rect.anchoredPosition = localPoint;
 
         img.sprite = sticker.sticker_sprite;
-        if(sticker.special_mat != null)
+
+        if (sticker.special_mat != null)
         {
             img.material = sticker.special_mat;
         }
+
         img.maskable = false;
     }
 }

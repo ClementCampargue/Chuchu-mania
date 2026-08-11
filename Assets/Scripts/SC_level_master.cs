@@ -8,45 +8,75 @@ public class SC_level_master : MonoBehaviour
     public Transform spawn;
     public static SC_level_master instance;
     public float limits;
+
+    [Header("Discord Rich Presence")]
+    public string discordState = "";
+    public string discordLargeImage = "";
+
     private SC_player player;
+
     private void Awake()
     {
         instance = this;
     }
-    void Start()
+
+    private void Start()
     {
         player = SC_player.instance;
+
         SC_music_manager.instance.update_music(music);
-        GameObject.Find("Overlay").transform.GetChild(0).gameObject.SetActive(overlay_on);
-        SC_player.instance.moveSpeed = SC_player.instance.base_speed;
+
+        GameObject.Find("Overlay")
+            .transform.GetChild(0)
+            .gameObject.SetActive(overlay_on);
+
+        SC_player.instance.moveSpeed =
+            SC_player.instance.base_speed;
+
         SC_timer.instance.reset_timer();
         SC_timer.instance.pause();
+
+        // Mise à jour de Discord
+
+
         if (level)
         {
             player.Revive();
 
             player.gameObject.SetActive(true);
+
             player.rb.linearVelocity = Vector2.zero;
+
             player.transform.position = spawn.position;
+
             Invoke("delay", 0.1f);
         }
         else
         {
             player.gameObject.SetActive(false);
         }
+
         SC_player.instance.rb.gravityScale = 3;
+        if (SC_discord_manager.Instance != null)
+        {
+
+            SC_discord_manager.Instance.ChangeActivity(
+                discordState,
+                discordLargeImage
+            );
+        }
     }
 
-    void delay()
+    private void delay()
     {
         SC_player.instance.enabled = false;
+
         player.gameObject.SetActive(true);
+
         player.enabled = true;
     }
 
-    // Update is called once per frame
-    void Update()
+    private void Update()
     {
-
     }
 }

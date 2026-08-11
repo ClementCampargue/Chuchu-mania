@@ -21,7 +21,7 @@ public class SC_scursorManager : MonoBehaviour
     public RectTransform cursorRect;
 
 
-
+    public bool grabing;
     [Header("Gamepad")]
     public InputActionReference cursorMoveAction;
     public InputActionReference cursorClickAction;
@@ -112,131 +112,108 @@ public class SC_scursorManager : MonoBehaviour
 
     void Update()
     {
-        if(SceneManager.GetActiveScene().name != "Stickers")
-        {
-            if (cursor_enabled)
-            {
-                if (!SC_controller_manager.instance.using_controller)
-                {
-                    img2.enabled = true;
-                    img.enabled = true;
-                }
-                else
-                {
-                    img2.enabled = false;
-                    img.enabled = false;
-                    return;
-                }
+        bool usingController = SC_controller_manager.instance.using_controller;
 
+        // =========================
+        // VISIBILITÉ
+        // =========================
+
+        if (SceneManager.GetActiveScene().name != "Stickers")
+        {
+
+            if (!cursor_enabled)
+            {
+                img.enabled = false;
+                img2.enabled = false;
+                return;
+            }
+
+            if (usingController)
+            {
+                img.enabled = false;
+                img2.enabled = false;
             }
             else
             {
-                img2.enabled = false;
-                img.enabled = false;
-                return;
+                img.enabled = true;
+                img2.enabled = true;
             }
+
             if (Input.GetKeyDown(KeyCode.Mouse0))
             {
                 if (anim.enabled)
-                {
                     anim.SetTrigger("click");
-                }
                 else
-                {
                     anim.enabled = true;
-                }
             }
         }
         else
         {
-            cursor_enabled = true;
-            img.enabled = true;
-            img2.enabled = true;
+            if (!cursor_enabled)
+            {
+                img.enabled = false;
+                img2.enabled = false;
+                return;
+            }
+
+            else
+            {
+                img.enabled = true;
+                img2.enabled = true;
+            }
+
+            if (Input.GetKeyDown(KeyCode.Mouse0))
+            {
+                if (anim.enabled)
+                    anim.SetTrigger("click");
+                else
+                    anim.enabled = true;
+            }
         }
-
-
 
         // =========================
         // SOURIS PHYSIQUE
         // =========================
 
-        if (Mouse.current != null)
-        {
-
-
-     
-
-            if (!SC_controller_manager.instance.using_controller)
+        if (!usingController && Mouse.current != null)
             {
-
-                cursorPosition =
-                    Mouse.current.position.ReadValue();
-
+                cursorPosition = Mouse.current.position.ReadValue();
 
                 UpdateCursor();
             }
-        }
-
-
-
-
-
 
 
         // =========================
         // MANETTE
         // =========================
 
-        if (SC_controller_manager.instance.using_controller)
+        if (usingController)
         {
-
-            Vector2 stick =
-            cursorMoveAction.action
-            .ReadValue<Vector2>();
-
-
+            Vector2 stick = cursorMoveAction.action.ReadValue<Vector2>();
 
             if (stick.sqrMagnitude > 0.01f)
             {
-
                 cursorPosition +=
                     stick *
                     gamepadCursorSpeed *
                     Time.unscaledDeltaTime;
 
+                cursorPosition.x = Mathf.Clamp(
+                    cursorPosition.x,
+                    0,
+                    Screen.width
+                );
 
-
-                cursorPosition.x =
-                    Mathf.Clamp(
-                        cursorPosition.x,
-                        0,
-                        Screen.width
-                    );
-
-
-                cursorPosition.y =
-                    Mathf.Clamp(
-                        cursorPosition.y,
-                        0,
-                        Screen.height
-                    );
-
-
+                cursorPosition.y = Mathf.Clamp(
+                    cursorPosition.y,
+                    0,
+                    Screen.height
+                );
 
                 UpdateCursor();
             }
-
-
         }
-
-
-
-        // =========================
-        // CLIC VIRTUEL
-        // =========================
-
     }
-
 
 
     void UpdateCursor()
@@ -260,6 +237,7 @@ public class SC_scursorManager : MonoBehaviour
 
     public void SetNormalCursor()
     {
+        grabing = false;
         if (cursorRenderer != null)
             cursorRenderer.sprite =
                 normalSprite;
@@ -269,6 +247,8 @@ public class SC_scursorManager : MonoBehaviour
 
     public void SetHoverCursor()
     {
+        grabing = false;
+
         if (cursorRenderer != null)
             cursorRenderer.sprite =
                 hoverSprite;
@@ -278,6 +258,7 @@ public class SC_scursorManager : MonoBehaviour
 
     public void SetGrabCursor()
     {
+        grabing = true;
         if (cursorRenderer != null)
             cursorRenderer.sprite =
                 grabSprite;
