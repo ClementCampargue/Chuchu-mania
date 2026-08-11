@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class SC_ScreenWarp : MonoBehaviour
 {
-    private float limit = -10f;
+    private Vector2 limit;
 
     [Header("Warning")]
     public float warningDistance = 2f;
@@ -29,10 +29,10 @@ public class SC_ScreenWarp : MonoBehaviour
         Vector3 pos = transform.position;
 
         bool inRightWarningZone =
-            pos.x > limit - warningDistance;
+            pos.x > limit.y - warningDistance;
 
         bool inLeftWarningZone =
-            pos.x < -limit + warningDistance;
+            pos.x < limit.x + warningDistance;
 
         // Spawn seulement une fois
         if (!hasSpawnedWarning)
@@ -42,7 +42,7 @@ public class SC_ScreenWarp : MonoBehaviour
             {
                 SpawnWarning(
                     new Vector3(
-                        -limit + warningSpawnOffset,
+                        limit.x + warningSpawnOffset,
                         pos.y,
                         pos.z
                     )
@@ -56,7 +56,7 @@ public class SC_ScreenWarp : MonoBehaviour
             {
                 SpawnWarning(
                     new Vector3(
-                        limit - warningSpawnOffset,
+                        limit.y - warningSpawnOffset,
                         pos.y,
                         pos.z
                     )
@@ -91,13 +91,13 @@ public class SC_ScreenWarp : MonoBehaviour
     {
         Vector3 pos = transform.position;
 
-        if (pos.x > limit)
+        if (pos.x > limit.y)
         {
-            pos.x = -limit;
+            pos.x = limit.x;
         }
-        else if (pos.x < -limit)
+        else if (pos.x < limit.x)
         {
-            pos.x = limit;
+            pos.x = limit.y;
         }
 
         transform.position = pos;
@@ -108,25 +108,25 @@ public class SC_ScreenWarp : MonoBehaviour
         Gizmos.color = Color.green;
 
         Gizmos.DrawLine(
-            new Vector3(-limit, -50, 0),
-            new Vector3(-limit, 50, 0)
+            new Vector3(limit.x, -50, 0),
+            new Vector3(limit.x, 50, 0)
         );
 
         Gizmos.DrawLine(
-            new Vector3(limit, -50, 0),
-            new Vector3(limit, 50, 0)
+            new Vector3(limit.y, -50, 0),
+            new Vector3(limit.y, 50, 0)
         );
 
         Gizmos.color = Color.yellow;
 
         Gizmos.DrawLine(
-            new Vector3(-limit + warningDistance, -50, 0),
-            new Vector3(-limit + warningDistance, 50, 0)
+            new Vector3(limit.x + warningDistance, -50, 0),
+            new Vector3(limit.x  + warningDistance, 50, 0)
         );
 
         Gizmos.DrawLine(
-            new Vector3(limit - warningDistance, -50, 0),
-            new Vector3(limit - warningDistance, 50, 0)
+            new Vector3(limit.y - warningDistance, -50, 0),
+            new Vector3(limit.y - warningDistance, 50, 0)
         );
     }
 }

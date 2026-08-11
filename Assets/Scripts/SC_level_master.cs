@@ -7,7 +7,9 @@ public class SC_level_master : MonoBehaviour
     public bool level;
     public Transform spawn;
     public static SC_level_master instance;
-    public float limits;
+
+    [Header("Limites X")]
+    public Vector2 limits = new Vector2(-10f, 10f);
 
     [Header("Discord Rich Presence")]
     public string discordState = "";
@@ -36,9 +38,6 @@ public class SC_level_master : MonoBehaviour
         SC_timer.instance.reset_timer();
         SC_timer.instance.pause();
 
-        // Mise à jour de Discord
-
-
         if (level)
         {
             player.Revive();
@@ -57,9 +56,9 @@ public class SC_level_master : MonoBehaviour
         }
 
         SC_player.instance.rb.gravityScale = 3;
+
         if (SC_discord_manager.Instance != null)
         {
-
             SC_discord_manager.Instance.ChangeActivity(
                 discordState,
                 discordLargeImage
@@ -78,5 +77,22 @@ public class SC_level_master : MonoBehaviour
 
     private void Update()
     {
+    }
+
+    private void OnDrawGizmosSelected()
+    {
+        Gizmos.color = Color.red;
+
+        // Ligne de limite gauche
+        Gizmos.DrawLine(
+            new Vector3(limits.x, -100f, 0f),
+            new Vector3(limits.x, 100f, 0f)
+        );
+
+        // Ligne de limite droite
+        Gizmos.DrawLine(
+            new Vector3(limits.y, -100f, 0f),
+            new Vector3(limits.y, 100f, 0f)
+        );
     }
 }

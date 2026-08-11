@@ -94,10 +94,9 @@ public class SC_player : MonoBehaviour
     public InputActionReference Move;
 
     [Header("Screen Wrap")]
-    private float limit = -10f;
+    private Vector2 limit ;
     public Transform ghost;
 
-    private float levelWidth;
     private Coroutine hitCoroutine;
     private Vector2 knockbackVelocity;
     public ParticleSystem ps_damage;
@@ -164,7 +163,6 @@ public class SC_player : MonoBehaviour
         normal.SetActive(true);
         transformed.SetActive(false);
 
-        limit = SC_game_master.instance.limits;
 
         base_gravity = rb.gravityScale;
 
@@ -744,34 +742,45 @@ public class SC_player : MonoBehaviour
     }
 
 
-    void LateUpdate()
+void LateUpdate()
     {
         float x = transform.position.x;
 
-
         // --- Ghost pour le screen wrap ---
 
-        if (x > (limit - levelWidth / 2))
+        if (x > (limit.y - 0.2f))
         {
             ghost.gameObject.SetActive(true);
+            ghost.localScale = transform.localScale;
 
-            ghost.position =
-                new Vector3(
-                    x - levelWidth,
-                    transform.position.y,
-                    transform.position.z
-                );
+            // Distance du joueur par rapport à la limite droite
+            float distance = limit.y - x;
+
+            // Même distance par rapport à la limite gauche
+            float ghostX = limit.x - distance;
+
+            ghost.position = new Vector3(
+                ghostX,
+                transform.position.y,
+                transform.position.z
+            );
         }
-        else if (x < (-limit + levelWidth / 2))
+        else if (x < (limit.x + 0.2f))
         {
             ghost.gameObject.SetActive(true);
+            ghost.localScale = transform.localScale;
 
-            ghost.position =
-                new Vector3(
-                    x + levelWidth,
-                    transform.position.y,
-                    transform.position.z
-                );
+            // Distance du joueur par rapport à la limite gauche
+            float distance = x - limit.x;
+
+            // Même distance par rapport à la limite droite
+            float ghostX = limit.y + distance;
+
+            ghost.position = new Vector3(
+                ghostX,
+                transform.position.y,
+                transform.position.z
+            );
         }
         else
         {
@@ -781,44 +790,36 @@ public class SC_player : MonoBehaviour
 
         // --- Screen wrap ---
 
-        if (x > limit)
+        if (x > limit.y)
         {
-            transform.position =
-                new Vector3(
-                    -limit,
-                    transform.position.y,
-                    transform.position.z
-                );
+            transform.position = new Vector3(
+                limit.x,
+                transform.position.y,
+                transform.position.z
+            );
 
             if (rb.linearVelocity.x > 0)
             {
-                rb.linearVelocity =
-                    new Vector2(
-                        -Mathf.Abs(
-                            rb.linearVelocity.x
-                        ),
-                        rb.linearVelocity.y
-                    );
+                rb.linearVelocity = new Vector2(
+                    -Mathf.Abs(rb.linearVelocity.x),
+                    rb.linearVelocity.y
+                );
             }
         }
-        else if (x < -limit)
+        else if (x < limit.x)
         {
-            transform.position =
-                new Vector3(
-                    limit,
-                    transform.position.y,
-                    transform.position.z
-                );
+            transform.position = new Vector3(
+                limit.y,
+                transform.position.y,
+                transform.position.z
+            );
 
             if (rb.linearVelocity.x < 0)
             {
-                rb.linearVelocity =
-                    new Vector2(
-                        Mathf.Abs(
-                            rb.linearVelocity.x
-                        ),
-                        rb.linearVelocity.y
-                    );
+                rb.linearVelocity = new Vector2(
+                    Mathf.Abs(rb.linearVelocity.x),
+                    rb.linearVelocity.y
+                );
             }
         }
     }
