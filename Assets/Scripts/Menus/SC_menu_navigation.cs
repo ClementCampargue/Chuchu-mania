@@ -37,6 +37,10 @@ public class SC_menu_navigation : MonoBehaviour
     public float initialDelay = 0.4f;
     public float repeatRate = 0.1f;
 
+    [Header("Selection")]
+    [Tooltip("Le dernier bouton sélectionné est mémorisé quand le menu est fermé.")]
+    [SerializeField] private int lastSelected = -1;
+
     private int currentIndex;
     private float lastMoveTime;
     public float moveCooldown = 0.05f;
@@ -47,6 +51,7 @@ public class SC_menu_navigation : MonoBehaviour
 
     private Vector2 lastMousePosition;
     private bool mouseMode;
+
 
     private void Awake()
     {
@@ -59,7 +64,10 @@ public class SC_menu_navigation : MonoBehaviour
         {
             SortButtonsByRectTransform();
         }
+
+        currentIndex = -1;
     }
+
 
     private void SortButtonsByRectTransform()
     {
@@ -94,6 +102,7 @@ public class SC_menu_navigation : MonoBehaviour
         });
     }
 
+
     private void OnEnable()
     {
         if (move != null)
@@ -118,8 +127,17 @@ public class SC_menu_navigation : MonoBehaviour
         SelectFirstAvailable();
     }
 
+
     private void OnDisable()
     {
+        // On mémorise toujours le dernier bouton sélectionné
+        if (currentIndex >= 0 &&
+            currentIndex < buttons.Length &&
+            IsButtonAvailable(buttons[currentIndex]))
+        {
+            lastSelected = currentIndex;
+        }
+
         if (move != null)
         {
             move.action.performed -= OnMoveInput;
@@ -136,6 +154,7 @@ public class SC_menu_navigation : MonoBehaviour
             pointerPosition.action.Disable();
         }
     }
+
 
     private void Update()
     {
@@ -184,6 +203,7 @@ public class SC_menu_navigation : MonoBehaviour
             }
         }
 
+
         // =========================
         // SOURIS
         // =========================
@@ -195,19 +215,12 @@ public class SC_menu_navigation : MonoBehaviour
             if ((mousePos - lastMousePosition).sqrMagnitude > 1f)
             {
                 mouseMode = true;
-
-                if (buttons.Length > 0 &&
-                    currentIndex >= 0 &&
-                    currentIndex < buttons.Length &&
-                    IsButtonAvailable(buttons[currentIndex]))
-                {
-            
-                }
             }
 
             lastMousePosition = mousePos;
         }
     }
+
 
     private void OnMoveInput(InputAction.CallbackContext ctx)
     {
@@ -233,12 +246,14 @@ public class SC_menu_navigation : MonoBehaviour
         }
     }
 
+
     private void OnMoveRelease(InputAction.CallbackContext ctx)
     {
         currentMoveInput = Vector2.zero;
         isHolding = false;
         holdTimer = 0f;
     }
+
 
     /// <summary>
     /// Filtre l'input selon l'orientation du menu.
@@ -264,6 +279,7 @@ public class SC_menu_navigation : MonoBehaviour
 
         return input;
     }
+
 
     private void Navigate(Vector2 value)
     {
@@ -309,6 +325,7 @@ public class SC_menu_navigation : MonoBehaviour
         lastMoveTime = Time.unscaledTime;
     }
 
+
     private int NavigateGrid(Vector2 value)
     {
         // Sécurité : filtre l'input avant de calculer ligne/colonne
@@ -316,6 +333,9 @@ public class SC_menu_navigation : MonoBehaviour
 
         if (value.sqrMagnitude < 0.2f)
             return currentIndex;
+
+        if (columns <= 0)
+            columns = 1;
 
         int row = currentIndex / columns;
         int col = currentIndex % columns;
@@ -368,6 +388,7 @@ public class SC_menu_navigation : MonoBehaviour
         return index;
     }
 
+
     private void OnSubmit(InputAction.CallbackContext ctx)
     {
         if (mouseMode)
@@ -381,52 +402,113 @@ public class SC_menu_navigation : MonoBehaviour
         }
     }
 
+
     private void Select(int index)
     {
-        if (buttons.Length == 0)
+        if (buttons == null || buttons.Length == 0)
+            return;
+
+        if (index < 0 || index >= buttons.Length)
             return;
 
         if (!IsButtonAvailable(buttons[index]))
             return;
 
-
-        if (IsButtonAvailable(buttons[currentIndex]))
+        // Désélectionne l'ancien bouton
+        if (currentIndex >= 0 &&
+            currentIndex < buttons.Length &&
+            IsButtonAvailable(buttons[currentIndex]))
         {
-   
             buttons[currentIndex].UnSelect();
         }
 
+        // Nouvelle sélection
         currentIndex = index;
+
+        // Mémorise immédiatement le dernier bouton
+        lastSelected = index;
 
         buttons[currentIndex].Select();
     }
+
 
     private void SelectFirstAvailable()
     {
         if (buttons == null || buttons.Length == 0)
             return;
 
-        // Essaie d'abord le bouton par défaut
+        // ==========================================
+        // 1. ESSAIE DE REPRENDRE LE DERNIER BOUTON
+        // ==========================================
+
+        if (lastSelected >= 0 &&
+            lastSelected < buttons.Length &&
+            IsButtonAvailable(buttons[lastSelected]))
+        {
+            currentIndex = lastSelected;
+            buttons[currentIndex].Select();
+            return;
+        }
+
+        // ==========================================
+        // 2. SINON UTILISE LE BOUTON PAR DÉFAUT
+        // ==========================================
+
         if (defaultSelected >= 0 &&
             defaultSelected < buttons.Length &&
             IsButtonAvailable(buttons[defaultSelected]))
         {
             currentIndex = defaultSelected;
+            lastSelected = defaultSelected;
+
             buttons[currentIndex].Select();
             return;
         }
 
-        // Sinon prend le premier disponible
+        // ==========================================
+        // 3. SINON PREND LE PREMIER DISPONIBLE
+        // ==========================================
+
         for (int i = 0; i < buttons.Length; i++)
         {
             if (IsButtonAvailable(buttons[i]))
             {
                 currentIndex = i;
+                lastSelected = i;
+
                 buttons[i].Select();
                 return;
             }
         }
     }
+
+
+    /// <summary>
+    /// Remet la sélection sur le bouton défini dans defaultSelected.
+    /// Utilise cette fonction lorsque tu veux volontairement
+    /// réinitialiser la sélection du menu.
+    /// </summary>
+    public void ResetFirstSelected()
+    {
+        if (buttons == null || buttons.Length == 0)
+            return;
+
+        // Désélectionne le bouton actuel
+        if (currentIndex >= 0 &&
+            currentIndex < buttons.Length &&
+            IsButtonAvailable(buttons[currentIndex]))
+        {
+            buttons[currentIndex].UnSelect();
+        }
+
+        // Oublie le dernier bouton
+        lastSelected = -1;
+        currentIndex = -1;
+
+        // Repart sur defaultSelected
+        SelectFirstAvailable();
+    }
+
 
     private bool IsButtonAvailable(SC_Button button)
     {
@@ -435,8 +517,15 @@ public class SC_menu_navigation : MonoBehaviour
                button.enabled;
     }
 
+
     private int GetNextAvailableIndex(int startIndex, int direction)
     {
+        if (buttons == null || buttons.Length == 0)
+            return -1;
+
+        if (startIndex < 0 || startIndex >= buttons.Length)
+            startIndex = 0;
+
         int index = startIndex;
 
         for (int i = 0; i < buttons.Length; i++)

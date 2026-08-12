@@ -105,8 +105,7 @@ public class SC_juiciness : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.V))
-            PlayJuice();
+
     }
 
 

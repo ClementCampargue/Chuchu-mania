@@ -1,44 +1,134 @@
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
-using System.Collections.Generic;
 
 public class SC_pause : MonoBehaviour
 {
     [Header("Input")]
     public InputActionReference pauseAction;
+    public InputActionReference backAction;
 
     [Header("Menu Pause")]
     public GameObject pauseMenu;
     public GameObject tuto_window;
+    public GameObject buttons;
 
     [Header("Objet à masquer")]
     public GameObject objectToDisable;
     public GameObject objectToEnable;
     public List<string> scenesToDisableObject = new List<string>();
 
+    [Header("Réglages")]
+    [SerializeField] private float inputCooldown = 0.2f;
+
     private bool isPaused = false;
     private bool tuto = false;
+    private bool settings = false;
+
+    // Empêche plusieurs inputs d'être traités trop rapidement
+    private bool canUsePauseInput = true;
+    private float inputTimer = 0f;
+
     private SC_screenshot_transition transition;
+
 
     private void OnEnable()
     {
-        pauseAction.action.Enable();
-        pauseAction.action.performed += TogglePause;
+        if (backAction != null)
+        {
+            backAction.action.Enable();
+        }
+
+        if (pauseAction != null)
+        {
+            pauseAction.action.Enable();
+            pauseAction.action.performed += TogglePause;
+        }
     }
+
 
     private void OnDisable()
     {
-        pauseAction.action.performed -= TogglePause;
-        pauseAction.action.Disable();
+        if (pauseAction != null)
+        {
+            pauseAction.action.performed -= TogglePause;
+            pauseAction.action.Disable();
+        }
+
+        if (backAction != null)
+        {
+            backAction.action.Disable();
+        }
     }
+
 
     private void Start()
     {
         transition = SC_screenshot_transition.instance;
-        pauseMenu.SetActive(false);
 
+        isPaused = false;
+        tuto = false;
+        settings = false;
+
+        Time.timeScale = 1f;
+
+        if (pauseMenu != null)
+            pauseMenu.SetActive(false);
+
+        if (tuto_window != null)
+            tuto_window.SetActive(false);
+
+        if (buttons != null)
+            buttons.SetActive(true);
     }
+
+
+    private void Update()
+    {
+        // Gestion du cooldown de l'input
+        if (!canUsePauseInput)
+        {
+            inputTimer -= Time.unscaledDeltaTime;
+
+            if (inputTimer <= 0f)
+            {
+                canUsePauseInput = true;
+            }
+        }
+
+        if (!isPaused)
+            return;
+
+        // Empêche le bouton "Retour" de fermer le menu
+        // immédiatement après son ouverture.
+        if (!canUsePauseInput)
+            return;
+
+        if (backAction != null && backAction.action.WasPerformedThisFrame())
+        {
+            if (tuto)
+            {
+                Hide_tutorial();
+            }
+            else if (settings)
+            {
+                Hide_settings();
+            }
+            else
+            {
+                Close();
+            }
+        }
+    }
+
+
+    private void StartInputCooldown()
+    {
+        canUsePauseInput = false;
+        inputTimer = inputCooldown;
+    }
+
 
     private void UpdateObjectState()
     {
@@ -47,114 +137,283 @@ public class SC_pause : MonoBehaviour
 
         string currentScene = SceneManager.GetActiveScene().name;
 
-        // Désactive l'objet si la scène est dans la liste
-        objectToDisable.SetActive(!scenesToDisableObject.Contains(currentScene));
-        objectToEnable.SetActive(scenesToDisableObject.Contains(currentScene));
+        bool shouldDisable =
+            scenesToDisableObject.Contains(currentScene);
+
+        objectToDisable.SetActive(!shouldDisable);
+
+        if (objectToEnable != null)
+        {
+            objectToEnable.SetActive(shouldDisable);
+        }
     }
+
 
     private void TogglePause(InputAction.CallbackContext context)
     {
-        if (!SC_player.instance.canMove &&!isPaused)
-        {
+        // Évite les doubles appels
+        if (!canUsePauseInput)
             return;
-        }
-        else if (SceneManager.GetActiveScene().name =="Stickers")
+
+        // Si le joueur ne peut pas bouger, on ne permet pas
+        // d'ouvrir le menu.
+        if (!isPaused && SC_player.instance != null)
         {
-            return;
+            if (!SC_player.instance.canMove)
+                return;
+
+            if (!SC_player.instance.enabled)
+                return;
         }
-        else if (!SC_player.instance.enabled && !isPaused)
-        {
+
+        // Pas de pause dans cette scène
+        if (SceneManager.GetActiveScene().name == "Stickers")
             return;
-        }
+
+        StartInputCooldown();
 
         UpdateObjectState();
-        isPaused = !isPaused;
-        if (isPaused)
-        {
-            SC_scursorManager.instance.enable_cursor();
 
-        }
         if (!isPaused)
         {
-            SC_scursorManager.instance.disable_cursor();
-
+            OpenPause();
         }
-        pauseMenu.SetActive(isPaused);
-    
-        Hide_tutorial();
-
-        Time.timeScale = isPaused ? 0f : 1f;
-        SC_player.instance.enabled = !isPaused;
-        SC_player.instance.anim_.updateMode = isPaused
-            ? AnimatorUpdateMode.Normal
-            : AnimatorUpdateMode.UnscaledTime;
+        else
+        {
+            Close();
+        }
     }
 
 
-    public void close()
+    private void OpenPause()
     {
-        SC_scursorManager.instance.disable_cursor();
-        pauseMenu.SetActive(false);
-        Hide_tutorial();
-        isPaused = false;
-        SC_player.instance.enabled = true;
-        SC_player.instance.anim_.updateMode = AnimatorUpdateMode.UnscaledTime;
-        Time.timeScale = 1;
+        isPaused = true;
+        buttons.GetComponent<SC_menu_navigation>().ResetFirstSelected();
+        tuto = false;
+        settings = false;
+
+        // État du menu principal
+        if (tuto_window != null)
+            tuto_window.SetActive(false);
+
+        if (buttons != null)
+            buttons.SetActive(true);
+
+        if (pauseMenu != null)
+            pauseMenu.SetActive(true);
+
+        // Musique
+        if (SC_music_manager.instance != null)
+        {
+            SC_music_manager.instance.pause_music();
+        }
+
+        // Curseur
+        if (SC_scursorManager.instance != null)
+        {
+            SC_scursorManager.instance.enable_cursor();
+        }
+
+        // Pause Unity
+        Time.timeScale = 0f;
+
+        // Désactive le joueur
+        if (SC_player.instance != null)
+        {
+            SC_player.instance.enabled = false;
+
+            if (SC_player.instance.anim_ != null)
+            {
+                SC_player.instance.anim_.updateMode =
+                    AnimatorUpdateMode.Normal;
+            }
+        }
     }
+
+
+    public void Close()
+    {
+        isPaused = false;
+        tuto = false;
+        settings = false;
+
+        if (pauseMenu != null)
+            pauseMenu.SetActive(false);
+
+        if (tuto_window != null)
+            tuto_window.SetActive(false);
+
+        if (buttons != null)
+            buttons.SetActive(true);
+
+        // Musique
+        if (SC_music_manager.instance != null)
+        {
+            SC_music_manager.instance.resume_music();
+        }
+
+        // Curseur
+        if (SC_scursorManager.instance != null)
+        {
+            SC_scursorManager.instance.disable_cursor();
+        }
+
+        // Reprise du jeu
+        Time.timeScale = 1f;
+
+        if (SC_player.instance != null)
+        {
+            SC_player.instance.enabled = true;
+
+            if (SC_player.instance.anim_ != null)
+            {
+                SC_player.instance.anim_.updateMode =
+                    AnimatorUpdateMode.UnscaledTime;
+            }
+        }
+
+        // Évite qu'un deuxième input soit pris immédiatement
+        StartInputCooldown();
+    }
+
 
     public void Retry()
     {
-        SC_scursorManager.instance.disable_cursor();
-        pauseMenu.SetActive(false);
+        if (SC_music_manager.instance != null)
+        {
+            SC_music_manager.instance.resume_music();
+        }
+
+        if (SC_scursorManager.instance != null)
+        {
+            SC_scursorManager.instance.disable_cursor();
+        }
+
+        if (pauseMenu != null)
+            pauseMenu.SetActive(false);
 
         isPaused = false;
-        SC_player.instance.canMove = true;
-        SC_player.instance.anim_.updateMode = AnimatorUpdateMode.UnscaledTime;
-        Time.timeScale = 1;
-        SC_player.instance.enabled = false;
+        tuto = false;
+        settings = false;
+
+        Time.timeScale = 1f;
+
+        if (SC_player.instance != null)
+        {
+            SC_player.instance.canMove = true;
+            SC_player.instance.enabled = false;
+
+            if (SC_player.instance.anim_ != null)
+            {
+                SC_player.instance.anim_.updateMode =
+                    AnimatorUpdateMode.UnscaledTime;
+            }
+        }
+
         Scene currentScene = SceneManager.GetActiveScene();
+
         SceneManager.LoadScene(currentScene.buildIndex);
     }
+
 
     public void Show_tutorial()
     {
         tuto = true;
-        tuto_window.SetActive(true);
+        settings = false;
+
+        if (tuto_window != null)
+            tuto_window.SetActive(true);
+
+        if (buttons != null)
+            buttons.SetActive(false);
     }
+
 
     public void Show_settings()
     {
+        settings = true;
         tuto = false;
-        tuto_window.SetActive(true);
+
+        if (tuto_window != null)
+            tuto_window.SetActive(true);
+
+        if (buttons != null)
+            buttons.SetActive(false);
     }
+
 
     public void Quit_game()
     {
-     Application.Quit();
+        Application.Quit();
     }
+
 
     public void Hide_tutorial()
     {
-        tuto_window.SetActive(false);
+        tuto = false;
+
+        if (tuto_window != null)
+            tuto_window.SetActive(false);
+
+        if (buttons != null)
+            buttons.SetActive(true);
     }
+
+
+    public void Hide_settings()
+    {
+        settings = false;
+
+        if (tuto_window != null)
+            tuto_window.SetActive(false);
+
+        if (buttons != null)
+            buttons.SetActive(true);
+    }
+
 
     public void Give_up()
     {
-        SC_scursorManager.instance.disable_cursor();
-        pauseMenu.SetActive(false);
+        if (SC_music_manager.instance != null)
+        {
+            SC_music_manager.instance.resume_music();
+        }
+
+        if (SC_scursorManager.instance != null)
+        {
+            SC_scursorManager.instance.disable_cursor();
+        }
+
+        if (pauseMenu != null)
+            pauseMenu.SetActive(false);
 
         isPaused = false;
+        tuto = false;
+        settings = false;
 
-        SC_player.instance.enabled = true;
-        SC_player.instance.anim_.updateMode = AnimatorUpdateMode.UnscaledTime;
-        Time.timeScale = 1;
-        if (PlayerPrefs.GetInt("Score")== 0)
+        Time.timeScale = 1f;
+
+        if (SC_player.instance != null)
         {
-            transition.Capture("HUB");
+            SC_player.instance.enabled = true;
+
+            if (SC_player.instance.anim_ != null)
+            {
+                SC_player.instance.anim_.updateMode =
+                    AnimatorUpdateMode.UnscaledTime;
+            }
         }
-        else
+
+        if (transition != null)
         {
-            transition.Capture("MoneyScene");
+            if (PlayerPrefs.GetInt("Score") == 0)
+            {
+                transition.Capture("HUB");
+            }
+            else
+            {
+                transition.Capture("MoneyScene");
+            }
         }
     }
 }

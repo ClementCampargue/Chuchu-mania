@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.Audio;
 
 public class SC_music_manager : MonoBehaviour
 {
@@ -30,5 +31,13 @@ public class SC_music_manager : MonoBehaviour
     public void stop_music()
     {
         music.Stop();
+    }
+    public void pause_music()
+    {
+        music.Pause();
+    }
+    public void resume_music()
+    {
+        music.UnPause();
     }
 }

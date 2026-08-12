@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class SC_cutscene : MonoBehaviour
 {
@@ -12,7 +13,7 @@ public class SC_cutscene : MonoBehaviour
     public DialogueData dialogue_to_play;
     public static SC_cutscene instance;
     public Animator anim;
-
+    public InputActionReference skip;
     private void Awake()
     {
         instance = this;
@@ -48,7 +49,11 @@ public class SC_cutscene : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        if (skip.action.WasPerformedThisFrame())
+        {
+            EndCutscene();
+            this.enabled = false;
+        }
     }
     public void EndCutscene()
     {

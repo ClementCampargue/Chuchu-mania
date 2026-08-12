@@ -237,6 +237,7 @@ MonoBehaviour:
   dialogue: {fileID: 974702575}
   dialogue_to_play: {fileID: 11400000, guid: 4485b7838f4e7cc4da0e0ffc41ea83c7, type: 2}
   anim: {fileID: 255835188}
+  skip: {fileID: 7727032971491509709, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
 --- !u!95 &255835188
 Animator:
   serializedVersion: 7

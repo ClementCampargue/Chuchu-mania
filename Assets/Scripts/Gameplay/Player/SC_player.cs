@@ -65,6 +65,7 @@ public class SC_player : MonoBehaviour
     public Transform damageCheck;
     public float damageRadius = 0.5f;
     public LayerMask damageLayer;
+    public LayerMask bounceLayer;
     private bool canTakeDamage = true;
 
     [Header("Stun")]
@@ -105,7 +106,6 @@ public class SC_player : MonoBehaviour
 
     private Coroutine hitCoroutine;
     private Vector2 knockbackVelocity;
-    public ParticleSystem ps_damage;
 
     public SC_icecream_eat_system eat_system;
 
@@ -123,6 +123,7 @@ public class SC_player : MonoBehaviour
     [Header("Audio")]
     public SC_juiciness jump;
     public SC_juiciness damage_sfx;
+    public SC_juiciness bounce_sfx;
     public SC_juiciness damage_lava_sfx;
     public SC_juiciness stun;
     public SC_juiciness transformation;
@@ -229,12 +230,9 @@ public class SC_player : MonoBehaviour
         // INPUT
         // =====================================================
 
-        if (!isFrozen &&
-            canMove &&
-            Time.timeScale != 0)
+        if (!isFrozen &&canMove && !eat_system.isEating &&Time.timeScale != 0)
         {
-            Vector2 input =
-                Move.action.ReadValue<Vector2>();
+            Vector2 input =Move.action.ReadValue<Vector2>();
 
 
             moveInput = new Vector2(
@@ -252,9 +250,7 @@ public class SC_player : MonoBehaviour
             // TENTATIVE D'ACCROCHE
             // =================================================
 
-            if (!isClimbing &&
-                canClimb &&
-                climbReattachTimer <= 0f)
+            if (!isClimbing && canClimb && climbReattachTimer <= 0f)
             {
                 TryStartClimbing(input);
             }
@@ -646,7 +642,6 @@ public class SC_player : MonoBehaviour
                 damageLayer
             );
 
-
         if (hit != null)
         {
             TakeDamage(
@@ -668,6 +663,39 @@ public class SC_player : MonoBehaviour
                 StartCoroutine(delay_death_enemy());
             }
         }
+
+
+
+
+        hit =
+          Physics2D.OverlapCircle(
+              damageCheck.position,
+              damageRadius,
+              bounceLayer
+          ); 
+        
+        if (hit != null)
+        {
+            TakeDamage(
+                0,
+                hit.transform.position
+            );
+
+
+            if (health.current_health == 0)
+            {
+                SortingGroup sortingGroup =
+                    hit.GetComponentInParent<SortingGroup>();
+
+                if (sortingGroup != null)
+                {
+                    sortingGroup.sortingLayerName = "UI";
+                }
+
+                StartCoroutine(delay_death_enemy());
+            }
+        }
+
     }
 
 
@@ -789,6 +817,12 @@ public class SC_player : MonoBehaviour
                 0.2f
             );
 
+        if (eat_system != null && eat_system.isEating)
+        {
+            moveInput = Vector2.zero;
+
+            return;
+        }
 
         if (!canMove)
             return;
@@ -848,9 +882,10 @@ public class SC_player : MonoBehaviour
         // =====================================================
         // MOVEMENT NORMAL
         // =====================================================
-
         if (!isFrozen)
         {
+
+
             float horizontalSpeed =
                 moveInput.x *
                 (
@@ -859,8 +894,6 @@ public class SC_player : MonoBehaviour
                         : moveSpeed
                 )
                 + knockbackVelocity.x;
-
-
             float verticalSpeed =
                 rb.linearVelocity.y;
 
@@ -1040,17 +1073,22 @@ public class SC_player : MonoBehaviour
             StopClimbingJump();
         }
 
+        if(damage == 0)
+        {
+            bounce_sfx.PlayJuice();
+        }
+        else
+        {
+            health.take_damage(damage);
 
-        damage_sfx.PlayJuice();
+            eat_system.take_damage();
+
+            damage_sfx.PlayJuice();
+        }
 
         isStunned = false;
 
-        ps_damage.Play();
 
-
-        health.take_damage(damage);
-
-        eat_system.take_damage();
 
 
         if (health.current_health > 0)
@@ -1140,7 +1178,6 @@ public class SC_player : MonoBehaviour
 
         isStunned = false;
 
-        ps_damage.Play();
 
         isFrozen = false;
         isStunned = false;
@@ -1313,11 +1350,7 @@ public class SC_player : MonoBehaviour
             RigidbodyType2D.Kinematic;
 
 
-        float originalTimeScale =
-            Time.timeScale;
 
-
-        Time.timeScale = 0f;
 
 
         yield return new WaitForSecondsRealtime(
@@ -1328,9 +1361,6 @@ public class SC_player : MonoBehaviour
         rb.bodyType =
             RigidbodyType2D.Dynamic;
 
-
-        Time.timeScale =
-            originalTimeScale;
 
 
         isFrozen = false;

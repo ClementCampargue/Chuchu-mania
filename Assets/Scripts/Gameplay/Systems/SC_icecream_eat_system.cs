@@ -14,7 +14,7 @@ public class SC_icecream_eat_system : MonoBehaviour
     public bool progressiveEat = false;
     public float eatSpeed = 0.5f;
 
-    private bool isEating = false;
+    public bool isEating = false;
     private bool isSelecting = false;
     private bool forceEatAll = false;
     private List<SC_icecream_fall> selectedCreams = new List<SC_icecream_fall>();
