@@ -64,7 +64,7 @@ public class SC_crate : MonoBehaviour
         {
             if (damage_player)
             {
-                SC_player.instance.TakeDamage(1,1,transform.position);
+                SC_player.instance.TakeDamage(1,new Vector2(1,1),transform.position);
                 Destroy(gameObject);
             }
             else if(!isGrounded && SC_player.instance.isGrounded)

@@ -197,7 +197,6 @@ public class SC_player : MonoBehaviour
         limit = SC_level_master.instance.limits;
 
         CheckStun();
-        CheckDamage();
         HandleLowHealthBlink();
 
 
@@ -620,81 +619,6 @@ public class SC_player : MonoBehaviour
     // DAMAGE DETECTION
     // =========================================================
 
-    void CheckDamage()
-    {
-        // IMPORTANT :
-        // L'invincibilité bloque TOUS les dégâts normaux.
-        if (!canTakeDamage ||
-            isInvincible ||
-            health.current_health == 0)
-        {
-            return;
-        }
-
-
-        hit =
-            Physics2D.OverlapCircle(
-                damageCheck.position,
-                damageRadius,
-                damageLayer
-            );
-
-        if (hit != null)
-        {
-            TakeDamage(1,
-                1,
-                hit.transform.position
-            );
-
-
-            if (health.current_health == 0)
-            {
-                SortingGroup sortingGroup =
-                    hit.GetComponentInParent<SortingGroup>();
-
-                if (sortingGroup != null)
-                {
-                    sortingGroup.sortingLayerName = "UI";
-                }
-
-                StartCoroutine(delay_death_enemy());
-            }
-        }
-
-
-
-
-        hit =
-          Physics2D.OverlapCircle(
-              damageCheck.position,
-              damageRadius,
-              bounceLayer
-          ); 
-        
-        if (hit != null)
-        {
-            TakeDamage(0,
-                2,
-                hit.transform.position
-            );
-
-
-            if (health.current_health == 0)
-            {
-                SortingGroup sortingGroup =
-                    hit.GetComponentInParent<SortingGroup>();
-
-                if (sortingGroup != null)
-                {
-                    sortingGroup.sortingLayerName = "UI";
-                }
-
-                StartCoroutine(delay_death_enemy());
-            }
-        }
-
-    }
-
 
     IEnumerator delay_death_enemy()
     {
@@ -1044,7 +968,7 @@ public class SC_player : MonoBehaviour
 
     public void TakeDamage(
         int damage,
-        int ejection_power,
+        Vector2 ejection_power,
         Vector3 sourcePosition)
     {
         // Double sécurité.
@@ -1330,7 +1254,7 @@ public class SC_player : MonoBehaviour
     // =========================================================
 
     private IEnumerator HitFreezeWithKnockback(
-        Vector3 sourcePosition,int power)
+        Vector3 sourcePosition, Vector2 power)
     {
         isFrozen = true;
 
@@ -1374,10 +1298,10 @@ public class SC_player : MonoBehaviour
         knockbackVelocity =
             new Vector2(
                 direction.x *
-                hitKnockback.x * power,
+                hitKnockback.x * power.x,
 
                 hitKnockback.y *
-                transform.localScale.y * power
+                transform.localScale.y * power.y
             );
 
 
