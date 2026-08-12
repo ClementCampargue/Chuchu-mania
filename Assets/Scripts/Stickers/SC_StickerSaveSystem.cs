@@ -6,27 +6,51 @@ public class SC_StickerSaveSystem : MonoBehaviour
 {
     public static SC_StickerSaveSystem instance;
 
+    // =========================================================
+    // PREFABS
+    // =========================================================
+
     [Header("Prefabs")]
     public GameObject stickerPrefab;
     public Transform parent;
 
+    // =========================================================
+    // STICKER DATABASE
+    // =========================================================
+
     [Header("Sticker Database")]
     public SO_sticker_list stickers;
+
+    // =========================================================
+    // DELETE ZONE
+    // =========================================================
 
     [Header("Delete Zone")]
     public RectTransform deleteZone;
 
+    // =========================================================
+    // COUNT
+    // =========================================================
+
     [Header("Sticker Count")]
     public int stickerCount;
 
-    private const string SAVE_KEY = "ui_stickers_save";
+    // =========================================================
+    // SAVE KEY
+    // =========================================================
+
+    private const string SAVE_KEY =
+        "ui_stickers_save";
+
+    // =========================================================
+    // SAVE DATA
+    // =========================================================
 
     [System.Serializable]
     public class StickerData
     {
         public string spriteName;
 
-        // Nom du Material spécial
         public string specialMatName;
 
         public float posX;
@@ -37,19 +61,24 @@ public class SC_StickerSaveSystem : MonoBehaviour
         public float scaleX;
         public float scaleY;
 
-        // Ordre du sticker dans la hiérarchie
         public int siblingIndex;
     }
 
     [System.Serializable]
     public class StickerSave
     {
-        public List<StickerData> stickers = new List<StickerData>();
+        public List<StickerData> stickers =
+            new List<StickerData>();
     }
+
+    // =========================================================
+    // LIFECYCLE
+    // =========================================================
 
     private void Awake()
     {
-        if (instance != null && instance != this)
+        if (instance != null &&
+            instance != this)
         {
             Destroy(gameObject);
             return;
@@ -60,35 +89,52 @@ public class SC_StickerSaveSystem : MonoBehaviour
 
     private void OnDisable()
     {
-        AutoSave();
+        // Évite les sauvegardes inutiles si l'objet
+        // n'est pas l'instance principale.
+        if (instance == this)
+        {
+            AutoSave();
+        }
     }
 
     private void OnDestroy()
     {
-        AutoSave();
+        if (instance == this)
+        {
+            AutoSave();
+        }
     }
 
     private void Start()
     {
-        // Cherche automatiquement la TrashZone
+        // -----------------------------------------------------
+        // TRASH ZONE
+        // -----------------------------------------------------
+
         if (deleteZone == null)
         {
-            GameObject trashObject = GameObject.Find("TrashZone");
+            GameObject trashObject =
+                GameObject.Find("TrashZone");
 
             if (trashObject != null)
             {
-                deleteZone = trashObject.GetComponent<RectTransform>();
+                deleteZone =
+                    trashObject.GetComponent<RectTransform>();
             }
         }
+
+        // -----------------------------------------------------
+        // LOAD
+        // -----------------------------------------------------
 
         Load();
 
         UpdateStickerCount();
     }
 
-    // ==========================================
-    // UPDATE STICKER COUNT
-    // ==========================================
+    // =========================================================
+    // UPDATE COUNT
+    // =========================================================
 
     public void UpdateStickerCount()
     {
@@ -100,9 +146,12 @@ public class SC_StickerSaveSystem : MonoBehaviour
 
         int count = 0;
 
-        for (int i = 0; i < parent.childCount; i++)
+        for (int i = 0;
+             i < parent.childCount;
+             i++)
         {
-            Transform child = parent.GetChild(i);
+            Transform child =
+                parent.GetChild(i);
 
             if (child == null)
                 continue;
@@ -122,42 +171,48 @@ public class SC_StickerSaveSystem : MonoBehaviour
             }
         }
 
-        stickerCount = count;
+        stickerCount =
+            count;
     }
 
-    // ==========================================
+    // =========================================================
     // AUTO SAVE
-    // ==========================================
+    // =========================================================
 
     public void AutoSave()
     {
         Save();
     }
 
-    // ==========================================
+    // =========================================================
     // SAVE
-    // ==========================================
+    // =========================================================
 
     public void Save()
     {
         if (parent == null)
         {
-            Debug.LogError("Parent n'est pas assigné.");
+            Debug.LogError(
+                "SC_StickerSaveSystem : Parent n'est pas assigné."
+            );
+
             stickerCount = 0;
             return;
         }
 
-        StickerSave save = new StickerSave();
+        StickerSave save =
+            new StickerSave();
 
-        /*
-         * IMPORTANT :
-         * On parcourt directement les enfants du parent.
-         * Cela garantit que les stickers sont récupérés
-         * dans l'ordre exact de la hiérarchie.
-         */
-        for (int i = 0; i < parent.childCount; i++)
+        // -----------------------------------------------------
+        // PARCOURS DES STICKERS
+        // -----------------------------------------------------
+
+        for (int i = 0;
+             i < parent.childCount;
+             i++)
         {
-            Transform child = parent.GetChild(i);
+            Transform child =
+                parent.GetChild(i);
 
             if (child == null)
                 continue;
@@ -165,10 +220,6 @@ public class SC_StickerSaveSystem : MonoBehaviour
             SC_sticker_UI stickerUI =
                 child.GetComponent<SC_sticker_UI>();
 
-            /*
-             * Si le SC_sticker_UI est sur un enfant du prefab,
-             * on cherche aussi dans les enfants.
-             */
             if (stickerUI == null)
             {
                 stickerUI =
@@ -178,11 +229,12 @@ public class SC_StickerSaveSystem : MonoBehaviour
             if (stickerUI == null)
                 continue;
 
+            // -------------------------------------------------
+            // RECT
+            // -------------------------------------------------
+
             RectTransform rt =
                 stickerUI.GetComponent<RectTransform>();
-
-            Image img =
-                stickerUI.GetComponent<Image>();
 
             if (rt == null)
             {
@@ -190,18 +242,28 @@ public class SC_StickerSaveSystem : MonoBehaviour
                     stickerUI.GetComponentInChildren<RectTransform>();
             }
 
+            // -------------------------------------------------
+            // IMAGE
+            // -------------------------------------------------
+
+            Image img =
+                stickerUI.GetComponent<Image>();
+
             if (img == null)
             {
                 img =
                     stickerUI.GetComponentInChildren<Image>();
             }
 
-            if (rt == null || img == null)
+            if (rt == null ||
+                img == null)
+            {
                 continue;
+            }
 
-            // ==========================================
-            // POSITION ÉCRAN
-            // ==========================================
+            // -------------------------------------------------
+            // DELETE ZONE
+            // -------------------------------------------------
 
             Vector2 screenPos =
                 RectTransformUtility.WorldToScreenPoint(
@@ -209,10 +271,6 @@ public class SC_StickerSaveSystem : MonoBehaviour
                     rt.position
                 );
 
-            /*
-             * Si le sticker est dans la TrashZone,
-             * on le détruit et on ne le sauvegarde pas.
-             */
             if (deleteZone != null &&
                 RectTransformUtility.RectangleContainsScreenPoint(
                     deleteZone,
@@ -220,30 +278,34 @@ public class SC_StickerSaveSystem : MonoBehaviour
                 ))
             {
                 Debug.Log(
-                    "Sticker supprimé par le SaveSystem."
+                    "Sticker dans la TrashZone : suppression."
                 );
 
                 Destroy(child.gameObject);
+
                 continue;
             }
 
-            StickerData data = new StickerData();
+            StickerData data =
+                new StickerData();
 
-            // ==========================================
+            // -------------------------------------------------
             // SPRITE
-            // ==========================================
+            // -------------------------------------------------
 
             data.spriteName =
                 img.sprite != null
                     ? img.sprite.name
                     : "";
 
-            // ==========================================
+            // -------------------------------------------------
             // SPECIAL MATERIAL
-            // ==========================================
+            // -------------------------------------------------
 
             SO_Sticker stickerData =
-                FindSticker(data.spriteName);
+                FindSticker(
+                    data.spriteName
+                );
 
             data.specialMatName =
                 stickerData != null &&
@@ -251,40 +313,68 @@ public class SC_StickerSaveSystem : MonoBehaviour
                     ? stickerData.special_mat.name
                     : "";
 
-            // ==========================================
+            // -------------------------------------------------
             // POSITION
-            // ==========================================
+            // -------------------------------------------------
 
-            data.posX = rt.anchoredPosition.x;
-            data.posY = rt.anchoredPosition.y;
+            data.posX =
+                rt.anchoredPosition.x;
 
-            // ==========================================
+            data.posY =
+                rt.anchoredPosition.y;
+
+            // -------------------------------------------------
             // ROTATION
-            // ==========================================
+            // -------------------------------------------------
+            //
+            // IMPORTANT :
+            // On utilise stickerRotationZ et non
+            // rt.localEulerAngles.z.
+            //
+            // Cela évite de sauvegarder le tilt Balatro.
+            // -------------------------------------------------
 
-            data.rotZ = rt.localEulerAngles.z;
+            data.rotZ =
+                stickerUI.GetSaveRotationZ();
 
-            // ==========================================
+            // -------------------------------------------------
             // SCALE
-            // ==========================================
+            // -------------------------------------------------
+            //
+            // IMPORTANT :
+            // On utilise stickerScale et non
+            // rt.localScale.
+            //
+            // Cela évite de sauvegarder le scale punch
+            // du drag.
+            // -------------------------------------------------
 
-            data.scaleX = rt.localScale.x;
-            data.scaleY = rt.localScale.y;
+            data.scaleX =
+                stickerUI.GetSaveScaleX();
 
-            /*
-             * On sauvegarde l'ordre actuel.
-             *
-             * Comme on parcourt parent.GetChild(i),
-             * cet index correspond exactement à l'ordre
-             * des stickers dans la hiérarchie.
-             */
-            data.siblingIndex = i;
+            data.scaleY =
+                stickerUI.GetSaveScaleY();
 
-            save.stickers.Add(data);
+            // -------------------------------------------------
+            // SIBLING INDEX
+            // -------------------------------------------------
+
+            data.siblingIndex =
+                i;
+
+            save.stickers.Add(
+                data
+            );
         }
 
+        // =====================================================
+        // JSON
+        // =====================================================
+
         string json =
-            JsonUtility.ToJson(save);
+            JsonUtility.ToJson(
+                save
+            );
 
         PlayerPrefs.SetString(
             SAVE_KEY,
@@ -292,10 +382,13 @@ public class SC_StickerSaveSystem : MonoBehaviour
         );
 
         PlayerPrefs.Save();
-                    UpdateStickerCount();
 
-        // Mise à jour du nombre de stickers
-        stickerCount = save.stickers.Count;
+        // =====================================================
+        // COUNT
+        // =====================================================
+
+        stickerCount =
+            save.stickers.Count;
 
         Debug.Log(
             "Stickers sauvegardés : " +
@@ -303,9 +396,9 @@ public class SC_StickerSaveSystem : MonoBehaviour
         );
     }
 
-    // ==========================================
+    // =========================================================
     // LOAD
-    // ==========================================
+    // =========================================================
 
     public void Load()
     {
@@ -316,13 +409,14 @@ public class SC_StickerSaveSystem : MonoBehaviour
             );
 
             UpdateStickerCount();
+
             return;
         }
 
         if (stickerPrefab == null)
         {
             Debug.LogError(
-                "StickerPrefab n'est pas assigné."
+                "SC_StickerSaveSystem : StickerPrefab n'est pas assigné."
             );
 
             return;
@@ -331,7 +425,7 @@ public class SC_StickerSaveSystem : MonoBehaviour
         if (parent == null)
         {
             Debug.LogError(
-                "Parent n'est pas assigné."
+                "SC_StickerSaveSystem : Parent n'est pas assigné."
             );
 
             return;
@@ -340,17 +434,25 @@ public class SC_StickerSaveSystem : MonoBehaviour
         if (stickers == null)
         {
             Debug.LogError(
-                "SO_sticker_list n'est pas assigné."
+                "SC_StickerSaveSystem : SO_sticker_list n'est pas assigné."
             );
 
             return;
         }
 
+        // =====================================================
+        // JSON
+        // =====================================================
+
         string json =
-            PlayerPrefs.GetString(SAVE_KEY);
+            PlayerPrefs.GetString(
+                SAVE_KEY
+            );
 
         StickerSave save =
-            JsonUtility.FromJson<StickerSave>(json);
+            JsonUtility.FromJson<StickerSave>(
+                json
+            );
 
         if (save == null ||
             save.stickers == null)
@@ -362,19 +464,25 @@ public class SC_StickerSaveSystem : MonoBehaviour
             return;
         }
 
-        /*
-         * On garde une liste des objets créés.
-         * Cela permet de restaurer l'ordre APRÈS
-         * avoir créé tous les stickers.
-         */
+        // =====================================================
+        // LOADED OBJECTS
+        // =====================================================
+
         List<GameObject> loadedObjects =
             new List<GameObject>();
 
+        // =====================================================
+        // CREATE STICKERS
+        // =====================================================
+
         foreach (StickerData data in save.stickers)
         {
-            // ==========================================
-            // CRÉATION DU PREFAB
-            // ==========================================
+            if (data == null)
+                continue;
+
+            // -------------------------------------------------
+            // INSTANTIATE
+            // -------------------------------------------------
 
             GameObject prefabInstance =
                 Instantiate(
@@ -382,10 +490,13 @@ public class SC_StickerSaveSystem : MonoBehaviour
                     parent
                 );
 
-            /*
-             * Ton prefab semble contenir le sticker
-             * comme premier enfant.
-             */
+            if (prefabInstance == null)
+                continue;
+
+            // -------------------------------------------------
+            // FIND STICKER OBJECT
+            // -------------------------------------------------
+
             GameObject stickerObject =
                 prefabInstance;
 
@@ -397,81 +508,69 @@ public class SC_StickerSaveSystem : MonoBehaviour
                         .gameObject;
             }
 
+            // -------------------------------------------------
+            // COMPONENTS
+            // -------------------------------------------------
+
             RectTransform rt =
                 stickerObject.GetComponent<RectTransform>();
 
             Image img =
                 stickerObject.GetComponent<Image>();
 
-            if (rt == null || img == null)
-            {
-                Debug.LogWarning(
-                    "Le sticker chargé n'a pas de " +
-                    "RectTransform ou d'Image."
-                );
-
-                Destroy(prefabInstance);
-                continue;
-            }
-
-            // ==========================================
-            // POSITION
-            // ==========================================
-
-            rt.anchoredPosition =
-                new Vector2(
-                    data.posX,
-                    data.posY
-                );
-
-            // ==========================================
-            // ROTATION
-            // ==========================================
-
-            rt.localEulerAngles =
-                new Vector3(
-                    0f,
-                    0f,
-                    data.rotZ
-                );
-
-            // ==========================================
-            // SCALE
-            // ==========================================
-
             SC_sticker_UI stickerUI =
                 stickerObject.GetComponent<SC_sticker_UI>();
 
-            if (stickerUI != null)
-            {
-                stickerUI.spawnedSticker = true;
+            // -------------------------------------------------
+            // FALLBACK SEARCH
+            // -------------------------------------------------
 
-                stickerUI.SetSavedScale(
-                    data.scaleX,
-                    data.scaleY
+            if (rt == null)
+            {
+                rt =
+                    stickerObject.GetComponentInChildren<RectTransform>();
+            }
+
+            if (img == null)
+            {
+                img =
+                    stickerObject.GetComponentInChildren<Image>();
+            }
+
+            if (stickerUI == null)
+            {
+                stickerUI =
+                    stickerObject.GetComponentInChildren<SC_sticker_UI>();
+            }
+
+            if (rt == null ||
+                img == null)
+            {
+                Debug.LogWarning(
+                    "Le sticker chargé n'a pas de RectTransform ou Image."
                 );
-            }
-            else
-            {
-                rt.localScale =
-                    new Vector3(
-                        data.scaleX,
-                        data.scaleY,
-                        1f
-                    );
+
+                Destroy(prefabInstance);
+
+                continue;
             }
 
-            // ==========================================
-            // RECHERCHE DU SPRITE
-            // ==========================================
+            // =================================================
+            // SPRITE
+            // =================================================
 
             Sprite loadedSprite =
-                FindSprite(data.spriteName);
+                FindSprite(
+                    data.spriteName
+                );
 
             if (loadedSprite != null)
             {
-                img.sprite = loadedSprite;
-                img.maskable = true;
+                img.sprite =
+                    loadedSprite;
+
+                img.maskable =
+                    true;
             }
             else
             {
@@ -481,9 +580,9 @@ public class SC_StickerSaveSystem : MonoBehaviour
                 );
             }
 
-            // ==========================================
-            // RECHERCHE DU SPECIAL MATERIAL
-            // ==========================================
+            // =================================================
+            // MATERIAL
+            // =================================================
 
             Material specialMat =
                 FindSpecialMaterial(
@@ -492,38 +591,89 @@ public class SC_StickerSaveSystem : MonoBehaviour
 
             if (specialMat != null)
             {
-                img.material = specialMat;
+                // On crée une instance pour éviter que plusieurs
+                // stickers modifient le même material.
+                img.material =
+                    new Material(
+                        specialMat
+                    );
             }
 
-            /*
-             * On stocke le PREFAB parent.
-             * C'est lui qui doit être déplacé dans
-             * la hiérarchie.
-             */
-            loadedObjects.Add(prefabInstance);
+            // =================================================
+            // INITIALIZE SC_STICKER_UI
+            // =================================================
+
+            if (stickerUI != null)
+            {
+                stickerUI.InitializeLoadedSticker(
+                    new Vector2(
+                        data.posX,
+                        data.posY
+                    ),
+                    data.rotZ,
+                    data.scaleX,
+                    data.scaleY
+                );
+            }
+            else
+            {
+                // -------------------------------------------------
+                // FALLBACK SANS SC_STICKER_UI
+                // -------------------------------------------------
+
+                rt.anchoredPosition =
+                    new Vector2(
+                        data.posX,
+                        data.posY
+                    );
+
+                rt.localRotation =
+                    Quaternion.Euler(
+                        0f,
+                        0f,
+                        data.rotZ
+                    );
+
+                rt.localScale =
+                    new Vector3(
+                        data.scaleX,
+                        data.scaleY,
+                        1f
+                    );
+            }
+
+            // -------------------------------------------------
+            // STORE PREFAB
+            // -------------------------------------------------
+
+            loadedObjects.Add(
+                prefabInstance
+            );
         }
 
-        // ==========================================
-        // RESTAURATION DE L'ORDRE
-        // ==========================================
+        // =====================================================
+        // RESTORE HIERARCHY ORDER
+        // =====================================================
 
-        /*
-         * Les stickers sont dans save.stickers
-         * dans le même ordre que lors du Save().
-         *
-         * On remet donc les prefabs dans cet ordre.
-         */
-        for (int i = 0; i < loadedObjects.Count; i++)
+        for (int i = 0;
+             i < loadedObjects.Count;
+             i++)
         {
-            if (loadedObjects[i] == null)
+            GameObject obj =
+                loadedObjects[i];
+
+            if (obj == null)
                 continue;
 
-            loadedObjects[i]
-                .transform
-                .SetSiblingIndex(i);
+            obj.transform.SetSiblingIndex(
+                i
+            );
         }
 
-        // Mise à jour du nombre de stickers
+        // =====================================================
+        // COUNT
+        // =====================================================
+
         UpdateStickerCount();
 
         Debug.Log(
@@ -532,11 +682,12 @@ public class SC_StickerSaveSystem : MonoBehaviour
         );
     }
 
-    // ==========================================
+    // =========================================================
     // FIND SPRITE
-    // ==========================================
+    // =========================================================
 
-    private Sprite FindSprite(string spriteName)
+    private Sprite FindSprite(
+        string spriteName)
     {
         if (string.IsNullOrEmpty(spriteName))
             return null;
@@ -553,7 +704,8 @@ public class SC_StickerSaveSystem : MonoBehaviour
             if (sticker.sticker_sprite == null)
                 continue;
 
-            if (sticker.sticker_sprite.name == spriteName)
+            if (sticker.sticker_sprite.name ==
+                spriteName)
             {
                 return sticker.sticker_sprite;
             }
@@ -562,11 +714,12 @@ public class SC_StickerSaveSystem : MonoBehaviour
         return null;
     }
 
-    // ==========================================
+    // =========================================================
     // FIND STICKER
-    // ==========================================
+    // =========================================================
 
-    private SO_Sticker FindSticker(string spriteName)
+    private SO_Sticker FindSticker(
+        string spriteName)
     {
         if (string.IsNullOrEmpty(spriteName))
             return null;
@@ -583,7 +736,8 @@ public class SC_StickerSaveSystem : MonoBehaviour
             if (sticker.sticker_sprite == null)
                 continue;
 
-            if (sticker.sticker_sprite.name == spriteName)
+            if (sticker.sticker_sprite.name ==
+                spriteName)
             {
                 return sticker;
             }
@@ -592,11 +746,12 @@ public class SC_StickerSaveSystem : MonoBehaviour
         return null;
     }
 
-    // ==========================================
+    // =========================================================
     // FIND SPECIAL MATERIAL
-    // ==========================================
+    // =========================================================
 
-    private Material FindSpecialMaterial(string materialName)
+    private Material FindSpecialMaterial(
+        string materialName)
     {
         if (string.IsNullOrEmpty(materialName))
             return null;
@@ -613,7 +768,8 @@ public class SC_StickerSaveSystem : MonoBehaviour
             if (sticker.special_mat == null)
                 continue;
 
-            if (sticker.special_mat.name == materialName)
+            if (sticker.special_mat.name ==
+                materialName)
             {
                 return sticker.special_mat;
             }
@@ -622,28 +778,34 @@ public class SC_StickerSaveSystem : MonoBehaviour
         return null;
     }
 
-    // ==========================================
+    // =========================================================
     // CLEAR
-    // ==========================================
+    // =========================================================
 
     public void Clear()
     {
-        PlayerPrefs.DeleteKey(SAVE_KEY);
+        PlayerPrefs.DeleteKey(
+            SAVE_KEY
+        );
+
         PlayerPrefs.Save();
 
-        stickerCount = 0;
+        stickerCount =
+            0;
 
         Debug.Log(
             "Sauvegarde des stickers supprimée."
         );
     }
 
-    // ==========================================
+    // =========================================================
     // HAS SAVE
-    // ==========================================
+    // =========================================================
 
     public bool HasSave()
     {
-        return PlayerPrefs.HasKey(SAVE_KEY);
+        return PlayerPrefs.HasKey(
+            SAVE_KEY
+        );
     }
 }

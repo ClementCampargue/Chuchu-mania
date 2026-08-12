@@ -34,7 +34,7 @@ public class SC_level_master : MonoBehaviour
 
         SC_player.instance.moveSpeed =
             SC_player.instance.base_speed;
-
+        SC_score.Instance.reset_score_level();
         SC_timer.instance.reset_timer();
         SC_timer.instance.pause();
 

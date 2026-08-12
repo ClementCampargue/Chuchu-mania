@@ -141,10 +141,8 @@ public class SC_NPC : MonoBehaviour
 
 
         player.FaceTarget(transform);
-
-        player.rb.constraints = RigidbodyConstraints2D.FreezeAll;
         player.canMove = false;
-
+        player.rb.linearVelocity = Vector2.zero;
         player.anim.Play("Idle");
     }
 

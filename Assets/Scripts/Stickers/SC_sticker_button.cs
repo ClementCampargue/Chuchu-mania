@@ -97,7 +97,7 @@ public class SC_sticker_button : MonoBehaviour
             Sticker_prefab,
             save.parent
         ).transform.GetChild(0).gameObject;
-
+        obj.GetComponent<SC_sticker_UI>().spawnedSticker = true;
         Image img = obj.GetComponent<Image>();
         RectTransform rect = obj.GetComponent<RectTransform>();
 

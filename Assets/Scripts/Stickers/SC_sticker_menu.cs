@@ -8,7 +8,7 @@ using UnityEngine.UI;
 public class SC_sticker_menu : MonoBehaviour
 {
     public static SC_sticker_menu instance;
-
+    private SC_sticker_UI currentDraggingSticker;
     [Header("UI")]
     public Animator anim;
 
@@ -46,7 +46,16 @@ public class SC_sticker_menu : MonoBehaviour
         instance = this;
     }
 
+    public void SetDraggingSticker(SC_sticker_UI sticker)
+    {
+        currentDraggingSticker = sticker;
+    }
 
+    public void ClearDraggingSticker(SC_sticker_UI sticker)
+    {
+        if (currentDraggingSticker == sticker)
+            currentDraggingSticker = null;
+    }
     private void Start()
     {
         if (SC_scursorManager.instance != null)
@@ -305,29 +314,41 @@ public class SC_sticker_menu : MonoBehaviour
 
     public void QuitEditMode()
     {
+        // -----------------------------------------------------
+        // SI UN STICKER EST ENCORE TENU
+        // -----------------------------------------------------
+
+        if (currentDraggingSticker != null)
+        {
+            SC_sticker_UI sticker = currentDraggingSticker;
+
+            currentDraggingSticker = null;
+
+            sticker.DeleteIfDragging();
+        }
+
+
         editing = false;
+
 
         if (anim != null)
         {
             anim.SetTrigger("Off");
         }
 
+
         if (SC_scursorManager.instance != null)
         {
             SC_scursorManager.instance.disable_cursor();
         }
 
-        /*
-         * On ne sélectionne le bouton que si on est
-         * réellement en mode manette.
-         */
+
         if (SC_controller_manager.instance != null &&
             SC_controller_manager.instance.using_controller)
         {
             SelectDefaultButton();
         }
     }
-
 
     public void quit_edit_mode()
     {
