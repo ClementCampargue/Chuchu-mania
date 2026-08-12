@@ -26,6 +26,7 @@ public class SC_sticker_menu : MonoBehaviour
 
     [Header("Input")]
     public InputActionReference quit;
+    public InputActionReference quit2;
     public InputActionReference edit;
 
     [Header("Materials")]
@@ -149,6 +150,13 @@ public class SC_sticker_menu : MonoBehaviour
             StartEditMode();
         }
 
+        else if (editing &&
+            edit != null &&
+            edit.action.WasPressedThisFrame())
+        {
+            quit_edit_mode();
+        }
+
 
         // =====================================================
         // QUIT
@@ -156,6 +164,18 @@ public class SC_sticker_menu : MonoBehaviour
 
         if (quit != null &&
             quit.action.WasPerformedThisFrame())
+        {
+            if (SC_scursorManager.instance == null ||
+                !SC_scursorManager.instance.grabing)
+            {
+                if (SC_screenshot_transition.instance != null)
+                {
+                    SC_screenshot_transition.instance.Capture("HUB");
+                }
+            }
+        }
+        if (quit2 != null &&
+            quit2.action.WasPerformedThisFrame() && !editing)
         {
             if (SC_scursorManager.instance == null ||
                 !SC_scursorManager.instance.grabing)

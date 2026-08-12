@@ -155,6 +155,18 @@ MonoBehaviour:
     m_Key: Unavailable in demo
     m_Metadata:
       m_Items: []
+  - m_Id: 23505739456987136
+    m_Key: Select
+    m_Metadata:
+      m_Items: []
+  - m_Id: 23505777901977600
+    m_Key: Edit mode
+    m_Metadata:
+      m_Items: []
+  - m_Id: 23505815986257920
+    m_Key: "Stickers plac\xE9s:"
+    m_Metadata:
+      m_Items: []
   m_Metadata:
     m_Items: []
   m_KeyGenerator:

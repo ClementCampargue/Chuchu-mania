@@ -158,6 +158,18 @@ MonoBehaviour:
     m_Localized: "Pas dans la d\xE9mo"
     m_Metadata:
       m_Items: []
+  - m_Id: 23505739456987136
+    m_Localized: "S\xE9lectionner"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 23505777901977600
+    m_Localized: Edition
+    m_Metadata:
+      m_Items: []
+  - m_Id: 23505815986257920
+    m_Localized: "Stickers plac\xE9s:"
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds: []

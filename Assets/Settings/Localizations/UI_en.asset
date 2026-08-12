@@ -158,6 +158,18 @@ MonoBehaviour:
     m_Localized: Unavailable in demo
     m_Metadata:
       m_Items: []
+  - m_Id: 23505739456987136
+    m_Localized: Select
+    m_Metadata:
+      m_Items: []
+  - m_Id: 23505777901977600
+    m_Localized: Edit mode
+    m_Metadata:
+      m_Items: []
+  - m_Id: 23505815986257920
+    m_Localized: 'Stickers:'
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds: []
