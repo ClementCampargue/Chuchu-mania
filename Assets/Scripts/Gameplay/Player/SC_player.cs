@@ -965,7 +965,6 @@ public class SC_player : MonoBehaviour
     // =========================================================
     // TAKE DAMAGE
     // =========================================================
-
     public void TakeDamage(
         int damage,
         Vector2 ejection_power,
@@ -973,74 +972,83 @@ public class SC_player : MonoBehaviour
     {
         // Double sécurité.
         if (!canTakeDamage ||
-            isInvincible||
+            isInvincible ||
             burning)
         {
             return;
         }
-
 
         if (isFrozen ||
             eat_system.isPowerUpActive)
         {
             return;
         }
-  
 
         anim.SetBool("Stun", false);
-
         anim.SetTrigger("Hit");
-
 
         if (isClimbing)
         {
             StopClimbingJump();
         }
 
-        if(damage == 0)
+        // =====================================================
+        // BOUNCE
+        // Même logique que le HIT, mais sans FREEZE
+        // =====================================================
+
+        if (damage == 0)
         {
             bounce_sfx.PlayJuice();
-        }
-        else
-        {
-            health.take_damage(damage);
 
-            eat_system.take_damage();
-
-            damage_sfx.PlayJuice();
-        }
-
-        isStunned = false;
-
-
-
-
-        if (health.current_health > 0)
-        {
             if (hitCoroutine != null)
             {
                 StopCoroutine(hitCoroutine);
             }
 
-
-            hitCoroutine =
-                StartCoroutine(
-                    HitFreezeWithKnockback(
-                        sourcePosition, ejection_power
-                    )
-                );
-
-            if(damage != 0)
-            {
-                StartInvincibility(invincibilityTime);
-            }
+            hitCoroutine = StartCoroutine(
+                BounceWithKnockback(
+                    sourcePosition,
+                    ejection_power
+                )
+            );
         }
         else
         {
-            Die();
-        }
-    }
+            // =================================================
+            // DAMAGE NORMAL
+            // =================================================
 
+            health.take_damage(damage);
+
+            eat_system.take_damage();
+
+            damage_sfx.PlayJuice();
+
+            if (health.current_health > 0)
+            {
+                if (hitCoroutine != null)
+                {
+                    StopCoroutine(hitCoroutine);
+                }
+
+                hitCoroutine = StartCoroutine(
+                    HitFreezeWithKnockback(
+                        sourcePosition,
+                        ejection_power
+                    )
+                );
+
+                StartInvincibility(invincibilityTime);
+            }
+            else
+            {
+                Die();
+            }
+        }
+
+        isStunned = false;
+    }
 
     // =========================================================
     // LAVA HIT
@@ -1138,7 +1146,32 @@ public class SC_player : MonoBehaviour
     // =========================================================
     // LAVA CONTROL
     // =========================================================
+    private IEnumerator BounceWithKnockback(
+    Vector3 sourcePosition,
+    Vector2 power)
+    {
+        // Même calcul de direction que le HitFreeze
+        Vector2 direction =
+            (
+                transform.position -
+                sourcePosition
+            ).normalized;
 
+        knockbackVelocity =
+            new Vector2(
+                direction.x *
+                hitKnockback.x *
+                power.x,
+
+                hitKnockback.y *
+                transform.localScale.y *
+                power.y
+            );
+
+        // Même comportement de relâchement du knockback
+        yield return new WaitForSeconds(0.1f);
+
+    }
     private IEnumerator LavaControlLock(
         float multiplier,
         float time)

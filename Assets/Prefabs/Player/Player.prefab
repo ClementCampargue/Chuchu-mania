@@ -20980,7 +20980,7 @@ MonoBehaviour:
   verticalStretch: 1
   shakeDuration: 0.15
   shakeIntensity: 0.13
-  freeze: 0
+  freeze: 1
   freezeDuration: 0
   slowMoScale: 0
   fovCurve:
@@ -21895,6 +21895,7 @@ MonoBehaviour:
   maxJumpTime: 0.3
   coyoteTime: 0.2
   jumpBufferTime: 0.1
+  jumpBufferCounter: 0
   canJump: 1
   climbSpeed: 2
   climbAttachUpThreshold: 0.6

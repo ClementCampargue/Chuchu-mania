@@ -58,13 +58,18 @@ public class SC_cage : MonoBehaviour
         if (!isBouncing)
             return;
 
-        // Déplacement
-        transform.position +=
-            (Vector3)(direction.normalized * currentSpeed * Time.deltaTime);
+        float deltaTime = Time.deltaTime;
+
+        // Sécurité : évite un énorme déplacement après une frame anormalement longue
+        deltaTime = Mathf.Min(deltaTime, 0.05f);
+
+        Vector3 movement =
+            (Vector3)(direction.normalized * currentSpeed * deltaTime);
+
+        transform.position += movement;
 
         CheckScreenBounds();
 
-        // Arrêt lorsque la vitesse est trop faible
         if (currentSpeed <= minSpeed)
         {
             currentSpeed = 0f;
