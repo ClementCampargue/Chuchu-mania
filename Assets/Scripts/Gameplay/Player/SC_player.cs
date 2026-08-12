@@ -24,6 +24,7 @@ public class SC_player : MonoBehaviour
 
     [Header("Jump Input Buffer")]
     public float jumpBufferTime = 0.1f;
+
     [HideInInspector] public float jumpBufferCounter;
 
     private float jumpTimeCounter;
@@ -133,6 +134,7 @@ public class SC_player : MonoBehaviour
     public AudioSource run;
 
     private Collider2D hit;
+
     private sc_health_system health;
 
 
@@ -172,7 +174,7 @@ public class SC_player : MonoBehaviour
     // START
     // =========================================================
 
-    private void Start()
+    void Start()
     {
         canTakeDamage = true;
 
@@ -191,12 +193,13 @@ public class SC_player : MonoBehaviour
     // UPDATE
     // =========================================================
 
-    private void Update()
+    void Update()
     {
         limit = SC_level_master.instance.limits;
 
         CheckStun();
         HandleLowHealthBlink();
+
 
         // =====================================================
         // TIMER DE RÉACCROCHE
@@ -207,13 +210,11 @@ public class SC_player : MonoBehaviour
             climbReattachTimer -= Time.deltaTime;
 
             if (climbReattachTimer < 0f)
+            {
                 climbReattachTimer = 0f;
+            }
         }
 
-
-        // =====================================================
-        // STUN
-        // =====================================================
 
         if (isStunned)
         {
@@ -226,57 +227,29 @@ public class SC_player : MonoBehaviour
         // INPUT
         // =====================================================
 
-        if (!isFrozen &&
-            canMove &&
-            !eat_system.isEating &&
-            Time.timeScale != 0)
+        if (!isFrozen && canMove && !eat_system.isEating && Time.timeScale != 0)
         {
             Vector2 input = Move.action.ReadValue<Vector2>();
 
-            Vector2 processedInput = new Vector2(
-                Mathf.Abs(input.x) > 0.1f ? Mathf.Sign(input.x) : 0f,
-                Mathf.Abs(input.y) > 0.1f ? Mathf.Sign(input.y) : 0f
+
+            moveInput = new Vector2(
+                Mathf.Abs(input.x) > 0.1f
+                    ? Mathf.Sign(input.x)
+                    : 0f,
+
+                Mathf.Abs(input.y) > 0.1f
+                    ? Mathf.Sign(input.y)
+                    : 0f
             );
 
 
             // =================================================
             // TENTATIVE D'ACCROCHE
-            //
-            // IMPORTANT :
-            // On teste l'accroche AVANT de donner le moveInput
-            // au déplacement normal.
             // =================================================
 
-            if (!isClimbing &&
-                canClimb &&
-                climbReattachTimer <= 0f)
+            if (!isClimbing && canClimb && climbReattachTimer <= 0f)
             {
-                if (CanAttachToClimb(input))
-                {
-                    StartClimbing();
-
-                    // On annule immédiatement le mouvement normal.
-                    moveInput = Vector2.zero;
-
-                    return;
-                }
-            }
-
-
-            // =================================================
-            // MOUVEMENT NORMAL
-            // =================================================
-
-            if (!isClimbing)
-            {
-                moveInput = processedInput;
-            }
-            else
-            {
-                // Sécurité :
-                // aucune input de déplacement normal
-                // pendant l'escalade.
-                moveInput = Vector2.zero;
+                TryStartClimbing(input);
             }
         }
         else
@@ -340,13 +313,16 @@ public class SC_player : MonoBehaviour
             if (moveInput.sqrMagnitude > 0.01f)
             {
                 if (!grid.isPlaying)
+                {
                     grid.Play();
+                }
 
                 anim.SetBool("Run", true);
             }
             else
             {
                 grid.Stop();
+
                 anim.SetBool("Run", false);
             }
         }
@@ -361,7 +337,9 @@ public class SC_player : MonoBehaviour
                 if (isGrounded)
                 {
                     if (!run.isPlaying)
+                    {
                         run.Play();
+                    }
                 }
                 else
                 {
@@ -373,6 +351,7 @@ public class SC_player : MonoBehaviour
             else
             {
                 run.Stop();
+
                 anim.SetBool("Run", false);
             }
         }
@@ -388,9 +367,7 @@ public class SC_player : MonoBehaviour
         {
             anim.ResetTrigger("Jump");
             anim.SetTrigger("Land");
-
             moveSpeed = base_speed;
-
             land.PlayJuice();
         }
 
@@ -403,7 +380,6 @@ public class SC_player : MonoBehaviour
             {
                 anim.ResetTrigger("Jump");
                 anim.SetTrigger("Land");
-
                 moveSpeed = base_speed;
 
                 land.PlayJuice();
@@ -424,20 +400,17 @@ public class SC_player : MonoBehaviour
         // FACING
         // =====================================================
 
-        if (!isClimbing)
-        {
-            float yScale = transform.localScale.y;
+        float yScale = transform.localScale.y;
 
-            if (moveInput.x > 0)
-            {
-                transform.localScale =
-                    new Vector3(1, yScale, 1);
-            }
-            else if (moveInput.x < 0)
-            {
-                transform.localScale =
-                    new Vector3(-1, yScale, 1);
-            }
+        if (moveInput.x > 0)
+        {
+            transform.localScale =
+                new Vector3(1, yScale, 1);
+        }
+        else if (moveInput.x < 0)
+        {
+            transform.localScale =
+                new Vector3(-1, yScale, 1);
         }
 
 
@@ -473,40 +446,6 @@ public class SC_player : MonoBehaviour
                 isJumping = false;
             }
         }
-    }
-
-
-    // =========================================================
-    // CAN ATTACH TO CLIMB
-    // =========================================================
-
-    private bool CanAttachToClimb(Vector2 input)
-    {
-        if (!canClimb)
-            return false;
-
-        if (isClimbing)
-            return false;
-
-        if (grillage == null)
-            return false;
-
-        if (climbReattachTimer > 0f)
-            return false;
-
-        // Le joueur doit pousser vers le haut.
-        if (input.y < climbAttachUpThreshold)
-            return false;
-
-        // Empêche l'accroche avec une direction
-        // trop horizontale.
-        if (Mathf.Abs(input.x) >
-            input.y * climbAttachDiagonalLimit)
-        {
-            return false;
-        }
-
-        return true;
     }
 
 
@@ -630,7 +569,7 @@ public class SC_player : MonoBehaviour
     // ANIMATION CHECK
     // =========================================================
 
-    private bool IsAnimationPlaying(string animationName)
+    bool IsAnimationPlaying(string animationName)
     {
         AnimatorStateInfo stateInfo =
             anim.GetCurrentAnimatorStateInfo(0);
@@ -643,7 +582,7 @@ public class SC_player : MonoBehaviour
     // STUN
     // =========================================================
 
-    private void CheckStun()
+    void CheckStun()
     {
         if (isStunned)
             return;
@@ -681,12 +620,14 @@ public class SC_player : MonoBehaviour
 
 
     // =========================================================
-    // DELAY DEATH ENEMY
+    // DAMAGE DETECTION
     // =========================================================
 
-    private IEnumerator delay_death_enemy()
+
+    IEnumerator delay_death_enemy()
     {
         yield return new WaitForSecondsRealtime(1f);
+
 
         if (hit != null)
         {
@@ -718,13 +659,11 @@ public class SC_player : MonoBehaviour
     }
 
 
-    private IEnumerator StunCoroutine()
+    IEnumerator StunCoroutine()
     {
         juice.PlayJuice();
 
         isStunned = true;
-
-        moveInput = Vector2.zero;
 
         anim.SetBool("Stun", true);
 
@@ -742,7 +681,7 @@ public class SC_player : MonoBehaviour
     // LOW HEALTH
     // =========================================================
 
-    private void HandleLowHealthBlink()
+    void HandleLowHealthBlink()
     {
         if (health.current_health == 1)
         {
@@ -757,6 +696,7 @@ public class SC_player : MonoBehaviour
             if (lowHealthCoroutine != null)
             {
                 StopCoroutine(lowHealthCoroutine);
+
                 lowHealthCoroutine = null;
             }
 
@@ -765,9 +705,10 @@ public class SC_player : MonoBehaviour
     }
 
 
-    private IEnumerator LowHealthBlink()
+    IEnumerator LowHealthBlink()
     {
         bool toggle = false;
+
 
         while (health.current_health == 1)
         {
@@ -781,6 +722,7 @@ public class SC_player : MonoBehaviour
             yield return new WaitForSeconds(lowHealthBlinkRate);
         }
 
+
         spriteRenderer.material = normalMaterial;
 
         lowHealthCoroutine = null;
@@ -791,7 +733,7 @@ public class SC_player : MonoBehaviour
     // FIXED UPDATE
     // =========================================================
 
-    private void FixedUpdate()
+    void FixedUpdate()
     {
         added_velocity_ =
             Vector2.Lerp(
@@ -803,6 +745,7 @@ public class SC_player : MonoBehaviour
         if (eat_system != null && eat_system.isEating)
         {
             moveInput = Vector2.zero;
+
             return;
         }
 
@@ -826,8 +769,6 @@ public class SC_player : MonoBehaviour
             }
 
 
-            // Pendant l'escalade, on lit UNIQUEMENT
-            // l'input de grille.
             Vector2 climbInput =
                 Move.action.ReadValue<Vector2>();
 
@@ -846,8 +787,7 @@ public class SC_player : MonoBehaviour
                 climbInput * climbSpeed;
 
 
-            rb.linearVelocity =
-                climbVelocity;
+            rb.linearVelocity = climbVelocity;
 
 
             Vector2 nextPosition =
@@ -867,9 +807,10 @@ public class SC_player : MonoBehaviour
         // =====================================================
         // MOVEMENT NORMAL
         // =====================================================
-
         if (!isFrozen)
         {
+
+
             float horizontalSpeed =
                 moveInput.x *
                 (
@@ -878,8 +819,6 @@ public class SC_player : MonoBehaviour
                         : moveSpeed
                 )
                 + knockbackVelocity.x;
-
-
             float verticalSpeed =
                 rb.linearVelocity.y;
 
@@ -917,7 +856,7 @@ public class SC_player : MonoBehaviour
     // LATE UPDATE
     // =========================================================
 
-    private void LateUpdate()
+    void LateUpdate()
     {
         float x = transform.position.x;
 
@@ -933,11 +872,14 @@ public class SC_player : MonoBehaviour
             ghost.localScale =
                 transform.localScale;
 
+
             float distance =
                 limit.y - x;
 
+
             float ghostX =
                 limit.x - distance;
+
 
             ghost.position =
                 new Vector3(
@@ -953,11 +895,14 @@ public class SC_player : MonoBehaviour
             ghost.localScale =
                 transform.localScale;
 
+
             float distance =
                 x - limit.x;
 
+
             float ghostX =
                 limit.y + distance;
+
 
             ghost.position =
                 new Vector3(
@@ -985,6 +930,7 @@ public class SC_player : MonoBehaviour
                     transform.position.z
                 );
 
+
             if (rb.linearVelocity.x > 0)
             {
                 rb.linearVelocity =
@@ -1005,6 +951,7 @@ public class SC_player : MonoBehaviour
                     transform.position.z
                 );
 
+
             if (rb.linearVelocity.x < 0)
             {
                 rb.linearVelocity =
@@ -1022,12 +969,12 @@ public class SC_player : MonoBehaviour
     // =========================================================
     // TAKE DAMAGE
     // =========================================================
-
     public void TakeDamage(
         int damage,
         Vector2 ejection_power,
         Vector3 sourcePosition)
     {
+        // Double sécurité.
         if (!canTakeDamage ||
             isInvincible ||
             burning)
@@ -1049,9 +996,9 @@ public class SC_player : MonoBehaviour
             StopClimbingJump();
         }
 
-
         // =====================================================
         // BOUNCE
+        // Même logique que le HIT, mais sans FREEZE
         // =====================================================
 
         if (damage == 0)
@@ -1059,15 +1006,16 @@ public class SC_player : MonoBehaviour
             bounce_sfx.PlayJuice();
 
             if (hitCoroutine != null)
+            {
                 StopCoroutine(hitCoroutine);
+            }
 
-            hitCoroutine =
-                StartCoroutine(
-                    BounceWithKnockback(
-                        sourcePosition,
-                        ejection_power
-                    )
-                );
+            hitCoroutine = StartCoroutine(
+                BounceWithKnockback(
+                    sourcePosition,
+                    ejection_power
+                )
+            );
         }
         else
         {
@@ -1084,15 +1032,16 @@ public class SC_player : MonoBehaviour
             if (health.current_health > 0)
             {
                 if (hitCoroutine != null)
+                {
                     StopCoroutine(hitCoroutine);
+                }
 
-                hitCoroutine =
-                    StartCoroutine(
-                        HitFreezeWithKnockback(
-                            sourcePosition,
-                            ejection_power
-                        )
-                    );
+                hitCoroutine = StartCoroutine(
+                    HitFreezeWithKnockback(
+                        sourcePosition,
+                        ejection_power
+                    )
+                );
 
                 StartInvincibility(invincibilityTime);
             }
@@ -1105,7 +1054,6 @@ public class SC_player : MonoBehaviour
         isStunned = false;
     }
 
-
     // =========================================================
     // LAVA HIT
     // =========================================================
@@ -1115,13 +1063,17 @@ public class SC_player : MonoBehaviour
         float controlMultiplier,
         float controlTime)
     {
+
         burning = true;
+
 
         rb.bodyType =
             RigidbodyType2D.Dynamic;
 
+
         rb.linearVelocity =
             launchVelocity;
+
 
         StartCoroutine(
             LavaControlLock(
@@ -1129,6 +1081,7 @@ public class SC_player : MonoBehaviour
                 controlTime
             )
         );
+
 
         if (isInvincible ||
             !canTakeDamage)
@@ -1141,29 +1094,54 @@ public class SC_player : MonoBehaviour
             return;
         }
 
+
         if (health.current_health == 0)
             return;
 
-        anim.SetBool("Stun", false);
-        anim.SetTrigger("Hit");
+
+
+        anim.SetBool(
+            "Stun",
+            false
+        );
+
+
+        anim.SetTrigger(
+            "Hit"
+        );
+
 
         isStunned = false;
+
+
         isFrozen = false;
+        isStunned = false;
+
 
         eat_system.take_damage();
+
         health.take_damage(1);
+
 
         if (health.current_health > 0)
         {
             if (hitCoroutine != null)
+            {
                 StopCoroutine(hitCoroutine);
+            }
 
-            StartInvincibility(invincibilityTime);
+
+            // IMPORTANT :
+            // Même système d'invincibilité que les dégâts normaux.
+            StartInvincibility(
+                invincibilityTime
+            );
         }
         else
         {
             Die();
         }
+
 
         damage_lava_sfx.PlayJuice();
     }
@@ -1172,7 +1150,32 @@ public class SC_player : MonoBehaviour
     // =========================================================
     // LAVA CONTROL
     // =========================================================
+    private IEnumerator BounceWithKnockback(
+    Vector3 sourcePosition,
+    Vector2 power)
+    {
+        // Même calcul de direction que le HitFreeze
+        Vector2 direction =
+            (
+                transform.position -
+                sourcePosition
+            ).normalized;
 
+        knockbackVelocity =
+            new Vector2(
+                direction.x *
+                hitKnockback.x *
+                power.x,
+
+                hitKnockback.y *
+                transform.localScale.y *
+                power.y
+            );
+
+        // Même comportement de relâchement du knockback
+        yield return new WaitForSeconds(0.1f);
+
+    }
     private IEnumerator LavaControlLock(
         float multiplier,
         float time)
@@ -1180,22 +1183,30 @@ public class SC_player : MonoBehaviour
         float originalMove =
             moveSpeed;
 
+
         float originalPower =
             PowermoveSpeed;
 
+
         moveSpeed *= multiplier;
+
         PowermoveSpeed *= multiplier;
 
+
         yield return new WaitForSeconds(time);
+
 
         yield return new WaitUntil(
             () => isGrounded || isClimbing
         );
 
+
         burning = false;
+
 
         moveSpeed =
             originalMove;
+
 
         PowermoveSpeed =
             originalPower;
@@ -1206,18 +1217,21 @@ public class SC_player : MonoBehaviour
     // INVINCIBILITY
     // =========================================================
 
-    public void TriggerInvincibility(float duration)
+    public void TriggerInvincibility(
+        float duration)
     {
         StartInvincibility(duration);
     }
 
 
-    public void StartInvincibility(float duration)
+    public void StartInvincibility(
+        float duration)
     {
         if (invincibilityCoroutine != null)
         {
             StopCoroutine(invincibilityCoroutine);
         }
+
 
         invincibilityCoroutine =
             StartCoroutine(
@@ -1226,30 +1240,48 @@ public class SC_player : MonoBehaviour
     }
 
 
-    private IEnumerator InvincibilityRoutine(float duration)
+    private IEnumerator InvincibilityRoutine(
+        float duration)
     {
+        // =====================================================
+        // IMPORTANT :
+        // Les deux protections sont activées ensemble.
+        // =====================================================
+
         isInvincible = true;
         canTakeDamage = false;
 
+
         float elapsed = 0f;
         bool visible = true;
+
 
         while (elapsed < duration)
         {
             visible = !visible;
 
+
             spriteRenderer.enabled =
                 visible;
 
+
             yield return new WaitForSecondsRealtime(0.1f);
+
 
             elapsed += 0.1f;
         }
 
+
         spriteRenderer.enabled = true;
 
+
         isInvincible = false;
+
+
+        // On ne réactive les dégâts qu'une fois
+        // l'invincibilité complètement terminée.
         canTakeDamage = true;
+
 
         invincibilityCoroutine = null;
     }
@@ -1260,26 +1292,37 @@ public class SC_player : MonoBehaviour
     // =========================================================
 
     private IEnumerator HitFreezeWithKnockback(
-        Vector3 sourcePosition,
-        Vector2 power)
+        Vector3 sourcePosition, Vector2 power)
     {
         isFrozen = true;
+
         canTakeDamage = false;
+
+
 
         rb.linearVelocity =
             Vector2.zero;
 
+
         rb.bodyType =
             RigidbodyType2D.Kinematic;
+
+
+
+
 
         yield return new WaitForSecondsRealtime(
             hitFreezeTime
         );
 
+
         rb.bodyType =
             RigidbodyType2D.Dynamic;
 
+
+
         isFrozen = false;
+
 
         Vector2 direction =
             (
@@ -1287,52 +1330,30 @@ public class SC_player : MonoBehaviour
                 sourcePosition
             ).normalized;
 
+
         knockbackVelocity =
             new Vector2(
                 direction.x *
-                hitKnockback.x *
-                power.x,
+                hitKnockback.x * power.x,
 
                 hitKnockback.y *
-                transform.localScale.y *
-                power.y
+                transform.localScale.y * power.y
             );
 
+
         yield return new WaitForSeconds(0.1f);
+
+
+        // =====================================================
+        // IMPORTANT :
+        // Ne jamais réactiver les dégâts pendant
+        // une invincibilité encore active.
+        // =====================================================
 
         if (!isInvincible)
         {
             canTakeDamage = true;
         }
-    }
-
-
-    // =========================================================
-    // BOUNCE
-    // =========================================================
-
-    private IEnumerator BounceWithKnockback(
-        Vector3 sourcePosition,
-        Vector2 power)
-    {
-        Vector2 direction =
-            (
-                transform.position -
-                sourcePosition
-            ).normalized;
-
-        knockbackVelocity =
-            new Vector2(
-                direction.x *
-                hitKnockback.x *
-                power.x,
-
-                hitKnockback.y *
-                transform.localScale.y *
-                power.y
-            );
-
-        yield return new WaitForSeconds(0.1f);
     }
 
 
@@ -1345,33 +1366,43 @@ public class SC_player : MonoBehaviour
     {
         isFrozen = true;
 
+
         rb.linearVelocity =
             Vector2.zero;
 
+
         rb.bodyType =
             RigidbodyType2D.Kinematic;
+
 
         string trigger =
             isActivating
                 ? transformAnimTrigger
                 : detransformAnimTrigger;
 
+
         anim.SetTrigger(trigger);
+
 
         float originalTimeScale =
             Time.timeScale;
 
+
         Time.timeScale = 0f;
+
 
         yield return new WaitForSecondsRealtime(
             transformFreezeTime
         );
 
+
         Time.timeScale =
             originalTimeScale;
 
+
         rb.bodyType =
             RigidbodyType2D.Dynamic;
+
 
         isFrozen = false;
     }
@@ -1385,41 +1416,48 @@ public class SC_player : MonoBehaviour
     {
         canMove = false;
 
+
         if (hitCoroutine != null)
+        {
             StopCoroutine(hitCoroutine);
+        }
 
         rb.linearVelocity =
-            Vector2.zero;
+        Vector2.zero;
 
         GetComponent<SortingGroup>()
             .sortingLayerName = "UI";
-
-        rb.constraints =
-            RigidbodyConstraints2D.FreezeAll;
-
+        rb.constraints = RigidbodyConstraints2D.FreezeAll;
         rb.gravityScale = 0;
-
         isFrozen = true;
-
         rb.linearVelocity =
-            Vector2.zero;
+        Vector2.zero;
+
 
         anim.SetBool("Die", true);
+
         anim.SetBool("Eat", false);
+
 
         eat_system.eating_sfx.Stop();
 
+
         game_over_screen.SetActive(true);
+
 
         SC_music_manager.instance
             .stop_music();
 
+
         collider.enabled = false;
+
 
         die.PlayJuice();
 
+
         knockbackVelocity =
             Vector2.zero;
+
 
         Time.timeScale = 0;
     }
@@ -1429,11 +1467,12 @@ public class SC_player : MonoBehaviour
     // GIZMOS
     // =========================================================
 
-    private void OnDrawGizmosSelected()
+    void OnDrawGizmosSelected()
     {
         if (damageCheck != null)
         {
             Gizmos.color = Color.red;
+
 
             Gizmos.DrawWireSphere(
                 damageCheck.position,
@@ -1454,10 +1493,14 @@ public class SC_player : MonoBehaviour
 
         anim.SetTrigger("Transform");
 
+
         transformation.PlayJuice();
 
+
         normal.SetActive(false);
+
         transformed.SetActive(true);
+
 
         StartCoroutine(
             PowerupFreeze(true)
@@ -1468,7 +1511,9 @@ public class SC_player : MonoBehaviour
     public void end_powerup()
     {
         normal.SetActive(true);
+
         transformed.SetActive(false);
+
 
         StartCoroutine(
             PowerupFreeze(false)
@@ -1480,11 +1525,13 @@ public class SC_player : MonoBehaviour
     // CLIMB TRIGGERS
     // =========================================================
 
-    private void OnTriggerEnter2D(Collider2D other)
+    private void OnTriggerEnter2D(
+        Collider2D other)
     {
         if (other.CompareTag("Climb"))
         {
             canClimb = true;
+
 
             grillage =
                 other.GetComponent<SC_grillage>();
@@ -1492,11 +1539,13 @@ public class SC_player : MonoBehaviour
     }
 
 
-    private void OnTriggerStay2D(Collider2D other)
+    private void OnTriggerStay2D(
+        Collider2D other)
     {
         if (other.CompareTag("Climb"))
         {
             canClimb = true;
+
 
             if (grillage == null)
             {
@@ -1507,18 +1556,22 @@ public class SC_player : MonoBehaviour
     }
 
 
-    private void OnTriggerExit2D(Collider2D other)
+    private void OnTriggerExit2D(
+        Collider2D other)
     {
         if (other.CompareTag("Climb"))
         {
             SC_grillage exitedGrillage =
                 other.GetComponent<SC_grillage>();
 
+
             if (grillage == exitedGrillage)
             {
                 StopClimbing();
 
+
                 grillage = null;
+
 
                 canClimb = false;
             }
@@ -1527,10 +1580,49 @@ public class SC_player : MonoBehaviour
 
 
     // =========================================================
+    // TRY START CLIMBING
+    // =========================================================
+
+    private void TryStartClimbing(
+        Vector2 input)
+    {
+        if (!canClimb)
+            return;
+
+        if (isClimbing)
+            return;
+
+        if (grillage == null)
+            return;
+
+        if (climbReattachTimer > 0f)
+            return;
+
+
+        if (input.y <
+            climbAttachUpThreshold)
+        {
+            return;
+        }
+
+
+        if (Mathf.Abs(input.x) >
+            input.y *
+            climbAttachDiagonalLimit)
+        {
+            return;
+        }
+
+
+        StartClimbing();
+    }
+
+
+    // =========================================================
     // START CLIMBING
     // =========================================================
 
-    private void StartClimbing()
+    void StartClimbing()
     {
         if (!canClimb)
             return;
@@ -1541,23 +1633,21 @@ public class SC_player : MonoBehaviour
         if (climbReattachTimer > 0f)
             return;
 
+
         isClimbing = true;
 
-        // IMPORTANT :
-        // On coupe complètement le déplacement horizontal
-        // au moment où l'accroche commence.
-        moveInput = Vector2.zero;
 
-        knockbackVelocity = Vector2.zero;
+        rb.gravityScale = 0;
+
 
         rb.linearVelocity =
             Vector2.zero;
 
-        rb.gravityScale = 0;
 
-        anim.SetBool("Climb", true);
-
-        run.Stop();
+        anim.SetBool(
+            "Climb",
+            true
+        );
     }
 
 
@@ -1565,22 +1655,25 @@ public class SC_player : MonoBehaviour
     // STOP CLIMBING
     // =========================================================
 
-    private void StopClimbing()
+    void StopClimbing()
     {
         if (!isClimbing)
             return;
 
+
         isClimbing = false;
+
 
         rb.gravityScale =
             base_gravity;
 
+
         rb.linearVelocity =
             Vector2.zero;
 
-        moveInput = Vector2.zero;
 
         grid.Stop();
+
 
         anim.SetBool(
             "Climb",
@@ -1593,25 +1686,29 @@ public class SC_player : MonoBehaviour
     // STOP CLIMBING POUR SAUT
     // =========================================================
 
-    private void StopClimbingJump()
+    void StopClimbingJump()
     {
         if (!isClimbing)
             return;
 
+
         isClimbing = false;
+
 
         climbReattachTimer =
             climbReattachDelay;
 
+
         rb.gravityScale =
             base_gravity;
+
 
         rb.linearVelocity =
             Vector2.zero;
 
-        moveInput = Vector2.zero;
 
         grid.Stop();
+
 
         anim.SetBool(
             "Climb",
@@ -1624,14 +1721,17 @@ public class SC_player : MonoBehaviour
     // FACE TARGET
     // =========================================================
 
-    public void FaceTarget(Transform target)
+    public void FaceTarget(
+        Transform target)
     {
         if (target == null)
             return;
 
+
         float direction =
             target.position.x -
             transform.position.x;
+
 
         if (direction > 0)
         {
@@ -1662,7 +1762,8 @@ public class SC_player : MonoBehaviour
     // GROUND VELOCITY
     // =========================================================
 
-    public void SetGroundVelocity(Vector2 vel)
+    public void SetGroundVelocity(
+        Vector2 vel)
     {
         added_velocity = vel;
     }
@@ -1675,59 +1776,80 @@ public class SC_player : MonoBehaviour
     public void Revive()
     {
         normal.SetActive(true);
+
         transformed.SetActive(false);
 
+
         StopAllCoroutines();
+
 
         isFrozen = false;
         isStunned = false;
         isInvincible = false;
         canTakeDamage = true;
 
+
         isClimbing = false;
         canClimb = false;
         grillage = null;
 
+
         climbReattachTimer = 0f;
+
 
         rb.gravityScale =
             base_gravity;
 
+
+
+
         GetComponent<SortingGroup>()
             .sortingLayerName = "Default";
+
 
         coyoteTimeCounter = 0f;
         jumpBufferCounter = 0f;
         isJumping = false;
+
 
         if (health != null)
         {
             health.revive();
         }
 
+
         collider.enabled = true;
 
+
         spriteRenderer.enabled = true;
+
 
         rb.bodyType =
             RigidbodyType2D.Dynamic;
 
+
         rb.linearVelocity =
             Vector2.zero;
+
 
         rb.constraints =
             RigidbodyConstraints2D.FreezeRotation;
 
+
         rb.angularVelocity = 0;
+
 
         eat_system.ResetSystem();
 
-        anim.SetBool("Die", false);
-        anim.SetBool("Climb", false);
 
-        anim.SetTrigger("Start");
-
-        transform.localScale =
-            Vector3.one;
+        anim.SetBool(
+            "Die",
+            false
+        );
+        anim.SetBool(
+         "Climb",
+         false
+     ); anim.SetTrigger("Start");
+        transform.localScale = Vector3.one;
     }
 }

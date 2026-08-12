@@ -21899,7 +21899,7 @@ MonoBehaviour:
   canJump: 1
   climbSpeed: 2
   climbAttachUpThreshold: 0.6
-  climbAttachDiagonalLimit: 0.5
+  climbAttachDiagonalLimit: 1
   climbReattachDelay: 0.2
   hitFreezeTime: 0.51
   hitKnockback: {x: 10, y: 5}
@@ -21934,6 +21934,7 @@ MonoBehaviour:
   detransformAnimTrigger: DeTransform
   rb: {fileID: 70515771043777974}
   anim: {fileID: 8603257414306407405}
+  moveInput: {x: 0, y: 0}
   isGrounded: 0
   Jump: {fileID: -2099379676528639254, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
   Move: {fileID: -1680190386980627800, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
