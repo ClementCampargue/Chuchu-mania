@@ -88,8 +88,7 @@ public class SC_player : MonoBehaviour
     public string detransformAnimTrigger = "DeTransform";
 
     public Rigidbody2D rb;
-    public Animator anim_;
-    private Animator anim;
+    public Animator anim;
 
     private Vector2 moveInput;
     public bool isGrounded;
@@ -186,8 +185,6 @@ public class SC_player : MonoBehaviour
         base_gravity = rb.gravityScale;
 
         spriteRenderer.material = normalMaterial;
-
-        anim = anim_;
     }
 
 
@@ -644,7 +641,7 @@ public class SC_player : MonoBehaviour
 
         if (hit != null)
         {
-            TakeDamage(
+            TakeDamage(1,
                 1,
                 hit.transform.position
             );
@@ -676,8 +673,8 @@ public class SC_player : MonoBehaviour
         
         if (hit != null)
         {
-            TakeDamage(
-                0,
+            TakeDamage(0,
+                2,
                 hit.transform.position
             );
 
@@ -701,7 +698,7 @@ public class SC_player : MonoBehaviour
 
     IEnumerator delay_death_enemy()
     {
-        yield return new WaitForSecondsRealtime(1.5f);
+        yield return new WaitForSecondsRealtime(1f);
 
 
         if (hit != null)
@@ -1047,6 +1044,7 @@ public class SC_player : MonoBehaviour
 
     public void TakeDamage(
         int damage,
+        int ejection_power,
         Vector3 sourcePosition)
     {
         // Double sécurité.
@@ -1102,7 +1100,7 @@ public class SC_player : MonoBehaviour
             hitCoroutine =
                 StartCoroutine(
                     HitFreezeWithKnockback(
-                        sourcePosition
+                        sourcePosition, ejection_power
                     )
                 );
 
@@ -1332,7 +1330,7 @@ public class SC_player : MonoBehaviour
     // =========================================================
 
     private IEnumerator HitFreezeWithKnockback(
-        Vector3 sourcePosition)
+        Vector3 sourcePosition,int power)
     {
         isFrozen = true;
 
@@ -1376,10 +1374,10 @@ public class SC_player : MonoBehaviour
         knockbackVelocity =
             new Vector2(
                 direction.x *
-                hitKnockback.x,
+                hitKnockback.x * power,
 
                 hitKnockback.y *
-                transform.localScale.y
+                transform.localScale.y * power
             );
 
 
@@ -1464,12 +1462,16 @@ public class SC_player : MonoBehaviour
             StopCoroutine(hitCoroutine);
         }
 
+        rb.linearVelocity =
+        Vector2.zero;
 
         GetComponent<SortingGroup>()
             .sortingLayerName = "UI";
-
-
+        rb.constraints = RigidbodyConstraints2D.FreezeAll;
+        rb.gravityScale = 0;
         isFrozen = true;
+        rb.linearVelocity =
+        Vector2.zero;
 
 
         anim.SetBool("Die", true);
@@ -1527,6 +1529,7 @@ public class SC_player : MonoBehaviour
     public void powerup()
     {
         anim.ResetTrigger("Punch");
+        anim.SetBool("Eat",false);
 
         anim.SetTrigger("Transform");
 
@@ -1879,13 +1882,14 @@ public class SC_player : MonoBehaviour
         eat_system.ResetSystem();
 
 
-        anim_.SetBool(
+        anim.SetBool(
             "Die",
             false
         );
-        anim_.SetBool(
+        anim.SetBool(
          "Climb",
          false
-     );
+     ); anim.SetTrigger("Start");
+        transform.localScale = Vector3.one;
     }
 }

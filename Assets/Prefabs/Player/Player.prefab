@@ -21932,7 +21932,7 @@ MonoBehaviour:
   transformAnimTrigger: Transform
   detransformAnimTrigger: DeTransform
   rb: {fileID: 70515771043777974}
-  anim_: {fileID: 8603257414306407405}
+  anim: {fileID: 8603257414306407405}
   isGrounded: 0
   Jump: {fileID: -2099379676528639254, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
   Move: {fileID: -1680190386980627800, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
@@ -22266,7 +22266,8 @@ MonoBehaviour:
   shakeAmplitude: 0
   shakeFrequency: 0
   shakeScreenDuration: 0
-  ps: []
+  ps:
+  - {fileID: 2596787470629622434}
   audio:
   - {fileID: 5434950776363754950}
   flash: 1
@@ -22277,9 +22278,9 @@ MonoBehaviour:
   verticalStretch: 1
   shakeDuration: 0.15
   shakeIntensity: 0.1
-  freeze: 0
-  freezeDuration: 0.05
-  slowMoScale: 0.05
+  freeze: 1
+  freezeDuration: 1
+  slowMoScale: 0
   fovCurve:
     serializedVersion: 2
     m_Curve:

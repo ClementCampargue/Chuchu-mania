@@ -258,7 +258,7 @@ public class SC_cage : MonoBehaviour
             SC_player.instance.rb.constraints =
                 RigidbodyConstraints2D.FreezeAll;
 
-            SC_player.instance.anim_.SetTrigger("End");
+            SC_player.instance.anim .SetTrigger("End");
             SC_player.instance.enabled = false;
 
             SC_music_manager.instance.stop_music();
@@ -267,7 +267,7 @@ public class SC_cage : MonoBehaviour
         {
             anim.SetTrigger("Damage");
 
-            SC_player.instance.anim_.SetTrigger("Punch");
+            SC_player.instance.anim.SetTrigger("Punch");
 
             juice_damage.PlayJuice();
         }

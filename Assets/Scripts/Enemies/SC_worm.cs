@@ -66,11 +66,20 @@ public class SC_enemy_random_teleport : MonoBehaviour
                 playerLayer
             );
 
-        if (hit != null || hit2 != null && SC_icecream_eat_system.instance.isPowerUpActive)
+        if (hit != null )
         {
             hasReacted = true;
             juice.PlayJuice();
             anim.SetTrigger(reactionTrigger);
+
+        }
+
+        if ( hit2 != null && SC_icecream_eat_system.instance.isPowerUpActive)
+        {
+            hasReacted = true;
+            juice.PlayJuice();
+            anim.SetTrigger(reactionTrigger);
+            SC_player.instance.anim.SetTrigger("Punch");
 
         }
     }

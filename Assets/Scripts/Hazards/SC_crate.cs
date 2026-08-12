@@ -47,7 +47,7 @@ public class SC_crate : MonoBehaviour
         {
             if (SC_icecream_eat_system.instance.isPowerUpActive)
             {
-                SC_player.instance.anim_.SetTrigger("Punch");
+                SC_player.instance.anim.SetTrigger("Punch");
                 die();
             }
         }
@@ -64,7 +64,7 @@ public class SC_crate : MonoBehaviour
         {
             if (damage_player)
             {
-                SC_player.instance.TakeDamage(1,transform.position);
+                SC_player.instance.TakeDamage(1,1,transform.position);
                 Destroy(gameObject);
             }
             else if(!isGrounded && SC_player.instance.isGrounded)

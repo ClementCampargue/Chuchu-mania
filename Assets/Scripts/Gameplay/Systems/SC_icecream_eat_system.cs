@@ -196,7 +196,7 @@ public class SC_icecream_eat_system : MonoBehaviour
         isEating = true;
         player.canMove = false;
         eating_sfx.Play();
-        player.anim_.SetBool("Eat", true);
+        player.anim.SetBool("Eat", true);
 
         for (int i = selectedCreams.Count - 1; i >= 0; i--)
         {
@@ -223,7 +223,7 @@ public class SC_icecream_eat_system : MonoBehaviour
                         calculate_score();
                         eat.PlayJuice();
 
-                        player.anim_.SetBool("Eat", false);
+                        player.anim.SetBool("Eat", false);
                         multiplierText.gameObject.SetActive(false);
                         isEating = false;
                         player.canMove = true;
@@ -261,7 +261,7 @@ public class SC_icecream_eat_system : MonoBehaviour
         for (int j = 0; j < creams.Count; j++)
             creams[j].currentTargetPosition = creams_points[j];
 
-        player.anim_.SetBool("Eat", false);
+        player.anim.SetBool("Eat", false);
         multiplierText.gameObject.SetActive(false);
         eating_sfx.Stop();
         calculate_score();

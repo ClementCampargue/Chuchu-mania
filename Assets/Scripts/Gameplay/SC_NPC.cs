@@ -145,7 +145,7 @@ public class SC_NPC : MonoBehaviour
         player.rb.constraints = RigidbodyConstraints2D.FreezeAll;
         player.canMove = false;
 
-        player.anim_.Play("Idle");
+        player.anim.Play("Idle");
     }
 
 

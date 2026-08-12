@@ -225,9 +225,9 @@ public class SC_pause : MonoBehaviour
         {
             SC_player.instance.enabled = false;
 
-            if (SC_player.instance.anim_ != null)
+            if (SC_player.instance.anim != null)
             {
-                SC_player.instance.anim_.updateMode =
+                SC_player.instance.anim.updateMode =
                     AnimatorUpdateMode.Normal;
             }
         }
@@ -271,9 +271,9 @@ public class SC_pause : MonoBehaviour
         {
             SC_player.instance.enabled = true;
 
-            if (SC_player.instance.anim_ != null)
+            if (SC_player.instance.anim != null)
             {
-                SC_player.instance.anim_.updateMode =
+                SC_player.instance.anim.updateMode =
                     AnimatorUpdateMode.UnscaledTime;
             }
         }
@@ -309,9 +309,9 @@ public class SC_pause : MonoBehaviour
             SC_player.instance.canMove = true;
             SC_player.instance.enabled = false;
 
-            if (SC_player.instance.anim_ != null)
+            if (SC_player.instance.anim  != null)
             {
-                SC_player.instance.anim_.updateMode =
+                SC_player.instance.anim.updateMode =
                     AnimatorUpdateMode.UnscaledTime;
             }
         }
@@ -403,9 +403,9 @@ public class SC_pause : MonoBehaviour
         {
             SC_player.instance.enabled = true;
 
-            if (SC_player.instance.anim_ != null)
+            if (SC_player.instance.anim != null)
             {
-                SC_player.instance.anim_.updateMode =
+                SC_player.instance.anim.updateMode =
                     AnimatorUpdateMode.UnscaledTime;
             }
         }
