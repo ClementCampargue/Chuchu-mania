@@ -95,7 +95,7 @@ MonoBehaviour:
     - choiceText: Juste le boss en fait
       answer:
       - character: {fileID: 11400000, guid: d545f39ec73e8a94f874387ac2d04a27, type: 2}
-        text: <sh>MAIS OUI!</sh><p=5> C'est la plus grande oeuvre la galaxie!
+        text: <sh>MAIS OUI!</sh><p=5> C'est la plus grande oeuvre de la galaxie!
         hasChoices: 0
         choices: []
       - character: {fileID: 11400000, guid: d545f39ec73e8a94f874387ac2d04a27, type: 2}
