@@ -9,164 +9,431 @@ public class SC_sticker_menu : MonoBehaviour
 {
     public static SC_sticker_menu instance;
 
+    [Header("UI")]
     public Animator anim;
 
     public TextMeshProUGUI sticker_name;
     public TextMeshProUGUI sticker_description;
     public TextMeshProUGUI artist;
     public TextMeshProUGUI number_of_stickers;
+
     public Image sprite_image;
+
     public List<GameObject> stars;
+
+    [Header("Mode")]
     public bool editing;
+
+    [Header("Input")]
     public InputActionReference quit;
     public InputActionReference edit;
+
+    [Header("Materials")]
     private Material unlocked;
     public Material not_unlocked;
 
+    [Header("Default Button")]
     public Button button;
+
+
+    // =========================================================
+    // UNITY
+    // =========================================================
+
     private void Awake()
     {
         instance = this;
     }
-    void Start()
+
+
+    private void Start()
     {
-        SC_scursorManager.instance.gameObject.SetActive(false);
-        SC_scursorManager.instance.enable_cursor();
-        Invoke("delay",0.25f);
-        unlocked = sprite_image.material;
-        SC_scursorManager.instance.gameObject.SetActive(true);
+        if (SC_scursorManager.instance != null)
+        {
+            SC_scursorManager.instance.gameObject.SetActive(false);
+            SC_scursorManager.instance.enable_cursor();
+        }
+
+        Invoke(nameof(DelayCursor), 0.25f);
+
+        if (sprite_image != null)
+        {
+            unlocked = sprite_image.material;
+        }
+
+        if (SC_scursorManager.instance != null)
+        {
+            SC_scursorManager.instance.gameObject.SetActive(true);
+        }
     }
 
-    void delay()
-    {
-        SC_scursorManager.instance.gameObject.SetActive(true);
 
+    private void DelayCursor()
+    {
+        if (SC_scursorManager.instance != null)
+        {
+            SC_scursorManager.instance.gameObject.SetActive(true);
+        }
     }
+
+
     private void OnEnable()
     {
-        edit.action.Enable();
-        quit.action.Enable();
+        if (edit != null)
+        {
+            edit.action.Enable();
+        }
+
+        if (quit != null)
+        {
+            quit.action.Enable();
+        }
     }
+
+
     private void OnDisable()
     {
-        SC_scursorManager.instance.gameObject.SetActive(false);
+        if (edit != null)
+        {
+            edit.action.Disable();
+        }
 
+        if (quit != null)
+        {
+            quit.action.Disable();
+        }
+
+        if (SC_scursorManager.instance != null)
+        {
+            SC_scursorManager.instance.gameObject.SetActive(false);
+        }
     }
+
+
     private void OnDestroy()
     {
-        SC_scursorManager.instance.gameObject.SetActive(false);
+        if (SC_scursorManager.instance != null)
+        {
+            SC_scursorManager.instance.gameObject.SetActive(false);
+        }
 
+        if (instance == this)
+        {
+            instance = null;
+        }
     }
-    // Update is called once per frame
-    void Update()
+
+
+    // =========================================================
+    // UPDATE
+    // =========================================================
+
+    private void Update()
     {
-        if (edit.action.IsPressed())
+        if (number_of_stickers != null &&
+            SC_StickerSaveSystem.instance != null)
         {
-            Debug.Log("EDIT PRESSED");
+            number_of_stickers.text =
+                SC_StickerSaveSystem.instance.stickerCount.ToString("D2");
         }
 
-        number_of_stickers.text = SC_StickerSaveSystem.instance.stickerCount.ToString("D2");
 
-        if (edit.action.WasPressedThisFrame() && !editing)
+        // =====================================================
+        // EDIT
+        // =====================================================
+
+        if (!editing &&
+            edit != null &&
+            edit.action.WasPressedThisFrame())
         {
-            start_edit_mode();
+            StartEditMode();
         }
 
-        if (quit.action.WasPerformedThisFrame() && !SC_scursorManager.instance.grabing)
-        {
-            SC_screenshot_transition.instance.Capture("HUB");
-        }
 
-        if (!editing)
+        // =====================================================
+        // QUIT
+        // =====================================================
+
+        if (quit != null &&
+            quit.action.WasPerformedThisFrame())
         {
-            if (SC_controller_manager.instance.using_controller)
+            if (SC_scursorManager.instance == null ||
+                !SC_scursorManager.instance.grabing)
             {
-                SC_scursorManager.instance.disable_cursor();
-            }
-            else
-            {
-                SC_scursorManager.instance.enable_cursor();
-            }
-            if (SC_controller_manager.instance.using_controller &&
-          EventSystem.current.currentSelectedGameObject == null)
-            {
-                if (button != null)
+                if (SC_screenshot_transition.instance != null)
                 {
-                    button.Select();
+                    SC_screenshot_transition.instance.Capture("HUB");
                 }
             }
         }
+
+
+        // =====================================================
+        // CURSEUR / MANETTE
+        // =====================================================
+
+        if (!editing)
+        {
+            UpdateCursorMode();
+        }
         else
         {
-            SC_scursorManager.instance.enable_cursor();
-
-            // Si on est en édition, à la manette,
-            // et qu'aucun bouton n'est sélectionné, on resélectionne le bouton actuel.
-
+            // En mode édition, la souris reste active.
+            if (SC_scursorManager.instance != null)
+            {
+                SC_scursorManager.instance.enable_cursor();
+            }
         }
     }
+
+
+    // =========================================================
+    // CURSOR MODE
+    // =========================================================
+
+    private void UpdateCursorMode()
+    {
+        if (SC_controller_manager.instance == null)
+            return;
+
+        bool usingController =
+            SC_controller_manager.instance.using_controller;
+
+
+        if (usingController)
+        {
+            // Manette :
+            // on cache le curseur.
+            if (SC_scursorManager.instance != null)
+            {
+                SC_scursorManager.instance.disable_cursor();
+            }
+
+            /*
+             * IMPORTANT :
+             *
+             * On ne force plus button.Select()
+             * à chaque frame.
+             *
+             * On le fait uniquement si absolument
+             * aucun objet n'est sélectionné.
+             */
+            if (EventSystem.current != null &&
+                EventSystem.current.currentSelectedGameObject == null)
+            {
+                SelectDefaultButton();
+            }
+        }
+        else
+        {
+            // Souris :
+            // on affiche le curseur.
+            if (SC_scursorManager.instance != null)
+            {
+                SC_scursorManager.instance.enable_cursor();
+            }
+        }
+    }
+
+
+    private void SelectDefaultButton()
+    {
+        if (button == null)
+            return;
+
+        if (!button.gameObject.activeInHierarchy)
+            return;
+
+        button.Select();
+    }
+
+
+    // =========================================================
+    // EDIT MODE
+    // =========================================================
+
+    public void StartEditMode()
+    {
+        editing = true;
+
+        /*
+         * On retire la sélection EventSystem.
+         * Le mode édition est contrôlé par la souris.
+         */
+        if (EventSystem.current != null)
+        {
+            EventSystem.current.SetSelectedGameObject(null);
+        }
+
+        if (SC_scursorManager.instance != null)
+        {
+            SC_scursorManager.instance.enable_cursor();
+        }
+
+        if (anim != null)
+        {
+            anim.SetTrigger("On");
+        }
+    }
+
 
     public void start_edit_mode()
     {
-        EventSystem.current.SetSelectedGameObject(null);
-        SC_scursorManager.instance.enable_cursor();
-        editing = true;
-        anim.SetTrigger("On");
+        StartEditMode();
     }
+
+
+    public void QuitEditMode()
+    {
+        editing = false;
+
+        if (anim != null)
+        {
+            anim.SetTrigger("Off");
+        }
+
+        if (SC_scursorManager.instance != null)
+        {
+            SC_scursorManager.instance.disable_cursor();
+        }
+
+        /*
+         * On ne sélectionne le bouton que si on est
+         * réellement en mode manette.
+         */
+        if (SC_controller_manager.instance != null &&
+            SC_controller_manager.instance.using_controller)
+        {
+            SelectDefaultButton();
+        }
+    }
+
 
     public void quit_edit_mode()
     {
-        
-        SC_scursorManager.instance.disable_cursor();
-        if (SC_controller_manager.instance.using_controller)
-        {
-            button.Select();
-        }
-        editing = false;
-        anim.SetTrigger("Off");
+        QuitEditMode();
     }
+
+
+    // =========================================================
+    // STICKER INFO
+    // =========================================================
 
     public void update_infos(SO_Sticker sticker, Button but)
     {
+        if (sticker == null)
+            return;
+
+
+        // -----------------------------------------------------
+        // STICKER DEBLOQUE
+        // -----------------------------------------------------
+
         if (sticker.unlocked)
         {
             button = but;
-            sticker_name.text = sticker.sticker_name;
-            sticker_description.text = sticker.description;
-            if (sticker.special_mat)
+
+            if (sticker_name != null)
             {
-                sprite_image.material = sticker.special_mat;
+                sticker_name.text =
+                    sticker.sticker_name;
             }
-            else
+
+            if (sticker_description != null)
             {
-                sprite_image.material = unlocked;
+                sticker_description.text =
+                    sticker.description;
+            }
+
+            if (sprite_image != null)
+            {
+                if (sticker.special_mat != null)
+                {
+                    sprite_image.material =
+                        sticker.special_mat;
+                }
+                else
+                {
+                    sprite_image.material =
+                        unlocked;
+                }
             }
         }
+
+
+        // -----------------------------------------------------
+        // STICKER VERROUILLE
+        // -----------------------------------------------------
+
         else
         {
-            sticker_name.text = "???";
-            sticker_description.text = sticker.unlock_conditions;
-            sprite_image.material = not_unlocked;
+            if (sticker_name != null)
+            {
+                sticker_name.text = "???";
+            }
 
+            if (sticker_description != null)
+            {
+                sticker_description.text =
+                    sticker.unlock_conditions;
+            }
+
+            if (sprite_image != null)
+            {
+                sprite_image.material =
+                    not_unlocked;
+            }
         }
-        artist.text = sticker.artist;
-        sprite_image.sprite = sticker.sticker_sprite;
+
+
+        // -----------------------------------------------------
+        // INFOS COMMUNES
+        // -----------------------------------------------------
+
+        if (artist != null)
+        {
+            artist.text = sticker.artist;
+        }
+
+        if (sprite_image != null)
+        {
+            sprite_image.sprite =
+                sticker.sticker_sprite;
+        }
+
         UpdateStars(sticker.rarity);
     }
+
+
+    // =========================================================
+    // STARS
+    // =========================================================
+
     public void UpdateStars(int rarity)
     {
+        if (stars == null)
+            return;
+
         foreach (GameObject star in stars)
         {
-            star.SetActive(false);
+            if (star != null)
+            {
+                star.SetActive(false);
+            }
         }
 
-        rarity = Mathf.Clamp(rarity, 0, stars.Count);
+        rarity = Mathf.Clamp(
+            rarity,
+            0,
+            stars.Count
+        );
 
         for (int i = 0; i < rarity; i++)
         {
-            stars[i].SetActive(true);
+            if (stars[i] != null)
+            {
+                stars[i].SetActive(true);
+            }
         }
     }
-
-    
 }

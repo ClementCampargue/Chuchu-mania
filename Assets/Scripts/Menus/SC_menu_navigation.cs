@@ -8,6 +8,10 @@ public class SC_menu_navigation : MonoBehaviour
     public int defaultSelected = 0;
     public bool autoFindButtons = true;
 
+    [Header("Mouse")]
+    [Tooltip("Si activé, bouger la souris ne désélectionne pas le bouton actuel.")]
+    public bool ignore_mouse = false;
+
     [Header("Input Actions")]
     public InputActionReference move;
     public InputActionReference submit;
@@ -41,9 +45,11 @@ public class SC_menu_navigation : MonoBehaviour
     [Tooltip("Le dernier bouton sélectionné est mémorisé quand le menu est fermé.")]
     [SerializeField] private int lastSelected = -1;
 
-    private int currentIndex;
-    private float lastMoveTime;
+    [Header("Navigation Cooldown")]
     public float moveCooldown = 0.05f;
+
+    private int currentIndex = -1;
+    private float lastMoveTime;
 
     private Vector2 currentMoveInput;
     private float holdTimer;
@@ -53,11 +59,20 @@ public class SC_menu_navigation : MonoBehaviour
     private bool mouseMode;
 
 
+    // =========================================================
+    // UNITY
+    // =========================================================
+
     private void Awake()
     {
         if (autoFindButtons)
         {
             buttons = GetComponentsInChildren<SC_Button>(true);
+        }
+
+        if (buttons == null)
+        {
+            buttons = new SC_Button[0];
         }
 
         if (sortButtonsByPosition)
@@ -66,40 +81,6 @@ public class SC_menu_navigation : MonoBehaviour
         }
 
         currentIndex = -1;
-    }
-
-
-    private void SortButtonsByRectTransform()
-    {
-        System.Array.Sort(buttons, (a, b) =>
-        {
-            RectTransform rectA = a.GetComponent<RectTransform>();
-            RectTransform rectB = b.GetComponent<RectTransform>();
-
-            if (rectA == null || rectB == null)
-                return 0;
-
-            Vector3 posA = rectA.localPosition;
-            Vector3 posB = rectB.localPosition;
-
-            float lineTolerance = 20f;
-
-            // Même ligne -> tri gauche droite
-            if (Mathf.Abs(posA.y - posB.y) < lineTolerance)
-            {
-                return posA.x.CompareTo(posB.x);
-            }
-
-            // Sinon tri vertical
-            if (reverseVertical)
-            {
-                return posB.y.CompareTo(posA.y);
-            }
-            else
-            {
-                return posA.y.CompareTo(posB.y);
-            }
-        });
     }
 
 
@@ -124,15 +105,19 @@ public class SC_menu_navigation : MonoBehaviour
             lastMousePosition = pointerPosition.action.ReadValue<Vector2>();
         }
 
+        mouseMode = false;
+
+        isHolding = false;
+        holdTimer = 0f;
+        currentMoveInput = Vector2.zero;
+
         SelectFirstAvailable();
     }
 
 
     private void OnDisable()
     {
-        // On mémorise toujours le dernier bouton sélectionné
-        if (currentIndex >= 0 &&
-            currentIndex < buttons.Length &&
+        if (IsValidIndex(currentIndex) &&
             IsButtonAvailable(buttons[currentIndex]))
         {
             lastSelected = currentIndex;
@@ -153,20 +138,48 @@ public class SC_menu_navigation : MonoBehaviour
         {
             pointerPosition.action.Disable();
         }
+
+        isHolding = false;
+        holdTimer = 0f;
+        currentMoveInput = Vector2.zero;
     }
 
 
     private void Update()
     {
-        // =========================
-        // NAVIGATION STICK / CLAVIER
-        // =========================
+        // =====================================================
+        // SOURIS
+        // =====================================================
+
+        if (pointerPosition != null)
+        {
+            Vector2 mousePos = pointerPosition.action.ReadValue<Vector2>();
+
+            // Si ignore_mouse est activé :
+            // la souris est complètement ignorée par ce système.
+            if (!ignore_mouse)
+            {
+                if ((mousePos - lastMousePosition).sqrMagnitude > 1f)
+                {
+                    if (!mouseMode)
+                    {
+                        EnterMouseMode();
+                    }
+                }
+            }
+
+            lastMousePosition = mousePos;
+        }
+
+
+        // =====================================================
+        // NAVIGATION MANETTE / CLAVIER
+        // =====================================================
 
         if (move != null && !mouseMode)
         {
             Vector2 input = move.action.ReadValue<Vector2>();
 
-            // Ignore les axes qui ne correspondent pas au menu
             input = FilterNavigationInput(input);
 
             if (input.sqrMagnitude > 0.2f)
@@ -176,10 +189,8 @@ public class SC_menu_navigation : MonoBehaviour
                     currentMoveInput = input;
                     isHolding = true;
 
-                    // Premier mouvement immédiat
                     Navigate(input);
 
-                    // Délai avant répétition
                     holdTimer = initialDelay;
                 }
                 else
@@ -202,43 +213,94 @@ public class SC_menu_navigation : MonoBehaviour
                 holdTimer = 0f;
             }
         }
+    }
 
 
-        // =========================
-        // SOURIS
-        // =========================
+    // =========================================================
+    // MODE SOURIS
+    // =========================================================
 
-        if (pointerPosition != null)
+    private void EnterMouseMode()
+    {
+        // Sécurité supplémentaire.
+        if (ignore_mouse)
+            return;
+
+        mouseMode = true;
+
+        isHolding = false;
+        holdTimer = 0f;
+        currentMoveInput = Vector2.zero;
+
+        ClearVisualSelection();
+    }
+
+
+    private void ClearVisualSelection()
+    {
+        if (IsValidIndex(currentIndex) &&
+            buttons[currentIndex] != null)
         {
-            Vector2 mousePos = pointerPosition.action.ReadValue<Vector2>();
-
-            if ((mousePos - lastMousePosition).sqrMagnitude > 1f)
-            {
-                mouseMode = true;
-            }
-
-            lastMousePosition = mousePos;
+            buttons[currentIndex].UnSelect();
         }
     }
 
+
+    private void EnterNavigationMode()
+    {
+        if (!mouseMode)
+            return;
+
+        mouseMode = false;
+
+        RestoreCurrentSelection();
+    }
+
+
+    private void RestoreCurrentSelection()
+    {
+        if (buttons == null || buttons.Length == 0)
+            return;
+
+        if (!IsValidIndex(currentIndex) ||
+            !IsButtonAvailable(buttons[currentIndex]))
+        {
+            int available = FindFirstAvailable();
+
+            if (available < 0)
+                return;
+
+            currentIndex = available;
+            lastSelected = available;
+        }
+
+        ClearAllSelectionsExcept(currentIndex);
+
+        buttons[currentIndex].Select();
+    }
+
+
+    // =========================================================
+    // INPUT MOVE
+    // =========================================================
 
     private void OnMoveInput(InputAction.CallbackContext ctx)
     {
         Vector2 input = ctx.ReadValue<Vector2>();
 
-        // Ignore complètement les inputs qui ne correspondent
-        // pas à l'orientation du menu.
         input = FilterNavigationInput(input);
 
         if (input.sqrMagnitude < 0.2f)
             return;
 
+        // Une entrée manette/clavier force toujours
+        // le retour en mode navigation.
+        EnterNavigationMode();
+
         currentMoveInput = input;
 
         if (!isHolding)
         {
-            mouseMode = false;
-
             Navigate(currentMoveInput);
 
             isHolding = true;
@@ -255,12 +317,10 @@ public class SC_menu_navigation : MonoBehaviour
     }
 
 
-    /// <summary>
-    /// Filtre l'input selon l'orientation du menu.
-    /// Horizontal : ignore Y
-    /// Vertical   : ignore X
-    /// Both       : conserve X et Y
-    /// </summary>
+    // =========================================================
+    // FILTER AXIS
+    // =========================================================
+
     private Vector2 FilterNavigationInput(Vector2 input)
     {
         switch (navigationAxis)
@@ -281,43 +341,48 @@ public class SC_menu_navigation : MonoBehaviour
     }
 
 
+    // =========================================================
+    // NAVIGATION
+    // =========================================================
+
     private void Navigate(Vector2 value)
     {
-        // Sécurité supplémentaire : filtre l'input même si
-        // Navigate() est appelé depuis un autre endroit.
         value = FilterNavigationInput(value);
-
-        if (Time.unscaledTime < lastMoveTime + moveCooldown)
-            return;
 
         if (value.sqrMagnitude < 0.2f)
             return;
 
-        int next = currentIndex;
+        if (Time.unscaledTime < lastMoveTime + moveCooldown)
+            return;
+
+        EnsureValidCurrentIndex();
+
+        int next;
 
         if (!useGrid)
         {
-            int direction = 0;
+            int direction;
 
             if (Mathf.Abs(value.y) > Mathf.Abs(value.x))
             {
-                // Navigation verticale
-                direction = value.y > 0 ? -1 : 1;
+                direction = value.y > 0f ? -1 : 1;
             }
             else
             {
-                // Navigation horizontale
-                direction = value.x > 0 ? 1 : -1;
+                direction = value.x > 0f ? 1 : -1;
             }
 
-            next = GetNextAvailableIndex(currentIndex, direction);
+            next = GetNextAvailableIndex(
+                currentIndex,
+                direction
+            );
         }
         else
         {
             next = NavigateGrid(value);
         }
 
-        if (next != currentIndex)
+        if (next >= 0 && next != currentIndex)
         {
             Select(next);
         }
@@ -326,9 +391,12 @@ public class SC_menu_navigation : MonoBehaviour
     }
 
 
+    // =========================================================
+    // GRID
+    // =========================================================
+
     private int NavigateGrid(Vector2 value)
     {
-        // Sécurité : filtre l'input avant de calculer ligne/colonne
         value = FilterNavigationInput(value);
 
         if (value.sqrMagnitude < 0.2f)
@@ -337,20 +405,28 @@ public class SC_menu_navigation : MonoBehaviour
         if (columns <= 0)
             columns = 1;
 
+        EnsureValidCurrentIndex();
+
         int row = currentIndex / columns;
         int col = currentIndex % columns;
 
-        if (Mathf.Abs(value.y) > Mathf.Abs(value.x))
+        bool vertical =
+            Mathf.Abs(value.y) > Mathf.Abs(value.x);
+
+        if (vertical)
         {
-            row += value.y > 0 ? -1 : 1;
+            row += value.y > 0f ? -1 : 1;
         }
         else
         {
-            col += value.x > 0 ? 1 : -1;
+            col += value.x > 0f ? 1 : -1;
         }
 
-        int maxRows = Mathf.CeilToInt((float)buttons.Length / columns);
+        int maxRows = Mathf.CeilToInt(
+            (float)buttons.Length / columns
+        );
 
+        // Horizontal
         if (wrapHorizontal)
         {
             if (col < 0)
@@ -361,9 +437,14 @@ public class SC_menu_navigation : MonoBehaviour
         }
         else
         {
-            col = Mathf.Clamp(col, 0, columns - 1);
+            col = Mathf.Clamp(
+                col,
+                0,
+                columns - 1
+            );
         }
 
+        // Vertical
         if (wrapVertical)
         {
             if (row < 0)
@@ -374,139 +455,327 @@ public class SC_menu_navigation : MonoBehaviour
         }
         else
         {
-            row = Mathf.Clamp(row, 0, maxRows - 1);
+            row = Mathf.Clamp(
+                row,
+                0,
+                maxRows - 1
+            );
         }
 
-        int index = row * columns + col;
+        int targetIndex = row * columns + col;
 
-        if (index >= buttons.Length)
-            return currentIndex;
+        if (targetIndex < 0 ||
+            targetIndex >= buttons.Length)
+        {
+            return FindClosestAvailableInDirection(
+                currentIndex,
+                value
+            );
+        }
 
-        if (!IsButtonAvailable(buttons[index]))
-            return GetNextAvailableIndex(index, 1);
+        if (!IsButtonAvailable(buttons[targetIndex]))
+        {
+            return FindClosestAvailableInDirection(
+                currentIndex,
+                value
+            );
+        }
 
-        return index;
+        return targetIndex;
     }
 
+
+    // =========================================================
+    // GRID FALLBACK
+    // =========================================================
+
+    private int FindClosestAvailableInDirection(
+        int startIndex,
+        Vector2 direction)
+    {
+        if (buttons == null ||
+            buttons.Length == 0)
+        {
+            return -1;
+        }
+
+        if (!IsValidIndex(startIndex))
+            return FindFirstAvailable();
+
+        int startRow = startIndex / columns;
+        int startCol = startIndex % columns;
+
+        bool vertical =
+            Mathf.Abs(direction.y) > Mathf.Abs(direction.x);
+
+        int step = vertical
+            ? (direction.y > 0f ? -1 : 1)
+            : (direction.x > 0f ? 1 : -1);
+
+        int maxRows = Mathf.CeilToInt(
+            (float)buttons.Length / columns
+        );
+
+        int row = startRow;
+        int col = startCol;
+
+        for (int i = 0; i < buttons.Length; i++)
+        {
+            if (vertical)
+            {
+                row += step;
+
+                if (wrapVertical)
+                {
+                    if (row < 0)
+                        row = maxRows - 1;
+
+                    if (row >= maxRows)
+                        row = 0;
+                }
+                else
+                {
+                    if (row < 0 ||
+                        row >= maxRows)
+                    {
+                        break;
+                    }
+                }
+            }
+            else
+            {
+                col += step;
+
+                if (wrapHorizontal)
+                {
+                    if (col < 0)
+                        col = columns - 1;
+
+                    if (col >= columns)
+                        col = 0;
+                }
+                else
+                {
+                    if (col < 0 ||
+                        col >= columns)
+                    {
+                        break;
+                    }
+                }
+            }
+
+            int index = row * columns + col;
+
+            if (index >= 0 &&
+                index < buttons.Length &&
+                IsButtonAvailable(buttons[index]))
+            {
+                return index;
+            }
+        }
+
+        return startIndex;
+    }
+
+
+    // =========================================================
+    // SUBMIT
+    // =========================================================
 
     private void OnSubmit(InputAction.CallbackContext ctx)
     {
+        // En mode souris, pas de Submit clavier/manette.
         if (mouseMode)
             return;
 
-        if (currentIndex >= 0 &&
-            currentIndex < buttons.Length &&
-            IsButtonAvailable(buttons[currentIndex]))
-        {
-            buttons[currentIndex].Press();
-        }
+        EnsureValidCurrentIndex();
+
+        if (!IsValidIndex(currentIndex))
+            return;
+
+        SC_Button selectedButton = buttons[currentIndex];
+
+        if (!IsButtonAvailable(selectedButton))
+            return;
+
+        selectedButton.Press();
     }
 
 
+    // =========================================================
+    // SELECTION
+    // =========================================================
+
     private void Select(int index)
     {
-        if (buttons == null || buttons.Length == 0)
+        if (buttons == null ||
+            buttons.Length == 0)
+        {
             return;
+        }
 
-        if (index < 0 || index >= buttons.Length)
+        if (!IsValidIndex(index))
             return;
 
         if (!IsButtonAvailable(buttons[index]))
             return;
 
-        // Désélectionne l'ancien bouton
-        if (currentIndex >= 0 &&
-            currentIndex < buttons.Length &&
-            IsButtonAvailable(buttons[currentIndex]))
-        {
-            buttons[currentIndex].UnSelect();
-        }
+        // Garantit qu'un seul bouton est visuellement sélectionné.
+        ClearAllSelectionsExcept(index);
 
-        // Nouvelle sélection
         currentIndex = index;
-
-        // Mémorise immédiatement le dernier bouton
         lastSelected = index;
 
-        buttons[currentIndex].Select();
+        buttons[index].Select();
     }
 
 
-    private void SelectFirstAvailable()
+    private void ClearAllSelectionsExcept(int exceptIndex)
     {
-        if (buttons == null || buttons.Length == 0)
+        if (buttons == null)
             return;
 
-        // ==========================================
-        // 1. ESSAIE DE REPRENDRE LE DERNIER BOUTON
-        // ==========================================
-
-        if (lastSelected >= 0 &&
-            lastSelected < buttons.Length &&
-            IsButtonAvailable(buttons[lastSelected]))
+        for (int i = 0; i < buttons.Length; i++)
         {
-            currentIndex = lastSelected;
-            buttons[currentIndex].Select();
+            if (i == exceptIndex)
+                continue;
+
+            if (buttons[i] != null)
+            {
+                buttons[i].UnSelect();
+            }
+        }
+    }
+
+
+    // =========================================================
+    // INITIAL SELECTION
+    // =========================================================
+
+    private void SelectFirstAvailable()
+    {
+        if (buttons == null ||
+            buttons.Length == 0)
+        {
             return;
         }
 
-        // ==========================================
-        // 2. SINON UTILISE LE BOUTON PAR DÉFAUT
-        // ==========================================
+        ClearAllSelectionsExcept(-1);
 
-        if (defaultSelected >= 0 &&
-            defaultSelected < buttons.Length &&
+        // Dernier bouton
+        if (IsValidIndex(lastSelected) &&
+            IsButtonAvailable(buttons[lastSelected]))
+        {
+            currentIndex = lastSelected;
+
+            buttons[currentIndex].Select();
+
+            return;
+        }
+
+        // Bouton par défaut
+        if (IsValidIndex(defaultSelected) &&
             IsButtonAvailable(buttons[defaultSelected]))
         {
             currentIndex = defaultSelected;
             lastSelected = defaultSelected;
 
             buttons[currentIndex].Select();
+
             return;
         }
 
-        // ==========================================
-        // 3. SINON PREND LE PREMIER DISPONIBLE
-        // ==========================================
+        // Premier disponible
+        int first = FindFirstAvailable();
 
-        for (int i = 0; i < buttons.Length; i++)
+        if (first >= 0)
         {
-            if (IsButtonAvailable(buttons[i]))
-            {
-                currentIndex = i;
-                lastSelected = i;
+            currentIndex = first;
+            lastSelected = first;
 
-                buttons[i].Select();
-                return;
-            }
+            buttons[currentIndex].Select();
         }
     }
 
 
-    /// <summary>
-    /// Remet la sélection sur le bouton défini dans defaultSelected.
-    /// Utilise cette fonction lorsque tu veux volontairement
-    /// réinitialiser la sélection du menu.
-    /// </summary>
+    // =========================================================
+    // RESET
+    // =========================================================
+
     public void ResetFirstSelected()
     {
-        if (buttons == null || buttons.Length == 0)
-            return;
-
-        // Désélectionne le bouton actuel
-        if (currentIndex >= 0 &&
-            currentIndex < buttons.Length &&
-            IsButtonAvailable(buttons[currentIndex]))
+        if (buttons == null ||
+            buttons.Length == 0)
         {
-            buttons[currentIndex].UnSelect();
+            return;
         }
 
-        // Oublie le dernier bouton
+        ClearAllSelectionsExcept(-1);
+
         lastSelected = -1;
         currentIndex = -1;
 
-        // Repart sur defaultSelected
+        mouseMode = false;
+        isHolding = false;
+        holdTimer = 0f;
+
         SelectFirstAvailable();
+    }
+
+
+    // =========================================================
+    // VALIDATION
+    // =========================================================
+
+    private void EnsureValidCurrentIndex()
+    {
+        if (IsValidIndex(currentIndex) &&
+            IsButtonAvailable(buttons[currentIndex]))
+        {
+            return;
+        }
+
+        int available = FindFirstAvailable();
+
+        if (available >= 0)
+        {
+            currentIndex = available;
+            lastSelected = available;
+
+            if (!mouseMode)
+            {
+                ClearAllSelectionsExcept(currentIndex);
+
+                buttons[currentIndex].Select();
+            }
+        }
+        else
+        {
+            currentIndex = -1;
+        }
+    }
+
+
+    private int FindFirstAvailable()
+    {
+        if (buttons == null)
+            return -1;
+
+        for (int i = 0; i < buttons.Length; i++)
+        {
+            if (IsButtonAvailable(buttons[i]))
+                return i;
+        }
+
+        return -1;
+    }
+
+
+    private bool IsValidIndex(int index)
+    {
+        return buttons != null &&
+               index >= 0 &&
+               index < buttons.Length;
     }
 
 
@@ -518,12 +787,24 @@ public class SC_menu_navigation : MonoBehaviour
     }
 
 
-    private int GetNextAvailableIndex(int startIndex, int direction)
-    {
-        if (buttons == null || buttons.Length == 0)
-            return -1;
+    // =========================================================
+    // GET NEXT AVAILABLE
+    // =========================================================
 
-        if (startIndex < 0 || startIndex >= buttons.Length)
+    private int GetNextAvailableIndex(
+        int startIndex,
+        int direction)
+    {
+        if (buttons == null ||
+            buttons.Length == 0)
+        {
+            return -1;
+        }
+
+        if (direction == 0)
+            direction = 1;
+
+        if (!IsValidIndex(startIndex))
             startIndex = 0;
 
         int index = startIndex;
@@ -533,15 +814,92 @@ public class SC_menu_navigation : MonoBehaviour
             index += direction;
 
             if (index < 0)
-                index = buttons.Length - 1;
+            {
+                if (wrapHorizontal || wrapVertical)
+                    index = buttons.Length - 1;
+                else
+                    return startIndex;
+            }
 
             if (index >= buttons.Length)
-                index = 0;
+            {
+                if (wrapHorizontal || wrapVertical)
+                    index = 0;
+                else
+                    return startIndex;
+            }
 
             if (IsButtonAvailable(buttons[index]))
                 return index;
         }
 
         return startIndex;
+    }
+
+
+    // =========================================================
+    // SORT
+    // =========================================================
+
+    private void SortButtonsByRectTransform()
+    {
+        System.Array.Sort(buttons, (a, b) =>
+        {
+            if (a == null)
+                return 1;
+
+            if (b == null)
+                return -1;
+
+            RectTransform rectA =
+                a.GetComponent<RectTransform>();
+
+            RectTransform rectB =
+                b.GetComponent<RectTransform>();
+
+            if (rectA == null ||
+                rectB == null)
+            {
+                return 0;
+            }
+
+            Vector3 posA = rectA.localPosition;
+            Vector3 posB = rectB.localPosition;
+
+            float lineTolerance = 20f;
+
+            // Même ligne = gauche vers droite.
+            if (Mathf.Abs(posA.y - posB.y) < lineTolerance)
+            {
+                return posA.x.CompareTo(posB.x);
+            }
+
+            // Tri vertical.
+            if (reverseVertical)
+            {
+                return posB.y.CompareTo(posA.y);
+            }
+
+            return posA.y.CompareTo(posB.y);
+        });
+    }
+
+
+    // =========================================================
+    // PUBLIC ACCESS
+    // =========================================================
+
+    public int GetCurrentIndex()
+    {
+        return currentIndex;
+    }
+
+
+    public SC_Button GetCurrentButton()
+    {
+        if (!IsValidIndex(currentIndex))
+            return null;
+
+        return buttons[currentIndex];
     }
 }

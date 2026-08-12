@@ -580,6 +580,7 @@ MonoBehaviour:
   buttons: []
   defaultSelected: 0
   autoFindButtons: 1
+  ignore_mouse: 1
   move: {fileID: -1680190386980627800, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
   submit: {fileID: -2099379676528639254, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
   pointerPosition: {fileID: -5630151704836100654, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
@@ -592,6 +593,7 @@ MonoBehaviour:
   navigationAxis: 1
   initialDelay: 0.4
   repeatRate: 0.1
+  lastSelected: -1
   moveCooldown: 0.1
 --- !u!1 &8110095047518472068
 GameObject:

@@ -373,6 +373,8 @@ public class SC_player : MonoBehaviour
 
         if (!wasGrounded && isGrounded)
         {
+            anim.ResetTrigger("Hit");
+
             if (rb.linearVelocity.y <= 0.5f)
             {
                 anim.ResetTrigger("Jump");

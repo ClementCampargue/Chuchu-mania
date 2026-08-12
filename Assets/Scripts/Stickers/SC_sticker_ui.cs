@@ -687,7 +687,7 @@ public class SC_sticker_UI : MonoBehaviour,
         anim.SetTrigger("drop");
 
 
-        SC_sticker_menu.instance.quit_edit_mode();
+      SC_sticker_menu.instance.quit_edit_mode();
 
 
         SC_StickerSaveSystem.instance.AutoSave();
@@ -942,7 +942,10 @@ public class SC_sticker_UI : MonoBehaviour,
 
     void DeleteSticker()
     {
-        SC_sticker_menu.instance.quit_edit_mode();
+        if (!SC_controller_manager.instance.using_controller)
+        {
+            SC_sticker_menu.instance.quit_edit_mode();
+        }
 
 
         SC_StickerSaveSystem.instance.AutoSave();
