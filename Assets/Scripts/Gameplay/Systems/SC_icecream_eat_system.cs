@@ -94,6 +94,7 @@ public class SC_icecream_eat_system : MonoBehaviour
         {
             isSelecting = false;
             forceEatAll = true;
+            player.rb.linearVelocity = Vector2.zero;
 
             StartCoroutine(EatSelectedCreamsCoroutine());
         }
@@ -180,6 +181,8 @@ public class SC_icecream_eat_system : MonoBehaviour
     {
         selectedCreams = new List<SC_icecream_fall>(creams);
         multiplier = selectedCreams.Count;
+        player.rb.linearVelocity = Vector2.zero;
+
 
         forceEatAll = true;
         StartCoroutine(EatSelectedCreamsCoroutine());
@@ -187,12 +190,12 @@ public class SC_icecream_eat_system : MonoBehaviour
 
     private IEnumerator EatSelectedCreamsCoroutine()
     {
+        player.moveInput = Vector2.zero;
+
         SC_combo_system.Instance.ResetCombo();
         eaten_cream = 0;
-
         multiplierText.gameObject.SetActive(true);
         UpdateMultiplierUI();
-
         isEating = true;
         player.canMove = false;
         eating_sfx.Play();
@@ -203,6 +206,7 @@ public class SC_icecream_eat_system : MonoBehaviour
             StartCoroutine(ScaleBack());
             eaten_cream++;
 
+            player.moveInput = Vector2.zero;
             SC_icecream_fall cream = selectedCreams[i];
             cream.Deselect();
 
@@ -213,7 +217,7 @@ public class SC_icecream_eat_system : MonoBehaviour
             currrent_ice_cream--;
 
             float targetFill = displayedFill + stomach_fill_per_cream;
-
+     
             if (progressiveEat)
             {
                 while (displayedFill < targetFill - 0.001f)

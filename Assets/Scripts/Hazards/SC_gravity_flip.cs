@@ -12,6 +12,7 @@ public class SC_gravity_flip : MonoBehaviour
     public static SC_gravity_flip instance;
     public static event Action<bool> OnGravityChanged;
     public Animator anim;
+    private sc_health_system health;
     private void Awake()
     {
         instance = this;
@@ -19,12 +20,23 @@ public class SC_gravity_flip : MonoBehaviour
     private void Start()
     {
         player = SC_player.instance;
+        health = sc_health_system.instance;
 
         if (player != null)
         {
             StartCoroutine(GravityLoop());
         }
 
+    }
+
+    private void Update()
+    {
+        if(health.current_health == 0)
+        {
+            StopAllCoroutines();
+            anim.enabled = false;
+            flipInterval = 1000000000;
+        }
     }
 
     private IEnumerator GravityLoop()

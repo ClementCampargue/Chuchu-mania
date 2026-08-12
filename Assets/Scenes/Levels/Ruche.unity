@@ -1047,6 +1047,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3356851276348862139, guid: 894c74b520a88a24e88966d64bc5ea3e, type: 3}
+      propertyPath: stomach_fill_per_cream
+      value: 0.1
+      objectReference: {fileID: 0}
     - target: {fileID: 5541224540911051492, guid: 894c74b520a88a24e88966d64bc5ea3e, type: 3}
       propertyPath: m_Name
       value: GAME MASTER (1)
@@ -1057,7 +1061,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 9042987386885964439, guid: 894c74b520a88a24e88966d64bc5ea3e, type: 3}
       propertyPath: orthographic size
-      value: 7.9083333
+      value: 8.416667
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

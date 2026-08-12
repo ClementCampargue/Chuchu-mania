@@ -90,7 +90,7 @@ public class SC_player : MonoBehaviour
     public Rigidbody2D rb;
     public Animator anim;
 
-    private Vector2 moveInput;
+    public Vector2 moveInput;
     public bool isGrounded;
     private bool wasGrounded;
     private bool isFrozen;
@@ -366,7 +366,7 @@ public class SC_player : MonoBehaviour
         {
             anim.ResetTrigger("Jump");
             anim.SetTrigger("Land");
-
+            moveSpeed = base_speed;
             land.PlayJuice();
         }
 
@@ -379,6 +379,7 @@ public class SC_player : MonoBehaviour
             {
                 anim.ResetTrigger("Jump");
                 anim.SetTrigger("Land");
+                moveSpeed = base_speed;
 
                 land.PlayJuice();
             }
