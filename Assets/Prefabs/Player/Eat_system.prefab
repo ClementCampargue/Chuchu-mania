@@ -245,7 +245,7 @@ MonoBehaviour:
   currrent_ice_cream: 0
   eat_input: {fileID: -7868807682114652187, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
   mat: {fileID: 2100000, guid: d465e86a57e33f84abb482636275e583, type: 2}
-  stomach_fill_per_cream: 0.05
+  stomach_fill_per_cream: 0.03
   stomach_fill_speed: 25
   delayBetweenCreams: 0.1
   minDistanceForSpawn: 2
