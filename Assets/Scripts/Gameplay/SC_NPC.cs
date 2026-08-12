@@ -154,7 +154,7 @@ public class SC_NPC : MonoBehaviour
         // Passage au dialogue suivant
         NextDialogue();
 
-
+        player.jumpBufferCounter = 0;
         player.enabled = false;
         Invoke(nameof(DelayEnd), 0.1f);
     }

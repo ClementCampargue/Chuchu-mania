@@ -24,7 +24,7 @@ public class SC_player : MonoBehaviour
 
     [Header("Jump Input Buffer")]
     public float jumpBufferTime = 0.1f;
-    private float jumpBufferCounter;
+   [HideInInspector] public float jumpBufferCounter;
 
     private float jumpTimeCounter;
     private bool isJumping;

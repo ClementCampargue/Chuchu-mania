@@ -332,6 +332,7 @@ public class SC_pause : MonoBehaviour
 
         if (buttons != null)
             buttons.SetActive(false);
+        Time.timeScale = 0f;
     }
 
 
@@ -345,6 +346,7 @@ public class SC_pause : MonoBehaviour
 
         if (buttons != null)
             buttons.SetActive(false);
+        Time.timeScale = 0f;
     }
 
 
@@ -363,6 +365,7 @@ public class SC_pause : MonoBehaviour
 
         if (buttons != null)
             buttons.SetActive(true);
+        Time.timeScale = 0f;
     }
 
 
@@ -375,6 +378,7 @@ public class SC_pause : MonoBehaviour
 
         if (buttons != null)
             buttons.SetActive(true);
+        Time.timeScale = 0f;
     }
 
 
