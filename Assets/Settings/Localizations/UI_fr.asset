@@ -94,6 +94,70 @@ MonoBehaviour:
     m_Localized: Quitter le jeu
     m_Metadata:
       m_Items: []
+  - m_Id: 23464717540671488
+    m_Localized: Son
+    m_Metadata:
+      m_Items: []
+  - m_Id: 23464778475520000
+    m_Localized: "G\xE9n\xE9ral"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 23464843403345920
+    m_Localized: Musique
+    m_Metadata:
+      m_Items: []
+  - m_Id: 23464876286689280
+    m_Localized: Bruitages
+    m_Metadata:
+      m_Items: []
+  - m_Id: 23465265417437184
+    m_Localized: Affichage
+    m_Metadata:
+      m_Items: []
+  - m_Id: 23465304638373888
+    m_Localized: "R\xE9solution"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 23465344706560000
+    m_Localized: "Fen\xEAtre"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 23465481541533696
+    m_Localized: Overlay
+    m_Metadata:
+      m_Items: []
+  - m_Id: 23465505230962688
+    m_Localized: Jeu
+    m_Metadata:
+      m_Items: []
+  - m_Id: 23465544858746880
+    m_Localized: Langue
+    m_Metadata:
+      m_Items: []
+  - m_Id: 23465582536179712
+    m_Localized: Filtre daltonien
+    m_Metadata:
+      m_Items: []
+  - m_Id: 23465784605163520
+    m_Localized: Cheats
+    m_Metadata:
+      m_Items: []
+  - m_Id: 23466108808085504
+    m_Localized: Manette
+    m_Metadata:
+      m_Items: []
+  - m_Id: 23466137996247040
+    m_Localized: Vibrations de la manette
+    m_Metadata:
+      m_Items: []
+  - m_Id: 23467755491835904
+    m_Localized: "Tremblements de l'\xE9cran"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 23472744364785664
+    m_Localized: "Pas dans la d\xE9mo"
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds: []

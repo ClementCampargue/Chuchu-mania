@@ -12,6 +12,7 @@ public class SC_pause : MonoBehaviour
     [Header("Menu Pause")]
     public GameObject pauseMenu;
     public GameObject tuto_window;
+    public GameObject settings_;
     public GameObject buttons;
 
     [Header("Objet à masquer")]
@@ -195,6 +196,8 @@ public class SC_pause : MonoBehaviour
         // État du menu principal
         if (tuto_window != null)
             tuto_window.SetActive(false);
+        if (settings_ != null)
+            settings_.SetActive(false);
 
         if (buttons != null)
             buttons.SetActive(true);
@@ -242,6 +245,9 @@ public class SC_pause : MonoBehaviour
 
         if (tuto_window != null)
             tuto_window.SetActive(false);
+
+        if (settings_ != null)
+            settings_.SetActive(false);
 
         if (buttons != null)
             buttons.SetActive(true);
@@ -334,8 +340,8 @@ public class SC_pause : MonoBehaviour
         settings = true;
         tuto = false;
 
-        if (tuto_window != null)
-            tuto_window.SetActive(true);
+        if (settings_ != null)
+            settings_.SetActive(true);
 
         if (buttons != null)
             buttons.SetActive(false);
@@ -364,8 +370,8 @@ public class SC_pause : MonoBehaviour
     {
         settings = false;
 
-        if (tuto_window != null)
-            tuto_window.SetActive(false);
+        if (settings_ != null)
+            settings_.SetActive(false);
 
         if (buttons != null)
             buttons.SetActive(true);

@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3369462965948076935}
   - component: {fileID: 8354008221963834404}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: Heart (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -26,8 +26,8 @@ Transform:
   m_GameObject: {fileID: 1129198110479708270}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 1.82, y: -1.71, z: 0}
-  m_LocalScale: {x: 2.6882, y: 2.6882, z: 2.6882}
+  m_LocalPosition: {x: 3.0195394, y: -1.5457964, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 6734083113427776967}
@@ -76,12 +76,12 @@ SpriteRenderer:
   m_SortingLayerID: 458446795
   m_SortingLayer: 1
   m_SortingOrder: 3
-  m_Sprite: {fileID: 21300000, guid: f1bc4e36a812902418d91dd7a84bace0, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 3f31bc9901764244eb6d87215773d07f, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 0.58, y: 0.74}
+  m_Size: {x: 0.36666667, y: 0.33333334}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
@@ -97,13 +97,13 @@ GameObject:
   m_Component:
   - component: {fileID: 1010977233292934254}
   - component: {fileID: 1418306403842676260}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: outline_estomac
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1010977233292934254
 Transform:
   m_ObjectHideFlags: 0
@@ -113,8 +113,8 @@ Transform:
   m_GameObject: {fileID: 1769674814576579717}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.03527212, y: -2.6800003, z: 0}
-  m_LocalScale: {x: 2.6882, y: 2.6882, z: 2.6882}
+  m_LocalPosition: {x: 0.6510005, y: -2.6929998, z: 0}
+  m_LocalScale: {x: 1.938639, y: 1.938639, z: 1.938639}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 6734083113427776967}
@@ -162,7 +162,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 458446795
   m_SortingLayer: 1
-  m_SortingOrder: 3
+  m_SortingOrder: 7
   m_Sprite: {fileID: 21300000, guid: 389ca3e6e72b53b498b65f3a61112ac3, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -184,7 +184,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6734083113427776967}
   - component: {fileID: 5286284455900837583}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: Eat_system
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -227,8 +227,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   multiplierText: {fileID: 0}
-  progressiveEat: 0
+  progressiveEat: 1
   eatSpeed: 0.5
+  isEating: 0
   creams_points:
   - {fileID: 6899160171033498648}
   - {fileID: 7312589106270476527}
@@ -242,15 +243,13 @@ MonoBehaviour:
   - {fileID: 5169860696823799935}
   creams: []
   currrent_ice_cream: 0
-  eat_input: {fileID: 1120369429361536294, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
+  eat_input: {fileID: -7868807682114652187, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
   mat: {fileID: 2100000, guid: d465e86a57e33f84abb482636275e583, type: 2}
-  stomach_fill_per_cream: 0.1
+  stomach_fill_per_cream: 0.05
   stomach_fill_speed: 25
   delayBetweenCreams: 0.1
   minDistanceForSpawn: 2
   isPowerUpActive: 0
-  drainSpeed: 0.25
-  loosing_points: 0
   eat: {fileID: 4251476775065246266}
   eating_sfx: {fileID: 1275778307263400631}
   music: {fileID: 8300000, guid: d83efc43f00eb5545865017d07e8e960, type: 3}
@@ -263,7 +262,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8318250190362256362}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: GameObject (3)
   m_TagString: Untagged
   m_Icon: {fileID: 6519382022992737161, guid: 0000000000000000d000000000000000, type: 0}
@@ -354,7 +353,6 @@ MonoBehaviour:
   freeze: 1
   freezeDuration: 0.15
   slowMoScale: 0.05
-  freezeRecoverDuration: 0.15
   fovCurve:
     serializedVersion: 2
     m_Curve:
@@ -509,7 +507,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2331509903533532349}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: GameObject (6)
   m_TagString: Untagged
   m_Icon: {fileID: 6519382022992737161, guid: 0000000000000000d000000000000000, type: 0}
@@ -540,7 +538,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5169860696823799935}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: GameObject (9)
   m_TagString: Untagged
   m_Icon: {fileID: 6519382022992737161, guid: 0000000000000000d000000000000000, type: 0}
@@ -571,7 +569,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6545385440683321652}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: GameObject (2)
   m_TagString: Untagged
   m_Icon: {fileID: 6519382022992737161, guid: 0000000000000000d000000000000000, type: 0}
@@ -602,7 +600,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5885840943577176328}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: GameObject (5)
   m_TagString: Untagged
   m_Icon: {fileID: 6519382022992737161, guid: 0000000000000000d000000000000000, type: 0}
@@ -633,7 +631,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2493599001407652850}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: GameObject (8)
   m_TagString: Untagged
   m_Icon: {fileID: 6519382022992737161, guid: 0000000000000000d000000000000000, type: 0}
@@ -793,7 +791,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7312589106270476527}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: GameObject (1)
   m_TagString: Untagged
   m_Icon: {fileID: 6519382022992737161, guid: 0000000000000000d000000000000000, type: 0}
@@ -825,7 +823,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1640027130389494777}
   - component: {fileID: 5045032215416519932}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: outline_estomac (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -841,8 +839,8 @@ Transform:
   m_GameObject: {fileID: 4804367672360301287}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.03527212, y: -2.6800003, z: 0}
-  m_LocalScale: {x: 2.6882, y: 2.6882, z: 2.6882}
+  m_LocalPosition: {x: 0.61953974, y: -2.8124628, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 6734083113427776967}
@@ -890,16 +888,16 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 458446795
   m_SortingLayer: 1
-  m_SortingOrder: 2
-  m_Sprite: {fileID: 21300000, guid: a2dadfac50eddac46b8917327722719f, type: 3}
+  m_SortingOrder: 6
+  m_Sprite: {fileID: 21300000, guid: 0599a32acc9b332489923cc32a43cce1, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 0.58, y: 0.74}
+  m_Size: {x: 1.0666667, y: 1.8}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 0
+  m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
 --- !u!1 &5676743818534894127
@@ -911,7 +909,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6899160171033498648}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: GameObject
   m_TagString: Untagged
   m_Icon: {fileID: 6519382022992737161, guid: 0000000000000000d000000000000000, type: 0}
@@ -943,7 +941,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2368376567195344955}
   - component: {fileID: 8821913869857104085}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: Heart (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -959,8 +957,8 @@ Transform:
   m_GameObject: {fileID: 6000196085594209288}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 2.55, y: -1.71, z: 0}
-  m_LocalScale: {x: 2.6882, y: 2.6882, z: 2.6882}
+  m_LocalPosition: {x: 3.4528735, y: -1.5457964, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 6734083113427776967}
@@ -1009,12 +1007,12 @@ SpriteRenderer:
   m_SortingLayerID: 458446795
   m_SortingLayer: 1
   m_SortingOrder: 3
-  m_Sprite: {fileID: 21300000, guid: f1bc4e36a812902418d91dd7a84bace0, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 3f31bc9901764244eb6d87215773d07f, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 0.58, y: 0.74}
+  m_Size: {x: 0.36666667, y: 0.33333334}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
@@ -1030,7 +1028,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3910224600000339220}
   - component: {fileID: 4539078323476970612}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: Heart
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1046,8 +1044,8 @@ Transform:
   m_GameObject: {fileID: 6103275194048674631}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 1.09, y: -1.71, z: 0}
-  m_LocalScale: {x: 2.6882, y: 2.6882, z: 2.6882}
+  m_LocalPosition: {x: 2.5714364, y: -1.5457965, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 6734083113427776967}
@@ -1096,12 +1094,12 @@ SpriteRenderer:
   m_SortingLayerID: 458446795
   m_SortingLayer: 1
   m_SortingOrder: 3
-  m_Sprite: {fileID: 21300000, guid: f1bc4e36a812902418d91dd7a84bace0, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 3f31bc9901764244eb6d87215773d07f, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 0.58, y: 0.74}
+  m_Size: {x: 0.36666667, y: 0.33333334}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
@@ -1116,7 +1114,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6623704608247716315}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: GameObject (4)
   m_TagString: Untagged
   m_Icon: {fileID: 6519382022992737161, guid: 0000000000000000d000000000000000, type: 0}
@@ -1147,7 +1145,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3740662034360328336}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: Icecream_points
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1163,7 +1161,7 @@ Transform:
   m_GameObject: {fileID: 8814201304034371682}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0.61, y: -0.58, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -1188,7 +1186,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4868436260421071423}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: GameObject (7)
   m_TagString: Untagged
   m_Icon: {fileID: 6519382022992737161, guid: 0000000000000000d000000000000000, type: 0}

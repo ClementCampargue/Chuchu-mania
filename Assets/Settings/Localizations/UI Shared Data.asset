@@ -91,6 +91,70 @@ MonoBehaviour:
     m_Key: Quit game
     m_Metadata:
       m_Items: []
+  - m_Id: 23464717540671488
+    m_Key: Sound
+    m_Metadata:
+      m_Items: []
+  - m_Id: 23464778475520000
+    m_Key: Master
+    m_Metadata:
+      m_Items: []
+  - m_Id: 23464843403345920
+    m_Key: Music
+    m_Metadata:
+      m_Items: []
+  - m_Id: 23464876286689280
+    m_Key: Sounds
+    m_Metadata:
+      m_Items: []
+  - m_Id: 23465265417437184
+    m_Key: Display
+    m_Metadata:
+      m_Items: []
+  - m_Id: 23465304638373888
+    m_Key: Resolution
+    m_Metadata:
+      m_Items: []
+  - m_Id: 23465344706560000
+    m_Key: Window mode
+    m_Metadata:
+      m_Items: []
+  - m_Id: 23465481541533696
+    m_Key: Overlay
+    m_Metadata:
+      m_Items: []
+  - m_Id: 23465505230962688
+    m_Key: Game
+    m_Metadata:
+      m_Items: []
+  - m_Id: 23465544858746880
+    m_Key: Language
+    m_Metadata:
+      m_Items: []
+  - m_Id: 23465582536179712
+    m_Key: Colorblind filter
+    m_Metadata:
+      m_Items: []
+  - m_Id: 23465784605163520
+    m_Key: Cheats
+    m_Metadata:
+      m_Items: []
+  - m_Id: 23466108808085504
+    m_Key: Controller
+    m_Metadata:
+      m_Items: []
+  - m_Id: 23466137996247040
+    m_Key: Controller rumble
+    m_Metadata:
+      m_Items: []
+  - m_Id: 23467755491835904
+    m_Key: Screen shake
+    m_Metadata:
+      m_Items: []
+  - m_Id: 23472744364785664
+    m_Key: Unavailable in demo
+    m_Metadata:
+      m_Items: []
   m_Metadata:
     m_Items: []
   m_KeyGenerator:

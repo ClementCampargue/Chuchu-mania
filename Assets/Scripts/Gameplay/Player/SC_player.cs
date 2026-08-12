@@ -1838,7 +1838,11 @@ public class SC_player : MonoBehaviour
             base_gravity;
 
 
-     
+
+
+        GetComponent<SortingGroup>()
+            .sortingLayerName = "Default";
+
 
         coyoteTimeCounter = 0f;
         jumpBufferCounter = 0f;
