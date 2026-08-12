@@ -985,9 +985,11 @@ public class SC_player : MonoBehaviour
         {
             return;
         }
-
+  
 
         anim.SetBool("Stun", false);
+
+        anim.SetTrigger("Hit");
 
 
         if (isClimbing)
@@ -1028,11 +1030,10 @@ public class SC_player : MonoBehaviour
                     )
                 );
 
-
-            // IMPORTANT :
-            // L'invincibilité démarre immédiatement,
-            // avant même la fin du hit freeze.
-            StartInvincibility(invincibilityTime);
+            if(damage != 0)
+            {
+                StartInvincibility(invincibilityTime);
+            }
         }
         else
         {
@@ -1260,8 +1261,6 @@ public class SC_player : MonoBehaviour
 
         canTakeDamage = false;
 
-
-        anim.SetTrigger("Hit");
 
 
         rb.linearVelocity =
