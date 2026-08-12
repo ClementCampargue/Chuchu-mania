@@ -3252,6 +3252,10 @@ MonoBehaviour:
   flipInterval: 5
   gravity_up: 0
   anim: {fileID: 1710306342}
+  audio:
+  - {fileID: 1663587257}
+  - {fileID: 952200203}
+  - {fileID: 895678272}
 --- !u!4 &1710306341
 Transform:
   m_ObjectHideFlags: 0

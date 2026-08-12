@@ -79,6 +79,7 @@ GameObject:
   - component: {fileID: 6238966504481305009}
   - component: {fileID: 1793191172161585732}
   - component: {fileID: 966980152824118124}
+  - component: {fileID: 5425736058412866738}
   m_Layer: 7
   m_Name: Square (1)
   m_TagString: Enemy
@@ -202,3 +203,17 @@ BoxCollider2D:
   m_AutoTiling: 0
   m_Size: {x: 1, y: 1}
   m_EdgeRadius: 0
+--- !u!114 &5425736058412866738
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2954060547983380427}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3cab93887c1fb5d4a858f0443af4921e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  damage: 1
+  ejection_power: {x: 1, y: 1}

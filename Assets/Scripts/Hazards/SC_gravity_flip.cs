@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class SC_gravity_flip : MonoBehaviour
@@ -13,6 +14,7 @@ public class SC_gravity_flip : MonoBehaviour
     public static event Action<bool> OnGravityChanged;
     public Animator anim;
     private sc_health_system health;
+    public List<GameObject> audio;
     private void Awake()
     {
         instance = this;
@@ -28,7 +30,14 @@ public class SC_gravity_flip : MonoBehaviour
         }
 
     }
+    private void OnDisable()
+    {foreach (GameObject gb in audio)
+        
+        {
+            Destroy(gb);
 
+        }
+    }
     private void Update()
     {
         if(health.current_health == 0)

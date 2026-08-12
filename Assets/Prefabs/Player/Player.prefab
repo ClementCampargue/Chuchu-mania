@@ -20752,7 +20752,8 @@ MonoBehaviour:
   shakeAmplitude: 0
   shakeFrequency: 0
   shakeScreenDuration: 0
-  ps: []
+  ps:
+  - {fileID: 2596787470629622434}
   audio:
   - {fileID: 1087156711343839658}
   - {fileID: 3354049188716555192}
@@ -20764,9 +20765,9 @@ MonoBehaviour:
   verticalStretch: 1
   shakeDuration: 0.15
   shakeIntensity: 0.1
-  freeze: 0
-  freezeDuration: 0.05
-  slowMoScale: 0.05
+  freeze: 1
+  freezeDuration: 0.5
+  slowMoScale: 0
   fovCurve:
     serializedVersion: 2
     m_Curve:
