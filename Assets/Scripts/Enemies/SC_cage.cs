@@ -40,7 +40,12 @@ public class SC_cage : MonoBehaviour
     private float currentSpeed;
 
     private bool isBouncing = false;
+    public static SC_cage instance;
+    private void Awake()
+    {
+        instance = this;
 
+    }
     void Start()
     {
         system = SC_icecream_eat_system.instance;

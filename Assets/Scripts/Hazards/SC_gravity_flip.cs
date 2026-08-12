@@ -40,7 +40,7 @@ public class SC_gravity_flip : MonoBehaviour
     }
     private void Update()
     {
-        if(health.current_health == 0)
+        if(health.current_health == 0 || SC_cage.instance.Health<=0)
         {
             StopAllCoroutines();
             anim.enabled = false;
