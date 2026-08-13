@@ -65,7 +65,7 @@ MonoBehaviour:
       answer: []
       actionID: 
   - character: {fileID: 11400000, guid: 5cc7475fadc274743a90d03b3f3285de, type: 2}
-    text: "Je ne suis pas venu pour manger!<p=5> Mes amies ont \xE9t\xE9 captur\xE9es
+    text: "Je ne suis pas venue pour manger!<p=5> Mes amies ont \xE9t\xE9 captur\xE9es
       par la Reine Litchi pour sa grande f\xEAte!"
     hasChoices: 0
     choices:

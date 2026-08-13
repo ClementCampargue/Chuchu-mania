@@ -74,7 +74,7 @@ MonoBehaviour:
         choices: []
       actionID: 
   - character: {fileID: 11400000, guid: 358c18f725108b14d9b9efeb15db2fc1, type: 2}
-    text: Euh...<p=2> yes...<p=5> Je vais vous laisser hein...
+    text: Euh...<p=2> dacodac...<p=5> Je vais vous laisser hein...
     hasChoices: 0
     choices:
     - choiceText: Non
