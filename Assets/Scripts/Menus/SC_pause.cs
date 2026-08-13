@@ -14,9 +14,13 @@ public class SC_pause : MonoBehaviour
     public GameObject tuto_window;
     public GameObject settings_;
     public GameObject buttons;
+    public GameObject areyousure;
+    public GameObject areyousureretry;
+    public GameObject areyousurequit;
 
     [Header("Objet à masquer")]
     public GameObject objectToDisable;
+    public GameObject objectToDisable2;
     public GameObject objectToEnable;
     public List<string> scenesToDisableObject = new List<string>();
 
@@ -26,6 +30,9 @@ public class SC_pause : MonoBehaviour
     private bool isPaused = false;
     private bool tuto = false;
     private bool settings = false;
+    private bool areyousure_ = false;
+    private bool areyousure_retry = false;
+    private bool areyousure_quit = false;
 
     // Empêche plusieurs inputs d'être traités trop rapidement
     private bool canUsePauseInput = true;
@@ -71,6 +78,9 @@ public class SC_pause : MonoBehaviour
         isPaused = false;
         tuto = false;
         settings = false;
+        areyousure_ = false;
+        areyousure_retry = false;
+        areyousure_quit = false;
 
         Time.timeScale = 1f;
 
@@ -79,6 +89,15 @@ public class SC_pause : MonoBehaviour
 
         if (tuto_window != null)
             tuto_window.SetActive(false);
+
+        if (areyousure != null)
+            areyousure.SetActive(false);
+
+        if (areyousureretry != null)
+            areyousureretry.SetActive(false);
+
+        if (areyousurequit != null)
+            areyousurequit.SetActive(false);
 
         if (buttons != null)
             buttons.SetActive(true);
@@ -116,6 +135,18 @@ public class SC_pause : MonoBehaviour
             {
                 Hide_settings();
             }
+            else if (areyousure_)
+            {
+                Hide_sure();
+            }
+            else if (areyousure_retry)
+            {
+                Hide_sure_retry();
+            }
+            else if (areyousure_quit)
+            {
+                Hide_sure_quit();
+            }
             else
             {
                 Close();
@@ -142,6 +173,7 @@ public class SC_pause : MonoBehaviour
             scenesToDisableObject.Contains(currentScene);
 
         objectToDisable.SetActive(!shouldDisable);
+        objectToDisable2.SetActive(!shouldDisable);
 
         if (objectToEnable != null)
         {
@@ -298,6 +330,9 @@ public class SC_pause : MonoBehaviour
         if (pauseMenu != null)
             pauseMenu.SetActive(false);
 
+        if (areyousureretry != null)
+            areyousureretry.SetActive(false);
+
         isPaused = false;
         tuto = false;
         settings = false;
@@ -322,24 +357,15 @@ public class SC_pause : MonoBehaviour
     }
 
 
-    public void Show_tutorial()
-    {
-        tuto = true;
-        settings = false;
-
-        if (tuto_window != null)
-            tuto_window.SetActive(true);
-
-        if (buttons != null)
-            buttons.SetActive(false);
-        Time.timeScale = 0f;
-    }
 
 
     public void Show_settings()
     {
         settings = true;
         tuto = false;
+        areyousure_retry = false;
+        areyousure_ = false;
+        areyousure_quit = false;
 
         if (settings_ != null)
             settings_.SetActive(true);
@@ -355,13 +381,112 @@ public class SC_pause : MonoBehaviour
         Application.Quit();
     }
 
+    public void Show_tutorial()
+    {
+        tuto = true;
+        settings = false;
+        areyousure_ = false;
+        areyousure_retry = false;
+        areyousure_quit = false;
 
+        if (tuto_window != null)
+            tuto_window.SetActive(true);
+
+        if (buttons != null)
+            buttons.SetActive(false);
+        Time.timeScale = 0f;
+    }
     public void Hide_tutorial()
     {
         tuto = false;
 
         if (tuto_window != null)
             tuto_window.SetActive(false);
+
+        if (buttons != null)
+            buttons.SetActive(true);
+        Time.timeScale = 0f;
+    }
+
+
+    public void Show_sure()
+    {
+        areyousure_ = true;
+        settings = false;
+        tuto = false;
+        areyousure_quit = false;
+        areyousure_retry = false;
+
+        if (areyousure != null)
+            areyousure.SetActive(true);
+
+        if (buttons != null)
+            buttons.SetActive(false);
+        Time.timeScale = 0f;
+    }
+    public void Hide_sure()
+    {
+        areyousure_ = false;
+
+        if (areyousure != null)
+            areyousure.SetActive(false);
+
+        if (buttons != null)
+            buttons.SetActive(true);
+        Time.timeScale = 0f;
+    }
+
+
+    public void Show_sure_retry()
+    {
+        areyousure_retry = true;
+        settings = false;
+        areyousure_ = false;
+        tuto = false;
+        areyousure_quit = false;
+
+        if (areyousureretry != null)
+            areyousureretry.SetActive(true);
+
+        if (buttons != null)
+            buttons.SetActive(false);
+        Time.timeScale = 0f;
+    }
+    public void Hide_sure_retry()
+    {
+        areyousure_retry = false;
+
+        if (areyousureretry != null)
+            areyousureretry.SetActive(false);
+
+        if (buttons != null)
+            buttons.SetActive(true);
+        Time.timeScale = 0f;
+    }
+
+
+
+    public void Show_sure_quit()
+    {
+        areyousure_quit = true;
+        settings = false;
+        areyousure_ = false;
+        tuto = false;
+        areyousure_retry = false;
+
+        if (areyousurequit != null)
+            areyousurequit.SetActive(true);
+
+        if (buttons != null)
+            buttons.SetActive(false);
+        Time.timeScale = 0f;
+    }
+    public void Hide_sure_quit()
+    {
+        areyousure_quit = false;
+
+        if (areyousurequit != null)
+            areyousurequit.SetActive(false);
 
         if (buttons != null)
             buttons.SetActive(true);
@@ -384,6 +509,9 @@ public class SC_pause : MonoBehaviour
 
     public void Give_up()
     {
+        if (areyousure != null)
+            areyousure.SetActive(false);
+
         if (SC_music_manager.instance != null)
         {
             SC_music_manager.instance.resume_music();

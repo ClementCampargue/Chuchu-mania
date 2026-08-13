@@ -26,7 +26,7 @@ public class SC_cutscene : MonoBehaviour
         PlayerPrefs.SetInt("Level", next_level+1);
         if(next_level == 0)
         {
-            next_scene = "ART";
+            next_scene = "Beach";
 
         }
         else if (next_level == 1)

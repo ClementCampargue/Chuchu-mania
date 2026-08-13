@@ -9,6 +9,7 @@ public class SC_player : MonoBehaviour
 
     [Header("Power_up_stats")]
     public float PowermoveSpeed = 5f;
+    public float BasePowermoveSpeed = 5f;
     public float PowerJump = 5f;
     public SC_juiciness juice;
 
@@ -145,6 +146,7 @@ public class SC_player : MonoBehaviour
     private void Awake()
     {
         base_speed = moveSpeed;
+        BasePowermoveSpeed = PowermoveSpeed;
         instance = this;
     }
 
@@ -390,6 +392,7 @@ public class SC_player : MonoBehaviour
             {
                 anim.ResetTrigger("Jump");
                 anim.SetTrigger("Land");
+                moveSpeed = base_speed;
 
                 land.PlayJuice();
             }
@@ -1180,12 +1183,7 @@ public class SC_player : MonoBehaviour
         float multiplier,
         float time)
     {
-        float originalMove =
-            moveSpeed;
-
-
-        float originalPower =
-            PowermoveSpeed;
+  
 
 
         moveSpeed *= multiplier;
@@ -1200,16 +1198,12 @@ public class SC_player : MonoBehaviour
             () => isGrounded || isClimbing
         );
 
+        moveSpeed = base_speed;
 
         burning = false;
 
-
-        moveSpeed =
-            originalMove;
-
-
         PowermoveSpeed =
-            originalPower;
+            BasePowermoveSpeed;
     }
 
 
@@ -1786,6 +1780,7 @@ public class SC_player : MonoBehaviour
         isFrozen = false;
         isStunned = false;
         isInvincible = false;
+        burning = false;
         canTakeDamage = true;
 
 

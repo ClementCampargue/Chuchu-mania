@@ -62,21 +62,26 @@ public class SC_crate : MonoBehaviour
     {
         if (collision.CompareTag("Player"))
         {
+            if(SC_player.instance.burning)
+            {
+                die();
+            }
+
             if (damage_player)
             {
                 SC_player.instance.TakeDamage(1,new Vector2(1,1),transform.position);
-                Destroy(gameObject);
+                die();
             }
             else if(!isGrounded && SC_player.instance.isGrounded)
             {
                 SC_player.instance.stun_player();
-                Destroy(gameObject);
+                die();
             }
-         
+
         }
         if (collision.CompareTag("Lava"))
         {
-            Destroy(gameObject);
+            die();
 
         }
     }

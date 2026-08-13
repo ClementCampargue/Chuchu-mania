@@ -11,7 +11,7 @@ public class sc_health_system : MonoBehaviour
     public int max_health;
 
     public static sc_health_system instance;
-
+    public AudioSource low_health;
     private void Awake()
     {
         instance = this;
@@ -29,7 +29,10 @@ public class sc_health_system : MonoBehaviour
             return;
 
         current_health = Mathf.Max(current_health - damage, 0);
-
+        if(current_health == 1)
+        {
+            low_health.Play();
+        }
         UpdateHearts();
     }
 

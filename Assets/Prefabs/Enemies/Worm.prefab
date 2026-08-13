@@ -163,7 +163,7 @@ MonoBehaviour:
   shakeIntensity: 0
   freeze: 1
   freezeDuration: 0.15
-  slowMoScale: 0.05
+  slowMoScale: 0
   fovCurve:
     serializedVersion: 2
     m_Curve:

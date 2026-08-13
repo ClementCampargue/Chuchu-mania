@@ -167,6 +167,18 @@ MonoBehaviour:
     m_Key: "Stickers plac\xE9s:"
     m_Metadata:
       m_Items: []
+  - m_Id: 23792354276425728
+    m_Key: Are you sure?
+    m_Metadata:
+      m_Items: []
+  - m_Id: 23792445972299776
+    m_Key: Yes
+    m_Metadata:
+      m_Items: []
+  - m_Id: 23792458932699136
+    m_Key: No
+    m_Metadata:
+      m_Items: []
   m_Metadata:
     m_Items: []
   m_KeyGenerator:

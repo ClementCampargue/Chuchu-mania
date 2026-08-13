@@ -181,7 +181,6 @@ public class SC_icecream_eat_system : MonoBehaviour
     {
         selectedCreams = new List<SC_icecream_fall>(creams);
         multiplier = selectedCreams.Count;
-        player.rb.linearVelocity = Vector2.zero;
 
 
         forceEatAll = true;

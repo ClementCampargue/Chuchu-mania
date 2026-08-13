@@ -170,6 +170,18 @@ MonoBehaviour:
     m_Localized: "Stickers plac\xE9s:"
     m_Metadata:
       m_Items: []
+  - m_Id: 23792354276425728
+    m_Localized: "Etes vous s\xFBr?"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 23792445972299776
+    m_Localized: Oui
+    m_Metadata:
+      m_Items: []
+  - m_Id: 23792458932699136
+    m_Localized: Non
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds: []

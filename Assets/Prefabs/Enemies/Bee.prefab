@@ -608,6 +608,7 @@ GameObject:
   - component: {fileID: 4309484708592477127}
   - component: {fileID: 7296315618068111041}
   - component: {fileID: 4817986177760981909}
+  - component: {fileID: 4621376417626277932}
   m_Layer: 7
   m_Name: Bee
   m_TagString: Enemy
@@ -698,10 +699,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 91d266ecb7a4a954caf8fe1b1460a0a0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  randomStartOnShape: 1
   shape: 0
   radius: 1.5
   speed: 2
   resolution: 0.05
+  lineRotation: 0
   showGizmos: 1
   gizmosColor: {r: 0, g: 1, b: 1, a: 1}
   damage: {fileID: 4309484708592477127}
@@ -791,6 +794,20 @@ SortingGroup:
   m_SortingLayer: 0
   m_SortingOrder: 5
   m_SortAtRoot: 0
+--- !u!114 &4621376417626277932
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4992955532290190889}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3cab93887c1fb5d4a858f0443af4921e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  damage: 1
+  ejection_power: {x: 1, y: 1}
 --- !u!1 &6804857224660344624
 GameObject:
   m_ObjectHideFlags: 0

@@ -6,7 +6,11 @@ public class SC_title_screen : MonoBehaviour
     public string scene;
     void Start()
     {
-
+        Invoke("delay", 0.1f);
+    }
+    void delay()
+    {
+        transi = SC_screenshot_transition.instance;
     }
 
     void Update()

@@ -33,7 +33,7 @@ EditorBuildSettings:
     path: Assets/Scenes/Menus/MoneyScene.unity
     guid: e32df890a46001344b5bd88ff4676238
   - enabled: 1
-    path: Assets/Scenes/ART.unity
+    path: Assets/Scenes/Levels/Beach.unity
     guid: db35c0ac1a9635043857db9523f4b24a
   - enabled: 1
     path: Assets/Scenes/Levels/Moon.unity

@@ -5629,7 +5629,7 @@ MonoBehaviour:
   juice_stun: {fileID: 8006942828086938426}
   isKnockedBack: 0
   isStunned: 0
-  die_burn: 0
+  die_burn: 1
 --- !u!114 &3255610440191343998
 MonoBehaviour:
   m_ObjectHideFlags: 0

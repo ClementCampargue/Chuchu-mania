@@ -170,6 +170,18 @@ MonoBehaviour:
     m_Localized: 'Stickers:'
     m_Metadata:
       m_Items: []
+  - m_Id: 23792354276425728
+    m_Localized: Are you sure?
+    m_Metadata:
+      m_Items: []
+  - m_Id: 23792445972299776
+    m_Localized: Yes
+    m_Metadata:
+      m_Items: []
+  - m_Id: 23792458932699136
+    m_Localized: No
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds: []

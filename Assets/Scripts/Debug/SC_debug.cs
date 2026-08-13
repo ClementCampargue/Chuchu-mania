@@ -1,6 +1,6 @@
 using UnityEngine;
 
-#if UNITY_EDITOR
+//#if UNITY_EDITOR
 
 public class SC_debug : MonoBehaviour
 {
@@ -41,4 +41,4 @@ public class SC_debug : MonoBehaviour
     }
 }
 
-#endif
+//#endif
