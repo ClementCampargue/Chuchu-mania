@@ -187,6 +187,8 @@ public class SC_pause : MonoBehaviour
         // Évite les doubles appels
         if (!canUsePauseInput)
             return;
+        if (!SC_player.instance.gameObject.activeInHierarchy)
+            return;
 
         // Si le joueur ne peut pas bouger, on ne permet pas
         // d'ouvrir le menu.
