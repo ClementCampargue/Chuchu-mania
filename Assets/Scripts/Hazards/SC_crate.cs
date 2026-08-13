@@ -12,6 +12,10 @@ public class SC_crate : MonoBehaviour
 
     private bool isGrounded;
     public bool damage_player;
+    public Animator anim;
+    public SC_juiciness land_juice;
+    public SC_juiciness juice;
+    public SC_crate_parent parent;
     private void FixedUpdate()
     {
         added_velocity_ = Vector2.Lerp(added_velocity_, added_velocity, 0.2f);
@@ -38,7 +42,10 @@ public class SC_crate : MonoBehaviour
 
     private void OnCollisionStay2D(Collision2D collision)
     {
-        isGrounded = true;
+        if (collision.gameObject.CompareTag("Ground"))
+        {
+            isGrounded = true;
+        }
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
@@ -51,11 +58,19 @@ public class SC_crate : MonoBehaviour
                 die();
             }
         }
+        if (collision.gameObject.CompareTag("Ground"))
+        {
+            land_juice.PlayJuice();
+            anim.SetTrigger("Land");
+        }
     }
 
     private void OnCollisionExit2D(Collision2D collision)
     {
-        isGrounded = false;
+        if (collision.gameObject.CompareTag("Ground"))
+        {
+            isGrounded = false;
+        }
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
@@ -88,6 +103,15 @@ public class SC_crate : MonoBehaviour
 
     public void die()
     {
+        parent.destroy();
+        juice.PlayJuice();
+        rb.constraints = RigidbodyConstraints2D.FreezeAll;
+        anim.SetTrigger("Die");
+    }
+
+    public void _destroy()
+    {
         Destroy(gameObject);
+
     }
 }
