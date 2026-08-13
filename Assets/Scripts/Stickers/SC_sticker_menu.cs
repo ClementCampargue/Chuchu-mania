@@ -103,15 +103,7 @@ public class SC_sticker_menu : MonoBehaviour
 
     private void OnDisable()
     {
-        if (edit != null)
-        {
-            edit.action.Disable();
-        }
 
-        if (quit != null)
-        {
-            quit.action.Disable();
-        }
 
         if (SC_scursorManager.instance != null)
         {
