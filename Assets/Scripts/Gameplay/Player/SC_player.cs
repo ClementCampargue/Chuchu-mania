@@ -6,6 +6,8 @@ using UnityEngine.Rendering;
 public class SC_player : MonoBehaviour
 {
     private Coroutine invincibilityCoroutine;
+    private Coroutine lowHealthCoroutine;
+    private Coroutine hitCoroutine;
 
     [Header("Power_up_stats")]
     public float PowermoveSpeed = 5f;
@@ -25,7 +27,6 @@ public class SC_player : MonoBehaviour
 
     [Header("Jump Input Buffer")]
     public float jumpBufferTime = 0.1f;
-
     [HideInInspector] public float jumpBufferCounter;
 
     private float jumpTimeCounter;
@@ -42,12 +43,13 @@ public class SC_player : MonoBehaviour
     public float climbAttachDiagonalLimit = 0.5f;
 
     public float climbReattachDelay = 0.2f;
-    private float climbReattachTimer;
 
+    private float climbReattachTimer;
     private bool isClimbing;
     private bool canClimb;
     private SC_grillage grillage;
 
+    [Header("Hit")]
     public float hitFreezeTime = 0.15f;
     public Vector2 hitKnockback = new Vector2(5f, 3f);
 
@@ -55,8 +57,6 @@ public class SC_player : MonoBehaviour
     public Material normalMaterial;
     public Material lowHealthMaterial;
     public float lowHealthBlinkRate = 0.2f;
-
-    private Coroutine lowHealthCoroutine;
 
     [Header("Ground Check")]
     public Transform groundCheckBottom;
@@ -68,34 +68,33 @@ public class SC_player : MonoBehaviour
     public float damageRadius = 0.5f;
     public LayerMask damageLayer;
     public LayerMask bounceLayer;
+
     private bool canTakeDamage = true;
 
     [Header("Stun")]
     public LayerMask stunLayer;
     public float stunDuration = 2f;
-
-    private bool isStunned = false;
+    private bool isStunned;
 
     [Header("Invincibility")]
     public float invincibilityTime = 1f;
     public SpriteRenderer spriteRenderer;
     public SpriteRenderer spriteRendererPower;
-    public bool isInvincible = false;
+
+    public bool isInvincible;
 
     [Header("Transformation")]
     public GameObject normal;
     public GameObject transformed;
     public float transformFreezeTime = 0.5f;
+
     public string transformAnimTrigger = "Transform";
     public string detransformAnimTrigger = "DeTransform";
 
+    [Header("Components")]
     public Rigidbody2D rb;
     public Animator anim;
-
-    public Vector2 moveInput;
-    public bool isGrounded;
-    private bool wasGrounded;
-    private bool isFrozen;
+    public BoxCollider2D collider;
 
     [Header("Inputs")]
     public InputActionReference Jump;
@@ -105,21 +104,22 @@ public class SC_player : MonoBehaviour
     private Vector2 limit;
     public Transform ghost;
 
-    private Coroutine hitCoroutine;
-    private Vector2 knockbackVelocity;
-
+    [Header("Systems")]
     public SC_icecream_eat_system eat_system;
-
     public static SC_player instance;
 
-    public BoxCollider2D collider;
     public float base_gravity;
+
     public GameObject game_over_screen;
-    public bool canMove;
+
+    public bool canMove = true;
     public bool burning;
 
-    private Vector2 added_velocity;
-    private Vector2 added_velocity_;
+    [Header("External Velocity")]
+    private Vector2 externalVelocity;
+
+    [Header("Knockback")]
+    private Vector2 knockbackVelocity;
 
     [Header("Audio")]
     public SC_juiciness jump;
@@ -135,9 +135,13 @@ public class SC_player : MonoBehaviour
     public AudioSource run;
 
     private Collider2D hit;
-
     private sc_health_system health;
 
+    public Vector2 moveInput;
+    public bool isGrounded;
+
+    private bool wasGrounded;
+    private bool isFrozen;
 
     // =========================================================
     // AWAKE
@@ -145,14 +149,14 @@ public class SC_player : MonoBehaviour
 
     private void Awake()
     {
+        instance = this;
+
         base_speed = moveSpeed;
         BasePowermoveSpeed = PowermoveSpeed;
-        instance = this;
     }
 
-
     // =========================================================
-    // ENABLE / DISABLE INPUTS
+    // ENABLE
     // =========================================================
 
     private void OnEnable()
@@ -164,19 +168,17 @@ public class SC_player : MonoBehaviour
         Jump.action.canceled += OnJumpReleased;
     }
 
-
     private void OnDisable()
     {
         Jump.action.performed -= OnJumpStarted;
         Jump.action.canceled -= OnJumpReleased;
     }
 
-
     // =========================================================
     // START
     // =========================================================
 
-    void Start()
+    private void Start()
     {
         canTakeDamage = true;
 
@@ -190,33 +192,32 @@ public class SC_player : MonoBehaviour
         spriteRenderer.material = normalMaterial;
     }
 
-
     // =========================================================
     // UPDATE
     // =========================================================
 
-    void Update()
+    private void Update()
     {
         limit = SC_level_master.instance.limits;
 
         CheckStun();
         HandleLowHealthBlink();
 
-
-        // =====================================================
-        // TIMER DE RÉACCROCHE
-        // =====================================================
+        // -----------------------------------------------------
+        // CLIMB REATTACH TIMER
+        // -----------------------------------------------------
 
         if (climbReattachTimer > 0f)
         {
             climbReattachTimer -= Time.deltaTime;
 
             if (climbReattachTimer < 0f)
-            {
                 climbReattachTimer = 0f;
-            }
         }
 
+        // -----------------------------------------------------
+        // STUN
+        // -----------------------------------------------------
 
         if (isStunned)
         {
@@ -224,15 +225,26 @@ public class SC_player : MonoBehaviour
             return;
         }
 
-
-        // =====================================================
+        // -----------------------------------------------------
         // INPUT
-        // =====================================================
+        // -----------------------------------------------------
 
-        if (!isFrozen && canMove && !eat_system.isEating && Time.timeScale != 0)
+        /*
+         * IMPORTANT :
+         *
+         * Pendant Eat :
+         * - le joueur ne peut pas contrôler son déplacement
+         * - mais on ne touche PAS à la velocity du Rigidbody
+         *
+         * La vélocité externe continue donc d'exister.
+         */
+
+        if (!isFrozen &&
+            canMove &&
+            !eat_system.isEating &&
+            Time.timeScale != 0)
         {
             Vector2 input = Move.action.ReadValue<Vector2>();
-
 
             moveInput = new Vector2(
                 Mathf.Abs(input.x) > 0.1f
@@ -244,104 +256,76 @@ public class SC_player : MonoBehaviour
                     : 0f
             );
 
-
-            // =================================================
-            // TENTATIVE D'ACCROCHE
-            // =================================================
-
-            if (!isClimbing && canClimb && climbReattachTimer <= 0f)
+            if (!isClimbing &&
+                canClimb &&
+                climbReattachTimer <= 0f)
             {
                 TryStartClimbing(input);
             }
         }
         else
         {
+            // On bloque uniquement l'INPUT.
+            // Pas la velocity.
             moveInput = Vector2.zero;
         }
 
-
-        // =====================================================
+        // -----------------------------------------------------
         // GROUND CHECK
-        // =====================================================
+        // -----------------------------------------------------
 
-        isGrounded =
-            Physics2D.OverlapCircle(
-                groundCheckBottom.position,
-                groundCheckRadius,
-                groundLayer
-            );
+        isGrounded = Physics2D.OverlapCircle(
+            groundCheckBottom.position,
+            groundCheckRadius,
+            groundLayer
+        );
 
-
-        // =====================================================
-        // COYOTE TIME
-        // =====================================================
+        // -----------------------------------------------------
+        // COYOTE
+        // -----------------------------------------------------
 
         if (isGrounded)
-        {
             coyoteTimeCounter = coyoteTime;
-        }
         else
-        {
             coyoteTimeCounter -= Time.deltaTime;
-        }
 
-
-        // =====================================================
-        // JUMP INPUT BUFFER
-        // =====================================================
+        // -----------------------------------------------------
+        // JUMP BUFFER
+        // -----------------------------------------------------
 
         if (jumpBufferCounter > 0f)
-        {
             jumpBufferCounter -= Time.deltaTime;
-        }
-
-
-        // =====================================================
-        // BUFFER + COYOTE JUMP
-        // =====================================================
 
         if (jumpBufferCounter > 0f)
-        {
             TryJump();
-        }
 
-
-        // =====================================================
-        // ANIMATION / AUDIO CLIMB
-        // =====================================================
+        // -----------------------------------------------------
+        // ANIMATION
+        // -----------------------------------------------------
 
         if (isClimbing)
         {
             if (moveInput.sqrMagnitude > 0.01f)
             {
                 if (!grid.isPlaying)
-                {
                     grid.Play();
-                }
 
                 anim.SetBool("Run", true);
             }
             else
             {
                 grid.Stop();
-
                 anim.SetBool("Run", false);
             }
         }
         else
         {
-            // =================================================
-            // RUN NORMAL
-            // =================================================
-
             if (Mathf.Abs(moveInput.x) > 0.1f)
             {
                 if (isGrounded)
                 {
                     if (!run.isPlaying)
-                    {
                         run.Play();
-                    }
                 }
                 else
                 {
@@ -353,26 +337,25 @@ public class SC_player : MonoBehaviour
             else
             {
                 run.Stop();
-
                 anim.SetBool("Run", false);
             }
         }
 
-
-        // =====================================================
+        // -----------------------------------------------------
         // LANDING
-        // =====================================================
+        // -----------------------------------------------------
 
         if (IsAnimationPlaying("jump_idle") &&
             isGrounded &&
-            rb.linearVelocity.y == 0)
+            Mathf.Abs(rb.linearVelocity.y) < 0.01f)
         {
             anim.ResetTrigger("Jump");
             anim.SetTrigger("Land");
+
             moveSpeed = base_speed;
+
             land.PlayJuice();
         }
-
 
         if (!wasGrounded && isGrounded)
         {
@@ -382,51 +365,45 @@ public class SC_player : MonoBehaviour
             {
                 anim.ResetTrigger("Jump");
                 anim.SetTrigger("Land");
-                moveSpeed = base_speed;
 
-                land.PlayJuice();
-            }
-            else if (
-                transform.localScale.y == -1 &&
-                rb.linearVelocity.y >= -0.5f)
-            {
-                anim.ResetTrigger("Jump");
-                anim.SetTrigger("Land");
                 moveSpeed = base_speed;
 
                 land.PlayJuice();
             }
         }
 
-
-        // =====================================================
+        // -----------------------------------------------------
         // FACING
-        // =====================================================
+        // -----------------------------------------------------
 
         float yScale = transform.localScale.y;
 
         if (moveInput.x > 0)
         {
-            transform.localScale =
-                new Vector3(1, yScale, 1);
+            transform.localScale = new Vector3(
+                1,
+                yScale,
+                1
+            );
         }
         else if (moveInput.x < 0)
         {
-            transform.localScale =
-                new Vector3(-1, yScale, 1);
+            transform.localScale = new Vector3(
+                -1,
+                yScale,
+                1
+            );
         }
-
 
         wasGrounded = isGrounded;
 
-
-        // =====================================================
+        // -----------------------------------------------------
         // JUMP
-        // =====================================================
+        // -----------------------------------------------------
 
         if (isJumping)
         {
-            if (jumpTimeCounter > 0)
+            if (jumpTimeCounter > 0f)
             {
                 float jumpPower =
                     eat_system.isPowerUpActive
@@ -436,11 +413,10 @@ public class SC_player : MonoBehaviour
                 float direction =
                     Mathf.Sign(rb.gravityScale);
 
-                rb.linearVelocity =
-                    new Vector2(
-                        rb.linearVelocity.x,
-                        jumpPower * direction
-                    );
+                rb.linearVelocity = new Vector2(
+                    rb.linearVelocity.x,
+                    jumpPower * direction
+                );
 
                 jumpTimeCounter -= Time.deltaTime;
             }
@@ -451,9 +427,145 @@ public class SC_player : MonoBehaviour
         }
     }
 
+    // =========================================================
+    // FIXED UPDATE
+    // =========================================================
+
+    private void FixedUpdate()
+    {
+        if (Time.timeScale == 0)
+            return;
+
+        // -----------------------------------------------------
+        // CLIMB
+        // -----------------------------------------------------
+
+        if (isClimbing)
+        {
+            if (grillage == null)
+            {
+                StopClimbing();
+                return;
+            }
+
+            Vector2 climbInput =
+                Move.action.ReadValue<Vector2>();
+
+            if (climbInput.magnitude < 0.1f)
+                climbInput = Vector2.zero;
+            else
+                climbInput.Normalize();
+
+            Vector2 climbVelocity =
+                climbInput * climbSpeed;
+
+            rb.linearVelocity = climbVelocity;
+
+            Vector2 nextPosition =
+                rb.position +
+                climbVelocity * Time.fixedDeltaTime;
+
+            rb.position =
+                grillage.ClampPosition(nextPosition);
+
+            return;
+        }
+
+        // -----------------------------------------------------
+        // PHYSICS
+        // -----------------------------------------------------
+
+        /*
+         * ICI EST LE FIX PRINCIPAL.
+         *
+         * On ne fait plus :
+         *
+         * if (isEating)
+         *     return;
+         *
+         * Sinon les vélocités externes sont supprimées.
+         */
+
+        float playerHorizontalVelocity = 0f;
+
+        // Le joueur peut contrôler son mouvement uniquement
+        // lorsqu'il n'est PAS en train de manger.
+        if (!isFrozen &&
+            canMove &&
+            !eat_system.isEating)
+        {
+            playerHorizontalVelocity =
+                moveInput.x *
+                (
+                    eat_system.isPowerUpActive
+                        ? PowermoveSpeed
+                        : moveSpeed
+                );
+        }
+
+        // -----------------------------------------------------
+        // KNOCKBACK
+        // -----------------------------------------------------
+
+        float knockbackX = knockbackVelocity.x;
+
+        float verticalVelocity =
+            rb.linearVelocity.y;
+
+        if (knockbackVelocity.y != 0f)
+        {
+            verticalVelocity =
+                knockbackVelocity.y;
+
+            knockbackVelocity.y = 0f;
+        }
+
+        // -----------------------------------------------------
+        // VELOCITY FINALE
+        // -----------------------------------------------------
+
+        float finalX =
+            playerHorizontalVelocity +
+            externalVelocity.x +
+            knockbackX;
+
+        float finalY =
+            verticalVelocity +
+            externalVelocity.y;
+
+        rb.linearVelocity = new Vector2(
+            finalX,
+            finalY
+        );
+
+        // -----------------------------------------------------
+        // FADE KNOCKBACK
+        // -----------------------------------------------------
+
+        knockbackVelocity.x =
+            Mathf.Lerp(
+                knockbackVelocity.x,
+                0f,
+                0.15f
+            );
+    }
 
     // =========================================================
-    // TRY JUMP
+    // EXTERNAL VELOCITY
+    // =========================================================
+
+    public void SetGroundVelocity(Vector2 velocity)
+    {
+        externalVelocity = velocity;
+    }
+
+    public void ClearGroundVelocity()
+    {
+        externalVelocity = Vector2.zero;
+    }
+
+    // =========================================================
+    // JUMP
     // =========================================================
 
     private void TryJump()
@@ -467,27 +579,26 @@ public class SC_player : MonoBehaviour
         if (isStunned)
             return;
 
-        if (isFrozen || !canMove)
+        if (isFrozen)
             return;
 
+        if (!canMove)
+            return;
 
-        // =====================================================
-        // SAUT DEPUIS UNE GRILLE
-        // =====================================================
+        if (eat_system.isEating)
+            return;
 
         if (isClimbing)
         {
             StopClimbingJump();
 
             isJumping = true;
-
             jumpTimeCounter = maxJumpTime;
 
-            rb.linearVelocity =
-                new Vector2(
-                    rb.linearVelocity.x,
-                    jumpForce
-                );
+            rb.linearVelocity = new Vector2(
+                rb.linearVelocity.x,
+                jumpForce
+            );
 
             anim.SetTrigger("Jump");
 
@@ -499,11 +610,6 @@ public class SC_player : MonoBehaviour
             return;
         }
 
-
-        // =====================================================
-        // SAUT NORMAL
-        // =====================================================
-
         if (rb.linearVelocity.y < 0.5f)
         {
             bool canPerformJump =
@@ -514,7 +620,6 @@ public class SC_player : MonoBehaviour
             if (canPerformJump)
             {
                 isJumping = true;
-
                 jumpTimeCounter = maxJumpTime;
 
                 float jumpPower =
@@ -522,11 +627,10 @@ public class SC_player : MonoBehaviour
                         ? PowerJump
                         : jumpForce;
 
-                rb.linearVelocity =
-                    new Vector2(
-                        rb.linearVelocity.x,
-                        jumpPower
-                    );
+                rb.linearVelocity = new Vector2(
+                    rb.linearVelocity.x,
+                    jumpPower
+                );
 
                 anim.SetTrigger("Jump");
 
@@ -537,11 +641,6 @@ public class SC_player : MonoBehaviour
             }
         }
     }
-
-
-    // =========================================================
-    // JUMP INPUT
-    // =========================================================
 
     private void OnJumpStarted(
         InputAction.CallbackContext context)
@@ -555,11 +654,13 @@ public class SC_player : MonoBehaviour
         if (isStunned)
             return;
 
+        if (eat_system.isEating)
+            return;
+
         jumpBufferCounter = jumpBufferTime;
 
         TryJump();
     }
-
 
     private void OnJumpReleased(
         InputAction.CallbackContext context)
@@ -567,12 +668,11 @@ public class SC_player : MonoBehaviour
         isJumping = false;
     }
 
-
     // =========================================================
-    // ANIMATION CHECK
+    // ANIMATION
     // =========================================================
 
-    bool IsAnimationPlaying(string animationName)
+    private bool IsAnimationPlaying(string animationName)
     {
         AnimatorStateInfo stateInfo =
             anim.GetCurrentAnimatorStateInfo(0);
@@ -580,12 +680,11 @@ public class SC_player : MonoBehaviour
         return stateInfo.IsName(animationName);
     }
 
-
     // =========================================================
     // STUN
     // =========================================================
 
-    void CheckStun()
+    private void CheckStun()
     {
         if (isStunned)
             return;
@@ -604,11 +703,8 @@ public class SC_player : MonoBehaviour
             );
 
         if (hit != null)
-        {
             StartCoroutine(StunCoroutine());
-        }
     }
-
 
     public void Stun()
     {
@@ -621,48 +717,17 @@ public class SC_player : MonoBehaviour
         StartCoroutine(StunCoroutine());
     }
 
-
-    // =========================================================
-    // DAMAGE DETECTION
-    // =========================================================
-
-
-    IEnumerator delay_death_enemy()
-    {
-        yield return new WaitForSecondsRealtime(1f);
-
-
-        if (hit != null)
-        {
-            SortingGroup sortingGroup =
-                hit.GetComponentInParent<SortingGroup>();
-
-            if (sortingGroup != null)
-            {
-                sortingGroup.sortingLayerName = "Default";
-            }
-        }
-    }
-
-
-    // =========================================================
-    // STUN PLAYER
-    // =========================================================
-
     public void stun_player()
     {
         if (isStunned ||
             isInvincible ||
             eat_system.isPowerUpActive)
-        {
             return;
-        }
 
         StartCoroutine(StunCoroutine());
     }
 
-
-    IEnumerator StunCoroutine()
+    private IEnumerator StunCoroutine()
     {
         juice.PlayJuice();
 
@@ -679,27 +744,26 @@ public class SC_player : MonoBehaviour
         isStunned = false;
     }
 
-
     // =========================================================
     // LOW HEALTH
     // =========================================================
 
-    void HandleLowHealthBlink()
+    private void HandleLowHealthBlink()
     {
+        if (health == null)
+            return;
+
         if (health.current_health == 1)
         {
             if (lowHealthCoroutine == null)
-            {
                 lowHealthCoroutine =
                     StartCoroutine(LowHealthBlink());
-            }
         }
         else
         {
             if (lowHealthCoroutine != null)
             {
                 StopCoroutine(lowHealthCoroutine);
-
                 lowHealthCoroutine = null;
             }
 
@@ -707,11 +771,9 @@ public class SC_player : MonoBehaviour
         }
     }
 
-
-    IEnumerator LowHealthBlink()
+    private IEnumerator LowHealthBlink()
     {
         bool toggle = false;
-
 
         while (health.current_health == 1)
         {
@@ -722,310 +784,57 @@ public class SC_player : MonoBehaviour
 
             toggle = !toggle;
 
-            yield return new WaitForSeconds(lowHealthBlinkRate);
+            yield return new WaitForSeconds(
+                lowHealthBlinkRate
+            );
         }
-
 
         spriteRenderer.material = normalMaterial;
 
         lowHealthCoroutine = null;
     }
 
-
     // =========================================================
-    // FIXED UPDATE
-    // =========================================================
-
-    void FixedUpdate()
-    {
-        added_velocity_ =
-            Vector2.Lerp(
-                added_velocity_,
-                added_velocity,
-                0.2f
-            );
-
-        if (eat_system != null && eat_system.isEating)
-        {
-            moveInput = Vector2.zero;
-
-            return;
-        }
-
-        if (!canMove)
-            return;
-
-        if (Time.timeScale == 0)
-            return;
-
-
-        // =====================================================
-        // CLIMB
-        // =====================================================
-
-        if (isClimbing)
-        {
-            if (grillage == null)
-            {
-                StopClimbing();
-                return;
-            }
-
-
-            Vector2 climbInput =
-                Move.action.ReadValue<Vector2>();
-
-
-            if (climbInput.magnitude < 0.1f)
-            {
-                climbInput = Vector2.zero;
-            }
-            else
-            {
-                climbInput.Normalize();
-            }
-
-
-            Vector2 climbVelocity =
-                climbInput * climbSpeed;
-
-
-            rb.linearVelocity = climbVelocity;
-
-
-            Vector2 nextPosition =
-                rb.position +
-                climbVelocity *
-                Time.fixedDeltaTime;
-
-
-            rb.position =
-                grillage.ClampPosition(nextPosition);
-
-
-            return;
-        }
-
-
-        // =====================================================
-        // MOVEMENT NORMAL
-        // =====================================================
-        if (!isFrozen)
-        {
-
-
-            float horizontalSpeed =
-                moveInput.x *
-                (
-                    eat_system.isPowerUpActive
-                        ? PowermoveSpeed
-                        : moveSpeed
-                )
-                + knockbackVelocity.x;
-            float verticalSpeed =
-                rb.linearVelocity.y;
-
-
-            if (knockbackVelocity.y != 0)
-            {
-                verticalSpeed =
-                    knockbackVelocity.y;
-
-                knockbackVelocity.y = 0;
-            }
-
-
-            rb.linearVelocity =
-                new Vector2(
-                    horizontalSpeed +
-                    added_velocity_.x,
-
-                    verticalSpeed +
-                    added_velocity_.y
-                );
-
-
-            knockbackVelocity.x =
-                Mathf.Lerp(
-                    knockbackVelocity.x,
-                    0,
-                    0.15f
-                );
-        }
-    }
-
-
-    // =========================================================
-    // LATE UPDATE
+    // DAMAGE
     // =========================================================
 
-    void LateUpdate()
-    {
-        float x = transform.position.x;
-
-
-        // =====================================================
-        // GHOST SCREEN WRAP
-        // =====================================================
-
-        if (x > (limit.y - 0.2f))
-        {
-            ghost.gameObject.SetActive(true);
-
-            ghost.localScale =
-                transform.localScale;
-
-
-            float distance =
-                limit.y - x;
-
-
-            float ghostX =
-                limit.x - distance;
-
-
-            ghost.position =
-                new Vector3(
-                    ghostX,
-                    transform.position.y,
-                    transform.position.z
-                );
-        }
-        else if (x < (limit.x + 0.2f))
-        {
-            ghost.gameObject.SetActive(true);
-
-            ghost.localScale =
-                transform.localScale;
-
-
-            float distance =
-                x - limit.x;
-
-
-            float ghostX =
-                limit.y + distance;
-
-
-            ghost.position =
-                new Vector3(
-                    ghostX,
-                    transform.position.y,
-                    transform.position.z
-                );
-        }
-        else
-        {
-            ghost.gameObject.SetActive(false);
-        }
-
-
-        // =====================================================
-        // SCREEN WRAP
-        // =====================================================
-
-        if (x > limit.y)
-        {
-            transform.position =
-                new Vector3(
-                    limit.x,
-                    transform.position.y,
-                    transform.position.z
-                );
-
-
-            if (rb.linearVelocity.x > 0)
-            {
-                rb.linearVelocity =
-                    new Vector2(
-                        -Mathf.Abs(
-                            rb.linearVelocity.x
-                        ),
-                        rb.linearVelocity.y
-                    );
-            }
-        }
-        else if (x < limit.x)
-        {
-            transform.position =
-                new Vector3(
-                    limit.y,
-                    transform.position.y,
-                    transform.position.z
-                );
-
-
-            if (rb.linearVelocity.x < 0)
-            {
-                rb.linearVelocity =
-                    new Vector2(
-                        Mathf.Abs(
-                            rb.linearVelocity.x
-                        ),
-                        rb.linearVelocity.y
-                    );
-            }
-        }
-    }
-
-
-    // =========================================================
-    // TAKE DAMAGE
-    // =========================================================
     public void TakeDamage(
         int damage,
         Vector2 ejection_power,
         Vector3 sourcePosition)
     {
-        // Double sécurité.
         if (!canTakeDamage ||
             isInvincible ||
             burning)
-        {
             return;
-        }
 
         if (isFrozen ||
             eat_system.isPowerUpActive)
-        {
             return;
-        }
 
         anim.SetBool("Stun", false);
         anim.SetTrigger("Hit");
 
         if (isClimbing)
-        {
             StopClimbingJump();
-        }
-
-        // =====================================================
-        // BOUNCE
-        // Même logique que le HIT, mais sans FREEZE
-        // =====================================================
 
         if (damage == 0)
         {
             bounce_sfx.PlayJuice();
 
             if (hitCoroutine != null)
-            {
                 StopCoroutine(hitCoroutine);
-            }
 
-            hitCoroutine = StartCoroutine(
-                BounceWithKnockback(
-                    sourcePosition,
-                    ejection_power
-                )
-            );
+            hitCoroutine =
+                StartCoroutine(
+                    BounceWithKnockback(
+                        sourcePosition,
+                        ejection_power
+                    )
+                );
         }
         else
         {
-            // =================================================
-            // DAMAGE NORMAL
-            // =================================================
-
             health.take_damage(damage);
 
             eat_system.take_damage();
@@ -1035,16 +844,15 @@ public class SC_player : MonoBehaviour
             if (health.current_health > 0)
             {
                 if (hitCoroutine != null)
-                {
                     StopCoroutine(hitCoroutine);
-                }
 
-                hitCoroutine = StartCoroutine(
-                    HitFreezeWithKnockback(
-                        sourcePosition,
-                        ejection_power
-                    )
-                );
+                hitCoroutine =
+                    StartCoroutine(
+                        HitFreezeWithKnockback(
+                            sourcePosition,
+                            ejection_power
+                        )
+                    );
 
                 StartInvincibility(invincibilityTime);
             }
@@ -1058,7 +866,81 @@ public class SC_player : MonoBehaviour
     }
 
     // =========================================================
-    // LAVA HIT
+    // BOUNCE
+    // =========================================================
+
+    private IEnumerator BounceWithKnockback(
+        Vector3 sourcePosition,
+        Vector2 power)
+    {
+        Vector2 direction =
+            (
+                transform.position -
+                sourcePosition
+            ).normalized;
+
+        knockbackVelocity = new Vector2(
+            direction.x *
+            hitKnockback.x *
+            power.x,
+
+            hitKnockback.y *
+            transform.localScale.y *
+            power.y
+        );
+
+        yield return new WaitForSeconds(0.1f);
+    }
+
+    // =========================================================
+    // HIT FREEZE
+    // =========================================================
+
+    private IEnumerator HitFreezeWithKnockback(
+        Vector3 sourcePosition,
+        Vector2 power)
+    {
+        isFrozen = true;
+        canTakeDamage = false;
+
+        rb.linearVelocity = Vector2.zero;
+
+        rb.bodyType =
+            RigidbodyType2D.Kinematic;
+
+        yield return new WaitForSecondsRealtime(
+            hitFreezeTime
+        );
+
+        rb.bodyType =
+            RigidbodyType2D.Dynamic;
+
+        isFrozen = false;
+
+        Vector2 direction =
+            (
+                transform.position -
+                sourcePosition
+            ).normalized;
+
+        knockbackVelocity = new Vector2(
+            direction.x *
+            hitKnockback.x *
+            power.x,
+
+            hitKnockback.y *
+            transform.localScale.y *
+            power.y
+        );
+
+        yield return new WaitForSeconds(0.1f);
+
+        if (!isInvincible)
+            canTakeDamage = true;
+    }
+
+    // =========================================================
+    // LAVA
     // =========================================================
 
     public void LavaHit(
@@ -1066,17 +948,13 @@ public class SC_player : MonoBehaviour
         float controlMultiplier,
         float controlTime)
     {
-
         burning = true;
-
 
         rb.bodyType =
             RigidbodyType2D.Dynamic;
 
-
         rb.linearVelocity =
             launchVelocity;
-
 
         StartCoroutine(
             LavaControlLock(
@@ -1085,147 +963,73 @@ public class SC_player : MonoBehaviour
             )
         );
 
-
         if (isInvincible ||
             !canTakeDamage)
-        {
             return;
-        }
 
         if (eat_system.isPowerUpActive)
-        {
             return;
-        }
-
 
         if (health.current_health == 0)
             return;
 
-
-
-        anim.SetBool(
-            "Stun",
-            false
-        );
-
-
-        anim.SetTrigger(
-            "Hit"
-        );
-
+        anim.SetBool("Stun", false);
+        anim.SetTrigger("Hit");
 
         isStunned = false;
-
-
         isFrozen = false;
-        isStunned = false;
-
 
         eat_system.take_damage();
 
         health.take_damage(1);
 
-
         if (health.current_health > 0)
         {
             if (hitCoroutine != null)
-            {
                 StopCoroutine(hitCoroutine);
-            }
 
-
-            // IMPORTANT :
-            // Même système d'invincibilité que les dégâts normaux.
-            StartInvincibility(
-                invincibilityTime
-            );
+            StartInvincibility(invincibilityTime);
         }
         else
         {
             Die();
         }
 
-
         damage_lava_sfx.PlayJuice();
     }
 
-
-    // =========================================================
-    // LAVA CONTROL
-    // =========================================================
-    private IEnumerator BounceWithKnockback(
-    Vector3 sourcePosition,
-    Vector2 power)
-    {
-        // Même calcul de direction que le HitFreeze
-        Vector2 direction =
-            (
-                transform.position -
-                sourcePosition
-            ).normalized;
-
-        knockbackVelocity =
-            new Vector2(
-                direction.x *
-                hitKnockback.x *
-                power.x,
-
-                hitKnockback.y *
-                transform.localScale.y *
-                power.y
-            );
-
-        // Même comportement de relâchement du knockback
-        yield return new WaitForSeconds(0.1f);
-
-    }
     private IEnumerator LavaControlLock(
         float multiplier,
         float time)
     {
-  
-
-
         moveSpeed *= multiplier;
-
         PowermoveSpeed *= multiplier;
 
-
         yield return new WaitForSeconds(time);
-
 
         yield return new WaitUntil(
             () => isGrounded || isClimbing
         );
 
         moveSpeed = base_speed;
+        PowermoveSpeed = BasePowermoveSpeed;
 
         burning = false;
-
-        PowermoveSpeed =
-            BasePowermoveSpeed;
     }
-
 
     // =========================================================
     // INVINCIBILITY
     // =========================================================
 
-    public void TriggerInvincibility(
-        float duration)
+    public void TriggerInvincibility(float duration)
     {
         StartInvincibility(duration);
     }
 
-
-    public void StartInvincibility(
-        float duration)
+    public void StartInvincibility(float duration)
     {
         if (invincibilityCoroutine != null)
-        {
             StopCoroutine(invincibilityCoroutine);
-        }
-
 
         invincibilityCoroutine =
             StartCoroutine(
@@ -1233,174 +1037,241 @@ public class SC_player : MonoBehaviour
             );
     }
 
-
-    private IEnumerator InvincibilityRoutine(
-        float duration)
+    private IEnumerator InvincibilityRoutine(float duration)
     {
-        // =====================================================
-        // IMPORTANT :
-        // Les deux protections sont activées ensemble.
-        // =====================================================
-
         isInvincible = true;
         canTakeDamage = false;
 
-
         float elapsed = 0f;
         bool visible = true;
-
 
         while (elapsed < duration)
         {
             visible = !visible;
 
-
-            spriteRenderer.enabled =
-                visible;
-
+            spriteRenderer.enabled = visible;
 
             yield return new WaitForSecondsRealtime(0.1f);
-
 
             elapsed += 0.1f;
         }
 
-
         spriteRenderer.enabled = true;
 
-
         isInvincible = false;
-
-
-        // On ne réactive les dégâts qu'une fois
-        // l'invincibilité complètement terminée.
         canTakeDamage = true;
-
 
         invincibilityCoroutine = null;
     }
 
-
     // =========================================================
-    // HIT FREEZE + KNOCKBACK
+    // POWERUP
     // =========================================================
 
-    private IEnumerator HitFreezeWithKnockback(
-        Vector3 sourcePosition, Vector2 power)
+    private IEnumerator PowerupFreeze(bool isActivating)
     {
         isFrozen = true;
 
-        canTakeDamage = false;
-
-
-
-        rb.linearVelocity =
-            Vector2.zero;
-
+        rb.linearVelocity = Vector2.zero;
 
         rb.bodyType =
             RigidbodyType2D.Kinematic;
-
-
-
-
-
-        yield return new WaitForSecondsRealtime(
-            hitFreezeTime
-        );
-
-
-        rb.bodyType =
-            RigidbodyType2D.Dynamic;
-
-
-
-        isFrozen = false;
-
-
-        Vector2 direction =
-            (
-                transform.position -
-                sourcePosition
-            ).normalized;
-
-
-        knockbackVelocity =
-            new Vector2(
-                direction.x *
-                hitKnockback.x * power.x,
-
-                hitKnockback.y *
-                transform.localScale.y * power.y
-            );
-
-
-        yield return new WaitForSeconds(0.1f);
-
-
-        // =====================================================
-        // IMPORTANT :
-        // Ne jamais réactiver les dégâts pendant
-        // une invincibilité encore active.
-        // =====================================================
-
-        if (!isInvincible)
-        {
-            canTakeDamage = true;
-        }
-    }
-
-
-    // =========================================================
-    // POWERUP FREEZE
-    // =========================================================
-
-    private IEnumerator PowerupFreeze(
-        bool isActivating)
-    {
-        isFrozen = true;
-
-
-        rb.linearVelocity =
-            Vector2.zero;
-
-
-        rb.bodyType =
-            RigidbodyType2D.Kinematic;
-
 
         string trigger =
             isActivating
                 ? transformAnimTrigger
                 : detransformAnimTrigger;
 
-
         anim.SetTrigger(trigger);
-
 
         float originalTimeScale =
             Time.timeScale;
 
-
         Time.timeScale = 0f;
-
 
         yield return new WaitForSecondsRealtime(
             transformFreezeTime
         );
 
-
         Time.timeScale =
             originalTimeScale;
-
 
         rb.bodyType =
             RigidbodyType2D.Dynamic;
 
-
         isFrozen = false;
     }
 
+    public void powerup()
+    {
+        anim.ResetTrigger("Punch");
+        anim.SetBool("Eat", false);
+
+        anim.SetTrigger("Transform");
+
+        transformation.PlayJuice();
+
+        normal.SetActive(false);
+        transformed.SetActive(true);
+
+        StartCoroutine(
+            PowerupFreeze(true)
+        );
+    }
+
+    public void end_powerup()
+    {
+        normal.SetActive(true);
+        transformed.SetActive(false);
+
+        StartCoroutine(
+            PowerupFreeze(false)
+        );
+    }
+
+    // =========================================================
+    // CLIMB
+    // =========================================================
+
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        if (!other.CompareTag("Climb"))
+            return;
+
+        canClimb = true;
+
+        grillage =
+            other.GetComponent<SC_grillage>();
+    }
+
+    private void OnTriggerStay2D(Collider2D other)
+    {
+        if (!other.CompareTag("Climb"))
+            return;
+
+        canClimb = true;
+
+        if (grillage == null)
+            grillage =
+                other.GetComponent<SC_grillage>();
+    }
+
+    private void OnTriggerExit2D(Collider2D other)
+    {
+        if (!other.CompareTag("Climb"))
+            return;
+
+        SC_grillage exitedGrillage =
+            other.GetComponent<SC_grillage>();
+
+        if (grillage == exitedGrillage)
+        {
+            StopClimbing();
+
+            grillage = null;
+            canClimb = false;
+        }
+    }
+
+    private void TryStartClimbing(Vector2 input)
+    {
+        if (!canClimb ||
+            isClimbing ||
+            grillage == null ||
+            climbReattachTimer > 0f)
+            return;
+
+        if (input.y < climbAttachUpThreshold)
+            return;
+
+        if (Mathf.Abs(input.x) >
+            input.y * climbAttachDiagonalLimit)
+            return;
+
+        StartClimbing();
+    }
+
+    private void StartClimbing()
+    {
+        if (!canClimb ||
+            grillage == null ||
+            climbReattachTimer > 0f)
+            return;
+
+        isClimbing = true;
+
+        rb.gravityScale = 0f;
+        rb.linearVelocity = Vector2.zero;
+
+        anim.SetBool("Climb", true);
+    }
+
+    private void StopClimbing()
+    {
+        if (!isClimbing)
+            return;
+
+        isClimbing = false;
+
+        rb.gravityScale = base_gravity;
+        rb.linearVelocity = Vector2.zero;
+
+        grid.Stop();
+
+        anim.SetBool("Climb", false);
+    }
+
+    private void StopClimbingJump()
+    {
+        if (!isClimbing)
+            return;
+
+        isClimbing = false;
+
+        climbReattachTimer =
+            climbReattachDelay;
+
+        rb.gravityScale =
+            base_gravity;
+
+        rb.linearVelocity =
+            Vector2.zero;
+
+        grid.Stop();
+
+        anim.SetBool("Climb", false);
+    }
+
+    // =========================================================
+    // FACE TARGET
+    // =========================================================
+
+    public void FaceTarget(Transform target)
+    {
+        if (target == null)
+            return;
+
+        float direction =
+            target.position.x -
+            transform.position.x;
+
+        if (direction > 0)
+        {
+            transform.localScale = new Vector3(
+                Mathf.Abs(transform.localScale.x),
+                transform.localScale.y,
+                transform.localScale.z
+            );
+        }
+        else if (direction < 0)
+        {
+            transform.localScale = new Vector3(
+                -Mathf.Abs(transform.localScale.x),
+                transform.localScale.y,
+                transform.localScale.z
+            );
+        }
+    }
 
     // =========================================================
     // DIE
@@ -1410,358 +1281,39 @@ public class SC_player : MonoBehaviour
     {
         canMove = false;
 
-
         if (hitCoroutine != null)
-        {
             StopCoroutine(hitCoroutine);
-        }
 
-        rb.linearVelocity =
-        Vector2.zero;
+        rb.linearVelocity = Vector2.zero;
 
         GetComponent<SortingGroup>()
             .sortingLayerName = "UI";
-        rb.constraints = RigidbodyConstraints2D.FreezeAll;
-        rb.gravityScale = 0;
-        isFrozen = true;
-        rb.linearVelocity =
-        Vector2.zero;
 
+        rb.constraints =
+            RigidbodyConstraints2D.FreezeAll;
+
+        rb.gravityScale = 0;
+
+        isFrozen = true;
 
         anim.SetBool("Die", true);
-
         anim.SetBool("Eat", false);
-
 
         eat_system.eating_sfx.Stop();
 
-
         game_over_screen.SetActive(true);
 
-
-        SC_music_manager.instance
-            .stop_music();
-
+        SC_music_manager.instance.stop_music();
 
         collider.enabled = false;
 
-
         die.PlayJuice();
 
-
-        knockbackVelocity =
-            Vector2.zero;
-
+        knockbackVelocity = Vector2.zero;
+        externalVelocity = Vector2.zero;
 
         Time.timeScale = 0;
     }
-
-
-    // =========================================================
-    // GIZMOS
-    // =========================================================
-
-    void OnDrawGizmosSelected()
-    {
-        if (damageCheck != null)
-        {
-            Gizmos.color = Color.red;
-
-
-            Gizmos.DrawWireSphere(
-                damageCheck.position,
-                damageRadius
-            );
-        }
-    }
-
-
-    // =========================================================
-    // POWERUP
-    // =========================================================
-
-    public void powerup()
-    {
-        anim.ResetTrigger("Punch");
-        anim.SetBool("Eat", false);
-
-        anim.SetTrigger("Transform");
-
-
-        transformation.PlayJuice();
-
-
-        normal.SetActive(false);
-
-        transformed.SetActive(true);
-
-
-        StartCoroutine(
-            PowerupFreeze(true)
-        );
-    }
-
-
-    public void end_powerup()
-    {
-        normal.SetActive(true);
-
-        transformed.SetActive(false);
-
-
-        StartCoroutine(
-            PowerupFreeze(false)
-        );
-    }
-
-
-    // =========================================================
-    // CLIMB TRIGGERS
-    // =========================================================
-
-    private void OnTriggerEnter2D(
-        Collider2D other)
-    {
-        if (other.CompareTag("Climb"))
-        {
-            canClimb = true;
-
-
-            grillage =
-                other.GetComponent<SC_grillage>();
-        }
-    }
-
-
-    private void OnTriggerStay2D(
-        Collider2D other)
-    {
-        if (other.CompareTag("Climb"))
-        {
-            canClimb = true;
-
-
-            if (grillage == null)
-            {
-                grillage =
-                    other.GetComponent<SC_grillage>();
-            }
-        }
-    }
-
-
-    private void OnTriggerExit2D(
-        Collider2D other)
-    {
-        if (other.CompareTag("Climb"))
-        {
-            SC_grillage exitedGrillage =
-                other.GetComponent<SC_grillage>();
-
-
-            if (grillage == exitedGrillage)
-            {
-                StopClimbing();
-
-
-                grillage = null;
-
-
-                canClimb = false;
-            }
-        }
-    }
-
-
-    // =========================================================
-    // TRY START CLIMBING
-    // =========================================================
-
-    private void TryStartClimbing(
-        Vector2 input)
-    {
-        if (!canClimb)
-            return;
-
-        if (isClimbing)
-            return;
-
-        if (grillage == null)
-            return;
-
-        if (climbReattachTimer > 0f)
-            return;
-
-
-        if (input.y <
-            climbAttachUpThreshold)
-        {
-            return;
-        }
-
-
-        if (Mathf.Abs(input.x) >
-            input.y *
-            climbAttachDiagonalLimit)
-        {
-            return;
-        }
-
-
-        StartClimbing();
-    }
-
-
-    // =========================================================
-    // START CLIMBING
-    // =========================================================
-
-    void StartClimbing()
-    {
-        if (!canClimb)
-            return;
-
-        if (grillage == null)
-            return;
-
-        if (climbReattachTimer > 0f)
-            return;
-
-
-        isClimbing = true;
-
-
-        rb.gravityScale = 0;
-
-
-        rb.linearVelocity =
-            Vector2.zero;
-
-
-        anim.SetBool(
-            "Climb",
-            true
-        );
-    }
-
-
-    // =========================================================
-    // STOP CLIMBING
-    // =========================================================
-
-    void StopClimbing()
-    {
-        if (!isClimbing)
-            return;
-
-
-        isClimbing = false;
-
-
-        rb.gravityScale =
-            base_gravity;
-
-
-        rb.linearVelocity =
-            Vector2.zero;
-
-
-        grid.Stop();
-
-
-        anim.SetBool(
-            "Climb",
-            false
-        );
-    }
-
-
-    // =========================================================
-    // STOP CLIMBING POUR SAUT
-    // =========================================================
-
-    void StopClimbingJump()
-    {
-        if (!isClimbing)
-            return;
-
-
-        isClimbing = false;
-
-
-        climbReattachTimer =
-            climbReattachDelay;
-
-
-        rb.gravityScale =
-            base_gravity;
-
-
-        rb.linearVelocity =
-            Vector2.zero;
-
-
-        grid.Stop();
-
-
-        anim.SetBool(
-            "Climb",
-            false
-        );
-    }
-
-
-    // =========================================================
-    // FACE TARGET
-    // =========================================================
-
-    public void FaceTarget(
-        Transform target)
-    {
-        if (target == null)
-            return;
-
-
-        float direction =
-            target.position.x -
-            transform.position.x;
-
-
-        if (direction > 0)
-        {
-            transform.localScale =
-                new Vector3(
-                    Mathf.Abs(
-                        transform.localScale.x
-                    ),
-                    transform.localScale.y,
-                    transform.localScale.z
-                );
-        }
-        else if (direction < 0)
-        {
-            transform.localScale =
-                new Vector3(
-                    -Mathf.Abs(
-                        transform.localScale.x
-                    ),
-                    transform.localScale.y,
-                    transform.localScale.z
-                );
-        }
-    }
-
-
-    // =========================================================
-    // GROUND VELOCITY
-    // =========================================================
-
-    public void SetGroundVelocity(
-        Vector2 vel)
-    {
-        added_velocity = vel;
-    }
-
 
     // =========================================================
     // REVIVE
@@ -1770,12 +1322,9 @@ public class SC_player : MonoBehaviour
     public void Revive()
     {
         normal.SetActive(true);
-
         transformed.SetActive(false);
 
-
         StopAllCoroutines();
-
 
         isFrozen = false;
         isStunned = false;
@@ -1783,68 +1332,156 @@ public class SC_player : MonoBehaviour
         burning = false;
         canTakeDamage = true;
 
-
         isClimbing = false;
         canClimb = false;
         grillage = null;
 
-
         climbReattachTimer = 0f;
 
+        externalVelocity = Vector2.zero;
+        knockbackVelocity = Vector2.zero;
 
-        rb.gravityScale =
-            base_gravity;
-
-
-
+        rb.gravityScale = base_gravity;
 
         GetComponent<SortingGroup>()
             .sortingLayerName = "Default";
-
 
         coyoteTimeCounter = 0f;
         jumpBufferCounter = 0f;
         isJumping = false;
 
-
         if (health != null)
-        {
             health.revive();
-        }
-
 
         collider.enabled = true;
-
-
         spriteRenderer.enabled = true;
-
 
         rb.bodyType =
             RigidbodyType2D.Dynamic;
 
-
         rb.linearVelocity =
             Vector2.zero;
-
 
         rb.constraints =
             RigidbodyConstraints2D.FreezeRotation;
 
-
         rb.angularVelocity = 0;
-
 
         eat_system.ResetSystem();
 
+        anim.SetBool("Die", false);
+        anim.SetBool("Climb", false);
 
-        anim.SetBool(
-            "Die",
-            false
-        );
-        anim.SetBool(
-         "Climb",
-         false
-     ); anim.SetTrigger("Start");
-        transform.localScale = Vector3.one;
+        anim.SetTrigger("Start");
+
+        transform.localScale =
+            Vector3.one;
+    }
+
+    // =========================================================
+    // GROUND VELOCITY
+    // =========================================================
+
+
+    // =========================================================
+    // GIZMOS
+    // =========================================================
+
+    private void OnDrawGizmosSelected()
+    {
+        if (damageCheck != null)
+        {
+            Gizmos.color = Color.red;
+
+            Gizmos.DrawWireSphere(
+                damageCheck.position,
+                damageRadius
+            );
+        }
+    }
+
+    // =========================================================
+    // SCREEN WRAP
+    // =========================================================
+
+    private void LateUpdate()
+    {
+        float x = transform.position.x;
+
+        if (x > limit.y - 0.2f)
+        {
+            ghost.gameObject.SetActive(true);
+
+            ghost.localScale =
+                transform.localScale;
+
+            float distance =
+                limit.y - x;
+
+            float ghostX =
+                limit.x - distance;
+
+            ghost.position = new Vector3(
+                ghostX,
+                transform.position.y,
+                transform.position.z
+            );
+        }
+        else if (x < limit.x + 0.2f)
+        {
+            ghost.gameObject.SetActive(true);
+
+            ghost.localScale =
+                transform.localScale;
+
+            float distance =
+                x - limit.x;
+
+            float ghostX =
+                limit.y + distance;
+
+            ghost.position = new Vector3(
+                ghostX,
+                transform.position.y,
+                transform.position.z
+            );
+        }
+        else
+        {
+            ghost.gameObject.SetActive(false);
+        }
+
+        if (x > limit.y)
+        {
+            transform.position = new Vector3(
+                limit.x,
+                transform.position.y,
+                transform.position.z
+            );
+
+            if (rb.linearVelocity.x > 0)
+            {
+                rb.linearVelocity = new Vector2(
+                    -Mathf.Abs(rb.linearVelocity.x),
+                    rb.linearVelocity.y
+                );
+            }
+        }
+        else if (x < limit.x)
+        {
+            transform.position = new Vector3(
+                limit.y,
+                transform.position.y,
+                transform.position.z
+            );
+
+            if (rb.linearVelocity.x < 0)
+            {
+                rb.linearVelocity = new Vector2(
+                    Mathf.Abs(rb.linearVelocity.x),
+                    rb.linearVelocity.y
+                );
+            }
+        }
     }
 }
