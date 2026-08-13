@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   lines:
   - character: {fileID: 11400000, guid: 358c18f725108b14d9b9efeb15db2fc1, type: 2}
-    text: "Litchi,<p=2> arr\xEAte d'emb\xEAter les gentils!"
+    text: "Litchi,<p=2> arr\xEAte d'emb\xEAter les gentils!<p=5> Tu n'es qu'une l\xE2che!"
     hasChoices: 0
     choices:
     - choiceText: Oui

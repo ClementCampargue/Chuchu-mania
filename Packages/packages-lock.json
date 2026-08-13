@@ -1,7 +1,7 @@
 {
   "dependencies": {
     "com.discord.game-sdk": {
-      "version": "file:C:/Users/ccamp/Downloads/Discord-Game-SDK-master/Discord-Game-SDK-master",
+      "version": "file:C:/Users/rcamp/Downloads/Discord-Game-SDK-master",
       "depth": 0,
       "source": "local",
       "dependencies": {}

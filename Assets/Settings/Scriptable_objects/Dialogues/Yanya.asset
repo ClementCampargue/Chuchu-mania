@@ -53,7 +53,7 @@ MonoBehaviour:
         hasChoices: 0
         choices: []
       - character: {fileID: 11400000, guid: 9bb439f5fd2ff414da01625643e8aff3, type: 2}
-        text: "Oui! <p=5>Ca me d\xE9tends d'y penser pendant ma pause."
+        text: "Oui! <p=5>Ca me d\xE9tend d'y penser pendant ma pause."
         hasChoices: 0
         choices: []
       - character: {fileID: 11400000, guid: a4442d57da2b0864093b6599e15d9f31, type: 2}

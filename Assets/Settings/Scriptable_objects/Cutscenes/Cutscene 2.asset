@@ -36,8 +36,8 @@ MonoBehaviour:
       answer: []
       actionID: 
   - character: {fileID: 11400000, guid: b1ce399ef06d9a5419786dbbca23aee3, type: 2}
-    text: "Hey,<p=2> bienvenue dans mon \xE9den,<p=2> petite gel\xE9e. <p=5> Mets-toi
-      \xE0 l'aise. <p=5> C'est la devise de notre clan."
+    text: "Hey,<p=2> bienvenue dans mon \xE9den,<p=2> petite gel\xE9e. <p=5>Mets-toi
+      \xE0 l'aise.<p=5> C'est la devise de notre clan."
     hasChoices: 0
     choices:
     - choiceText: Oui

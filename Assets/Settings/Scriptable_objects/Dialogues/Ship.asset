@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   lines:
   - character: {fileID: 11400000, guid: f1b273b5eefe3a6408d92c0f6cb1c256, type: 2}
-    text: "On part \xE0 l'aventure"
+    text: "On part \xE0 l'aventure?"
     hasChoices: 1
     choices:
     - choiceText: Oui
