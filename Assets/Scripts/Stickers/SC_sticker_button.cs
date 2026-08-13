@@ -53,6 +53,12 @@ public class SC_sticker_button : MonoBehaviour
 
     private void Update()
     {
+        if (button != null)
+        {
+            button.image.raycastTarget = !SC_controller_manager.instance.using_controller;
+        }
+
+   
 
         if (selected && selectAction.action.WasPressedThisFrame())
         {
