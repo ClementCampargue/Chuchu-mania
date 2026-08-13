@@ -801,6 +801,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6459469710402256254, guid: fe61762b851a74f41b422346f6cf4fea, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 8638522304926186513, guid: fe61762b851a74f41b422346f6cf4fea, type: 3}
       propertyPath: m_Name
       value: ConveyorBelt (2)
