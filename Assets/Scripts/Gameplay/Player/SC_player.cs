@@ -1024,6 +1024,7 @@ public class SC_player : MonoBehaviour
     public void TriggerInvincibility(float duration)
     {
         StartInvincibility(duration);
+        Invoke("delay_safe", invincibilityTime+0.1f);
     }
 
     public void StartInvincibility(float duration)
@@ -1063,7 +1064,11 @@ public class SC_player : MonoBehaviour
 
         invincibilityCoroutine = null;
     }
+    void delay_safe()
+    {
+        spriteRenderer.enabled = true;
 
+    }
     // =========================================================
     // POWERUP
     // =========================================================
