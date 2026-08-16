@@ -97,7 +97,7 @@ MonoBehaviour:
       actionID: 
   - character: {fileID: 11400000, guid: 999170bf34540294a957e7f2408c8a18, type: 2}
     text: "Jamais une pauvre gel\xE9e rondouillarde comme elle ne pourra suivre le
-      ryhtme d'une reine de la lune!"
+      rythme d'une reine de la lune!"
     hasChoices: 0
     choices:
     - choiceText: Oui
