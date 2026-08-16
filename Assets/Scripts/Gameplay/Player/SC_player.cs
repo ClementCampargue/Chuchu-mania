@@ -140,7 +140,7 @@ public class SC_player : MonoBehaviour
     public Vector2 moveInput;
     public bool isGrounded;
 
-    private bool wasGrounded;
+    public bool wasGrounded;
     private bool isFrozen;
 
     // =========================================================
@@ -245,13 +245,13 @@ public class SC_player : MonoBehaviour
             Time.timeScale != 0)
         {
             Vector2 input = Move.action.ReadValue<Vector2>();
-
+            Debug.Log($"Move input = {input}");
             moveInput = new Vector2(
-                Mathf.Abs(input.x) > 0.1f
+                Mathf.Abs(input.x) > 0.2f
                     ? Mathf.Sign(input.x)
                     : 0f,
 
-                Mathf.Abs(input.y) > 0.1f
+                Mathf.Abs(input.y) > 0.2f
                     ? Mathf.Sign(input.y)
                     : 0f
             );
@@ -347,7 +347,7 @@ public class SC_player : MonoBehaviour
 
         if (IsAnimationPlaying("jump_idle") &&
             isGrounded &&
-            Mathf.Abs(rb.linearVelocity.y) < 0.01f)
+            Mathf.Abs(rb.linearVelocity.y) < 0.01f && rb.gravityScale > 0)
         {
             anim.ResetTrigger("Jump");
             anim.SetTrigger("Land");
@@ -357,20 +357,42 @@ public class SC_player : MonoBehaviour
             land.PlayJuice();
         }
 
-        if (!wasGrounded && isGrounded)
+        if (IsAnimationPlaying("jump_idle")  &&
+            isGrounded &&
+            Mathf.Abs(rb.linearVelocity.y) > -0.1f && rb.gravityScale < 0)
         {
-            anim.ResetTrigger("Hit");
+            anim.ResetTrigger("Jump");
+            anim.SetTrigger("Land");
 
-            if (rb.linearVelocity.y <= 0.5f)
-            {
-                anim.ResetTrigger("Jump");
-                anim.SetTrigger("Land");
+            moveSpeed = base_speed;
 
-                moveSpeed = base_speed;
-
-                land.PlayJuice();
-            }
+            land.PlayJuice();
         }
+
+        if (IsAnimationPlaying("hit") && wasGrounded &&
+            isGrounded &&
+            Mathf.Abs(rb.linearVelocity.y) < 0.1f && rb.gravityScale > 0)
+        {
+            anim.ResetTrigger("Jump");
+            anim.SetTrigger("Land");
+
+            moveSpeed = base_speed;
+
+            land.PlayJuice();
+        }
+
+        if (IsAnimationPlaying("hit") && !wasGrounded &&
+            isGrounded &&
+            Mathf.Abs(rb.linearVelocity.y) > -0.01f && rb.gravityScale < 0)
+        {
+            anim.ResetTrigger("Jump");
+            anim.SetTrigger("Land");
+
+            moveSpeed = base_speed;
+
+            land.PlayJuice();
+        }
+
 
         // -----------------------------------------------------
         // FACING
@@ -813,7 +835,7 @@ public class SC_player : MonoBehaviour
             return;
 
         anim.SetBool("Stun", false);
-        anim.SetTrigger("Hit");
+        anim.SetBool("Hit",true);
 
         if (isClimbing)
             StopClimbingJump();
@@ -974,7 +996,7 @@ public class SC_player : MonoBehaviour
             return;
 
         anim.SetBool("Stun", false);
-        anim.SetTrigger("Hit");
+        anim.SetBool("Hit", true);
 
         isStunned = false;
         isFrozen = false;
@@ -1036,8 +1058,13 @@ public class SC_player : MonoBehaviour
             StartCoroutine(
                 InvincibilityRoutine(duration)
             );
+        Invoke("delay", 0.15f);
     }
+    void delay()
+    {
+        anim.SetBool("Hit", false);
 
+    }
     private IEnumerator InvincibilityRoutine(float duration)
     {
         isInvincible = true;
@@ -1376,6 +1403,7 @@ public class SC_player : MonoBehaviour
 
         anim.SetBool("Die", false);
         anim.SetBool("Climb", false);
+        anim.SetBool("Hit", false);
 
         anim.SetTrigger("Start");
 

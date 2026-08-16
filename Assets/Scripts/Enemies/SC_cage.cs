@@ -41,6 +41,7 @@ public class SC_cage : MonoBehaviour
 
     private bool isBouncing = false;
     public static SC_cage instance;
+    public SC_juiciness bounce_juice;
     private void Awake()
     {
         instance = this;
@@ -140,7 +141,7 @@ public class SC_cage : MonoBehaviour
     {
         // Réduit la vitesse à chaque rebond
         currentSpeed *= speedMultiplierOnBounce;
-
+        bounce_juice.PlayJuice();
         float angle = Random.Range(
             minBounceAngle,
             maxBounceAngle

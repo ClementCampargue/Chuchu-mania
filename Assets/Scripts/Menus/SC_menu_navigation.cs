@@ -7,7 +7,7 @@ public class SC_menu_navigation : MonoBehaviour
     public SC_Button[] buttons;
     public int defaultSelected = 0;
     public bool autoFindButtons = true;
-
+    public bool select_memory = true;
     [Header("Mouse")]
     [Tooltip("Si activé, bouger la souris ne désélectionne pas le bouton actuel.")]
     public bool ignore_mouse = false;
@@ -776,7 +776,7 @@ public class SC_menu_navigation : MonoBehaviour
         // =====================================================
 
         if (IsValidIndex(lastSelected) &&
-            IsButtonAvailable(buttons[lastSelected]))
+            IsButtonAvailable(buttons[lastSelected]) && select_memory)
         {
             currentIndex = lastSelected;
 

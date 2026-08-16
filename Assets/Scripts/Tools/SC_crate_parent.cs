@@ -54,4 +54,12 @@ public class SC_crate_parent : MonoBehaviour
         }
         this.enabled = false;
     }
+
+    public void OnDestroy()
+    {if (player != null)
+        {
+            player.transform.SetParent(gm.transform);
+        }
+        this.enabled = false;
+    }
 }

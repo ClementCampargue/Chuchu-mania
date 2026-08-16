@@ -1057,6 +1057,11 @@ public class SC_sticker_UI : MonoBehaviour,
             if (SC_sticker_menu.instance != null)
                 SC_sticker_menu.instance.quit_edit_mode();
         }
+        if (spawnedSticker)
+        {
+            if (SC_sticker_menu.instance != null)
+                SC_sticker_menu.instance.quit_edit_mode();
+        }
 
         if (SC_StickerSaveSystem.instance != null)
             SC_StickerSaveSystem.instance.AutoSave();

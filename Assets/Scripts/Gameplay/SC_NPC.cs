@@ -11,7 +11,7 @@ public class SC_NPC : MonoBehaviour
     public bool loopLastDialogue = true;
     private int currentDialogueIndex = 0;
     private bool hasFinishedDialogue = false;
-
+    private bool interactWasPressed = false;
 
     [Header("Interaction")]
     public GameObject interaction_popup;
@@ -65,20 +65,26 @@ public class SC_NPC : MonoBehaviour
         if (player == null)
             player = SC_player.instance;
 
+        if (!playerInRange || interactAction == null)
+            return;
 
-        if (playerInRange)
+        Vector2 stick = interactAction.action.ReadValue<Vector2>();
+
+        bool interactPressed = stick.y > 0.9f;
+
+        if (interactPressed && !interactWasPressed)
         {
-            if (!dialogueActive && !hasFinishedDialogue)
-                interaction_popup.SetActive(true);
-
-
-            if (interactAction.action.ReadValue<Vector2>().y > 0.5f && !dialogueActive && player.enabled && player.canMove)
+            if (!dialogueActive && player.enabled && player.canMove && player.isGrounded && player.wasGrounded && Mathf.Abs(player.rb.linearVelocityX) < 0.1f && Mathf.Abs(player.rb.linearVelocityY) <0.1f)
             {
                 StartTalking();
             }
         }
-    }
 
+        interactWasPressed = interactPressed;
+
+        if (!dialogueActive && !hasFinishedDialogue)
+            interaction_popup.SetActive(true);
+    }
 
     private void OnTriggerStay2D(Collider2D collision)
     {
@@ -128,7 +134,6 @@ public class SC_NPC : MonoBehaviour
         }
 
 
-        // Choix du dialogue actuel
         dialogue.currentDialogue = dialogues[currentDialogueIndex];
         dialogue.npc = this;
         dialogue.StartDialogue();
@@ -149,7 +154,6 @@ public class SC_NPC : MonoBehaviour
 
     public void EndTalking()
     {
-        // Passage au dialogue suivant
         NextDialogue();
 
         player.jumpBufferCounter = 0;

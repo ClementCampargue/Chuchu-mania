@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 310153615395688793}
   - component: {fileID: 8850293883598317108}
   - component: {fileID: 6038040437515322048}
+  - component: {fileID: 1168317179502656240}
   m_Layer: 10
   m_Name: Star_bit
   m_TagString: Untagged
@@ -92,6 +93,26 @@ CircleCollider2D:
   m_CompositeOrder: 0
   m_Offset: {x: 0, y: 0}
   m_Radius: 0.41
+--- !u!114 &1168317179502656240
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 793143194083467424}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5a5d6d9f609ae8548b0ccf0f75ff8b91, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  height: 0.1
+  speed: 5
+  horizontalDistance: 0
+  horizontalSpeed: 0
+  horizontalDirection: {x: 1, y: 0, z: 0}
+  useSmooth: 1
+  rotationAxis: {x: 0, y: 0, z: 0}
+  rotationSpeed: 0
 --- !u!1 &3220170749131341252
 GameObject:
   m_ObjectHideFlags: 0

@@ -48,9 +48,11 @@ public class SC_juiciness : MonoBehaviour
     public float slowMoScale = 0.05f;
 
     [Header("Curves")]
-    public AnimationCurve fovCurve = AnimationCurve.EaseInOut(0, 0, 1, 1);
-    public AnimationCurve timeScaleCurve = AnimationCurve.EaseInOut(0, 0, 1, 1);
+    public AnimationCurve fovCurve =
+        AnimationCurve.EaseInOut(0, 0, 1, 1);
 
+    public AnimationCurve timeScaleCurve =
+        AnimationCurve.EaseInOut(0, 0, 1, 1);
 
     private Vector3 originalScale;
     private Vector3 originalPosition;
@@ -58,22 +60,18 @@ public class SC_juiciness : MonoBehaviour
     private bool isScaling;
     private bool isShaking;
     private bool isFlashing;
-    private bool isFreezing;
 
-
-    void Awake()
+    private void Awake()
     {
         ResetState();
     }
 
-
-    void Start()
+    private void Start()
     {
         if (trs == null)
             trs = transform;
 
         originalScale = trs.localScale;
-
 
         if (flash)
         {
@@ -85,39 +83,27 @@ public class SC_juiciness : MonoBehaviour
         }
     }
 
-
-    void OnEnable()
+    private void OnEnable()
     {
         ResetState();
     }
 
-
-    void ResetState()
+    private void ResetState()
     {
         isScaling = false;
         isShaking = false;
         isFlashing = false;
-        isFreezing = false;
-
-        Time.timeScale = 1f;
     }
 
-
-    void Update()
+    public void PlayJuice()
     {
-
-    }
-
-
-public void PlayJuice()
-    {
-        if (this == null || gameObject == null)
-            return;
-
         if (!isActiveAndEnabled)
             return;
 
-        // Particles
+        // =====================================================
+        // PARTICLES
+        // =====================================================
+
         if (ps != null)
         {
             foreach (ParticleSystem particle in ps)
@@ -127,7 +113,10 @@ public void PlayJuice()
             }
         }
 
-        // Audio
+        // =====================================================
+        // AUDIO
+        // =====================================================
+
         if (audio != null)
         {
             foreach (AudioSource source in audio)
@@ -137,7 +126,10 @@ public void PlayJuice()
             }
         }
 
-        // Controller Rumble
+        // =====================================================
+        // CONTROLLER RUMBLE
+        // =====================================================
+
         if (rumble && SC_rumbleManager.instance != null)
         {
             SC_rumbleManager.instance.PlayRumble(
@@ -147,72 +139,69 @@ public void PlayJuice()
             );
         }
 
-        // Squash & Stretch
+        // =====================================================
+        // SQUASH & STRETCH
+        // =====================================================
+
         if (!isScaling)
             StartCoroutine(SquashAndStretch());
 
-        // Flash
+        // =====================================================
+        // FLASH
+        // =====================================================
+
         if (flash && !isFlashing)
             StartCoroutine(Flash());
 
-        // Local Shake
+        // =====================================================
+        // LOCAL SHAKE
+        // =====================================================
+
         if (!isShaking)
             StartCoroutine(Shake());
 
-        // Freeze Frame
-        if (freeze && !isFreezing)
-            StartCoroutine(FreezeFrame());
+        // =====================================================
+        // FREEZE FRAME
+        // =====================================================
+
+        if (freeze && SC_time_manager.instance != null)
+        {
+            SC_time_manager.instance.FreezeFrame(
+                freezeDuration,
+                slowMoScale
+            );
+        }
     }
 
-    IEnumerator FreezeFrame()
-    {
-        isFreezing = true;
+    // =========================================================
+    // FLASH
+    // =========================================================
 
-        float oldTimeScale = Time.timeScale;
-
-        Time.timeScale = slowMoScale;
-
-
-        yield return new WaitForSecondsRealtime(freezeDuration);
-
-
-        Time.timeScale = oldTimeScale;
-
-        isFreezing = false;
-    }
-
-
-
-    IEnumerator Flash()
+    private IEnumerator Flash()
     {
         isFlashing = true;
-
 
         if (spriteRenderer != null && flashMaterial != null)
             spriteRenderer.material = flashMaterial;
 
-
         yield return new WaitForSecondsRealtime(flashDuration);
-
 
         if (spriteRenderer != null)
             spriteRenderer.material = defaultMaterial;
 
-
         isFlashing = false;
     }
 
+    // =========================================================
+    // SQUASH & STRETCH
+    // =========================================================
 
-
-
-    IEnumerator SquashAndStretch()
+    private IEnumerator SquashAndStretch()
     {
         isScaling = true;
 
-
         Vector3 baseScale = originalScale;
         Vector3 targetScale = baseScale;
-
 
         if (verticalStretch)
         {
@@ -227,100 +216,90 @@ public void PlayJuice()
             targetScale.z *= squashAmount;
         }
 
-
-
-        float t = 0;
-
+        float t = 0f;
 
         while (t < scaleDuration)
         {
             t += Time.unscaledDeltaTime;
 
-            float value = Mathf.Clamp01(t / scaleDuration);
+            float value = Mathf.Clamp01(
+                t / scaleDuration
+            );
 
-            trs.localScale =
-                Vector3.Lerp(baseScale, targetScale, value * value);
+            trs.localScale = Vector3.Lerp(
+                baseScale,
+                targetScale,
+                value * value
+            );
 
             yield return null;
         }
 
-
-
-        t = 0;
-
+        t = 0f;
 
         while (t < scaleDuration)
         {
             t += Time.unscaledDeltaTime;
 
-            float value = Mathf.Clamp01(t / scaleDuration);
+            float value = Mathf.Clamp01(
+                t / scaleDuration
+            );
 
-            trs.localScale =
-                Vector3.Lerp(
-                    targetScale,
-                    baseScale,
-                    1f - Mathf.Pow(1f - value, 3f)
-                );
+            trs.localScale = Vector3.Lerp(
+                targetScale,
+                baseScale,
+                1f - Mathf.Pow(1f - value, 3f)
+            );
 
             yield return null;
         }
-
 
         trs.localScale = baseScale;
 
         isScaling = false;
     }
 
+    // =========================================================
+    // LOCAL SHAKE
+    // =========================================================
 
-
-
-    IEnumerator Shake()
+    private IEnumerator Shake()
     {
         isShaking = true;
 
-
         originalPosition = trs.localPosition;
 
-
-        float t = 0;
-
+        float t = 0f;
 
         while (t < shakeDuration)
         {
             t += Time.unscaledDeltaTime;
 
-
             trs.localPosition =
                 originalPosition +
                 Random.insideUnitSphere * shakeIntensity;
 
-
             yield return null;
         }
 
-
         trs.localPosition = originalPosition;
-
 
         isShaking = false;
     }
 
-
-
-    void OnDisable()
+    private void OnDisable()
     {
-        Time.timeScale = 1f;
-
         StopAllCoroutines();
 
-        ResetState();
+        if (trs != null)
+        {
+            trs.localScale = originalScale;
+            trs.localPosition = originalPosition;
+        }
     }
 
-
-    void OnDestroy()
+    private void OnDestroy()
     {
         StopAllCoroutines();
-
-        Time.timeScale = 1f;
     }
 }

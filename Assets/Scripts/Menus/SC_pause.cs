@@ -223,13 +223,15 @@ public class SC_pause : MonoBehaviour
     private void OpenPause()
     {
         isPaused = true;
+
         buttons.GetComponent<SC_menu_navigation>().ResetFirstSelected();
+
         tuto = false;
         settings = false;
 
-        // État du menu principal
         if (tuto_window != null)
             tuto_window.SetActive(false);
+
         if (settings_ != null)
             settings_.SetActive(false);
 
@@ -241,18 +243,15 @@ public class SC_pause : MonoBehaviour
 
         // Musique
         if (SC_music_manager.instance != null)
-        {
             SC_music_manager.instance.pause_music();
-        }
 
         // Curseur
         if (SC_scursorManager.instance != null)
-        {
             SC_scursorManager.instance.enable_cursor();
-        }
 
-        // Pause Unity
-        Time.timeScale = 0f;
+        // Pause via le Time Manager
+        if (SC_time_manager.instance != null)
+            SC_time_manager.instance.Pause();
 
         // Désactive le joueur
         if (SC_player.instance != null)
@@ -266,7 +265,6 @@ public class SC_pause : MonoBehaviour
             }
         }
     }
-
 
     public void Close()
     {
@@ -288,18 +286,15 @@ public class SC_pause : MonoBehaviour
 
         // Musique
         if (SC_music_manager.instance != null)
-        {
             SC_music_manager.instance.resume_music();
-        }
 
         // Curseur
         if (SC_scursorManager.instance != null)
-        {
             SC_scursorManager.instance.disable_cursor();
-        }
 
-        // Reprise du jeu
-        Time.timeScale = 1f;
+        // Reprise via le Time Manager
+        if (SC_time_manager.instance != null)
+            SC_time_manager.instance.Resume();
 
         if (SC_player.instance != null)
         {
@@ -312,10 +307,8 @@ public class SC_pause : MonoBehaviour
             }
         }
 
-        // Évite qu'un deuxième input soit pris immédiatement
         StartInputCooldown();
     }
-
 
     public void Retry()
     {
@@ -339,8 +332,8 @@ public class SC_pause : MonoBehaviour
         tuto = false;
         settings = false;
 
-        Time.timeScale = 1f;
-
+        if (SC_time_manager.instance != null)
+            SC_time_manager.instance.Resume();
         if (SC_player.instance != null)
         {
             SC_player.instance.canMove = true;
@@ -374,7 +367,7 @@ public class SC_pause : MonoBehaviour
 
         if (buttons != null)
             buttons.SetActive(false);
-        Time.timeScale = 0f;
+
     }
 
 
@@ -396,7 +389,6 @@ public class SC_pause : MonoBehaviour
 
         if (buttons != null)
             buttons.SetActive(false);
-        Time.timeScale = 0f;
     }
     public void Hide_tutorial()
     {
@@ -407,7 +399,6 @@ public class SC_pause : MonoBehaviour
 
         if (buttons != null)
             buttons.SetActive(true);
-        Time.timeScale = 0f;
     }
 
 
@@ -424,7 +415,6 @@ public class SC_pause : MonoBehaviour
 
         if (buttons != null)
             buttons.SetActive(false);
-        Time.timeScale = 0f;
     }
     public void Hide_sure()
     {
@@ -435,7 +425,6 @@ public class SC_pause : MonoBehaviour
 
         if (buttons != null)
             buttons.SetActive(true);
-        Time.timeScale = 0f;
     }
 
 
@@ -452,7 +441,6 @@ public class SC_pause : MonoBehaviour
 
         if (buttons != null)
             buttons.SetActive(false);
-        Time.timeScale = 0f;
     }
     public void Hide_sure_retry()
     {
@@ -463,7 +451,6 @@ public class SC_pause : MonoBehaviour
 
         if (buttons != null)
             buttons.SetActive(true);
-        Time.timeScale = 0f;
     }
 
 
@@ -481,7 +468,6 @@ public class SC_pause : MonoBehaviour
 
         if (buttons != null)
             buttons.SetActive(false);
-        Time.timeScale = 0f;
     }
     public void Hide_sure_quit()
     {
@@ -492,7 +478,6 @@ public class SC_pause : MonoBehaviour
 
         if (buttons != null)
             buttons.SetActive(true);
-        Time.timeScale = 0f;
     }
 
 
@@ -505,7 +490,6 @@ public class SC_pause : MonoBehaviour
 
         if (buttons != null)
             buttons.SetActive(true);
-        Time.timeScale = 0f;
     }
 
 
@@ -531,8 +515,8 @@ public class SC_pause : MonoBehaviour
         tuto = false;
         settings = false;
 
-        Time.timeScale = 1f;
-
+        if (SC_time_manager.instance != null)
+            SC_time_manager.instance.Resume();
         if (SC_player.instance != null)
         {
             SC_player.instance.enabled = true;

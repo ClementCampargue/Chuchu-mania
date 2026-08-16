@@ -106,7 +106,8 @@ public class SC_icecream_eat_system : MonoBehaviour
         if (eat_input.action.IsPressed() &&
             currrent_ice_cream > 0 &&
             !isPowerUpActive &&
-            player.isGrounded &&
+            player.isGrounded&&
+            sc_health_system.instance.current_health>0 &&
             !isEating)
         {
             if (!player.canMove)
@@ -127,8 +128,10 @@ public class SC_icecream_eat_system : MonoBehaviour
         // RELEASE
         // -----------------------------------------------------
 
-        if (eat_input.action.WasReleasedThisFrame() &&
-            isSelecting &&
+        if (!eat_input.action.IsPressed() &&
+            isSelecting&&
+            player.isGrounded &&
+            sc_health_system.instance.current_health > 0 &&
             !isEating)
         {
             /*

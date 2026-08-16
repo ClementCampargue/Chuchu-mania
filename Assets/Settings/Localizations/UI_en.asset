@@ -182,6 +182,10 @@ MonoBehaviour:
     m_Localized: No
     m_Metadata:
       m_Items: []
+  - m_Id: 24508294407688192
+    m_Localized: Shop
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds: []

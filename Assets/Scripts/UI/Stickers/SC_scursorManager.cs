@@ -191,7 +191,7 @@ public class SC_scursorManager : MonoBehaviour
         {
             Vector2 stick = cursorMoveAction.action.ReadValue<Vector2>();
 
-            if (stick.sqrMagnitude > 0.01f)
+            if (stick.sqrMagnitude > 0.1f)
             {
                 cursorPosition +=
                     stick *

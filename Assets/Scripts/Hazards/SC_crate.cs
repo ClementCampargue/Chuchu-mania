@@ -15,6 +15,7 @@ public class SC_crate : MonoBehaviour
     public Animator anim;
     public SC_juiciness land_juice;
     public SC_juiciness juice;
+    public SC_juiciness juice2;
     public SC_crate_parent parent;
     private void FixedUpdate()
     {
@@ -34,7 +35,15 @@ public class SC_crate : MonoBehaviour
 
         rb.linearVelocity = new Vector2(vel.x, vel.y);
     }
-
+    private void Update()
+    {
+        if(SC_cage.instance.Health == 0)
+        {
+            Destroy(juice);
+            Destroy(land_juice);
+            this.enabled = false;
+        }
+    }
     public void SetGroundVelocity(Vector2 vel)
     {
         added_velocity = vel;
@@ -55,6 +64,7 @@ public class SC_crate : MonoBehaviour
             if (SC_icecream_eat_system.instance.isPowerUpActive)
             {
                 SC_player.instance.anim.SetTrigger("Punch");
+                juice2.PlayJuice();
                 die();
             }
         }
@@ -79,23 +89,27 @@ public class SC_crate : MonoBehaviour
         {
             if(SC_player.instance.burning)
             {
+                juice2.PlayJuice();
                 die();
             }
 
             if (damage_player)
             {
                 SC_player.instance.TakeDamage(1,new Vector2(1,1),transform.position);
+                juice.PlayJuice();
                 die();
             }
             else if(!isGrounded && SC_player.instance.isGrounded)
             {
                 SC_player.instance.stun_player();
+                juice.PlayJuice();
                 die();
             }
 
         }
         if (collision.CompareTag("Lava"))
         {
+            juice.PlayJuice();
             die();
 
         }
@@ -104,7 +118,6 @@ public class SC_crate : MonoBehaviour
     public void die()
     {
         parent.destroy();
-        juice.PlayJuice();
         rb.constraints = RigidbodyConstraints2D.FreezeAll;
         anim.SetTrigger("Die");
     }
