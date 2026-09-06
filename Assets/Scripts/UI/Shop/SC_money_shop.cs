@@ -31,6 +31,8 @@ public class SC_money_shop : MonoBehaviour
 
     public void UpdateMoney()
     {
+        money = SC_money_manager.instance.money;
+
         DisplayMoney(money);
     }
 
