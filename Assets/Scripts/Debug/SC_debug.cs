@@ -18,6 +18,10 @@ public class SC_debug : MonoBehaviour
             SC_score.Instance.score = 1000;
             eat.ActivatePowerUpInstant();
         }
+        if (Input.GetKeyDown(KeyCode.M))
+        {
+            PlayerPrefs.SetInt("Money", PlayerPrefs.GetInt("Money") +10);
+        }
 
         if (Input.GetKeyDown(KeyCode.R))
         {
