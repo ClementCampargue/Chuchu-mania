@@ -3,60 +3,110 @@ using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 using TMPro;
+using UnityEngine.Localization.SmartFormat.Utilities;
+using UnityEngine.Localization;
 
 public class SC_shop_button : MonoBehaviour
 {
-    public Image image;
+    public SpriteRenderer spr;
 
     public SO_Sticker sticker;
-    public Button button;
 
     public InputActionReference selectAction;
 
     private bool selected;
+
+    public TextMeshPro price;
+    public LocalizedString description;
+    private LocalizedString description_;
+    public SC_shop_manager shop;
+    public bool random_sticker;
+    public SC_Button button;
     public Animator anim;
-
-    public SC_juiciness juice;
-    public SC_juiciness juice2;
-
-    public TextMeshProUGUI name_;
-    public TextMeshProUGUI price;
-
-
-
+    public GameObject cant_buy_visual;
     private void OnEnable()
     {
-        image.sprite = sticker.sticker_sprite;
-        name_.text = sticker.name;
-        price.text = sticker.Price.ToString();
+        if (!random_sticker)
+        {
+            spr.sprite = sticker.sticker_sprite;
+            price.text = sticker.Price.ToString() + "$";
+        }
 
         selectAction.action.Enable();
+
+        if (SC_money_manager.instance.money <= sticker.Price)
+        {
+            cant_buy_visual.SetActive(true);
+        }
+
     }
 
+    private void Start()
+    {
+        description_ = description;
 
+    }
 
     private void Update()
     {
-        if (button != null)
+        if (button.isHovered || button.isSelected)
         {
-            button.image.raycastTarget = !SC_controller_manager.instance.using_controller;
+            if (shop.typewriter.fullText != description.GetLocalizedString())
+            {
+                shop.show_text(description.GetLocalizedString());
+            }
+
+            selected = true;
+            if (selectAction.action.WasPressedThisFrame())
+            {
+                submit();
+            }
+
+        }
+        else
+        {
+            description = description_;
+
         }
 
-        if (selected && selectAction.action.WasPressedThisFrame())
+    }
+    public void submit()
+    {
+        if (random_sticker)
         {
-            sticker.unlocked = true;
-            anim.SetTrigger("Press");
+            if (SC_money_manager.instance.money >= 25)
+            {
+                shop.Show_gacha();
+
+            }
+            else
+            {
+                anim.ResetTrigger("Hover");
+                anim.ResetTrigger("Unhover");
+                anim.ResetTrigger("Press");
+                anim.SetTrigger("cant_buy");
+                description = shop.cant_buy_;
+            }
         }
-    }
+        else
+        {
+            if(SC_money_manager.instance.money>= sticker.Price)
+            {
+                SC_money_shop.instance.Buy(sticker.Price);
+                shop.buttons_.SetActive(false);
+                SC_sticker_popup.instance.update_visuals(sticker);
+                sticker.unlocked = true;
+                description = shop.thanks;
+            }
+            else
+            {
+                anim.ResetTrigger("Hover");
+                anim.ResetTrigger("Unhover");
+                anim.ResetTrigger("Press");
+                anim.SetTrigger("cant_buy");
+                description = shop.cant_buy_;
+            }
 
-    public void unhover()
-    {
-        selected = false;
-    }
-
-    public void update_infos()
-    {
-        selected = true;
-        juice.PlayJuice();
+        }
     }
 }

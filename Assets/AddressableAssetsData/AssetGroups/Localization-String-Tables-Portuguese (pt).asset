@@ -22,6 +22,12 @@ MonoBehaviour:
     - Locale-pt
     - Preload
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: a163693a9160f67418b2f59241c27660
+    m_Address: Dialogues_pt
+    m_ReadOnly: 1
+    m_SerializedLabels:
+    - Locale-pt
+    FlaggedDuringContentUpdateRestriction: 0
   m_ReadOnly: 1
   m_Settings: {fileID: 11400000, guid: 81a29239053a8aa46bf9eb55d08dc7e3, type: 2}
   m_SchemaSet:

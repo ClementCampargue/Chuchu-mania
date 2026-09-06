@@ -14,14 +14,15 @@ public class SC_Button : MonoBehaviour
 
     private Animator anim;
 
-    private bool isSelected;   // Navigation clavier/manette
+    public bool isSelected;   // Navigation clavier/manette
     public bool isHovered;    // Souris
-    private bool isPressed;
+    public bool isPressed;
     public GameObject indicator;
     public bool accept_input = true;
     public SC_juiciness juice;
     public SC_juiciness juice2;
     public bool clickable = true;
+    public SC_menu_navigation navigation;
     private void Awake()
     {
         anim = GetComponent<Animator>();
@@ -32,13 +33,20 @@ public class SC_Button : MonoBehaviour
     {
         juice.PlayJuice();
         isSelected = true;
-        indicator.SetActive(true);
+        if (indicator != null)
+        {
+            indicator.SetActive(true);
+        }
         PlayAnimation(hover);
     }
 
     private void OnDisable()
     {
+        if (indicator != null)
+        {
         indicator.SetActive(false);
+
+        }
         isSelected = false;
         isPressed = false;
         isHovered = false;
@@ -57,7 +65,11 @@ public class SC_Button : MonoBehaviour
         if (!isHovered)
         {
             PlayAnimation(unhover);
+            if (indicator != null)
+            {
             indicator.SetActive(false);
+
+            }
         }
     }
 
@@ -67,6 +79,13 @@ public class SC_Button : MonoBehaviour
         if (SC_controller_manager.instance != null &&
             SC_controller_manager.instance.using_controller)
             return;
+        if(navigation != null)
+        {
+            foreach(SC_Button button in navigation.buttons)
+            {
+                button.UnSelect();
+            }
+        }
         if (!clickable)
             {
                 return;
@@ -75,7 +94,11 @@ public class SC_Button : MonoBehaviour
 
         isPressed = false;
         isHovered = true;
+        if (indicator != null)
+        {
         indicator.SetActive(true);
+
+        }
 
         PlayAnimation(hover);
     }
@@ -91,7 +114,11 @@ public class SC_Button : MonoBehaviour
             return;
 
         isHovered = false;
+        if (indicator != null)
+        {
         indicator.SetActive(false);
+
+        }
 
         if (!isSelected)
         {
@@ -126,8 +153,11 @@ public class SC_Button : MonoBehaviour
         {
             Click();
         }
-
+        if (indicator != null)
+        {
         indicator.SetActive(false);
+
+        }
         isPressed = false;
     }
 
@@ -145,7 +175,11 @@ public class SC_Button : MonoBehaviour
         if (isPressed)
             return;
         isPressed = true;
+        if (indicator != null)
+        {
         indicator.SetActive(false);
+
+        }
         juice2.PlayJuice();
         PlayAnimation(press);
     }

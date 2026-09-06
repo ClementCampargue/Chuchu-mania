@@ -676,10 +676,6 @@ public class SC_StickerSaveSystem : MonoBehaviour
 
         UpdateStickerCount();
 
-        Debug.Log(
-            "Stickers chargés : " +
-            stickerCount
-        );
     }
 
     // =========================================================

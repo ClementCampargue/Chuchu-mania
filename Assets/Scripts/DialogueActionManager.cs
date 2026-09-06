@@ -27,6 +27,10 @@ public class DialogueActionManager : MonoBehaviour
             case "LOAD_GAME":
                 Load_game();
                 break;
+
+            case "LOAD_SHOP":
+                Load_shop();
+                break;
         }
     }
 
@@ -34,6 +38,14 @@ public class DialogueActionManager : MonoBehaviour
     private void Load_stickers()
     {
         SC_screenshot_transition.instance.Capture("Stickers");
+        SC_player.instance.rb.constraints = RigidbodyConstraints2D.FreezeRotation;
+        SC_player.instance.enabled = true;
+        SC_player.instance.canMove = true;
+    }
+
+    private void Load_shop()
+    {
+        SC_screenshot_transition.instance.Capture("Shop");
         SC_player.instance.rb.constraints = RigidbodyConstraints2D.FreezeRotation;
         SC_player.instance.enabled = true;
         SC_player.instance.canMove = true;

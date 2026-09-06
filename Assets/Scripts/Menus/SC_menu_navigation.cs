@@ -8,6 +8,7 @@ public class SC_menu_navigation : MonoBehaviour
     public int defaultSelected = 0;
     public bool autoFindButtons = true;
     public bool select_memory = true;
+
     [Header("Mouse")]
     [Tooltip("Si activé, bouger la souris ne désélectionne pas le bouton actuel.")]
     public bool ignore_mouse = false;
@@ -107,8 +108,13 @@ public class SC_menu_navigation : MonoBehaviour
         if (pointerPosition != null)
         {
             pointerPosition.action.Enable();
+
             lastMousePosition =
                 pointerPosition.action.ReadValue<Vector2>();
+        }
+        foreach (SC_Button button in buttons) 
+        {
+            button.navigation = this;
         }
 
         // Vérifie que l'ancien bouton sélectionné existe
@@ -296,17 +302,10 @@ public class SC_menu_navigation : MonoBehaviour
         holdTimer = 0f;
         currentMoveInput = Vector2.zero;
 
-        ClearVisualSelection();
-    }
-
-
-    private void ClearVisualSelection()
-    {
-        if (IsValidIndex(currentIndex) &&
-            buttons[currentIndex] != null)
-        {
-            buttons[currentIndex].UnSelect();
-        }
+        // La souris prend le contrôle visuel.
+        // Aucun bouton sélectionné par la navigation
+        // ne doit rester affiché comme sélectionné.
+        ClearAllSelectionsExcept(-1);
     }
 
 
@@ -338,6 +337,7 @@ public class SC_menu_navigation : MonoBehaviour
             lastSelected = currentIndex;
         }
 
+        // La navigation reprend la priorité visuelle.
         ClearAllSelectionsExcept(currentIndex);
 
         buttons[currentIndex].Select();
@@ -357,6 +357,7 @@ public class SC_menu_navigation : MonoBehaviour
         if (input.sqrMagnitude < 0.2f)
             return;
 
+        // La navigation reprend le contrôle.
         EnterNavigationMode();
 
         currentMoveInput = input;
@@ -504,6 +505,7 @@ public class SC_menu_navigation : MonoBehaviour
             Mathf.CeilToInt(
                 (float)buttons.Length / columns
             );
+
 
         // =====================================================
         // HORIZONTAL WRAP
@@ -729,6 +731,8 @@ public class SC_menu_navigation : MonoBehaviour
         if (!IsButtonAvailable(buttons[index]))
             return;
 
+        // On ne modifie la sélection de navigation
+        // que lorsque la navigation a le contrôle.
         ClearAllSelectionsExcept(index);
 
         currentIndex = index;
@@ -760,7 +764,7 @@ public class SC_menu_navigation : MonoBehaviour
     // INITIAL SELECTION
     // =========================================================
 
-    private void SelectFirstAvailable()
+    public void SelectFirstAvailable()
     {
         if (buttons == null ||
             buttons.Length == 0)
@@ -776,11 +780,14 @@ public class SC_menu_navigation : MonoBehaviour
         // =====================================================
 
         if (IsValidIndex(lastSelected) &&
-            IsButtonAvailable(buttons[lastSelected]) && select_memory)
+            IsButtonAvailable(buttons[lastSelected]) &&
+            select_memory)
         {
             currentIndex = lastSelected;
 
             buttons[currentIndex].Select();
+
+            Debug.Log("bouton " + currentIndex);
 
             return;
         }

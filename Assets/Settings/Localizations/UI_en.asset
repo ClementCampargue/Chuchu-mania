@@ -186,6 +186,38 @@ MonoBehaviour:
     m_Localized: Shop
     m_Metadata:
       m_Items: []
+  - m_Id: 31761941026586624
+    m_Localized: Chat
+    m_Metadata:
+      m_Items: []
+  - m_Id: 31762086292111360
+    m_Localized: Buy
+    m_Metadata:
+      m_Items: []
+  - m_Id: 31768640554811392
+    m_Localized: NEW!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 31821014006775808
+    m_Localized: STICKER OBTENU!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 31826797490618368
+    m_Localized: Common
+    m_Metadata:
+      m_Items: []
+  - m_Id: 31826833351917568
+    m_Localized: Rare
+    m_Metadata:
+      m_Items: []
+  - m_Id: 31826851370647552
+    m_Localized: Epic
+    m_Metadata:
+      m_Items: []
+  - m_Id: 31948510807212032
+    m_Localized: Can't buy
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds: []

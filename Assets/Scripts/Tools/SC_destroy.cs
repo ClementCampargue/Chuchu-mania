@@ -2,10 +2,14 @@ using UnityEngine;
 
 public class SC_destroy : MonoBehaviour
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
+
+    public int delay_to_destroy= 0;
     void Start()
     {
-        
+        if(delay_to_destroy != 0)
+        {
+            Invoke("destroy", delay_to_destroy);
+        }
     }
 
     // Update is called once per frame

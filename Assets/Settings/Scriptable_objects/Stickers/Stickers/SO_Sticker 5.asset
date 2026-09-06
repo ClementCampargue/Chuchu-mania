@@ -20,3 +20,4 @@ MonoBehaviour:
   rarity: 0
   Price: 0
   unlocked: 0
+  special_mat: {fileID: 0}

@@ -19,4 +19,5 @@ MonoBehaviour:
   artist: Martin Scorcese
   rarity: 2
   Price: 0
-  unlocked: 1
+  unlocked: 0
+  special_mat: {fileID: 0}

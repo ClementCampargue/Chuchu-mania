@@ -18,5 +18,6 @@ MonoBehaviour:
   unlock_conditions: "pas d\xE9bloqu\xE9 bouffon va"
   artist: Martin Scorcese
   rarity: 2
-  Price: 0
+  Price: 10
   unlocked: 1
+  special_mat: {fileID: 0}

@@ -183,6 +183,54 @@ MonoBehaviour:
     m_Key: Shop
     m_Metadata:
       m_Items: []
+  - m_Id: 31761941026586624
+    m_Key: Chat
+    m_Metadata:
+      m_Items: []
+  - m_Id: 31762086292111360
+    m_Key: Buy
+    m_Metadata:
+      m_Items: []
+  - m_Id: 31768640554811392
+    m_Key: new
+    m_Metadata:
+      m_Items: []
+  - m_Id: 31821014006775808
+    m_Key: STICKER OBTENU!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 31826797490618368
+    m_Key: Common
+    m_Metadata:
+      m_Items: []
+  - m_Id: 31826833351917568
+    m_Key: Rare
+    m_Metadata:
+      m_Items: []
+  - m_Id: 31826851370647552
+    m_Key: Epic
+    m_Metadata:
+      m_Items: []
+  - m_Id: 31906817974222848
+    m_Key: New Entry
+    m_Metadata:
+      m_Items: []
+  - m_Id: 31906829709885440
+    m_Key: Lootbox description
+    m_Metadata:
+      m_Items: []
+  - m_Id: 31908265747300352
+    m_Key: Sticker description
+    m_Metadata:
+      m_Items: []
+  - m_Id: 31948510807212032
+    m_Key: Can't buy
+    m_Metadata:
+      m_Items: []
+  - m_Id: 32573863909146624
+    m_Key: Thanks bro
+    m_Metadata:
+      m_Items: []
   m_Metadata:
     m_Items: []
   m_KeyGenerator:

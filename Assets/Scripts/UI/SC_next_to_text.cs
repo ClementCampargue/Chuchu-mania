@@ -6,8 +6,10 @@ public class SC_next_to_text : MonoBehaviour
     public TMP_Text textMesh;
     public Transform sprite;
 
-    [Tooltip("Distance entre le sprite et le début du texte")]
+    [Tooltip("Distance entre le sprite et le texte")]
     public float distance = 0.1f;
+
+    public bool right;
 
     void LateUpdate()
     {
@@ -21,27 +23,55 @@ public class SC_next_to_text : MonoBehaviour
         if (textInfo.characterCount == 0)
             return;
 
-        // Premier caractère visible
-        TMP_CharacterInfo character = textInfo.characterInfo[0];
+        TMP_CharacterInfo character;
 
-        // Position locale du début du premier caractère
-        Vector3 debutTexte = new Vector3(
-            character.bottomLeft.x,
-            character.baseLine,
-            0f
-        );
+        if (right)
+        {
+            // Dernier caractère du texte
+            character = textInfo.characterInfo[textInfo.characterCount - 1];
 
-        // Conversion de la position locale du texte vers le monde
-        Vector3 positionMonde = textMesh.transform.TransformPoint(debutTexte);
+            // Fin du texte
+            Vector3 finTexte = new Vector3(
+                character.topRight.x,
+                character.baseLine,
+                0f
+            );
 
-        // Décalage vers la gauche
-        Vector3 gauche = -textMesh.transform.right * distance;
+            Vector3 positionMonde =
+                textMesh.transform.TransformPoint(finTexte);
 
-        Vector3 nouvellePosition = positionMonde + gauche;
+            // Sprite à droite de la fin du texte
+            Vector3 nouvellePosition =
+                positionMonde + textMesh.transform.right * distance;
 
-        // Garde le Y actuel du sprite
-        nouvellePosition.y = sprite.position.y;
+            // Garde le Y du sprite
+            nouvellePosition.y = sprite.position.y;
 
-        sprite.position = nouvellePosition;
+            sprite.position = nouvellePosition;
+        }
+        else
+        {
+            // Premier caractère du texte
+            character = textInfo.characterInfo[0];
+
+            // Début du texte
+            Vector3 debutTexte = new Vector3(
+                character.bottomLeft.x,
+                character.baseLine,
+                0f
+            );
+
+            Vector3 positionMonde =
+                textMesh.transform.TransformPoint(debutTexte);
+
+            // Sprite à gauche du début du texte
+            Vector3 nouvellePosition =
+                positionMonde - textMesh.transform.right * distance;
+
+            // Garde le Y du sprite
+            nouvellePosition.y = sprite.position.y;
+
+            sprite.position = nouvellePosition;
+        }
     }
 }

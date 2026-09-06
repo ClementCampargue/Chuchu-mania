@@ -245,7 +245,6 @@ public class SC_player : MonoBehaviour
             Time.timeScale != 0)
         {
             Vector2 input = Move.action.ReadValue<Vector2>();
-            Debug.Log($"Move input = {input}");
             moveInput = new Vector2(
                 Mathf.Abs(input.x) > 0.2f
                     ? Mathf.Sign(input.x)

@@ -51,7 +51,6 @@ public class SC_discord_manager : MonoBehaviour
 
         activityManager.UpdateActivity(activity, (result) =>
         {
-            Debug.Log("Discord Activity updated : " + result);
         });
     }
 

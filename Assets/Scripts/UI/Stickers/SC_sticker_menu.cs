@@ -223,22 +223,12 @@ public class SC_sticker_menu : MonoBehaviour
 
         if (usingController)
         {
-            // Manette :
-            // on cache le curseur.
             if (SC_scursorManager.instance != null)
             {
                 SC_scursorManager.instance.disable_cursor();
             }
 
-            /*
-             * IMPORTANT :
-             *
-             * On ne force plus button.Select()
-             * à chaque frame.
-             *
-             * On le fait uniquement si absolument
-             * aucun objet n'est sélectionné.
-             */
+
             if (EventSystem.current != null &&
                 EventSystem.current.currentSelectedGameObject == null)
             {
@@ -247,8 +237,6 @@ public class SC_sticker_menu : MonoBehaviour
         }
         else
         {
-            // Souris :
-            // on affiche le curseur.
             if (SC_scursorManager.instance != null)
             {
                 SC_scursorManager.instance.enable_cursor();

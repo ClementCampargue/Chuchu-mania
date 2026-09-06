@@ -186,6 +186,51 @@ MonoBehaviour:
     m_Localized: Boutique
     m_Metadata:
       m_Items: []
+  - m_Id: 31761941026586624
+    m_Localized: Discuter
+    m_Metadata:
+      m_Items: []
+  - m_Id: 31762086292111360
+    m_Localized: Acheter
+    m_Metadata:
+      m_Items: []
+  - m_Id: 31768640554811392
+    m_Localized: NOUVEAU!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 31821014006775808
+    m_Localized: STICKER OBTENU!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 31826797490618368
+    m_Localized: Commun
+    m_Metadata:
+      m_Items: []
+  - m_Id: 31826833351917568
+    m_Localized: Rare
+    m_Metadata:
+      m_Items: []
+  - m_Id: 31826851370647552
+    m_Localized: Epic
+    m_Metadata:
+      m_Items: []
+  - m_Id: 31906829709885440
+    m_Localized: "\xE7a c'est une lootbox aboule la thunasse"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 31908265747300352
+    m_Localized: "\xE7a c'ets un sticker \xE0 l'unit\xE9 tu comprends quand je te
+      parle enfant benet?"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 31948510807212032
+    m_Localized: Tu peux pas acheter sale broke ass ouais je suis bilingue et ouuuuaaaiis
+    m_Metadata:
+      m_Items: []
+  - m_Id: 32573863909146624
+    m_Localized: "Voilaaaaa r\xE9gale moi c'est bien"
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds: []
