@@ -1,5 +1,7 @@
-using UnityEngine;
 using System.Collections.Generic;
+using Unity.VisualScripting;
+using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class SC_star_achievement : MonoBehaviour
 {
@@ -10,9 +12,11 @@ public class SC_star_achievement : MonoBehaviour
         public GameObject objectB;
     }
 
+    public SO_achievement achievement;
+    public SC_Button button;
     [Header("Condition")]
-    [SerializeField] private bool debloque = false;
-    [SerializeField] private bool red = false;
+    public bool debloque = false;
+    public bool red = false;
 
     [Header("Connexions")]
     [SerializeField] private List<Connection> connections = new List<Connection>();
@@ -22,42 +26,146 @@ public class SC_star_achievement : MonoBehaviour
     [SerializeField] private float distanceFromCenter = 0.5f;
     [SerializeField] private Material lineMaterial;
 
-
+    public Color color;
     public SpriteRenderer spr;
     public Sprite default_;
     public Sprite unlocked_;
     public Sprite red_;
-
     private List<LineRenderer> lines = new List<LineRenderer>();
-
+    public Animator anim;
     void Start()
     {
+        if (achievement.réussi)
+        {
+            debloque = true;
+        }
+
+        UpdateRedState();
         UpdateLines();
     }
 
     void Update()
     {
-        if(debloque)
+        if (button.isHovered || button.isSelected)
         {
+    
+            SC_achievement_menu.instance.update_display(achievement, this);
+        }
+        if (achievement.réussi || SC_achievement_menu.instance.current_wishes>0)
+        {
+            anim.SetBool("Unlockable", true);
+
+        }
+        else
+        {
+            anim.SetBool("Unlockable", false);
+        }
+
+        // Vérifie si l'étoile possède une connexion
+        UpdateRedState();
+
+        if (debloque)
+        {
+            anim.SetBool("Can_press", false);
             spr.sprite = unlocked_;
         }
         else if (red)
         {
+            anim.SetBool("Can_press", true);
             spr.sprite = red_;
         }
         else
         {
+            anim.SetBool("Can_press", true);
+
             spr.sprite = default_;
         }
 
-        if (debloque)
+    }
+
+    private void UpdateRedState()
+    {
+        // Si l'étoile n'est pas débloquée et n'a aucune connexion valide,
+        // elle passe en rouge.
+        if (!debloque)
         {
-            UpdateLines();
+            red = !HasActiveConnection();
         }
         else
         {
-            ClearLines();
+            red = false;
         }
+    }
+    public void show_reward()
+    {
+        SC_sticker_popup.instance.ShowStickers(
+            new SO_Sticker[] { achievement.sticker_reward }
+        );
+    }
+
+    private bool HasActiveConnection()
+    {
+        foreach (Connection connection in connections)
+        {
+            if (connection.objectA == null || connection.objectB == null)
+                continue;
+
+            GameObject otherObject = null;
+
+            // Cette étoile est A
+            if (connection.objectA == gameObject)
+            {
+                otherObject = connection.objectB;
+            }
+            // Cette étoile est B
+            else if (connection.objectB == gameObject)
+            {
+                otherObject = connection.objectA;
+            }
+
+            // Cette connexion ne concerne pas cette étoile
+            if (otherObject == null)
+                continue;
+
+            // Vérifie que l'autre étoile est réellement active/débloquée
+            SC_star_achievement otherStar =
+                otherObject.GetComponent<SC_star_achievement>();
+
+            if (otherStar != null && otherStar.debloque)
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public void unlock()
+    {
+        if (debloque) return;
+
+        if (SC_achievement_menu.instance.current_wishes > 0)
+        {
+            SC_achievement_menu.instance.use_wish();
+            debloque = true;
+            UpdateLines();
+            button.UnSelect();
+
+        }
+        else if (achievement.réussi)
+        {
+            debloque = true;
+            UpdateLines();
+            button.UnSelect();
+        }
+
+     
+    }
+
+    public void disable_movement()
+    {
+        SC_ConstellationNavigation.instance.enabled = false;
+        SC_achievement_menu.instance.hide_sticker();
     }
 
     private void UpdateLines()
@@ -86,6 +194,8 @@ public class SC_star_achievement : MonoBehaviour
         line.sortingOrder = 10;
         line.positionCount = 2;
         line.useWorldSpace = true;
+        line.startColor = color;
+        line.endColor = color;
 
         line.startWidth = lineWidth;
         line.endWidth = lineWidth;

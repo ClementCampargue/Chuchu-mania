@@ -56,6 +56,7 @@ public class SC_sticker_popup : MonoBehaviour
         {
             SC_shop_manager.instance.canquit = false;
         }
+
     }
 
     private void Update()
@@ -179,7 +180,11 @@ public class SC_sticker_popup : MonoBehaviour
         isClosing = true;
         isShowingSequence = false;
         can_quit = false;
-
+        if (SceneManager.GetActiveScene().name == "Achievements")
+        {
+            SC_ConstellationNavigation.instance.enabled = true;
+            SC_achievement_menu.instance.show_sticker();
+        }
         CancelInvoke();
 
         anim.ResetTrigger("get");

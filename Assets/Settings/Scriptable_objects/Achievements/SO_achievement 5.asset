@@ -1,0 +1,17 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8de40c3b1331b374eb85df61112c5e1a, type: 3}
+  m_Name: SO_achievement 5
+  m_EditorClassIdentifier: 
+  requirement: "P\xE9ter sans faire caca 5 fois"
+  sticker_reward: {fileID: 11400000, guid: 158d166711475304b9ef29d97635f7d3, type: 2}
+  "r\xE9ussi": 1

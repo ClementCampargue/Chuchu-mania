@@ -1,16 +1,36 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class SC_constellation : MonoBehaviour
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
+    public Animator animator;
+    public GameObject constellation_visual;
+    public List<SC_star_achievement> stars;
+
     void Start()
     {
-        
+        CheckAllStarsUnlocked();
     }
 
-    // Update is called once per frame
     void Update()
     {
-        
+        CheckAllStarsUnlocked();
+    }
+
+    private void CheckAllStarsUnlocked()
+    {
+        if (stars == null || stars.Count == 0)
+            return;
+
+        foreach (SC_star_achievement star in stars)
+        {
+            if (star == null || !star.debloque)
+            {
+                constellation_visual.SetActive(false);
+                return;
+            }
+        }
+
+        constellation_visual.SetActive(true);
     }
 }

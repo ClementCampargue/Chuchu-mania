@@ -9,9 +9,10 @@ public class SC_hub : MonoBehaviour
 
     public Transform shop;
     public Transform stickers;
+    public Transform Achievements;
     public Transform ship;
     public Transform spawn_point;
-    void Start()
+    private void Awake()
     {
         if (SC_game_master.instance.previousScene == "Shop")
         {
@@ -22,7 +23,16 @@ public class SC_hub : MonoBehaviour
             spawn_point.position = stickers.position;
         }
 
-        
+        else if (SC_game_master.instance.previousScene == "Achievements")
+        {
+            spawn_point.position = Achievements.position;
+        }
+
+
+    }
+    void Start()
+    {
+
 
 
         money = SC_money_manager.instance;

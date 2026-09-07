@@ -13,7 +13,7 @@ public class SC_game_master : MonoBehaviour
         }
 
         instance = this;
-
+        Application.targetFrameRate = 120;
         DontDestroyOnLoad(gameObject);
     }
 

@@ -185,8 +185,12 @@ public class SC_Button : MonoBehaviour
         }
         juice2.PlayJuice();
         PlayAnimation(press);
+        Invoke("delay",0.5f);
     }
-
+    void delay()
+    {
+        isPressed = false;
+    }
 
     private void Click()
     {
