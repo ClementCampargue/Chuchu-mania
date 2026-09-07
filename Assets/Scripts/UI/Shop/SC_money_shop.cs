@@ -78,6 +78,7 @@ public class SC_money_shop : MonoBehaviour
 
         money -= amount;
         PlayerPrefs.SetInt("Money", money);
+        SC_money_manager.instance.money = money;
 
         if (moneyAnimation != null)
             StopCoroutine(moneyAnimation);
