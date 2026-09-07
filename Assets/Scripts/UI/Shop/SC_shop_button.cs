@@ -30,14 +30,23 @@ public class SC_shop_button : MonoBehaviour
         {
             spr.sprite = sticker.sticker_sprite;
             price.text = sticker.Price.ToString() + "$";
+            if (SC_money_manager.instance.money < sticker.Price)
+            {
+                cant_buy_visual.SetActive(true);
+            }
+
         }
-
-        selectAction.action.Enable();
-
-        if (SC_money_manager.instance.money <= sticker.Price)
+        else
         {
-            cant_buy_visual.SetActive(true);
+            if (SC_money_manager.instance.money < 25)
+            {
+                cant_buy_visual.SetActive(true);
+            }
+     
         }
+
+            selectAction.action.Enable();
+
 
     }
 

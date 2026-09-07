@@ -55,6 +55,7 @@ MonoBehaviour:
   - {fileID: 4756765496947184673}
   defaultSelected: 0
   autoFindButtons: 0
+  select_memory: 1
   ignore_mouse: 0
   move: {fileID: -1680190386980627800, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
   submit: {fileID: -2099379676528639254, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
@@ -119,12 +120,9 @@ MonoBehaviour:
   buttons:
   - {fileID: 8105203884939137913}
   - {fileID: 7452259338894540779}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
   defaultSelected: 0
   autoFindButtons: 0
+  select_memory: 1
   ignore_mouse: 0
   move: {fileID: -1680190386980627800, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
   submit: {fileID: -2099379676528639254, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
@@ -631,12 +629,9 @@ MonoBehaviour:
   buttons:
   - {fileID: 5455376660188877667}
   - {fileID: 6390992078323055284}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
   defaultSelected: 0
   autoFindButtons: 0
+  select_memory: 1
   ignore_mouse: 0
   move: {fileID: -1680190386980627800, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
   submit: {fileID: -2099379676528639254, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
@@ -902,12 +897,9 @@ MonoBehaviour:
   buttons:
   - {fileID: 6515643683765234765}
   - {fileID: 2577933853432859990}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
   defaultSelected: 0
   autoFindButtons: 0
+  select_memory: 1
   ignore_mouse: 0
   move: {fileID: -1680190386980627800, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
   submit: {fileID: -2099379676528639254, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}

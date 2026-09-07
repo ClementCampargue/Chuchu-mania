@@ -1,6 +1,5 @@
 using UnityEngine;
 
-//#if UNITY_EDITOR
 
 public class SC_debug : MonoBehaviour
 {
@@ -20,7 +19,7 @@ public class SC_debug : MonoBehaviour
         }
         if (Input.GetKeyDown(KeyCode.M))
         {
-            PlayerPrefs.SetInt("Money", PlayerPrefs.GetInt("Money") +10);
+            SC_money_manager.instance.money = SC_money_manager.instance.money + 10;
         }
 
         if (Input.GetKeyDown(KeyCode.R))
@@ -45,4 +44,3 @@ public class SC_debug : MonoBehaviour
     }
 }
 
-//#endif

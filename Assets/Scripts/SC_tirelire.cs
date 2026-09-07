@@ -80,7 +80,7 @@ public class SC_tirelire : MonoBehaviour
         cat_anim.speed = anim_speed_range.x;
         cat_anim.enabled = false;
 
-        PlayerPrefs.SetInt("Money", total_money_ + money_won);
+        SC_money_manager.instance.money = total_money_ + money_won;
 
         UpdateTexts();
     }

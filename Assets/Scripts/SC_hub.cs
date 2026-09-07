@@ -6,8 +6,25 @@ public class SC_hub : MonoBehaviour
 {
     private SC_money_manager money;
     public TextMeshPro money_text;
+
+    public Transform shop;
+    public Transform stickers;
+    public Transform ship;
+    public Transform spawn_point;
     void Start()
     {
+        if (SC_game_master.instance.previousScene == "Shop")
+        {
+            spawn_point.position = shop.position;
+        }
+        else if (SC_game_master.instance.previousScene == "Stickers")
+        {
+            spawn_point.position = stickers.position;
+        }
+
+        
+
+
         money = SC_money_manager.instance;
         money_text.text = money.money.ToString("D6");
         PlayerPrefs.SetInt("Score", 0);

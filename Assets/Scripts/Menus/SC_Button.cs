@@ -80,11 +80,14 @@ public class SC_Button : MonoBehaviour
             SC_controller_manager.instance.using_controller)
             return;
         if(navigation != null)
-        {
-            foreach(SC_Button button in navigation.buttons)
+        {if(navigation.buttons.Length > 0)
             {
-                button.UnSelect();
+                foreach (SC_Button button in navigation.buttons)
+                {
+                    button.UnSelect();
+                }
             }
+
         }
         if (!clickable)
             {

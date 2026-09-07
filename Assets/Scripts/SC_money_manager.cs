@@ -17,6 +17,18 @@ public class SC_money_manager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        money = PlayerPrefs.GetInt("Money");
+
+    }
+
+    private void OnDestroy()
+    {
+        PlayerPrefs.SetInt("Money", money);
+
+    }
+
+    private void OnApplicationQuit()
+    {
+        PlayerPrefs.SetInt("Money", money);
+
     }
 }
