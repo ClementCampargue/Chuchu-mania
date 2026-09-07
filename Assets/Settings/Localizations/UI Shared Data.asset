@@ -212,7 +212,7 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 31906817974222848
-    m_Key: New Entry
+    m_Key: OBJET OBTENU
     m_Metadata:
       m_Items: []
   - m_Id: 31906829709885440
@@ -241,6 +241,14 @@ MonoBehaviour:
       m_Items: []
   - m_Id: 32577241330499584
     m_Key: vue d'ensemble
+    m_Metadata:
+      m_Items: []
+  - m_Id: 32903487360876544
+    m_Key: FREE
+    m_Metadata:
+      m_Items: []
+  - m_Id: 32905211739914240
+    m_Key: Wish description
     m_Metadata:
       m_Items: []
   m_Metadata:

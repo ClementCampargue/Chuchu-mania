@@ -11,11 +11,12 @@ public class SC_shop_button : MonoBehaviour
     public SpriteRenderer spr;
 
     public SO_Sticker sticker;
+    public SO_shop_item1 item;
 
     public InputActionReference selectAction;
 
     private bool selected;
-
+    public int price_;
     public TextMeshPro price;
     public LocalizedString description;
     private LocalizedString description_;
@@ -24,9 +25,10 @@ public class SC_shop_button : MonoBehaviour
     public SC_Button button;
     public Animator anim;
     public GameObject cant_buy_visual;
+    public GameObject new_;
     private void OnEnable()
     {
-        if (!random_sticker)
+        if (!random_sticker && item == null)
         {
             spr.sprite = sticker.sticker_sprite;
             price.text = sticker.Price.ToString() + "$";
@@ -34,10 +36,25 @@ public class SC_shop_button : MonoBehaviour
             {
                 cant_buy_visual.SetActive(true);
             }
+            new_.SetActive(!sticker.unlocked);
 
+
+        }
+        else if(item!=null)
+        {
+            spr.sprite = item.item_sprite;
+            price.text = item.Price.ToString() + "$";
+
+            if (SC_money_manager.instance.money < item.Price)
+            {
+                cant_buy_visual.SetActive(true);
+            }
+     
         }
         else
         {
+            price.text = price_.ToString() + "$";
+
             if (SC_money_manager.instance.money < 25)
             {
                 cant_buy_visual.SetActive(true);
@@ -99,22 +116,44 @@ public class SC_shop_button : MonoBehaviour
         }
         else
         {
-            if(SC_money_manager.instance.money>= sticker.Price)
+            if (sticker != null)
             {
-                SC_money_shop.instance.Buy(sticker.Price);
-                shop.buttons_.SetActive(false);
-                SC_sticker_popup.instance.update_visuals(sticker);
-                sticker.unlocked = true;
-                description = shop.thanks;
+                if (SC_money_manager.instance.money >= sticker.Price)
+                {
+                    SC_money_shop.instance.Buy(sticker.Price);
+                    shop.buttons_.SetActive(false);
+                    SC_sticker_popup.instance.update_visuals(sticker);
+                    sticker.unlocked = true;
+                    description = shop.thanks;
+                }
+                else
+                {
+                    anim.ResetTrigger("Hover");
+                    anim.ResetTrigger("Unhover");
+                    anim.ResetTrigger("Press");
+                    anim.SetTrigger("cant_buy");
+                    description = shop.cant_buy_;
+                }
             }
-            else
+            if (item != null)
             {
-                anim.ResetTrigger("Hover");
-                anim.ResetTrigger("Unhover");
-                anim.ResetTrigger("Press");
-                anim.SetTrigger("cant_buy");
-                description = shop.cant_buy_;
+                if (SC_money_manager.instance.money >= item.Price)
+                {
+                    SC_money_shop.instance.Buy(item.Price);
+                    shop.buttons_.SetActive(false);
+                    SC_sticker_popup.instance.update_visuals(item);
+                    description = shop.thanks;
+                }
+                else
+                {
+                    anim.ResetTrigger("Hover");
+                    anim.ResetTrigger("Unhover");
+                    anim.ResetTrigger("Press");
+                    anim.SetTrigger("cant_buy");
+                    description = shop.cant_buy_;
+                }
             }
+
 
         }
     }

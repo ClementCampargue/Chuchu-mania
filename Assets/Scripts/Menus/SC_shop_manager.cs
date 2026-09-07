@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.Localization;
@@ -11,7 +12,11 @@ public class SC_shop_manager : MonoBehaviour
     public LocalizedString thanks;
     public List<LocalizedString> random_lines;
     public List<SC_Button> buttons;
+    public SO_sticker_list stickers;
     public Animator anim;
+
+    public SC_shop_button sticker_1;
+    public SC_shop_button sticker_2;
 
     public bool talking = true;
     public InputActionReference submit;
@@ -30,14 +35,33 @@ public class SC_shop_manager : MonoBehaviour
     }
     void Start()
     {
+        choose_stickers();
         quit.action.Enable();
         talk.action.Enable();
         submit.action.Enable();
     }
+    void choose_stickers()
+    {
+        int index1 = Random.Range(0, stickers.stickers.Count);
 
+        int index2;
+        do
+        {
+            index2 = Random.Range(0, stickers.stickers.Count);
+        }
+        while (index2 == index1);
+
+        sticker_1.sticker = stickers.stickers[index1];
+        sticker_2.sticker = stickers.stickers[index2];
+    }
     // Update is called once per frame
     void Update()
     {
+
+        if (cantalk && talk.action.WasPressedThisFrame())
+        {
+            Talk();
+        }
         if (typewriter.finished && talking)
         {
             typewriter.SetWaitInputVisible(true);
@@ -51,10 +75,7 @@ public class SC_shop_manager : MonoBehaviour
             typewriter.FinishText();
             typewriter.SetWaitInputVisible(true);
         }
-        if (cantalk && talk.action.WasPerformedThisFrame())
-        {
-            Talk();
-        }
+
         if (quit.action.WasPerformedThisFrame() && canquit)
         {
             SC_screenshot_transition.instance.Capture("HUB");
@@ -99,15 +120,25 @@ public class SC_shop_manager : MonoBehaviour
 
     public void Talk()
     {
+        SC_Button currentButton = menu.GetCurrentButton();
+
+        if (currentButton != null)
+            currentButton.UnSelect();
+
         cantalk = false;
         canquit = false;
         talking = true;
+
         anim.ResetTrigger("Show_menu");
         anim.SetTrigger("talk");
-        buttons_.SetActive(false);
-        string random = random_lines[Random.Range(0, random_lines.Count -1)].GetLocalizedString();
 
-        show_text(random);
+        buttons_.SetActive(false);
+
+        string random =
+            random_lines[Random.Range(0, random_lines.Count)]
+            .GetLocalizedString();
+
+        typewriter.TriggerText(random);
     }
     private void UpdateCursorMode()
     {

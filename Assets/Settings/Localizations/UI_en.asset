@@ -218,6 +218,10 @@ MonoBehaviour:
     m_Localized: Can't buy
     m_Metadata:
       m_Items: []
+  - m_Id: 32903487360876544
+    m_Localized: FREE
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds: []

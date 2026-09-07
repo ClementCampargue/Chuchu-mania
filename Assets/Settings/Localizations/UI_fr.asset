@@ -243,6 +243,19 @@ MonoBehaviour:
     m_Localized: vue d'ensemble
     m_Metadata:
       m_Items: []
+  - m_Id: 32903487360876544
+    m_Localized: GRATUIT
+    m_Metadata:
+      m_Items: []
+  - m_Id: 32905211739914240
+    m_Localized: C'ets un souhait par exmeple avec tu peux souhaiter plus avoir la
+      chiasse sympa non?
+    m_Metadata:
+      m_Items: []
+  - m_Id: 31906817974222848
+    m_Localized: OBJET OBTENU!
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds: []

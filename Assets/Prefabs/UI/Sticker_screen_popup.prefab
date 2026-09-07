@@ -2384,7 +2384,7 @@ GameObject:
   - component: {fileID: 7487579656676823988}
   - component: {fileID: 6428726253308883589}
   m_Layer: 0
-  m_Name: Sticker_screen
+  m_Name: Sticker_screen_popup
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2464,6 +2464,25 @@ MonoBehaviour:
   name_: {fileID: 6891784134415426126}
   rarity: {fileID: 7953111931275854929}
   spr: {fileID: 1067615901682228131}
+  title: {fileID: 9212094493891568563}
+  sticker_obtenu:
+    m_TableReference:
+      m_TableCollectionName: GUID:71d64c1e148486e4887f3f66640476cd
+    m_TableEntryReference:
+      m_KeyId: 31821014006775808
+      m_Key: 
+    m_FallbackState: 0
+    m_WaitForCompletion: 0
+    m_LocalVariables: []
+  item_obtenu:
+    m_TableReference:
+      m_TableCollectionName: GUID:71d64c1e148486e4887f3f66640476cd
+    m_TableEntryReference:
+      m_KeyId: 31906817974222848
+      m_Key: 
+    m_FallbackState: 0
+    m_WaitForCompletion: 0
+    m_LocalVariables: []
   common:
     m_TableReference:
       m_TableCollectionName: GUID:71d64c1e148486e4887f3f66640476cd
@@ -2495,6 +2514,8 @@ MonoBehaviour:
   submit2: {fileID: 3001919216989983466, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
   anim: {fileID: 7487579656676823988}
   can_quit: 0
+  new_: {fileID: 6734867809345588664}
+  rarity_: {fileID: 8860781763979521784}
   references:
     version: 2
     RefIds: []
@@ -4236,7 +4257,8 @@ PrefabInstance:
       propertyPath: m_hasFontAssetChanged
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 3809789759598194910, guid: 3ce41f75411c41f448f4f822ac6d67b0, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []

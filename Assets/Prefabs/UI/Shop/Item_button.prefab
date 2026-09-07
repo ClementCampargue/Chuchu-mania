@@ -89,6 +89,7 @@ MonoBehaviour:
   spr: {fileID: 166561941587018196}
   sticker: {fileID: 11400000, guid: 22be6fc2b8bda6c4d8db0dd194f3332e, type: 2}
   selectAction: {fileID: -2099379676528639254, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
+  price_: 0
   price: {fileID: 9041591597979747797}
   description:
     m_TableReference:
@@ -104,6 +105,7 @@ MonoBehaviour:
   button: {fileID: 725638856090001623}
   anim: {fileID: 6307130964858840321}
   cant_buy_visual: {fileID: 9075297190448921647}
+  new_: {fileID: 793036437463494477}
   references:
     version: 2
     RefIds: []
@@ -191,6 +193,7 @@ MonoBehaviour:
   juice: {fileID: 4490212254618361828}
   juice2: {fileID: 6065087452666500239}
   clickable: 1
+  navigation: {fileID: 0}
 --- !u!95 &6307130964858840321
 Animator:
   serializedVersion: 7
@@ -826,7 +829,7 @@ Transform:
   m_GameObject: {fileID: 6842926668882587263}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.089999914, y: 0.17299986, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 0.06630007, y: 0.06630007, z: 0.06630007}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1118,7 +1121,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1049678611521369945, guid: 3ce41f75411c41f448f4f822ac6d67b0, type: 3}
       propertyPath: m_Name
-      value: Text
+      value: New
       objectReference: {fileID: 0}
     - target: {fileID: 2813768196200715495, guid: 3ce41f75411c41f448f4f822ac6d67b0, type: 3}
       propertyPath: m_Pivot.x
@@ -1242,6 +1245,11 @@ PrefabInstance:
       addedObject: {fileID: 3403475188051352516}
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 3ce41f75411c41f448f4f822ac6d67b0, type: 3}
+--- !u!1 &793036437463494477 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1049678611521369945, guid: 3ce41f75411c41f448f4f822ac6d67b0, type: 3}
+  m_PrefabInstance: {fileID: 400920778557462548}
+  m_PrefabAsset: {fileID: 0}
 --- !u!224 &2494105886317366515 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 2813768196200715495, guid: 3ce41f75411c41f448f4f822ac6d67b0, type: 3}
