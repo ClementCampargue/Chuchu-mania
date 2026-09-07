@@ -144,10 +144,8 @@ public class SC_sticker_popup : MonoBehaviour
         rarity_.SetActive(true);
 
         itemQueue = null;
-        new_.SetActive(!sticker.unlocked);
 
         currentIndex = 0;
-
         showingStickers = true;
         isShowingSequence = true;
         isClosing = false;
@@ -269,7 +267,8 @@ public class SC_sticker_popup : MonoBehaviour
     {
         if (sticker == null)
             return;
-
+        new_.SetActive(!sticker.unlocked);
+        sticker.unlocked = true;
         if (spr != null)
         {
             spr.sprite = sticker.sticker_sprite;
