@@ -291,20 +291,7 @@ public class SC_icecream_eat_system : MonoBehaviour
 
     private IEnumerator EatSelectedCreamsCoroutine()
     {
-        /*
-         * On bloque le contrôle du joueur.
-         *
-         * MAIS :
-         * - pas de velocity = 0
-         * - pas de Rigidbody Kinematic
-         * - pas de freeze physique
-         *
-         * SC_player continue donc à appliquer :
-         * - tapis roulant
-         * - knockback
-         * - bounce
-         * - forces externes
-         */
+
 
         player.moveInput = Vector2.zero;
 
@@ -348,7 +335,7 @@ public class SC_icecream_eat_system : MonoBehaviour
             );
 
             cream.Eat();
-
+     
             creams.Remove(cream);
 
             currrent_ice_cream--;
@@ -562,7 +549,10 @@ public class SC_icecream_eat_system : MonoBehaviour
             );
 
         SC_score.Instance.AddScore(score);
-
+        if (eaten_cream == 10)
+        {
+            sc_health_system.instance.heal();
+        }
         Debug.Log(
             "Crèmes mangées : " +
             eaten_cream +

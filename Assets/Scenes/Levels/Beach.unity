@@ -182,7 +182,7 @@ Transform:
   - {fileID: 1222871916}
   - {fileID: 2083755876}
   - {fileID: 1053563931}
-  - {fileID: 901269553}
+  - {fileID: 2112638664}
   - {fileID: 1420827396}
   - {fileID: 108702581}
   m_Father: {fileID: 1415538384}
@@ -6794,231 +6794,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!1001 &570829858
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    serializedVersion: 3
-    m_TransformParent: {fileID: 33126117}
-    m_Modifications:
-    - target: {fileID: 5089002671082510906, guid: 565a1ec9b289a3a4ba8cd9dd7f8fe31f, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: -12.7
-      objectReference: {fileID: 0}
-    - target: {fileID: 5089002671082510906, guid: 565a1ec9b289a3a4ba8cd9dd7f8fe31f, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: -2.4
-      objectReference: {fileID: 0}
-    - target: {fileID: 5089002671082510906, guid: 565a1ec9b289a3a4ba8cd9dd7f8fe31f, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5089002671082510906, guid: 565a1ec9b289a3a4ba8cd9dd7f8fe31f, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 5089002671082510906, guid: 565a1ec9b289a3a4ba8cd9dd7f8fe31f, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5089002671082510906, guid: 565a1ec9b289a3a4ba8cd9dd7f8fe31f, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5089002671082510906, guid: 565a1ec9b289a3a4ba8cd9dd7f8fe31f, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5089002671082510906, guid: 565a1ec9b289a3a4ba8cd9dd7f8fe31f, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5089002671082510906, guid: 565a1ec9b289a3a4ba8cd9dd7f8fe31f, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5089002671082510906, guid: 565a1ec9b289a3a4ba8cd9dd7f8fe31f, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6249361399758347668, guid: 565a1ec9b289a3a4ba8cd9dd7f8fe31f, type: 3}
-      propertyPath: m_Name
-      value: Worm (3)
-      objectReference: {fileID: 0}
-    - target: {fileID: 8202954234407879225, guid: 565a1ec9b289a3a4ba8cd9dd7f8fe31f, type: 3}
-      propertyPath: teleportPoints.Array.size
-      value: 34
-      objectReference: {fileID: 0}
-    - target: {fileID: 8202954234407879225, guid: 565a1ec9b289a3a4ba8cd9dd7f8fe31f, type: 3}
-      propertyPath: 'teleportPoints.Array.data[0]'
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 8202954234407879225, guid: 565a1ec9b289a3a4ba8cd9dd7f8fe31f, type: 3}
-      propertyPath: 'teleportPoints.Array.data[1]'
-      value: 
-      objectReference: {fileID: 171915983}
-    - target: {fileID: 8202954234407879225, guid: 565a1ec9b289a3a4ba8cd9dd7f8fe31f, type: 3}
-      propertyPath: 'teleportPoints.Array.data[2]'
-      value: 
-      objectReference: {fileID: 1693969689}
-    - target: {fileID: 8202954234407879225, guid: 565a1ec9b289a3a4ba8cd9dd7f8fe31f, type: 3}
-      propertyPath: 'teleportPoints.Array.data[3]'
-      value: 
-      objectReference: {fileID: 1741055236}
-    - target: {fileID: 8202954234407879225, guid: 565a1ec9b289a3a4ba8cd9dd7f8fe31f, type: 3}
-      propertyPath: 'teleportPoints.Array.data[4]'
-      value: 
-      objectReference: {fileID: 723429884}
-    - target: {fileID: 8202954234407879225, guid: 565a1ec9b289a3a4ba8cd9dd7f8fe31f, type: 3}
-      propertyPath: 'teleportPoints.Array.data[5]'
-      value: 
-      objectReference: {fileID: 269473078}
-    - target: {fileID: 8202954234407879225, guid: 565a1ec9b289a3a4ba8cd9dd7f8fe31f, type: 3}
-      propertyPath: 'teleportPoints.Array.data[6]'
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 8202954234407879225, guid: 565a1ec9b289a3a4ba8cd9dd7f8fe31f, type: 3}
-      propertyPath: 'teleportPoints.Array.data[7]'
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 8202954234407879225, guid: 565a1ec9b289a3a4ba8cd9dd7f8fe31f, type: 3}
-      propertyPath: 'teleportPoints.Array.data[8]'
-      value: 
-      objectReference: {fileID: 62922326}
-    - target: {fileID: 8202954234407879225, guid: 565a1ec9b289a3a4ba8cd9dd7f8fe31f, type: 3}
-      propertyPath: 'teleportPoints.Array.data[9]'
-      value: 
-      objectReference: {fileID: 536505799}
-    - target: {fileID: 8202954234407879225, guid: 565a1ec9b289a3a4ba8cd9dd7f8fe31f, type: 3}
-      propertyPath: 'teleportPoints.Array.data[10]'
-      value: 
-      objectReference: {fileID: 1330547868}
-    - target: {fileID: 8202954234407879225, guid: 565a1ec9b289a3a4ba8cd9dd7f8fe31f, type: 3}
-      propertyPath: 'teleportPoints.Array.data[11]'
-      value: 
-      objectReference: {fileID: 816082704}
-    - target: {fileID: 8202954234407879225, guid: 565a1ec9b289a3a4ba8cd9dd7f8fe31f, type: 3}
-      propertyPath: 'teleportPoints.Array.data[12]'
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 8202954234407879225, guid: 565a1ec9b289a3a4ba8cd9dd7f8fe31f, type: 3}
-      propertyPath: 'teleportPoints.Array.data[13]'
-      value: 
-      objectReference: {fileID: 1283755}
-    - target: {fileID: 8202954234407879225, guid: 565a1ec9b289a3a4ba8cd9dd7f8fe31f, type: 3}
-      propertyPath: 'teleportPoints.Array.data[14]'
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 8202954234407879225, guid: 565a1ec9b289a3a4ba8cd9dd7f8fe31f, type: 3}
-      propertyPath: 'teleportPoints.Array.data[15]'
-      value: 
-      objectReference: {fileID: 2047167545}
-    - target: {fileID: 8202954234407879225, guid: 565a1ec9b289a3a4ba8cd9dd7f8fe31f, type: 3}
-      propertyPath: 'teleportPoints.Array.data[16]'
-      value: 
-      objectReference: {fileID: 1746071793}
-    - target: {fileID: 8202954234407879225, guid: 565a1ec9b289a3a4ba8cd9dd7f8fe31f, type: 3}
-      propertyPath: 'teleportPoints.Array.data[17]'
-      value: 
-      objectReference: {fileID: 1026668250}
-    - target: {fileID: 8202954234407879225, guid: 565a1ec9b289a3a4ba8cd9dd7f8fe31f, type: 3}
-      propertyPath: 'teleportPoints.Array.data[18]'
-      value: 
-      objectReference: {fileID: 1701048828}
-    - target: {fileID: 8202954234407879225, guid: 565a1ec9b289a3a4ba8cd9dd7f8fe31f, type: 3}
-      propertyPath: 'teleportPoints.Array.data[19]'
-      value: 
-      objectReference: {fileID: 614913135}
-    - target: {fileID: 8202954234407879225, guid: 565a1ec9b289a3a4ba8cd9dd7f8fe31f, type: 3}
-      propertyPath: 'teleportPoints.Array.data[20]'
-      value: 
-      objectReference: {fileID: 239822761}
-    - target: {fileID: 8202954234407879225, guid: 565a1ec9b289a3a4ba8cd9dd7f8fe31f, type: 3}
-      propertyPath: 'teleportPoints.Array.data[21]'
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 8202954234407879225, guid: 565a1ec9b289a3a4ba8cd9dd7f8fe31f, type: 3}
-      propertyPath: 'teleportPoints.Array.data[22]'
-      value: 
-      objectReference: {fileID: 2101651936}
-    - target: {fileID: 8202954234407879225, guid: 565a1ec9b289a3a4ba8cd9dd7f8fe31f, type: 3}
-      propertyPath: 'teleportPoints.Array.data[23]'
-      value: 
-      objectReference: {fileID: 690816293}
-    - target: {fileID: 8202954234407879225, guid: 565a1ec9b289a3a4ba8cd9dd7f8fe31f, type: 3}
-      propertyPath: 'teleportPoints.Array.data[24]'
-      value: 
-      objectReference: {fileID: 1340908923}
-    - target: {fileID: 8202954234407879225, guid: 565a1ec9b289a3a4ba8cd9dd7f8fe31f, type: 3}
-      propertyPath: 'teleportPoints.Array.data[25]'
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 8202954234407879225, guid: 565a1ec9b289a3a4ba8cd9dd7f8fe31f, type: 3}
-      propertyPath: 'teleportPoints.Array.data[26]'
-      value: 
-      objectReference: {fileID: 1310174563}
-    - target: {fileID: 8202954234407879225, guid: 565a1ec9b289a3a4ba8cd9dd7f8fe31f, type: 3}
-      propertyPath: 'teleportPoints.Array.data[27]'
-      value: 
-      objectReference: {fileID: 169596123}
-    - target: {fileID: 8202954234407879225, guid: 565a1ec9b289a3a4ba8cd9dd7f8fe31f, type: 3}
-      propertyPath: 'teleportPoints.Array.data[28]'
-      value: 
-      objectReference: {fileID: 1360455214}
-    - target: {fileID: 8202954234407879225, guid: 565a1ec9b289a3a4ba8cd9dd7f8fe31f, type: 3}
-      propertyPath: 'teleportPoints.Array.data[29]'
-      value: 
-      objectReference: {fileID: 1046995890}
-    - target: {fileID: 8202954234407879225, guid: 565a1ec9b289a3a4ba8cd9dd7f8fe31f, type: 3}
-      propertyPath: 'teleportPoints.Array.data[30]'
-      value: 
-      objectReference: {fileID: 754478301}
-    - target: {fileID: 8202954234407879225, guid: 565a1ec9b289a3a4ba8cd9dd7f8fe31f, type: 3}
-      propertyPath: 'teleportPoints.Array.data[31]'
-      value: 
-      objectReference: {fileID: 2139769171}
-    - target: {fileID: 8202954234407879225, guid: 565a1ec9b289a3a4ba8cd9dd7f8fe31f, type: 3}
-      propertyPath: 'teleportPoints.Array.data[32]'
-      value: 
-      objectReference: {fileID: 57334471}
-    - target: {fileID: 8202954234407879225, guid: 565a1ec9b289a3a4ba8cd9dd7f8fe31f, type: 3}
-      propertyPath: 'teleportPoints.Array.data[33]'
-      value: 
-      objectReference: {fileID: 1921195607}
-    - target: {fileID: 8202954234407879225, guid: 565a1ec9b289a3a4ba8cd9dd7f8fe31f, type: 3}
-      propertyPath: 'teleportPoints.Array.data[34]'
-      value: 
-      objectReference: {fileID: 1046995890}
-    - target: {fileID: 8202954234407879225, guid: 565a1ec9b289a3a4ba8cd9dd7f8fe31f, type: 3}
-      propertyPath: 'teleportPoints.Array.data[35]'
-      value: 
-      objectReference: {fileID: 754478301}
-    - target: {fileID: 8202954234407879225, guid: 565a1ec9b289a3a4ba8cd9dd7f8fe31f, type: 3}
-      propertyPath: 'teleportPoints.Array.data[36]'
-      value: 
-      objectReference: {fileID: 2139769171}
-    - target: {fileID: 8202954234407879225, guid: 565a1ec9b289a3a4ba8cd9dd7f8fe31f, type: 3}
-      propertyPath: 'teleportPoints.Array.data[37]'
-      value: 
-      objectReference: {fileID: 57334471}
-    - target: {fileID: 8202954234407879225, guid: 565a1ec9b289a3a4ba8cd9dd7f8fe31f, type: 3}
-      propertyPath: 'teleportPoints.Array.data[38]'
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 8202954234407879225, guid: 565a1ec9b289a3a4ba8cd9dd7f8fe31f, type: 3}
-      propertyPath: 'teleportPoints.Array.data[39]'
-      value: 
-      objectReference: {fileID: 1921195607}
-    - target: {fileID: 8202954234407879225, guid: 565a1ec9b289a3a4ba8cd9dd7f8fe31f, type: 3}
-      propertyPath: 'teleportPoints.Array.data[40]'
-      value: 
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-    m_RemovedGameObjects: []
-    m_AddedGameObjects: []
-    m_AddedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: 565a1ec9b289a3a4ba8cd9dd7f8fe31f, type: 3}
 --- !u!1 &572797715
 GameObject:
   m_ObjectHideFlags: 0
@@ -17795,11 +17570,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 565a1ec9b289a3a4ba8cd9dd7f8fe31f, type: 3}
---- !u!4 &901269553 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 5089002671082510906, guid: 565a1ec9b289a3a4ba8cd9dd7f8fe31f, type: 3}
-  m_PrefabInstance: {fileID: 570829858}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &951281151
 GameObject:
   m_ObjectHideFlags: 0
@@ -36839,6 +36609,236 @@ Transform:
 Transform:
   m_CorrespondingSourceObject: {fileID: 3763133177607710856, guid: fc0a4bc2aae082741b1aa749cf6a68ed, type: 3}
   m_PrefabInstance: {fileID: 1415538382}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1001 &2112638663
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 33126117}
+    m_Modifications:
+    - target: {fileID: 5089002671082510906, guid: 565a1ec9b289a3a4ba8cd9dd7f8fe31f, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -12.7
+      objectReference: {fileID: 0}
+    - target: {fileID: 5089002671082510906, guid: 565a1ec9b289a3a4ba8cd9dd7f8fe31f, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -1.73
+      objectReference: {fileID: 0}
+    - target: {fileID: 5089002671082510906, guid: 565a1ec9b289a3a4ba8cd9dd7f8fe31f, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5089002671082510906, guid: 565a1ec9b289a3a4ba8cd9dd7f8fe31f, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5089002671082510906, guid: 565a1ec9b289a3a4ba8cd9dd7f8fe31f, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5089002671082510906, guid: 565a1ec9b289a3a4ba8cd9dd7f8fe31f, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5089002671082510906, guid: 565a1ec9b289a3a4ba8cd9dd7f8fe31f, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5089002671082510906, guid: 565a1ec9b289a3a4ba8cd9dd7f8fe31f, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5089002671082510906, guid: 565a1ec9b289a3a4ba8cd9dd7f8fe31f, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5089002671082510906, guid: 565a1ec9b289a3a4ba8cd9dd7f8fe31f, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6249361399758347668, guid: 565a1ec9b289a3a4ba8cd9dd7f8fe31f, type: 3}
+      propertyPath: m_Name
+      value: Worm (3)
+      objectReference: {fileID: 0}
+    - target: {fileID: 8202954234407879225, guid: 565a1ec9b289a3a4ba8cd9dd7f8fe31f, type: 3}
+      propertyPath: teleportPoints.Array.size
+      value: 34
+      objectReference: {fileID: 0}
+    - target: {fileID: 8202954234407879225, guid: 565a1ec9b289a3a4ba8cd9dd7f8fe31f, type: 3}
+      propertyPath: 'teleportPoints.Array.data[0]'
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 8202954234407879225, guid: 565a1ec9b289a3a4ba8cd9dd7f8fe31f, type: 3}
+      propertyPath: 'teleportPoints.Array.data[1]'
+      value: 
+      objectReference: {fileID: 171915983}
+    - target: {fileID: 8202954234407879225, guid: 565a1ec9b289a3a4ba8cd9dd7f8fe31f, type: 3}
+      propertyPath: 'teleportPoints.Array.data[2]'
+      value: 
+      objectReference: {fileID: 1693969689}
+    - target: {fileID: 8202954234407879225, guid: 565a1ec9b289a3a4ba8cd9dd7f8fe31f, type: 3}
+      propertyPath: 'teleportPoints.Array.data[3]'
+      value: 
+      objectReference: {fileID: 1741055236}
+    - target: {fileID: 8202954234407879225, guid: 565a1ec9b289a3a4ba8cd9dd7f8fe31f, type: 3}
+      propertyPath: 'teleportPoints.Array.data[4]'
+      value: 
+      objectReference: {fileID: 723429884}
+    - target: {fileID: 8202954234407879225, guid: 565a1ec9b289a3a4ba8cd9dd7f8fe31f, type: 3}
+      propertyPath: 'teleportPoints.Array.data[5]'
+      value: 
+      objectReference: {fileID: 269473078}
+    - target: {fileID: 8202954234407879225, guid: 565a1ec9b289a3a4ba8cd9dd7f8fe31f, type: 3}
+      propertyPath: 'teleportPoints.Array.data[6]'
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 8202954234407879225, guid: 565a1ec9b289a3a4ba8cd9dd7f8fe31f, type: 3}
+      propertyPath: 'teleportPoints.Array.data[7]'
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 8202954234407879225, guid: 565a1ec9b289a3a4ba8cd9dd7f8fe31f, type: 3}
+      propertyPath: 'teleportPoints.Array.data[8]'
+      value: 
+      objectReference: {fileID: 62922326}
+    - target: {fileID: 8202954234407879225, guid: 565a1ec9b289a3a4ba8cd9dd7f8fe31f, type: 3}
+      propertyPath: 'teleportPoints.Array.data[9]'
+      value: 
+      objectReference: {fileID: 536505799}
+    - target: {fileID: 8202954234407879225, guid: 565a1ec9b289a3a4ba8cd9dd7f8fe31f, type: 3}
+      propertyPath: 'teleportPoints.Array.data[10]'
+      value: 
+      objectReference: {fileID: 1330547868}
+    - target: {fileID: 8202954234407879225, guid: 565a1ec9b289a3a4ba8cd9dd7f8fe31f, type: 3}
+      propertyPath: 'teleportPoints.Array.data[11]'
+      value: 
+      objectReference: {fileID: 816082704}
+    - target: {fileID: 8202954234407879225, guid: 565a1ec9b289a3a4ba8cd9dd7f8fe31f, type: 3}
+      propertyPath: 'teleportPoints.Array.data[12]'
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 8202954234407879225, guid: 565a1ec9b289a3a4ba8cd9dd7f8fe31f, type: 3}
+      propertyPath: 'teleportPoints.Array.data[13]'
+      value: 
+      objectReference: {fileID: 1283755}
+    - target: {fileID: 8202954234407879225, guid: 565a1ec9b289a3a4ba8cd9dd7f8fe31f, type: 3}
+      propertyPath: 'teleportPoints.Array.data[14]'
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 8202954234407879225, guid: 565a1ec9b289a3a4ba8cd9dd7f8fe31f, type: 3}
+      propertyPath: 'teleportPoints.Array.data[15]'
+      value: 
+      objectReference: {fileID: 2047167545}
+    - target: {fileID: 8202954234407879225, guid: 565a1ec9b289a3a4ba8cd9dd7f8fe31f, type: 3}
+      propertyPath: 'teleportPoints.Array.data[16]'
+      value: 
+      objectReference: {fileID: 1746071793}
+    - target: {fileID: 8202954234407879225, guid: 565a1ec9b289a3a4ba8cd9dd7f8fe31f, type: 3}
+      propertyPath: 'teleportPoints.Array.data[17]'
+      value: 
+      objectReference: {fileID: 1026668250}
+    - target: {fileID: 8202954234407879225, guid: 565a1ec9b289a3a4ba8cd9dd7f8fe31f, type: 3}
+      propertyPath: 'teleportPoints.Array.data[18]'
+      value: 
+      objectReference: {fileID: 1701048828}
+    - target: {fileID: 8202954234407879225, guid: 565a1ec9b289a3a4ba8cd9dd7f8fe31f, type: 3}
+      propertyPath: 'teleportPoints.Array.data[19]'
+      value: 
+      objectReference: {fileID: 614913135}
+    - target: {fileID: 8202954234407879225, guid: 565a1ec9b289a3a4ba8cd9dd7f8fe31f, type: 3}
+      propertyPath: 'teleportPoints.Array.data[20]'
+      value: 
+      objectReference: {fileID: 239822761}
+    - target: {fileID: 8202954234407879225, guid: 565a1ec9b289a3a4ba8cd9dd7f8fe31f, type: 3}
+      propertyPath: 'teleportPoints.Array.data[21]'
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 8202954234407879225, guid: 565a1ec9b289a3a4ba8cd9dd7f8fe31f, type: 3}
+      propertyPath: 'teleportPoints.Array.data[22]'
+      value: 
+      objectReference: {fileID: 2101651936}
+    - target: {fileID: 8202954234407879225, guid: 565a1ec9b289a3a4ba8cd9dd7f8fe31f, type: 3}
+      propertyPath: 'teleportPoints.Array.data[23]'
+      value: 
+      objectReference: {fileID: 690816293}
+    - target: {fileID: 8202954234407879225, guid: 565a1ec9b289a3a4ba8cd9dd7f8fe31f, type: 3}
+      propertyPath: 'teleportPoints.Array.data[24]'
+      value: 
+      objectReference: {fileID: 1340908923}
+    - target: {fileID: 8202954234407879225, guid: 565a1ec9b289a3a4ba8cd9dd7f8fe31f, type: 3}
+      propertyPath: 'teleportPoints.Array.data[25]'
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 8202954234407879225, guid: 565a1ec9b289a3a4ba8cd9dd7f8fe31f, type: 3}
+      propertyPath: 'teleportPoints.Array.data[26]'
+      value: 
+      objectReference: {fileID: 1310174563}
+    - target: {fileID: 8202954234407879225, guid: 565a1ec9b289a3a4ba8cd9dd7f8fe31f, type: 3}
+      propertyPath: 'teleportPoints.Array.data[27]'
+      value: 
+      objectReference: {fileID: 169596123}
+    - target: {fileID: 8202954234407879225, guid: 565a1ec9b289a3a4ba8cd9dd7f8fe31f, type: 3}
+      propertyPath: 'teleportPoints.Array.data[28]'
+      value: 
+      objectReference: {fileID: 1360455214}
+    - target: {fileID: 8202954234407879225, guid: 565a1ec9b289a3a4ba8cd9dd7f8fe31f, type: 3}
+      propertyPath: 'teleportPoints.Array.data[29]'
+      value: 
+      objectReference: {fileID: 1046995890}
+    - target: {fileID: 8202954234407879225, guid: 565a1ec9b289a3a4ba8cd9dd7f8fe31f, type: 3}
+      propertyPath: 'teleportPoints.Array.data[30]'
+      value: 
+      objectReference: {fileID: 754478301}
+    - target: {fileID: 8202954234407879225, guid: 565a1ec9b289a3a4ba8cd9dd7f8fe31f, type: 3}
+      propertyPath: 'teleportPoints.Array.data[31]'
+      value: 
+      objectReference: {fileID: 2139769171}
+    - target: {fileID: 8202954234407879225, guid: 565a1ec9b289a3a4ba8cd9dd7f8fe31f, type: 3}
+      propertyPath: 'teleportPoints.Array.data[32]'
+      value: 
+      objectReference: {fileID: 57334471}
+    - target: {fileID: 8202954234407879225, guid: 565a1ec9b289a3a4ba8cd9dd7f8fe31f, type: 3}
+      propertyPath: 'teleportPoints.Array.data[33]'
+      value: 
+      objectReference: {fileID: 1921195607}
+    - target: {fileID: 8202954234407879225, guid: 565a1ec9b289a3a4ba8cd9dd7f8fe31f, type: 3}
+      propertyPath: 'teleportPoints.Array.data[34]'
+      value: 
+      objectReference: {fileID: 1046995890}
+    - target: {fileID: 8202954234407879225, guid: 565a1ec9b289a3a4ba8cd9dd7f8fe31f, type: 3}
+      propertyPath: 'teleportPoints.Array.data[35]'
+      value: 
+      objectReference: {fileID: 754478301}
+    - target: {fileID: 8202954234407879225, guid: 565a1ec9b289a3a4ba8cd9dd7f8fe31f, type: 3}
+      propertyPath: 'teleportPoints.Array.data[36]'
+      value: 
+      objectReference: {fileID: 2139769171}
+    - target: {fileID: 8202954234407879225, guid: 565a1ec9b289a3a4ba8cd9dd7f8fe31f, type: 3}
+      propertyPath: 'teleportPoints.Array.data[37]'
+      value: 
+      objectReference: {fileID: 57334471}
+    - target: {fileID: 8202954234407879225, guid: 565a1ec9b289a3a4ba8cd9dd7f8fe31f, type: 3}
+      propertyPath: 'teleportPoints.Array.data[38]'
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 8202954234407879225, guid: 565a1ec9b289a3a4ba8cd9dd7f8fe31f, type: 3}
+      propertyPath: 'teleportPoints.Array.data[39]'
+      value: 
+      objectReference: {fileID: 1921195607}
+    - target: {fileID: 8202954234407879225, guid: 565a1ec9b289a3a4ba8cd9dd7f8fe31f, type: 3}
+      propertyPath: 'teleportPoints.Array.data[40]'
+      value: 
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 565a1ec9b289a3a4ba8cd9dd7f8fe31f, type: 3}
+--- !u!4 &2112638664 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 5089002671082510906, guid: 565a1ec9b289a3a4ba8cd9dd7f8fe31f, type: 3}
+  m_PrefabInstance: {fileID: 2112638663}
   m_PrefabAsset: {fileID: 0}
 --- !u!1 &2118921174
 GameObject:

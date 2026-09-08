@@ -20,6 +20,7 @@ public class SC_shop_manager : MonoBehaviour
 
     public bool talking = true;
     public InputActionReference submit;
+    public InputActionReference submit2;
     public InputActionReference quit;
     public InputActionReference talk;
     public SC_gachapon gacha;
@@ -39,6 +40,7 @@ public class SC_shop_manager : MonoBehaviour
         quit.action.Enable();
         talk.action.Enable();
         submit.action.Enable();
+        submit2.action.Enable();
     }
     void choose_stickers()
     {
@@ -65,12 +67,18 @@ public class SC_shop_manager : MonoBehaviour
         if (typewriter.finished && talking)
         {
             typewriter.SetWaitInputVisible(true);
-            if (submit.action.WasPerformedThisFrame())
+            if (submit.action.WasPerformedThisFrame() || submit2.action.WasPerformedThisFrame())
             {
                 show_menu();
             }
         }
         if (!typewriter.finished && talking && submit.action.WasPerformedThisFrame())
+        {
+            typewriter.FinishText();
+            typewriter.SetWaitInputVisible(true);
+        }
+        
+        if (!typewriter.finished && talking && submit2.action.WasPerformedThisFrame())
         {
             typewriter.FinishText();
             typewriter.SetWaitInputVisible(true);

@@ -31617,6 +31617,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   PowermoveSpeed: 5
+  BasePowermoveSpeed: 5
   PowerJump: 6
   juice: {fileID: 1906161946050759491}
   moveSpeed: 4
@@ -31664,13 +31665,11 @@ MonoBehaviour:
   detransformAnimTrigger: DeTransform
   rb: {fileID: 70515771043777974}
   anim: {fileID: 8603257414306407405}
-  moveInput: {x: 0, y: 0}
-  isGrounded: 0
+  collider: {fileID: 636408113826853957}
   Jump: {fileID: -2099379676528639254, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
   Move: {fileID: -1680190386980627800, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
   ghost: {fileID: 0}
   eat_system: {fileID: 0}
-  collider: {fileID: 636408113826853957}
   base_gravity: 0
   game_over_screen: {fileID: 0}
   canMove: 1
@@ -31685,6 +31684,9 @@ MonoBehaviour:
   land: {fileID: 2153375865431356745}
   grid: {fileID: 1874199226758691141}
   run: {fileID: 3336361730294885639}
+  moveInput: {x: 0, y: 0}
+  isGrounded: 0
+  wasGrounded: 0
 --- !u!114 &1906161946050759491
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -31843,9 +31845,12 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   heart_on: {fileID: 21300000, guid: 3f31bc9901764244eb6d87215773d07f, type: 3}
+  heart_on_bonus: {fileID: 0}
   heart_off: {fileID: 21300000, guid: b08982da156c7d745b9186a03cdad930, type: 3}
   current_health: 4
   max_health: 4
+  current_bonus_health: 0
+  max_bonus_health: 3
   low_health: {fileID: 255940591001782215}
 --- !u!1 &8178604890168123396
 GameObject:

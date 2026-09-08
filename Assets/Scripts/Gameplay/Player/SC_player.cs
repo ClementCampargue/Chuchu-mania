@@ -832,6 +832,7 @@ public class SC_player : MonoBehaviour
         if (isFrozen ||
             eat_system.isPowerUpActive)
             return;
+        Invoke("delay_hit", hitFreezeTime);
 
         anim.SetBool("Stun", false);
         anim.SetBool("Hit",true);
@@ -885,7 +886,10 @@ public class SC_player : MonoBehaviour
 
         isStunned = false;
     }
-
+    void delay_hit()
+    {
+        anim.SetBool("Hit", false);
+    }
     // =========================================================
     // BOUNCE
     // =========================================================
