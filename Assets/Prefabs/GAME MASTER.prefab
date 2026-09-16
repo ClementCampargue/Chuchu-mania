@@ -2979,22 +2979,6 @@ PrefabInstance:
       value: Player
       objectReference: {fileID: 0}
     - target: {fileID: 8440433961212022318, guid: 699aef5bce431b945abe8a89d250bc89, type: 3}
-      propertyPath: max_health
-      value: 3
-      objectReference: {fileID: 0}
-    - target: {fileID: 8440433961212022318, guid: 699aef5bce431b945abe8a89d250bc89, type: 3}
-      propertyPath: current_health
-      value: 3
-      objectReference: {fileID: 0}
-    - target: {fileID: 8440433961212022318, guid: 699aef5bce431b945abe8a89d250bc89, type: 3}
-      propertyPath: heart_on_bonus
-      value: 
-      objectReference: {fileID: 21300000, guid: f3ff82ca2fac12a4ea2bcffbf70c6e46, type: 3}
-    - target: {fileID: 8440433961212022318, guid: 699aef5bce431b945abe8a89d250bc89, type: 3}
-      propertyPath: hearts.Array.size
-      value: 7
-      objectReference: {fileID: 0}
-    - target: {fileID: 8440433961212022318, guid: 699aef5bce431b945abe8a89d250bc89, type: 3}
       propertyPath: 'hearts.Array.data[0]'
       value: 
       objectReference: {fileID: 6428680010016580608}

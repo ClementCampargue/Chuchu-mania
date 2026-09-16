@@ -74,7 +74,7 @@ public class SC_player : MonoBehaviour
     [Header("Stun")]
     public LayerMask stunLayer;
     public float stunDuration = 2f;
-    private bool isStunned;
+    public bool isStunned;
 
     [Header("Invincibility")]
     public float invincibilityTime = 1f;
@@ -116,10 +116,10 @@ public class SC_player : MonoBehaviour
     public bool burning;
 
     [Header("External Velocity")]
-    private Vector2 externalVelocity;
+    public Vector2 externalVelocity;
 
     [Header("Knockback")]
-    private Vector2 knockbackVelocity;
+    public Vector2 knockbackVelocity;
 
     [Header("Audio")]
     public SC_juiciness jump;
@@ -141,7 +141,7 @@ public class SC_player : MonoBehaviour
     public bool isGrounded;
 
     public bool wasGrounded;
-    private bool isFrozen;
+    public bool isFrozen;
 
     // =========================================================
     // AWAKE

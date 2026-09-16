@@ -20,6 +20,7 @@ public class SC_spawner : MonoBehaviour
     [Header("Nombre maximum d'objets (0 = illimité)")]
     public int maxSpawnCount = 0;
 
+    public int delay_start = 0;
     private int currentSpawnCount = 0;
     private float timer = 0f;
     private float currentSpawnInterval = 0f;
@@ -37,7 +38,7 @@ public class SC_spawner : MonoBehaviour
 
         if (playOnAwake)
         {
-            timer = currentSpawnInterval;
+            timer = currentSpawnInterval - delay_start;
         }
     }
 

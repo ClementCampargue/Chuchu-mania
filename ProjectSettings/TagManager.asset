@@ -9,6 +9,8 @@ TagManager:
   - Climb
   - Crate
   - Lava
+  - Damage
+  - Dard
   layers:
   - Default
   - TransparentFX
