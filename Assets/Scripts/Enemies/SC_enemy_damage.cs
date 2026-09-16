@@ -125,13 +125,18 @@ public class SC_enemy_damage : MonoBehaviour
         player.anim.SetTrigger("Punch");
         if (animator != null)
         {
+            animator.enabled = true;
             animator.SetTrigger("Death");
         }
         if (ps != null)
         {
             ps.Play();
         }
-        juice.PlayJuice();
+        
+        if (juice != null)
+        {
+            juice.PlayJuice();
+        }
 
         Collider2D col = GetComponent<Collider2D>();
         if (col != null) col.enabled = false;

@@ -143,6 +143,7 @@ public class SC_player : MonoBehaviour
     public bool wasGrounded;
     public bool isFrozen;
 
+
     // =========================================================
     // AWAKE
     // =========================================================
@@ -154,6 +155,7 @@ public class SC_player : MonoBehaviour
         base_speed = moveSpeed;
         BasePowermoveSpeed = PowermoveSpeed;
     }
+
 
     // =========================================================
     // ENABLE
@@ -168,11 +170,13 @@ public class SC_player : MonoBehaviour
         Jump.action.canceled += OnJumpReleased;
     }
 
+
     private void OnDisable()
     {
         Jump.action.performed -= OnJumpStarted;
         Jump.action.canceled -= OnJumpReleased;
     }
+
 
     // =========================================================
     // START
@@ -191,6 +195,7 @@ public class SC_player : MonoBehaviour
 
         spriteRenderer.material = normalMaterial;
     }
+
 
     // =========================================================
     // UPDATE
@@ -215,6 +220,7 @@ public class SC_player : MonoBehaviour
                 climbReattachTimer = 0f;
         }
 
+
         // -----------------------------------------------------
         // STUN
         // -----------------------------------------------------
@@ -225,19 +231,10 @@ public class SC_player : MonoBehaviour
             return;
         }
 
+
         // -----------------------------------------------------
         // INPUT
         // -----------------------------------------------------
-
-        /*
-         * IMPORTANT :
-         *
-         * Pendant Eat :
-         * - le joueur ne peut pas contrôler son déplacement
-         * - mais on ne touche PAS à la velocity du Rigidbody
-         *
-         * La vélocité externe continue donc d'exister.
-         */
 
         if (!isFrozen &&
             canMove &&
@@ -245,6 +242,7 @@ public class SC_player : MonoBehaviour
             Time.timeScale != 0)
         {
             Vector2 input = Move.action.ReadValue<Vector2>();
+
             moveInput = new Vector2(
                 Mathf.Abs(input.x) > 0.2f
                     ? Mathf.Sign(input.x)
@@ -264,10 +262,9 @@ public class SC_player : MonoBehaviour
         }
         else
         {
-            // On bloque uniquement l'INPUT.
-            // Pas la velocity.
             moveInput = Vector2.zero;
         }
+
 
         // -----------------------------------------------------
         // GROUND CHECK
@@ -279,6 +276,7 @@ public class SC_player : MonoBehaviour
             groundLayer
         );
 
+
         // -----------------------------------------------------
         // COYOTE
         // -----------------------------------------------------
@@ -287,6 +285,7 @@ public class SC_player : MonoBehaviour
             coyoteTimeCounter = coyoteTime;
         else
             coyoteTimeCounter -= Time.deltaTime;
+
 
         // -----------------------------------------------------
         // JUMP BUFFER
@@ -297,6 +296,7 @@ public class SC_player : MonoBehaviour
 
         if (jumpBufferCounter > 0f)
             TryJump();
+
 
         // -----------------------------------------------------
         // ANIMATION
@@ -340,13 +340,15 @@ public class SC_player : MonoBehaviour
             }
         }
 
+
         // -----------------------------------------------------
         // LANDING
         // -----------------------------------------------------
 
         if (IsAnimationPlaying("jump_idle") &&
             isGrounded &&
-            Mathf.Abs(rb.linearVelocity.y) < 0.01f && rb.gravityScale > 0)
+            Mathf.Abs(rb.linearVelocity.y) < 0.01f &&
+            rb.gravityScale > 0)
         {
             anim.ResetTrigger("Jump");
             anim.SetTrigger("Land");
@@ -356,9 +358,11 @@ public class SC_player : MonoBehaviour
             land.PlayJuice();
         }
 
-        if (IsAnimationPlaying("jump_idle")  &&
+
+        if (IsAnimationPlaying("jump_idle") &&
             isGrounded &&
-            Mathf.Abs(rb.linearVelocity.y) > -0.1f && rb.gravityScale < 0)
+            Mathf.Abs(rb.linearVelocity.y) > -0.1f &&
+            rb.gravityScale < 0)
         {
             anim.ResetTrigger("Jump");
             anim.SetTrigger("Land");
@@ -368,9 +372,12 @@ public class SC_player : MonoBehaviour
             land.PlayJuice();
         }
 
-        if (IsAnimationPlaying("hit") && wasGrounded &&
+
+        if (IsAnimationPlaying("hit") &&
+            wasGrounded &&
             isGrounded &&
-            Mathf.Abs(rb.linearVelocity.y) < 0.1f && rb.gravityScale > 0)
+            Mathf.Abs(rb.linearVelocity.y) < 0.1f &&
+            rb.gravityScale > 0)
         {
             anim.ResetTrigger("Jump");
             anim.SetTrigger("Land");
@@ -380,9 +387,12 @@ public class SC_player : MonoBehaviour
             land.PlayJuice();
         }
 
-        if (IsAnimationPlaying("hit") && !wasGrounded &&
+
+        if (IsAnimationPlaying("hit") &&
+            !wasGrounded &&
             isGrounded &&
-            Mathf.Abs(rb.linearVelocity.y) > -0.01f && rb.gravityScale < 0)
+            Mathf.Abs(rb.linearVelocity.y) > -0.01f &&
+            rb.gravityScale < 0)
         {
             anim.ResetTrigger("Jump");
             anim.SetTrigger("Land");
@@ -416,7 +426,9 @@ public class SC_player : MonoBehaviour
             );
         }
 
+
         wasGrounded = isGrounded;
+
 
         // -----------------------------------------------------
         // JUMP
@@ -448,6 +460,7 @@ public class SC_player : MonoBehaviour
         }
     }
 
+
     // =========================================================
     // FIXED UPDATE
     // =========================================================
@@ -456,6 +469,7 @@ public class SC_player : MonoBehaviour
     {
         if (Time.timeScale == 0)
             return;
+
 
         // -----------------------------------------------------
         // CLIMB
@@ -492,25 +506,13 @@ public class SC_player : MonoBehaviour
             return;
         }
 
+
         // -----------------------------------------------------
         // PHYSICS
         // -----------------------------------------------------
 
-        /*
-         * ICI EST LE FIX PRINCIPAL.
-         *
-         * On ne fait plus :
-         *
-         * if (isEating)
-         *     return;
-         *
-         * Sinon les vélocités externes sont supprimées.
-         */
-
         float playerHorizontalVelocity = 0f;
 
-        // Le joueur peut contrôler son mouvement uniquement
-        // lorsqu'il n'est PAS en train de manger.
         if (!isFrozen &&
             canMove &&
             !eat_system.isEating)
@@ -523,6 +525,7 @@ public class SC_player : MonoBehaviour
                         : moveSpeed
                 );
         }
+
 
         // -----------------------------------------------------
         // KNOCKBACK
@@ -540,6 +543,7 @@ public class SC_player : MonoBehaviour
 
             knockbackVelocity.y = 0f;
         }
+
 
         // -----------------------------------------------------
         // VELOCITY FINALE
@@ -559,6 +563,7 @@ public class SC_player : MonoBehaviour
             finalY
         );
 
+
         // -----------------------------------------------------
         // FADE KNOCKBACK
         // -----------------------------------------------------
@@ -571,6 +576,7 @@ public class SC_player : MonoBehaviour
             );
     }
 
+
     // =========================================================
     // EXTERNAL VELOCITY
     // =========================================================
@@ -580,10 +586,12 @@ public class SC_player : MonoBehaviour
         externalVelocity = velocity;
     }
 
+
     public void ClearGroundVelocity()
     {
         externalVelocity = Vector2.zero;
     }
+
 
     // =========================================================
     // JUMP
@@ -609,6 +617,7 @@ public class SC_player : MonoBehaviour
         if (eat_system.isEating)
             return;
 
+
         if (isClimbing)
         {
             StopClimbingJump();
@@ -630,6 +639,7 @@ public class SC_player : MonoBehaviour
 
             return;
         }
+
 
         if (rb.linearVelocity.y < 0.5f)
         {
@@ -663,6 +673,7 @@ public class SC_player : MonoBehaviour
         }
     }
 
+
     private void OnJumpStarted(
         InputAction.CallbackContext context)
     {
@@ -683,11 +694,13 @@ public class SC_player : MonoBehaviour
         TryJump();
     }
 
+
     private void OnJumpReleased(
         InputAction.CallbackContext context)
     {
         isJumping = false;
     }
+
 
     // =========================================================
     // ANIMATION
@@ -700,6 +713,7 @@ public class SC_player : MonoBehaviour
 
         return stateInfo.IsName(animationName);
     }
+
 
     // =========================================================
     // STUN
@@ -727,6 +741,7 @@ public class SC_player : MonoBehaviour
             StartCoroutine(StunCoroutine());
     }
 
+
     public void Stun()
     {
         if (eat_system.isPowerUpActive)
@@ -738,6 +753,7 @@ public class SC_player : MonoBehaviour
         StartCoroutine(StunCoroutine());
     }
 
+
     public void stun_player()
     {
         if (isStunned ||
@@ -747,6 +763,7 @@ public class SC_player : MonoBehaviour
 
         StartCoroutine(StunCoroutine());
     }
+
 
     private IEnumerator StunCoroutine()
     {
@@ -764,6 +781,7 @@ public class SC_player : MonoBehaviour
 
         isStunned = false;
     }
+
 
     // =========================================================
     // LOW HEALTH
@@ -792,6 +810,7 @@ public class SC_player : MonoBehaviour
         }
     }
 
+
     private IEnumerator LowHealthBlink()
     {
         bool toggle = false;
@@ -815,6 +834,7 @@ public class SC_player : MonoBehaviour
         lowHealthCoroutine = null;
     }
 
+
     // =========================================================
     // DAMAGE
     // =========================================================
@@ -832,13 +852,16 @@ public class SC_player : MonoBehaviour
         if (isFrozen ||
             eat_system.isPowerUpActive)
             return;
+
         Invoke("delay_hit", hitFreezeTime);
 
         anim.SetBool("Stun", false);
-        anim.SetBool("Hit",true);
+        anim.SetBool("Hit", true);
+
 
         if (isClimbing)
             StopClimbingJump();
+
 
         if (damage == 0)
         {
@@ -886,10 +909,14 @@ public class SC_player : MonoBehaviour
 
         isStunned = false;
     }
-    void delay_hit()
+
+
+    private void delay_hit()
     {
         anim.SetBool("Hit", false);
     }
+
+
     // =========================================================
     // BOUNCE
     // =========================================================
@@ -916,6 +943,7 @@ public class SC_player : MonoBehaviour
 
         yield return new WaitForSeconds(0.1f);
     }
+
 
     // =========================================================
     // HIT FREEZE
@@ -964,6 +992,7 @@ public class SC_player : MonoBehaviour
             canTakeDamage = true;
     }
 
+
     // =========================================================
     // LAVA
     // =========================================================
@@ -974,6 +1003,8 @@ public class SC_player : MonoBehaviour
         float controlTime)
     {
         burning = true;
+        moveSpeed = base_speed;
+        PowermoveSpeed = BasePowermoveSpeed;
 
         rb.bodyType =
             RigidbodyType2D.Dynamic;
@@ -987,6 +1018,7 @@ public class SC_player : MonoBehaviour
                 controlTime
             )
         );
+
 
         if (isInvincible ||
             !canTakeDamage)
@@ -1023,6 +1055,7 @@ public class SC_player : MonoBehaviour
         damage_lava_sfx.PlayJuice();
     }
 
+
     private IEnumerator LavaControlLock(
         float multiplier,
         float time)
@@ -1033,7 +1066,10 @@ public class SC_player : MonoBehaviour
         yield return new WaitForSeconds(time);
 
         yield return new WaitUntil(
-            () => isGrounded || isClimbing
+            () => IsAnimationPlaying("jump_idle") &&
+            isGrounded &&
+            Mathf.Abs(rb.linearVelocity.y) < 0.01f &&
+            rb.gravityScale > 0 || isClimbing
         );
 
         moveSpeed = base_speed;
@@ -1042,6 +1078,7 @@ public class SC_player : MonoBehaviour
         burning = false;
     }
 
+
     // =========================================================
     // INVINCIBILITY
     // =========================================================
@@ -1049,8 +1086,13 @@ public class SC_player : MonoBehaviour
     public void TriggerInvincibility(float duration)
     {
         StartInvincibility(duration);
-        Invoke("delay_safe", invincibilityTime+0.1f);
+
+        Invoke(
+            "delay_safe",
+            invincibilityTime + 0.1f
+        );
     }
+
 
     public void StartInvincibility(float duration)
     {
@@ -1061,13 +1103,17 @@ public class SC_player : MonoBehaviour
             StartCoroutine(
                 InvincibilityRoutine(duration)
             );
+
         Invoke("delay", 0.15f);
     }
-    void delay()
+
+
+    private void delay()
     {
         anim.SetBool("Hit", false);
-
     }
+
+
     private IEnumerator InvincibilityRoutine(float duration)
     {
         isInvincible = true;
@@ -1094,11 +1140,14 @@ public class SC_player : MonoBehaviour
 
         invincibilityCoroutine = null;
     }
-    void delay_safe()
+
+
+    private void delay_safe()
     {
         spriteRenderer.enabled = true;
-
     }
+
+
     // =========================================================
     // POWERUP
     // =========================================================
@@ -1107,11 +1156,15 @@ public class SC_player : MonoBehaviour
     {
         isFrozen = true;
 
+        // Stop complètement le joueur pendant la transformation.
         rb.linearVelocity = Vector2.zero;
 
+        // On passe en Kinematic pour empêcher la physique
+        // de modifier la position pendant le freeze.
         rb.bodyType =
             RigidbodyType2D.Kinematic;
 
+        // Animation de transformation / détransformation.
         string trigger =
             isActivating
                 ? transformAnimTrigger
@@ -1119,30 +1172,34 @@ public class SC_player : MonoBehaviour
 
         anim.SetTrigger(trigger);
 
+        // Sauvegarde du Time.timeScale actuel.
         float originalTimeScale =
             Time.timeScale;
 
+        // FREEZE DU TEMPS
         Time.timeScale = 0f;
 
+        // WaitForSecondsRealtime continue même avec Time.timeScale = 0.
         yield return new WaitForSecondsRealtime(
             transformFreezeTime
         );
 
+        // Restaure le Time.timeScale précédent.
         Time.timeScale =
             originalTimeScale;
 
+        // Rend la physique au joueur.
         rb.bodyType =
             RigidbodyType2D.Dynamic;
 
         isFrozen = false;
     }
 
+
     public void powerup()
     {
         anim.ResetTrigger("Punch");
         anim.SetBool("Eat", false);
-
-        anim.SetTrigger("Transform");
 
         transformation.PlayJuice();
 
@@ -1154,6 +1211,7 @@ public class SC_player : MonoBehaviour
         );
     }
 
+
     public void end_powerup()
     {
         normal.SetActive(true);
@@ -1163,6 +1221,7 @@ public class SC_player : MonoBehaviour
             PowerupFreeze(false)
         );
     }
+
 
     // =========================================================
     // CLIMB
@@ -1179,6 +1238,7 @@ public class SC_player : MonoBehaviour
             other.GetComponent<SC_grillage>();
     }
 
+
     private void OnTriggerStay2D(Collider2D other)
     {
         if (!other.CompareTag("Climb"))
@@ -1190,6 +1250,7 @@ public class SC_player : MonoBehaviour
             grillage =
                 other.GetComponent<SC_grillage>();
     }
+
 
     private void OnTriggerExit2D(Collider2D other)
     {
@@ -1207,6 +1268,7 @@ public class SC_player : MonoBehaviour
             canClimb = false;
         }
     }
+
 
     private void TryStartClimbing(Vector2 input)
     {
@@ -1226,6 +1288,7 @@ public class SC_player : MonoBehaviour
         StartClimbing();
     }
 
+
     private void StartClimbing()
     {
         if (!canClimb ||
@@ -1241,6 +1304,7 @@ public class SC_player : MonoBehaviour
         anim.SetBool("Climb", true);
     }
 
+
     private void StopClimbing()
     {
         if (!isClimbing)
@@ -1255,6 +1319,7 @@ public class SC_player : MonoBehaviour
 
         anim.SetBool("Climb", false);
     }
+
 
     private void StopClimbingJump()
     {
@@ -1276,6 +1341,7 @@ public class SC_player : MonoBehaviour
 
         anim.SetBool("Climb", false);
     }
+
 
     // =========================================================
     // FACE TARGET
@@ -1307,6 +1373,7 @@ public class SC_player : MonoBehaviour
             );
         }
     }
+
 
     // =========================================================
     // DIE
@@ -1350,12 +1417,18 @@ public class SC_player : MonoBehaviour
         Time.timeScale = 0;
     }
 
+
     // =========================================================
     // REVIVE
     // =========================================================
 
     public void Revive()
     {
+        // IMPORTANT :
+        // Si le joueur meurt pendant un freeze,
+        // on remet le temps à 1.
+        Time.timeScale = 1f;
+
         normal.SetActive(true);
         transformed.SetActive(false);
 
@@ -1414,6 +1487,7 @@ public class SC_player : MonoBehaviour
             Vector3.one;
     }
 
+
     // =========================================================
     // GROUND VELOCITY
     // =========================================================
@@ -1436,6 +1510,7 @@ public class SC_player : MonoBehaviour
         }
     }
 
+
     // =========================================================
     // SCREEN WRAP
     // =========================================================
@@ -1443,6 +1518,7 @@ public class SC_player : MonoBehaviour
     private void LateUpdate()
     {
         float x = transform.position.x;
+
 
         if (x > limit.y - 0.2f)
         {
@@ -1486,6 +1562,7 @@ public class SC_player : MonoBehaviour
         {
             ghost.gameObject.SetActive(false);
         }
+
 
         if (x > limit.y)
         {

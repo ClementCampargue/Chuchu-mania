@@ -30979,9 +30979,9 @@ MonoBehaviour:
   verticalStretch: 1
   shakeDuration: 0.15
   shakeIntensity: 0.1
-  freeze: 0
-  freezeDuration: 0.05
-  slowMoScale: 0.05
+  freeze: 1
+  freezeDuration: 0.49
+  slowMoScale: 0
   fovCurve:
     serializedVersion: 2
     m_Curve:
@@ -32021,6 +32021,7 @@ MonoBehaviour:
   balloonCheck: {fileID: 0}
   riseSpeed: 1.5
   horizontalSpeed: 2
+  riseDelay: 0.5
   deflateDelay: 0.5
   move: {fileID: -1680190386980627800, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
   moveInput: {x: 0, y: 0}

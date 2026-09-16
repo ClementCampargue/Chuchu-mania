@@ -21,7 +21,7 @@ public class SC_bee_stinger : MonoBehaviour
 
     // Distance hors écran avant de téléporter l'abeille
     public float offScreenDistance = 2f;
-
+    public SC_enemy_damage damage;
     void Start()
     {
         if (positions == null || positions.Count < 4)
@@ -55,12 +55,18 @@ public class SC_bee_stinger : MonoBehaviour
         {
             MoveBee();
         }
+        if (damage.isKnockedBack)
+        {
+            StopAllCoroutines();
+            this.enabled = false;
+        }
     }
 
     private IEnumerator AttackRoutine()
     {
         while (true)
         {
+           
             // Attend que l'abeille soit arrivée à sa position.
             yield return new WaitUntil(() => !isMoving && !isTeleporting);
 

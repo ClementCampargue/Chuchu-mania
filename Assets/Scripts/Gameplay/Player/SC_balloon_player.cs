@@ -78,6 +78,9 @@ public class SC_balloon_player : MonoBehaviour
 
     public void Activate()
     {
+        if (player.eat_system.isPowerUpActive)
+            return;
+
         if (isActive)
             return;
 
@@ -151,6 +154,8 @@ public class SC_balloon_player : MonoBehaviour
 
     private void Update()
     {
+        if (player.eat_system.isPowerUpActive)
+            return;
         if (!isActive)
             return;
 
@@ -238,6 +243,8 @@ public class SC_balloon_player : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
+        if (player.eat_system.isPowerUpActive)
+            return;
         if (!isActive)
             return;
 
@@ -267,6 +274,8 @@ public class SC_balloon_player : MonoBehaviour
 
     private void BalloonTakeDamage()
     {
+        if (player.eat_system.isPowerUpActive)
+            return;
         if (!isActive)
             return;
 
