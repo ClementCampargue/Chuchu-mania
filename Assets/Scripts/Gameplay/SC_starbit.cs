@@ -58,6 +58,12 @@ public class SC_starbit : MonoBehaviour
             Invoke("delay_destroy", 0.5f);
         }
     }
+
+    public void Destroy_()
+    {
+        spawner.OnCollectiblePicked(gameObject);
+        Destroy(gameObject);
+    }
     void delay_destroy()
     {
         spawner.OnCollectiblePicked(gameObject);
