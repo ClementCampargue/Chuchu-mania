@@ -482,7 +482,7 @@ public class SC_water_physic : MonoBehaviour
 
 
         idleTime +=
-            Time.deltaTime *
+            Time.unscaledDeltaTime *
             idleSpeed;
 
 
@@ -566,7 +566,7 @@ public class SC_water_physic : MonoBehaviour
 
         float dt =
             Mathf.Max(
-                Time.deltaTime,
+                Time.unscaledDeltaTime,
                 0.0001f
             );
 
@@ -659,7 +659,7 @@ public class SC_water_physic : MonoBehaviour
 
 
         float dt =
-            Time.deltaTime;
+            Time.unscaledDeltaTime;
 
 
         for (
@@ -863,7 +863,7 @@ public class SC_water_physic : MonoBehaviour
     {
         float dt =
             Mathf.Min(
-                Time.deltaTime,
+                Time.unscaledDeltaTime,
                 0.033f
             );
 

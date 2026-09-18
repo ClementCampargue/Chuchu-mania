@@ -27,7 +27,7 @@ Transform:
   m_GameObject: {fileID: 2179269182993648010}
   serializedVersion: 2
   m_LocalRotation: {x: -1, y: -0, z: -0, w: 0.0000014603138}
-  m_LocalPosition: {x: -0.005, y: 0.37, z: -2.97}
+  m_LocalPosition: {x: -0.005, y: -0.09, z: -2.97}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -4847,6 +4847,8 @@ GameObject:
   - component: {fileID: 1928906070656818420}
   - component: {fileID: 4184758113109529269}
   - component: {fileID: 4532249769436777907}
+  - component: {fileID: 7934702230012090893}
+  - component: {fileID: 5894609588555175163}
   m_Layer: 0
   m_Name: Lava
   m_TagString: Lava
@@ -4931,7 +4933,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6351256170619640341}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a93015fb1d44403409fe9b7d25af1971, type: 3}
   m_Name: 
@@ -5000,6 +5002,110 @@ MonoBehaviour:
   launchForceX: 5
   reducedControlTime: 0.74
   airControlMultiplier: 0.5
+--- !u!61 &7934702230012090893
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6351256170619640341}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_CompositeOperation: 0
+  m_CompositeOrder: 0
+  m_Offset: {x: 0.00000019511211, y: 0}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0, y: 0}
+    oldSize: {x: 0, y: 0}
+    newSize: {x: 0, y: 0}
+    adaptiveTilingThreshold: 0
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  m_Size: {x: 0.99999976, y: 1}
+  m_EdgeRadius: 0
+--- !u!114 &5894609588555175163
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6351256170619640341}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 043abdd180ea3084989eeec1024fcddd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  width: 1.27
+  depth: 0.1
+  resolution: 120
+  surfaceHeight: 0
+  idleWaves: 1
+  idleAmplitude: 0.05
+  idleSpeed: 1.82
+  idleWaveLength: 0.22
+  idleSecondaryAmplitude: 0.03
+  idleSecondaryWaveLength: 0.43
+  idleBreathing: 0.025
+  idlePhaseOffset: 1.37
+  stiffness: 0.09
+  damping: 0.16
+  spread: 0.18
+  spreadPasses: 1
+  maxWaveHeight: 0.97
+  enterWaveForce: 0
+  exitWaveForce: 1.41
+  entryVelocityMultiplier: 0
+  exitVelocityMultiplier: 1.82
+  maxImpactForce: 0.43
+  impactRadius: 8
+  impulseStrength: 1.42
+  bigWaveEnabled: 1
+  bigWaveForce: 0
+  bigWaveRadius: 1
+  bigWaveSpeed: 1.24
+  bigWaveAmplitude: 0.74
+  bigWaveWidth: 10
+  bigWaveFadeSpeed: 7.49
+  bigWaveImpulse: 0.25
+  playerMovementWaves: 0
+  playerMinSpeed: 0.5
+  playerWaveInfluence: 0
+  playerWaveMultiplier: 0.12
+  playerMaxWaveForce: 1.5
+  playerWaveCooldown: 0.08
+  playerImpactRadius: 2
+  debugInput: 1
+  debugSplashForce: 1
+  debugBigWaveForce: 2.5
+  debugLeftClick: 1
+  debugMiddleClick: 1
+  waterColor: {r: 0.1, g: 0.5, b: 1, a: 0.6}
+  bottomOffset: -3
 --- !u!1 &8185306763594161498
 GameObject:
   m_ObjectHideFlags: 0
@@ -5027,7 +5133,7 @@ Transform:
   m_GameObject: {fileID: 8185306763594161498}
   serializedVersion: 2
   m_LocalRotation: {x: -1, y: -0, z: -0, w: 0.0000014603138}
-  m_LocalPosition: {x: -0.005, y: 0.37, z: -2.97}
+  m_LocalPosition: {x: -0.005, y: -0.09000003, z: -2.97}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []

@@ -2445,7 +2445,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1409162263840171399, guid: fc0a4bc2aae082741b1aa749cf6a68ed, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -4.57976
+      value: -4.28
       objectReference: {fileID: 0}
     - target: {fileID: 1955695286998564788, guid: fc0a4bc2aae082741b1aa749cf6a68ed, type: 3}
       propertyPath: m_LocalPosition.x
@@ -2665,6 +2665,14 @@ PrefabInstance:
       propertyPath: ColorModule.gradient.maxGradient.m_NumColorKeys
       value: 2
       objectReference: {fileID: 0}
+    - target: {fileID: 5894609588555175163, guid: 6189ce629719a624886a0a3bdcf2fa3d, type: 3}
+      propertyPath: debugInput
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5894609588555175163, guid: 6189ce629719a624886a0a3bdcf2fa3d, type: 3}
+      propertyPath: enterWaveForce
+      value: 0.22
+      objectReference: {fileID: 0}
     - target: {fileID: 6351256170619640341, guid: 6189ce629719a624886a0a3bdcf2fa3d, type: 3}
       propertyPath: m_Name
       value: Lava
@@ -2679,7 +2687,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8881155859259235925, guid: 6189ce629719a624886a0a3bdcf2fa3d, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -0.19999981
+      value: 0.26
       objectReference: {fileID: 0}
     - target: {fileID: 8881155859259235925, guid: 6189ce629719a624886a0a3bdcf2fa3d, type: 3}
       propertyPath: m_LocalPosition.z
