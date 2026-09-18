@@ -1723,7 +1723,7 @@ MonoBehaviour:
   columnDelay: 0.3
   randomColumnDelay: 0.15
   proba_spe_1: 3
-  proba_spe_2: 25
+  proba_spe_2: 4
 --- !u!1001 &1151857074489289518
 PrefabInstance:
   m_ObjectHideFlags: 0

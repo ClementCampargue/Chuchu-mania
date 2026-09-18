@@ -434,6 +434,7 @@ MonoBehaviour:
   water: {fileID: 0}
   big: 0
   once: 1
+  starbits_before_leave: 1
   leftPoint: {fileID: 0}
   rightPoint: {fileID: 0}
   swimSpeed: 3
@@ -447,10 +448,10 @@ MonoBehaviour:
   postJumpDelay: 0.5
   eatDistance: 0.35
   chaseDuration: 5
-  chaseSpeed: 2
+  chaseSpeed: 3
   chuchuCatchDistance: 0.5
   chuchuPreJumpDelay: 0.5
-  chuchuJumpDuration: 1.2
+  chuchuJumpDuration: 1
   chuchuJumpHeight: 3
   chuchuApexDelay: 0.15
   leaveScreenDistance: 30

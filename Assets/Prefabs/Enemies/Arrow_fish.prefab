@@ -5191,7 +5191,7 @@ MonoBehaviour:
   aimBeforeJump: 1
   distanceFromPoint: 3
   moveSpeed: 5
-  waitTime: 0.5
+  waitTime: 1
   jumpDuration: 1.75
   arcHeight: 3
   cycleDelay: 5
