@@ -1244,6 +1244,10 @@ PrefabInstance:
       value: 0.23
       objectReference: {fileID: 0}
     - target: {fileID: 4239849883444337517, guid: 861f2e20df3d6b149801340216555e4b, type: 3}
+      propertyPath: sleepParameter
+      value: sleep
+      objectReference: {fileID: 0}
+    - target: {fileID: 4239849883444337517, guid: 861f2e20df3d6b149801340216555e4b, type: 3}
       propertyPath: spriteRenderer
       value: 
       objectReference: {fileID: 219697653}
