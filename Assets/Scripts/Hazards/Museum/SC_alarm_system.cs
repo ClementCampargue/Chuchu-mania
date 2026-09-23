@@ -89,7 +89,7 @@ public class SC_alarm_system : MonoBehaviour
 
         foreach (SC_guard_movement guard in guards)
         {
-           // guard.SetChaseMode(true);
+           guard.SetChaseMode(true);
         }
     }
 
@@ -144,7 +144,7 @@ public class SC_alarm_system : MonoBehaviour
 
         foreach (SC_guard_movement guard in guards)
         {
-           // guard.SetChaseMode(false);
+          guard.SetChaseMode(false);
         }
 
         Debug.Log("ALARME ARRÊTÉE");

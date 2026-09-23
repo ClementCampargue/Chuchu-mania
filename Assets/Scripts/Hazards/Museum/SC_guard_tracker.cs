@@ -7,57 +7,95 @@ public class SC_guard_tracker : MonoBehaviour
     public Transform target;
 
     [Header("Graphe")]
-    public List<SC_guard_point> allPoints = new List<SC_guard_point>();
+    public List<SC_guard_point> allPoints =
+        new List<SC_guard_point>();
 
     [Header("Détection d'étage")]
-    [Tooltip("Différence verticale maximale pour considérer que le joueur est sur le même étage.")]
     public float verticalTolerance = 1.5f;
 
-    [Tooltip("Distance maximale entre le joueur et le graphe pour être considéré comme connecté au graphe.")]
-    public float maxPlayerDistanceFromGraph = 5f;
+    [Header("Connexions")]
+    [Tooltip("Tolérance utilisée pour reconnaître une ligne horizontale/verticale.")]
+    public float axisTolerance = 0.05f;
 
     [Header("Recalcul")]
     public float repathInterval = 0.25f;
 
-    [Tooltip("Recalcule immédiatement le chemin lorsque le joueur change de segment.")]
     public bool repathWhenSegmentChanges = true;
 
     [Header("Debug")]
     public bool drawPath = true;
     public Color pathColor = Color.red;
 
-    private List<SC_guard_point> currentPath = new List<SC_guard_point>();
+    private List<SC_guard_point> currentPath =
+        new List<SC_guard_point>();
 
-    private int currentPathIndex = 0;
+    private int currentPathIndex;
 
     private SC_guard_point currentPlayerPoint;
-    private SC_guard_point lastPlayerPoint;
 
     private float repathTimer;
 
-    public IReadOnlyList<SC_guard_point> CurrentPath => currentPath;
+    public IReadOnlyList<SC_guard_point> CurrentPath
+    {
+        get { return currentPath; }
+    }
 
     public SC_guard_point CurrentDestination
     {
         get
         {
-            if (currentPath == null || currentPath.Count == 0)
+            if (currentPath == null ||
+                currentPath.Count == 0)
+            {
                 return null;
+            }
 
-            if (currentPathIndex >= currentPath.Count)
+            if (currentPathIndex < 0 ||
+                currentPathIndex >= currentPath.Count)
+            {
                 return null;
+            }
 
             return currentPath[currentPathIndex];
         }
     }
 
+    public SC_guard_point CurrentSegmentStart
+    {
+        get
+        {
+            if (!HasPath())
+                return null;
+
+            if (currentPathIndex == 0)
+                return currentPath[0];
+
+            return currentPath[currentPathIndex - 1];
+        }
+    }
+
+    public SC_guard_point CurrentSegmentEnd
+    {
+        get
+        {
+            return CurrentDestination;
+        }
+    }
+
     private void Start()
     {
-        if (target == null && SC_player.instance != null)
-            target = SC_player.instance.transform;
+        if (target == null &&
+            SC_player.instance != null)
+        {
+            target =
+                SC_player.instance.transform;
+        }
 
         if (allPoints.Count == 0)
             FindAllPoints();
+
+        currentPlayerPoint =
+            FindPlayerPoint();
 
         RecalculatePath();
     }
@@ -65,22 +103,21 @@ public class SC_guard_tracker : MonoBehaviour
     private void Update()
     {
         if (target == null)
-        {
-            if (SC_player.instance != null)
-                target = SC_player.instance.transform;
-
             return;
-        }
 
         repathTimer -= Time.deltaTime;
 
-        SC_guard_point newPlayerPoint = FindClosestValidPointToPlayer();
+        SC_guard_point newPoint =
+            FindPlayerPoint();
 
-        bool playerChangedPoint = newPlayerPoint != currentPlayerPoint;
+        bool changed =
+            newPoint != currentPlayerPoint;
 
-        currentPlayerPoint = newPlayerPoint;
+        currentPlayerPoint =
+            newPoint;
 
-        if (playerChangedPoint && repathWhenSegmentChanges)
+        if (changed &&
+            repathWhenSegmentChanges)
         {
             RecalculatePath();
         }
@@ -93,54 +130,65 @@ public class SC_guard_tracker : MonoBehaviour
     private void FindAllPoints()
     {
         SC_guard_point[] points =
-            FindObjectsByType<SC_guard_point>(FindObjectsSortMode.None);
+            FindObjectsByType<SC_guard_point>(
+                FindObjectsSortMode.None
+            );
 
         allPoints.Clear();
         allPoints.AddRange(points);
     }
 
-    // =========================================================
-    // CALCUL DU POINT DU GRAPHE LE PLUS PERTINENT POUR LE JOUEUR
-    // =========================================================
-
-    private SC_guard_point FindClosestValidPointToPlayer()
+    /*
+     * ============================================================
+     * POINT DU JOUEUR
+     * ============================================================
+     *
+     * Même étage :
+     * on choisit le point selon le X du joueur.
+     */
+    private SC_guard_point FindPlayerPoint()
     {
         if (target == null)
             return null;
 
-        SC_guard_point closest = null;
-        float closestDistance = Mathf.Infinity;
+        SC_guard_point best = null;
+        float bestX = Mathf.Infinity;
 
         foreach (SC_guard_point point in allPoints)
         {
             if (point == null)
                 continue;
 
-            float verticalDifference =
-                Mathf.Abs(target.position.y - point.transform.position.y);
+            float yDifference =
+                Mathf.Abs(
+                    target.position.y -
+                    point.transform.position.y
+                );
 
-            // Le joueur est considéré comme appartenant à cet étage
-            // uniquement si sa différence verticale reste dans la tolérance.
-            if (verticalDifference > verticalTolerance)
+            if (yDifference > verticalTolerance)
                 continue;
 
-            float distance =
-                Vector3.Distance(target.position, point.transform.position);
+            float xDifference =
+                Mathf.Abs(
+                    target.position.x -
+                    point.transform.position.x
+                );
 
-            if (distance < closestDistance)
+            if (xDifference < bestX)
             {
-                closestDistance = distance;
-                closest = point;
+                bestX = xDifference;
+                best = point;
             }
         }
 
-        return closest;
+        return best;
     }
 
-    // =========================================================
-    // A*
-    // =========================================================
-
+    /*
+     * ============================================================
+     * RECALCUL
+     * ============================================================
+     */
     private void RecalculatePath()
     {
         repathTimer = repathInterval;
@@ -148,27 +196,61 @@ public class SC_guard_tracker : MonoBehaviour
         if (currentPlayerPoint == null)
             return;
 
-        SC_guard_point start = FindClosestPointToGuard();
+        SC_guard_point start =
+            FindClosestPointToGuard();
 
         if (start == null)
             return;
 
         List<SC_guard_point> newPath =
-            FindShortestPath(start, currentPlayerPoint);
+            FindShortestPath(
+                start,
+                currentPlayerPoint
+            );
 
-        if (newPath == null)
+        if (newPath == null ||
+            newPath.Count == 0)
+        {
             return;
+        }
+
+        /*
+         * On conserve le segment actuel si possible.
+         * Cela évite que le garde reparte constamment
+         * du début du nouveau chemin.
+         */
+        SC_guard_point oldDestination =
+            CurrentDestination;
 
         currentPath = newPath;
 
-        // Le premier node est généralement celui sur lequel
-        // le garde se trouve déjà.
-        if (currentPath.Count > 1)
-            currentPathIndex = 1;
-        else
-            currentPathIndex = 0;
+        int preservedIndex = -1;
 
-        lastPlayerPoint = currentPlayerPoint;
+        if (oldDestination != null)
+        {
+            for (int i = 0; i < currentPath.Count; i++)
+            {
+                if (currentPath[i] == oldDestination)
+                {
+                    preservedIndex = i;
+                    break;
+                }
+            }
+        }
+
+        if (preservedIndex > 0)
+        {
+            currentPathIndex =
+                preservedIndex;
+        }
+        else if (currentPath.Count > 1)
+        {
+            currentPathIndex = 1;
+        }
+        else
+        {
+            currentPathIndex = 0;
+        }
     }
 
     private SC_guard_point FindClosestPointToGuard()
@@ -182,7 +264,10 @@ public class SC_guard_tracker : MonoBehaviour
                 continue;
 
             float distance =
-                Vector3.Distance(transform.position, point.transform.position);
+                Vector2.Distance(
+                    transform.position,
+                    point.transform.position
+                );
 
             if (distance < closestDistance)
             {
@@ -194,6 +279,14 @@ public class SC_guard_tracker : MonoBehaviour
         return closest;
     }
 
+    /*
+     * ============================================================
+     * A*
+     * ============================================================
+     *
+     * UNIQUEMENT les connexions horizontales
+     * et verticales.
+     */
     private List<SC_guard_point> FindShortestPath(
         SC_guard_point start,
         SC_guard_point goal)
@@ -207,37 +300,69 @@ public class SC_guard_tracker : MonoBehaviour
         HashSet<SC_guard_point> closedSet =
             new HashSet<SC_guard_point>();
 
-        Dictionary<SC_guard_point, SC_guard_point> cameFrom =
-            new Dictionary<SC_guard_point, SC_guard_point>();
+        Dictionary<
+            SC_guard_point,
+            SC_guard_point
+        > cameFrom =
+            new Dictionary<
+                SC_guard_point,
+                SC_guard_point
+            >();
 
-        Dictionary<SC_guard_point, float> gScore =
-            new Dictionary<SC_guard_point, float>();
+        Dictionary<
+            SC_guard_point,
+            float
+        > gScore =
+            new Dictionary<
+                SC_guard_point,
+                float
+            >();
 
-        Dictionary<SC_guard_point, float> fScore =
-            new Dictionary<SC_guard_point, float>();
+        Dictionary<
+            SC_guard_point,
+            float
+        > fScore =
+            new Dictionary<
+                SC_guard_point,
+                float
+            >();
 
         foreach (SC_guard_point point in allPoints)
         {
+            if (point == null)
+                continue;
+
             gScore[point] = Mathf.Infinity;
             fScore[point] = Mathf.Infinity;
         }
 
         gScore[start] = 0f;
-        fScore[start] = Heuristic(start, goal);
+        fScore[start] =
+            Heuristic(start, goal);
 
         openSet.Add(start);
 
         while (openSet.Count > 0)
         {
-            SC_guard_point current = GetLowestFScore(openSet, fScore);
+            SC_guard_point current =
+                GetLowestFScore(
+                    openSet,
+                    fScore
+                );
 
             if (current == goal)
-                return ReconstructPath(cameFrom, current);
+            {
+                return ReconstructPath(
+                    cameFrom,
+                    current
+                );
+            }
 
             openSet.Remove(current);
             closedSet.Add(current);
 
-            foreach (SC_guard_point neighbour in current.connections)
+            foreach (SC_guard_point neighbour
+                     in current.connections)
             {
                 if (neighbour == null)
                     continue;
@@ -245,27 +370,51 @@ public class SC_guard_tracker : MonoBehaviour
                 if (closedSet.Contains(neighbour))
                     continue;
 
+                Vector2 delta =
+                    neighbour.transform.position -
+                    current.transform.position;
+
+                bool horizontal =
+                    Mathf.Abs(delta.y) <= axisTolerance &&
+                    Mathf.Abs(delta.x) > axisTolerance;
+
+                bool vertical =
+                    Mathf.Abs(delta.x) <= axisTolerance &&
+                    Mathf.Abs(delta.y) > axisTolerance;
+
+                /*
+                 * Toute connexion qui n'est pas
+                 * strictement H ou V est ignorée.
+                 */
+                if (!horizontal && !vertical)
+                    continue;
+
                 float distance =
-                    Vector3.Distance(
-                        current.transform.position,
-                        neighbour.transform.position
-                    );
+                    Mathf.Abs(delta.x) +
+                    Mathf.Abs(delta.y);
 
                 float tentativeG =
-                    gScore[current] + distance;
+                    gScore[current] +
+                    distance;
 
                 if (!openSet.Contains(neighbour))
                     openSet.Add(neighbour);
 
-                if (tentativeG < gScore[neighbour])
+                if (tentativeG <
+                    gScore[neighbour])
                 {
-                    cameFrom[neighbour] = current;
+                    cameFrom[neighbour] =
+                        current;
 
-                    gScore[neighbour] = tentativeG;
+                    gScore[neighbour] =
+                        tentativeG;
 
                     fScore[neighbour] =
                         tentativeG +
-                        Heuristic(neighbour, goal);
+                        Heuristic(
+                            neighbour,
+                            goal
+                        );
                 }
             }
         }
@@ -277,29 +426,44 @@ public class SC_guard_tracker : MonoBehaviour
         SC_guard_point a,
         SC_guard_point b)
     {
-        return Vector3.Distance(
-            a.transform.position,
-            b.transform.position
-        );
+        return
+            Mathf.Abs(
+                a.transform.position.x -
+                b.transform.position.x
+            )
+            +
+            Mathf.Abs(
+                a.transform.position.y -
+                b.transform.position.y
+            );
     }
 
     private SC_guard_point GetLowestFScore(
         List<SC_guard_point> list,
-        Dictionary<SC_guard_point, float> scores)
+        Dictionary<
+            SC_guard_point,
+            float
+        > scores)
     {
         SC_guard_point best = list[0];
 
         for (int i = 1; i < list.Count; i++)
         {
-            if (scores[list[i]] < scores[best])
+            if (scores[list[i]] <
+                scores[best])
+            {
                 best = list[i];
+            }
         }
 
         return best;
     }
 
     private List<SC_guard_point> ReconstructPath(
-        Dictionary<SC_guard_point, SC_guard_point> cameFrom,
+        Dictionary<
+            SC_guard_point,
+            SC_guard_point
+        > cameFrom,
         SC_guard_point current)
     {
         List<SC_guard_point> path =
@@ -309,7 +473,9 @@ public class SC_guard_tracker : MonoBehaviour
 
         while (cameFrom.ContainsKey(current))
         {
-            current = cameFrom[current];
+            current =
+                cameFrom[current];
+
             path.Add(current);
         }
 
@@ -318,35 +484,42 @@ public class SC_guard_tracker : MonoBehaviour
         return path;
     }
 
-    // =========================================================
-    // API POUR LE MOVEMENT
-    // =========================================================
-
-    public Vector3 GetCurrentDestination()
-    {
-        SC_guard_point point = CurrentDestination;
-
-        if (point == null)
-            return transform.position;
-
-        return point.transform.position;
-    }
+    /*
+     * ============================================================
+     * API POUR LE MOVEMENT
+     * ============================================================
+     */
 
     public bool HasPath()
     {
-        return currentPath != null &&
-               currentPath.Count > 0 &&
-               currentPathIndex < currentPath.Count;
+        return
+            currentPath != null &&
+            currentPath.Count > 0 &&
+            currentPathIndex <
+            currentPath.Count;
     }
 
     public void AdvanceToNextPoint()
     {
+        if (!HasPath())
+            return;
+
         currentPathIndex++;
 
-        if (currentPathIndex >= currentPath.Count)
+        if (currentPathIndex >=
+            currentPath.Count)
         {
-            currentPathIndex = currentPath.Count - 1;
+            currentPathIndex =
+                currentPath.Count - 1;
         }
+    }
+
+    public Vector3 GetCurrentDestination()
+    {
+        if (CurrentDestination == null)
+            return transform.position;
+
+        return CurrentDestination.transform.position;
     }
 
     public float DistanceToCurrentDestination()
@@ -354,47 +527,31 @@ public class SC_guard_tracker : MonoBehaviour
         if (!HasPath())
             return Mathf.Infinity;
 
-        return Vector3.Distance(
+        return Vector2.Distance(
             transform.position,
             CurrentDestination.transform.position
         );
     }
 
-    // =========================================================
-    // GIZMOS
-    // =========================================================
-
     private void OnDrawGizmosSelected()
     {
-        // Zone verticale autour du garde.
-        Vector3 center = transform.position;
-
-        Gizmos.color = new Color(
-            0f,
-            1f,
-            1f,
-            0.15f
-        );
-
-        Vector3 size = new Vector3(
-            2f,
-            verticalTolerance * 2f,
-            2f
-        );
-
-        Gizmos.DrawWireCube(center, size);
-
-        // Chemin actuel
-        if (!drawPath || currentPath == null)
+        if (!drawPath ||
+            currentPath == null)
+        {
             return;
+        }
 
         Gizmos.color = pathColor;
 
-        for (int i = 0; i < currentPath.Count - 1; i++)
+        for (int i = 0;
+             i < currentPath.Count - 1;
+             i++)
         {
             if (currentPath[i] == null ||
                 currentPath[i + 1] == null)
+            {
                 continue;
+            }
 
             Gizmos.DrawLine(
                 currentPath[i].transform.position,
@@ -402,7 +559,6 @@ public class SC_guard_tracker : MonoBehaviour
             );
         }
 
-        // Destination
         if (CurrentDestination != null)
         {
             Gizmos.DrawSphere(
