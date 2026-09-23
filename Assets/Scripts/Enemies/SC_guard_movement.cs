@@ -8,9 +8,26 @@ public class SC_guard_movement : MonoBehaviour
         Chase,
         Patrol
     }
+    [Header("Accélération / Décélération - Traque")]
+    [Tooltip("Vitesse maximale du garde pendant la traque.")]
+    [SerializeField] private float chaseMaxSpeed = 4.5f;
+
+    [Tooltip("Temps nécessaire pour atteindre la vitesse maximale.")]
+    [SerializeField] private float chaseAccelerationTime = 0.8f;
+
+    [Tooltip("Temps nécessaire pour ralentir jusqu'à l'arrêt.")]
+    [SerializeField] private float chaseDecelerationTime = 0.5f;
+
+    private float currentChaseSpeed = 0f;
+    [Header("Sommeil après une traque")]
+    [SerializeField] private float sleepDuration = 3f;
+    // ============================================================
+    // REFERENCES
+    // ============================================================
 
     [Header("Références")]
-    public GameObject flashlight;
+    [SerializeField] private GameObject flashlight;
+    [SerializeField] private Animator animator;
 
     // ============================================================
     // DEPLACEMENT
@@ -18,17 +35,19 @@ public class SC_guard_movement : MonoBehaviour
 
     [Header("Déplacement")]
     [SerializeField] private float moveSpeed = 3f;
-    [SerializeField] private MovementMode movementMode = MovementMode.Patrol;
+
+    [SerializeField]
+    private MovementMode movementMode = MovementMode.Patrol;
 
     // ============================================================
-    // POINT ACTUEL
+    // NODE ACTUEL
     // ============================================================
 
     [Header("Point actuel")]
     [SerializeField] private SC_guard_point currentNode;
 
     // ============================================================
-    // ZONE DE BASE
+    // BASE
     // ============================================================
 
     [Header("Zone de base")]
@@ -39,17 +58,43 @@ public class SC_guard_movement : MonoBehaviour
     // PATROUILLE
     // ============================================================
 
-    [Header("Points de balade")]
-    [Tooltip("Liste des points entre lesquels le personnage se balade lorsqu'il ne traque pas.")]
+    [Header("Patrouille")]
+    [Tooltip("Points entre lesquels le garde se balade.")]
     [SerializeField]
     private List<SC_guard_point> patrolPoints =
         new List<SC_guard_point>();
 
-    [Tooltip("Temps d'attente sur un point avant de repartir.")]
+    [Tooltip("Temps d'attente sur un point.")]
     [SerializeField] private float patrolWaitTime = 1.5f;
 
-    [Tooltip("Choisit un nouveau point aléatoire parmi les points de balade.")]
+    [Tooltip("Choisit aléatoirement le prochain point.")]
     [SerializeField] private bool randomPatrol = true;
+
+    // ============================================================
+    // SOMMEIL ALEATOIRE
+    // ============================================================
+
+    [Header("Sommeil aléatoire")]
+
+    [Tooltip("Le garde peut s'endormir aléatoirement pendant sa patrouille.")]
+    [SerializeField] private bool allowRandomSleep = true;
+
+    [Tooltip("Temps minimum avant qu'un nouveau sommeil puisse commencer.")]
+    [SerializeField] private float minSleepInterval = 8f;
+
+    [Tooltip("Temps maximum avant qu'un nouveau sommeil puisse commencer.")]
+    [SerializeField] private float maxSleepInterval = 20f;
+
+    [Tooltip("Durée minimale d'un sommeil.")]
+    [SerializeField] private float minSleepDuration = 2f;
+
+    [Tooltip("Durée maximale d'un sommeil.")]
+    [SerializeField] private float maxSleepDuration = 5f;
+
+    [Tooltip("Le garde peut s'endormir même lorsqu'il marche entre deux nodes.")]
+    [SerializeField] private bool canSleepWhileMoving = true;
+
+    private float randomSleepTimer;
 
     // ============================================================
     // TRAQUE
@@ -59,24 +104,49 @@ public class SC_guard_movement : MonoBehaviour
     [Tooltip("Fréquence de recalcul du chemin vers le joueur.")]
     [SerializeField] private float chaseRefreshRate = 0.25f;
 
-    [Tooltip("Le X du joueur est pris en compte uniquement si son Y est suffisamment proche.")]
+    [Tooltip("Tolérance verticale pour considérer deux positions comme étant au même niveau.")]
     [SerializeField] private float verticalTolerance = 0.5f;
 
-    [Tooltip("Influence de la hauteur lors du choix du node du joueur.")]
+    [Tooltip("Influence de la hauteur dans la recherche du node joueur.")]
     [SerializeField] private float verticalWeight = 0.15f;
 
-    [Tooltip("Autorise le garde à faire demi-tour immédiatement sur une liaison horizontale pendant la traque.")]
-    [SerializeField] private bool allowChaseHorizontalTurn = true;
+    [Tooltip("Permet au garde de chercher une échelle lorsqu'il doit changer de niveau.")]
+    [SerializeField] private bool useNearestLadder = true;
+
+    [Tooltip("Distance maximale à laquelle le garde peut abandonner son segment horizontal pour rejoindre une échelle.")]
+    [SerializeField] private float ladderDecisionDistance = 8f;
+
+    [Tooltip("Le garde peut changer de direction même au milieu d'une liaison horizontale.")]
+    [SerializeField] private bool allowMidSegmentTurn = true;
 
     // ============================================================
-    // SOMMEIL
+    // BONDS GOOFY DE TRAQUE
     // ============================================================
 
-    [Header("Sommeil après la traque")]
-    [Tooltip("Durée pendant laquelle le garde dort avant de reprendre sa patrouille.")]
-    [SerializeField] private float sleepDuration = 3f;
+    [Header("Bonds goofy - Traque uniquement")]
 
-    [Tooltip("Nom du Bool Animator pour l'animation Sleep.")]
+    [Tooltip("Hauteur des petits bonds pendant la traque.")]
+    [SerializeField] private float chaseHopHeight = 0.28f;
+
+    [Tooltip("Durée d'un bond.")]
+    [SerializeField] private float chaseHopDuration = 0.32f;
+
+    [Tooltip("Écrasement du personnage à l'atterrissage.")]
+    [SerializeField] private float hopSquash = 0.12f;
+
+    [Tooltip("Étirement vertical pendant le bond.")]
+    [SerializeField] private float hopStretch = 0.08f;
+
+    [Tooltip("Petit mouvement latéral pendant le bond.")]
+    [SerializeField] private float hopWobble = 0.025f;
+
+    private float hopTimer;
+
+    // ============================================================
+    // ANIMATION SOMMEIL
+    // ============================================================
+
+    [Header("Sommeil")]
     [SerializeField] private string sleepParameter = "Sleep";
 
     // ============================================================
@@ -84,16 +154,10 @@ public class SC_guard_movement : MonoBehaviour
     // ============================================================
 
     [Header("Animation")]
-    [Tooltip("Animator du garde. Si vide, le script cherchera un Animator dans les enfants.")]
-    [SerializeField] private Animator animator;
-
-    [Tooltip("Nom du Bool Animator pour la marche.")]
     [SerializeField] private string walkParameter = "Walk";
 
-    [Tooltip("Nom du Bool Animator pour monter une échelle.")]
     [SerializeField] private string ladderUpParameter = "LadderUp";
 
-    [Tooltip("Nom du Bool Animator pour descendre une échelle.")]
     [SerializeField] private string ladderDownParameter = "LadderDown";
 
     // ============================================================
@@ -101,10 +165,8 @@ public class SC_guard_movement : MonoBehaviour
     // ============================================================
 
     [Header("Flip")]
-    [Tooltip("Retourne automatiquement le personnage selon sa direction horizontale.")]
     [SerializeField] private bool flipCharacter = true;
 
-    [Tooltip("Si vrai, le personnage regarde vers la droite avec un scale X positif.")]
     [SerializeField] private bool facingRightByDefault = true;
 
     private Vector3 originalScale;
@@ -123,31 +185,35 @@ public class SC_guard_movement : MonoBehaviour
     // ============================================================
 
     private SC_guard_point segmentStartNode;
-    private SC_guard_point segmentTargetNode;
 
-    private bool movingBackwardsOnChase = false;
+    private SC_guard_point segmentTargetNode;
 
     // ============================================================
     // TIMERS
     // ============================================================
 
-    private float chaseTimer = 0f;
-    private float patrolWaitTimer = 0f;
-    private float sleepTimer = 0f;
+    private float chaseTimer;
+
+    private float patrolWaitTimer;
+
+    private float sleepTimer;
 
     // ============================================================
-    // ETAT
+    // ETATS
     // ============================================================
 
-    private bool isMovingBetweenNodes = false;
-    private bool isChasing = false;
-    private bool isWaitingAtPatrolPoint = false;
-    private bool isSleeping = false;
+    private bool isMovingBetweenNodes;
+
+    private bool isChasing;
+
+    private bool isWaitingAtPatrolPoint;
+
+    private bool isSleeping;
 
     private int currentPatrolIndex = -1;
 
     // ============================================================
-    // TYPE D'ANIMATION
+    // TYPE ANIMATION
     // ============================================================
 
     private enum AnimationMovement
@@ -158,7 +224,7 @@ public class SC_guard_movement : MonoBehaviour
     }
 
     // ============================================================
-    // INITIALISATION
+    // START
     // ============================================================
 
     private void Start()
@@ -167,12 +233,16 @@ public class SC_guard_movement : MonoBehaviour
 
         if (animator == null)
         {
-            animator = GetComponentInChildren<Animator>();
+            animator =
+                GetComponentInChildren<Animator>();
         }
 
         if (currentNode == null)
         {
-            currentNode = FindClosestNode(transform.position);
+            currentNode =
+                FindClosestNode(
+                    transform.position
+                );
         }
 
         if (baseNode == null)
@@ -186,7 +256,10 @@ public class SC_guard_movement : MonoBehaviour
                 currentNode.transform.position;
         }
 
-        movementMode = MovementMode.Patrol;
+        movementMode =
+            MovementMode.Patrol;
+
+        ResetRandomSleepTimer();
 
         StartPatrol();
     }
@@ -210,41 +283,142 @@ public class SC_guard_movement : MonoBehaviour
         }
 
         UpdatePatrol();
+
+        /*
+         * Le sommeil aléatoire est uniquement possible
+         * lorsqu'il n'est PAS en train de poursuivre le joueur.
+         */
+        UpdateRandomSleep();
+    }
+    private float UpdateChaseSpeed(bool hasTarget)
+    {
+        float accelerationTime = Mathf.Max(0.01f, chaseAccelerationTime);
+        float decelerationTime = Mathf.Max(0.01f, chaseDecelerationTime);
+
+        if (hasTarget)
+        {
+            currentChaseSpeed = Mathf.MoveTowards(
+                currentChaseSpeed,
+                chaseMaxSpeed,
+                (chaseMaxSpeed / accelerationTime) * Time.deltaTime
+            );
+        }
+        else
+        {
+            currentChaseSpeed = Mathf.MoveTowards(
+                currentChaseSpeed,
+                0f,
+                (chaseMaxSpeed / decelerationTime) * Time.deltaTime
+            );
+        }
+
+        return currentChaseSpeed;
+    }
+    // ============================================================
+    // SOMMEIL ALEATOIRE
+    // ============================================================
+
+    private void ResetRandomSleepTimer()
+    {
+        if (!allowRandomSleep)
+        {
+            randomSleepTimer =
+                Mathf.Infinity;
+
+            return;
+        }
+
+        float min =
+            Mathf.Max(
+                0f,
+                minSleepInterval
+            );
+
+        float max =
+            Mathf.Max(
+                min,
+                maxSleepInterval
+            );
+
+        randomSleepTimer =
+            Random.Range(
+                min,
+                max
+            );
     }
 
-    // ============================================================
-    // SOMMEIL
-    // ============================================================
-
-    private void StartSleep()
+    private void UpdateRandomSleep()
     {
+        if (!allowRandomSleep)
+        {
+            return;
+        }
+
+        if (isChasing ||
+            isSleeping)
+        {
+            return;
+        }
+
         /*
-         * On arrête complètement le déplacement.
-         *
-         * IMPORTANT :
-         * On ne modifie PAS currentNode ici.
-         *
-         * Le garde reste exactement là où il était au moment
-         * de la fin de la traque.
+         * Le garde peut être configuré pour ne dormir
+         * que lorsqu'il est en train de marcher.
          */
 
-        FinishPath();
+        if (canSleepWhileMoving &&
+            !isMovingBetweenNodes)
+        {
+            return;
+        }
 
-        isMovingBetweenNodes = false;
+        randomSleepTimer -=
+            Time.deltaTime;
 
-        isWaitingAtPatrolPoint = false;
+        if (randomSleepTimer <= 0f)
+        {
+            StartRandomSleep();
+        }
+    }
+
+    private void StartRandomSleep()
+    {
+        if (isChasing)
+        {
+            return;
+        }
+
+        /*
+         * On ne change PAS le currentNode ici.
+         *
+         * Le garde peut donc réellement s'endormir
+         * au milieu d'un déplacement.
+         */
 
         isSleeping = true;
 
-        sleepTimer =
+        float min =
             Mathf.Max(
                 0f,
-                sleepDuration
+                minSleepDuration
+            );
+
+        float max =
+            Mathf.Max(
+                min,
+                maxSleepDuration
+            );
+
+        sleepTimer =
+            Random.Range(
+                min,
+                max
             );
 
         SetFlashlight(false);
 
         StopMovementAnimation();
+
+        ResetGoofyScale();
 
         if (animator != null)
         {
@@ -253,20 +427,21 @@ public class SC_guard_movement : MonoBehaviour
                 true
             );
         }
-
-        if (sleepTimer <= 0f)
-        {
-            FinishSleep();
-        }
     }
+
+    // ============================================================
+    // SOMMEIL
+    // ============================================================
 
     private void UpdateSleep()
     {
         /*
-         * Aucun déplacement pendant le sommeil.
+         * Si la traque commence pendant le sommeil,
+         * SetChaseMode(true) sortira immédiatement de cet état.
          */
 
-        sleepTimer -= Time.deltaTime;
+        sleepTimer -=
+            Time.deltaTime;
 
         if (sleepTimer <= 0f)
         {
@@ -276,20 +451,6 @@ public class SC_guard_movement : MonoBehaviour
 
     private void FinishSleep()
     {
-        /*
-         * ========================================================
-         * FIN DU SOMMEIL
-         * ========================================================
-         *
-         * Le point important est ici.
-         *
-         * Le garde peut avoir dormi au milieu d'un ancien segment.
-         * On ne reprend donc JAMAIS cet ancien chemin.
-         *
-         * On retrouve d'abord le node correspondant à la position
-         * réelle du garde.
-         */
-
         isSleeping = false;
 
         if (animator != null)
@@ -301,46 +462,31 @@ public class SC_guard_movement : MonoBehaviour
         }
 
         /*
-         * Sécurité :
-         * aucun ancien chemin ne doit pouvoir être repris.
-         */
-
-        FinishPath();
-
-        /*
-         * On détermine le node le plus proche de la position
-         * actuelle du garde.
+         * Le garde peut s'être endormi au milieu
+         * d'un segment.
          *
-         * Cela permet de repartir depuis une vraie position du
-         * graphe et non depuis un ancien segment de chase.
+         * On le rattache au node le plus proche.
          */
 
         SC_guard_point nearestNode =
-            FindClosestNode(transform.position);
+            FindClosestNode(
+                transform.position
+            );
 
         if (nearestNode != null)
         {
-            currentNode = nearestNode;
-
-            /*
-             * On replace légèrement le garde sur le node.
-             *
-             * Comme les déplacements utilisent uniquement les
-             * connexions entre nodes, cela évite qu'il reparte
-             * depuis une position intermédiaire avec un déplacement
-             * diagonal direct.
-             */
+            currentNode =
+                nearestNode;
 
             transform.position =
                 nearestNode.transform.position;
         }
 
-        /*
-         * Retour en patrouille.
-         *
-         * StartPatrol() va choisir une nouvelle destination et
-         * recalculer un nouveau chemin A*.
-         */
+        FinishPath();
+
+        SetFlashlight(true);
+
+        ResetRandomSleepTimer();
 
         StartPatrol();
     }
@@ -352,13 +498,16 @@ public class SC_guard_movement : MonoBehaviour
     private void UpdateChase()
     {
         if (SC_player.instance == null)
+        {
             return;
+        }
 
         if (isMovingBetweenNodes)
         {
-            if (allowChaseHorizontalTurn)
+            if (allowMidSegmentTurn &&
+                useNearestLadder)
             {
-                CheckForChaseHorizontalTurn();
+                CheckForNearestLadderDecision();
             }
 
             FollowCurrentPath();
@@ -366,12 +515,16 @@ public class SC_guard_movement : MonoBehaviour
             return;
         }
 
-        chaseTimer -= Time.deltaTime;
+        chaseTimer -=
+            Time.deltaTime;
 
         if (chaseTimer <= 0f)
         {
             chaseTimer =
-                chaseRefreshRate;
+                Mathf.Max(
+                    0.01f,
+                    chaseRefreshRate
+                );
 
             RecalculateChasePath();
         }
@@ -383,22 +536,29 @@ public class SC_guard_movement : MonoBehaviour
     }
 
     // ============================================================
-    // CHANGEMENT DE SENS PENDANT LA TRAQUE
+    // DECISION ECHELLE
     // ============================================================
 
-    private void CheckForChaseHorizontalTurn()
+    private void CheckForNearestLadderDecision()
     {
         if (!isChasing)
+        {
             return;
+        }
 
         if (!isMovingBetweenNodes)
+        {
             return;
+        }
+
+        if (currentNode == null ||
+            segmentStartNode == null ||
+            segmentTargetNode == null)
+        {
+            return;
+        }
 
         if (SC_player.instance == null)
-            return;
-
-        if (segmentStartNode == null ||
-            segmentTargetNode == null)
         {
             return;
         }
@@ -406,105 +566,348 @@ public class SC_guard_movement : MonoBehaviour
         Vector3 playerPosition =
             SC_player.instance.transform.position;
 
-        float playerVerticalDifference =
+        float verticalDifference =
             Mathf.Abs(
                 playerPosition.y -
                 transform.position.y
             );
 
-        if (playerVerticalDifference >
+        if (verticalDifference <=
             verticalTolerance)
         {
             return;
         }
 
-        Vector3 startPosition =
-            segmentStartNode.transform.position;
-
-        Vector3 targetPosition =
-            segmentTargetNode.transform.position;
-
         float segmentVerticalDifference =
             Mathf.Abs(
-                targetPosition.y -
-                startPosition.y
+                segmentTargetNode.transform.position.y -
+                segmentStartNode.transform.position.y
             );
 
-        const float verticalThreshold = 0.05f;
-
-        if (segmentVerticalDifference >
-            verticalThreshold)
+        if (segmentVerticalDifference > 0.05f)
         {
             return;
         }
 
-        float segmentDirection =
-            targetPosition.x -
-            startPosition.x;
+        SC_guard_point nearestLadderNode =
+            FindNearestUsefulLadderNode(
+                playerPosition
+            );
 
-        if (Mathf.Abs(segmentDirection) < 0.01f)
+        if (nearestLadderNode == null)
+        {
             return;
+        }
 
-        float playerDirection =
-            playerPosition.x -
-            transform.position.x;
+        float distanceToLadder =
+            Vector3.Distance(
+                transform.position,
+                nearestLadderNode.transform.position
+            );
 
-        if (Mathf.Abs(playerDirection) < 0.05f)
+        if (distanceToLadder >
+            ladderDecisionDistance)
+        {
             return;
+        }
 
-        bool playerIsRight =
-            playerDirection > 0f;
+        float distanceToStart =
+            Vector3.Distance(
+                transform.position,
+                segmentStartNode.transform.position
+            );
 
-        bool segmentGoesRight =
-            segmentDirection > 0f;
+        float distanceToTarget =
+            Vector3.Distance(
+                transform.position,
+                segmentTargetNode.transform.position
+            );
 
-        bool playerIsOpposite =
-            playerIsRight != segmentGoesRight;
+        SC_guard_point bestEntryNode =
+            FindBestLadderEntryNode(
+                segmentStartNode,
+                segmentTargetNode,
+                nearestLadderNode
+            );
 
-        if (!playerIsOpposite)
+        if (bestEntryNode == null)
+        {
             return;
+        }
 
-        /*
-         * Demi-tour immédiat.
-         */
+        if (bestEntryNode == currentNode)
+        {
+            return;
+        }
 
-        movingBackwardsOnChase = true;
-
-        UpdateFlip(
-            transform.position,
-            segmentStartNode.transform.position
-        );
-
-        SetMovementAnimation(
-            AnimationMovement.Walk
-        );
+        if (bestEntryNode == segmentStartNode)
+        {
+            if (distanceToStart <
+                distanceToTarget)
+            {
+                ReverseCurrentSegmentToward(
+                    segmentStartNode
+                );
+            }
+        }
     }
 
     // ============================================================
-    // CALCUL DU CHEMIN DE TRAQUE
+    // DEMI-TOUR
+    // ============================================================
+
+    private void ReverseCurrentSegmentToward(
+        SC_guard_point destinationNode)
+    {
+        if (destinationNode == null)
+        {
+            return;
+        }
+
+        currentPath.Clear();
+
+        pathIndex = 0;
+
+        isMovingBetweenNodes = false;
+
+        segmentStartNode = null;
+        segmentTargetNode = null;
+
+        ResetGoofyScale();
+
+        currentPath.Add(
+            destinationNode
+        );
+
+        pathIndex = 0;
+
+        StartNextNodeMovement();
+    }
+
+    // ============================================================
+    // RECHERCHE ECHELLE UTILE
+    // ============================================================
+
+    private SC_guard_point FindNearestUsefulLadderNode(
+        Vector3 playerPosition)
+    {
+        SC_guard_point[] nodes =
+            FindObjectsByType<SC_guard_point>(
+                FindObjectsSortMode.None
+            );
+
+        SC_guard_point bestNode = null;
+
+        float bestScore =
+            Mathf.Infinity;
+
+        foreach (
+            SC_guard_point node
+            in nodes)
+        {
+            if (node == null)
+            {
+                continue;
+            }
+
+            if (!HasVerticalConnection(node))
+            {
+                continue;
+            }
+
+            float guardDistance =
+                Vector3.Distance(
+                    transform.position,
+                    node.transform.position
+                );
+
+            float playerDistance =
+                Vector3.Distance(
+                    node.transform.position,
+                    playerPosition
+                );
+
+            float score =
+                guardDistance +
+                playerDistance * 0.35f;
+
+            if (score < bestScore)
+            {
+                bestScore = score;
+                bestNode = node;
+            }
+        }
+
+        return bestNode;
+    }
+
+    // ============================================================
+    // DETECTION ECHELLE
+    // ============================================================
+
+    private bool HasVerticalConnection(
+        SC_guard_point node)
+    {
+        if (node == null ||
+            node.connections == null)
+        {
+            return false;
+        }
+
+        foreach (
+            SC_guard_point connection
+            in node.connections)
+        {
+            if (connection == null)
+            {
+                continue;
+            }
+
+            float verticalDifference =
+                Mathf.Abs(
+                    connection.transform.position.y -
+                    node.transform.position.y
+                );
+
+            if (verticalDifference > 0.05f)
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    // ============================================================
+    // CHOIX ENTREE ECHELLE
+    // ============================================================
+
+    private SC_guard_point FindBestLadderEntryNode(
+        SC_guard_point start,
+        SC_guard_point target,
+        SC_guard_point ladderNode)
+    {
+        if (start == null ||
+            target == null ||
+            ladderNode == null)
+        {
+            return null;
+        }
+
+        float startDistance =
+            EstimatePathDistance(
+                start,
+                ladderNode
+            );
+
+        float targetDistance =
+            EstimatePathDistance(
+                target,
+                ladderNode
+            );
+
+        if (startDistance <= targetDistance)
+        {
+            return start;
+        }
+
+        return target;
+    }
+
+    // ============================================================
+    // ESTIMATION DISTANCE
+    // ============================================================
+
+    private float EstimatePathDistance(
+        SC_guard_point start,
+        SC_guard_point target)
+    {
+        if (start == null ||
+            target == null)
+        {
+            return Mathf.Infinity;
+        }
+
+        if (start == target)
+        {
+            return 0f;
+        }
+
+        List<SC_guard_point> path =
+            FindShortestPath(
+                start,
+                target
+            );
+
+        if (path == null)
+        {
+            return Mathf.Infinity;
+        }
+
+        float totalDistance = 0f;
+
+        SC_guard_point previous =
+            start;
+
+        foreach (
+            SC_guard_point node
+            in path)
+        {
+            if (node == null)
+            {
+                return Mathf.Infinity;
+            }
+
+            totalDistance +=
+                Vector3.Distance(
+                    previous.transform.position,
+                    node.transform.position
+                );
+
+            previous = node;
+        }
+
+        return totalDistance;
+    }
+
+    // ============================================================
+    // RECALCUL TRAQUE
     // ============================================================
 
     private void RecalculateChasePath()
     {
-        if (SC_player.instance == null)
+        if (!isChasing)
+        {
             return;
+        }
+
+        if (SC_player.instance == null)
+        {
+            return;
+        }
 
         if (currentNode == null)
-            return;
+        {
+            currentNode =
+                FindClosestNode(
+                    transform.position
+                );
 
-        if (isMovingBetweenNodes)
-            return;
-
-        Transform player =
-            SC_player.instance.transform;
+            if (currentNode == null)
+            {
+                return;
+            }
+        }
 
         SC_guard_point targetNode =
             FindClosestNodeForChase(
-                player.position
+                SC_player.instance.transform.position
             );
 
         if (targetNode == null)
+        {
             return;
+        }
 
         if (targetNode == currentNode)
         {
@@ -526,8 +929,6 @@ public class SC_guard_movement : MonoBehaviour
 
             pathIndex = 0;
 
-            movingBackwardsOnChase = false;
-
             StartNextNodeMovement();
         }
         else
@@ -537,7 +938,7 @@ public class SC_guard_movement : MonoBehaviour
     }
 
     // ============================================================
-    // DEMARRER LE DEPLACEMENT
+    // DEMARRER SEGMENT
     // ============================================================
 
     private void StartNextNodeMovement()
@@ -555,7 +956,8 @@ public class SC_guard_movement : MonoBehaviour
             return;
         }
 
-        if (pathIndex >= currentPath.Count)
+        if (pathIndex >=
+            currentPath.Count)
         {
             FinishPath();
             return;
@@ -584,7 +986,12 @@ public class SC_guard_movement : MonoBehaviour
         segmentTargetNode =
             nextNode;
 
-        movingBackwardsOnChase = false;
+        /*
+         * Nouveau segment :
+         * on recommence le cycle de bond.
+         */
+
+        hopTimer = 0f;
 
         UpdateFlip(
             currentNode,
@@ -602,7 +1009,7 @@ public class SC_guard_movement : MonoBehaviour
     }
 
     // ============================================================
-    // SUIVI DU CHEMIN
+    // SUIVI CHEMIN
     // ============================================================
 
     private void FollowCurrentPath()
@@ -614,7 +1021,8 @@ public class SC_guard_movement : MonoBehaviour
             return;
         }
 
-        if (pathIndex >= currentPath.Count)
+        if (pathIndex >=
+            currentPath.Count)
         {
             FinishPath();
             return;
@@ -643,131 +1051,387 @@ public class SC_guard_movement : MonoBehaviour
             return;
         }
 
-        Vector3 targetPosition;
+        Vector3 targetPosition =
+            target.transform.position;
+
+        AnimationMovement movement =
+            GetMovementAnimation(
+                currentNode,
+                target
+            );
 
         /*
-         * Demi-tour pendant la traque.
+         * ========================================================
+         * SOL
+         * ========================================================
+         *
+         * PATROUILLE :
+         * déplacement NORMAL.
+         *
+         * TRAQUE :
+         * petits bonds goofy.
          */
 
-        if (isChasing &&
-            movingBackwardsOnChase &&
-            segmentStartNode != null)
+        if (movement ==
+            AnimationMovement.Walk)
         {
-            targetPosition =
-                segmentStartNode.transform.position;
+            if (isChasing)
+            {
+                FollowGroundWithGoofyHops(
+                    targetPosition
+                );
+            }
+            else
+            {
+                FollowGroundNormally(
+                    targetPosition
+                );
+            }
         }
         else
         {
-            targetPosition =
-                target.transform.position;
+            /*
+             * ECHELLE :
+             * déplacement normal.
+             */
+
+            transform.position =
+                Vector3.MoveTowards(
+                    transform.position,
+                    targetPosition,
+                    moveSpeed *
+                    Time.deltaTime
+                );
+
+            ResetGoofyScale();
         }
 
+        /*
+         * ========================================================
+         * ARRIVEE
+         * ========================================================
+         */
+
+        if (movement ==
+            AnimationMovement.Walk)
+        {
+            Vector3 flatCurrent =
+                new Vector3(
+                    transform.position.x,
+                    0f,
+                    transform.position.z
+                );
+
+            Vector3 flatTarget =
+                new Vector3(
+                    targetPosition.x,
+                    0f,
+                    targetPosition.z
+                );
+
+            if (Vector3.Distance(
+                    flatCurrent,
+                    flatTarget
+                ) <= 0.001f)
+            {
+                transform.position =
+                    targetPosition;
+
+                ResetGoofyScale();
+
+                ArriveAtCurrentPathNode();
+            }
+        }
+        else
+        {
+            if (Vector3.Distance(
+                    transform.position,
+                    targetPosition
+                ) <= 0.001f)
+            {
+                transform.position =
+                    targetPosition;
+
+                ResetGoofyScale();
+
+                ArriveAtCurrentPathNode();
+            }
+        }
+    }
+
+    // ============================================================
+    // DEPLACEMENT NORMAL
+    // ============================================================
+
+    private void FollowGroundNormally(
+        Vector3 targetPosition)
+    {
         transform.position =
             Vector3.MoveTowards(
                 transform.position,
                 targetPosition,
-                moveSpeed * Time.deltaTime
+                moveSpeed *
+                Time.deltaTime
             );
 
         /*
-         * Arrivée.
+         * Très important :
+         * aucun squash/stretch en patrouille.
          */
 
-        if (Vector3.Distance(
-                transform.position,
-                targetPosition
-            ) <= 0.001f)
+        ResetGoofyScale();
+    }
+
+    // ============================================================
+    // DEPLACEMENT GOOFY DE TRAQUE
+    // ============================================================
+
+    private void FollowGroundWithGoofyHops(
+        Vector3 targetPosition)
+    {
+        Vector3 currentPosition = transform.position;
+
+        /*
+         * ========================================================
+         * ACCELERATION
+         * ========================================================
+         */
+
+        float currentSpeed = UpdateChaseSpeed(true);
+
+        /*
+         * On retire le bond actuel pour calculer correctement
+         * le déplacement horizontal.
+         */
+
+        float groundY = targetPosition.y;
+
+        Vector3 horizontalCurrent = new Vector3(
+            currentPosition.x,
+            groundY,
+            currentPosition.z
+        );
+
+        Vector3 horizontalTarget = new Vector3(
+            targetPosition.x,
+            groundY,
+            targetPosition.z
+        );
+
+        Vector3 nextPosition = Vector3.MoveTowards(
+            horizontalCurrent,
+            horizontalTarget,
+            currentSpeed * Time.deltaTime
+        );
+
+        /*
+         * ========================================================
+         * BOND GOOFY
+         * ========================================================
+         */
+
+        float hopDuration = Mathf.Max(
+            0.05f,
+            chaseHopDuration
+        );
+
+        float hopHeight = chaseHopHeight;
+
+        hopTimer += Time.deltaTime;
+
+        float normalizedTime =
+            (hopTimer % hopDuration) / hopDuration;
+
+        float hopOffset =
+            Mathf.Sin(
+                normalizedTime * Mathf.PI
+            ) * hopHeight;
+
+        /*
+         * ========================================================
+         * PETIT WOBBLE
+         * ========================================================
+         */
+
+        float wobble =
+            Mathf.Sin(
+                normalizedTime * Mathf.PI * 2f
+            ) * hopWobble;
+
+        Vector3 direction =
+            targetPosition -
+            segmentStartNode.transform.position;
+
+        direction.y = 0f;
+
+        if (Mathf.Abs(direction.x) > 0.001f)
         {
-            transform.position =
-                targetPosition;
+            float wobbleDirection =
+                Mathf.Sign(direction.x);
 
-            /*
-             * Demi-tour.
-             */
+            nextPosition.x +=
+                wobble *
+                wobbleDirection;
+        }
 
-            if (isChasing &&
-                movingBackwardsOnChase)
+        /*
+         * ========================================================
+         * POSITION FINALE
+         * ========================================================
+         */
+
+        nextPosition.y =
+            groundY +
+            hopOffset;
+
+        transform.position =
+            nextPosition;
+
+        /*
+         * ========================================================
+         * SQUASH / STRETCH
+         * ========================================================
+         */
+
+        UpdateHopScale(
+            normalizedTime
+        );
+    }
+    // ============================================================
+    // SQUASH / STRETCH
+    // ============================================================
+
+    private void UpdateHopScale(
+        float normalizedTime)
+    {
+        float scaleY;
+        float scaleX;
+
+        if (normalizedTime < 0.5f)
+        {
+            float t =
+                normalizedTime /
+                0.5f;
+
+            scaleY =
+                Mathf.Lerp(
+                    1f,
+                    1f + hopStretch,
+                    t
+                );
+
+            scaleX =
+                Mathf.Lerp(
+                    1f,
+                    1f - hopSquash * 0.5f,
+                    t
+                );
+        }
+        else
+        {
+            float t =
+                (normalizedTime - 0.5f) /
+                0.5f;
+
+            scaleY =
+                Mathf.Lerp(
+                    1f + hopStretch,
+                    1f - hopSquash,
+                    t
+                );
+
+            scaleX =
+                Mathf.Lerp(
+                    1f - hopSquash * 0.5f,
+                    1f + hopSquash,
+                    t
+                );
+        }
+
+        Vector3 scale =
+            originalScale;
+
+        /*
+         * On conserve le signe X correspondant au flip.
+         */
+
+        float currentSignX =
+            Mathf.Sign(
+                transform.localScale.x
+            );
+
+        scale.x =
+            Mathf.Abs(
+                originalScale.x
+            ) *
+            currentSignX *
+            scaleX;
+
+        scale.y =
+            originalScale.y *
+            scaleY;
+
+        transform.localScale =
+            scale;
+    }
+
+    // ============================================================
+    // ARRIVEE NODE
+    // ============================================================
+
+    private void ArriveAtCurrentPathNode()
+    {
+        currentNode =
+            currentPath[pathIndex];
+
+        pathIndex++;
+
+        if (pathIndex >=
+            currentPath.Count)
+        {
+            FinishPath();
+
+            if (isChasing)
             {
-                currentNode =
-                    segmentStartNode;
-
-                movingBackwardsOnChase = false;
-
-                isMovingBetweenNodes = false;
-
-                currentPath.Clear();
-
-                pathIndex = 0;
-
-                segmentStartNode = null;
-                segmentTargetNode = null;
-
-                StopMovementAnimation();
-
                 chaseTimer = 0f;
-
-                RecalculateChasePath();
-
-                return;
             }
 
-            /*
-             * Arrivée normale sur le node.
-             */
+            return;
+        }
 
-            currentNode =
-                target;
+        SC_guard_point nextNode =
+            currentPath[pathIndex];
 
-            pathIndex++;
+        if (nextNode == null ||
+            !IsConnected(
+                currentNode,
+                nextNode))
+        {
+            FinishPath();
+            return;
+        }
 
-            /*
-             * Fin du chemin.
-             */
+        segmentStartNode =
+            currentNode;
 
-            if (pathIndex >= currentPath.Count)
-            {
-                FinishPath();
-                return;
-            }
+        segmentTargetNode =
+            nextNode;
 
-            /*
-             * Nouveau segment.
-             */
+        hopTimer = 0f;
 
-            SC_guard_point nextNode =
-                currentPath[pathIndex];
+        UpdateFlip(
+            currentNode,
+            nextNode
+        );
 
-            if (nextNode == null ||
-                !IsConnected(
-                    currentNode,
-                    nextNode))
-            {
-                FinishPath();
-                return;
-            }
-
-            segmentStartNode =
-                currentNode;
-
-            segmentTargetNode =
-                nextNode;
-
-            movingBackwardsOnChase = false;
-
-            UpdateFlip(
+        SetMovementAnimation(
+            GetMovementAnimation(
                 currentNode,
                 nextNode
-            );
+            )
+        );
 
-            SetMovementAnimation(
-                GetMovementAnimation(
-                    currentNode,
-                    nextNode
-                )
-            );
-
-            isMovingBetweenNodes = true;
-        }
+        isMovingBetweenNodes = true;
     }
 
     // ============================================================
@@ -781,10 +1445,6 @@ public class SC_guard_movement : MonoBehaviour
         {
             return;
         }
-
-        /*
-         * Attente sur un point.
-         */
 
         if (isWaitingAtPatrolPoint)
         {
@@ -801,10 +1461,6 @@ public class SC_guard_movement : MonoBehaviour
             return;
         }
 
-        /*
-         * Déplacement entre deux points.
-         */
-
         if (isMovingBetweenNodes)
         {
             FollowCurrentPath();
@@ -815,7 +1471,7 @@ public class SC_guard_movement : MonoBehaviour
     }
 
     // ============================================================
-    // CHOIX DU POINT DE PATROUILLE
+    // CHOIX PATROUILLE
     // ============================================================
 
     private void ChooseNextPatrolPoint()
@@ -828,28 +1484,28 @@ public class SC_guard_movement : MonoBehaviour
 
         if (currentNode == null)
         {
-            /*
-             * Si jamais le garde n'a plus de node valide,
-             * on le rattache au node le plus proche.
-             */
-
             currentNode =
                 FindClosestNode(
                     transform.position
                 );
 
             if (currentNode == null)
+            {
                 return;
+            }
         }
 
         List<SC_guard_point> validPoints =
             new List<SC_guard_point>();
 
-        foreach (SC_guard_point point
-                 in patrolPoints)
+        foreach (
+            SC_guard_point point
+            in patrolPoints)
         {
             if (point == null)
+            {
                 continue;
+            }
 
             if (point == currentNode &&
                 patrolPoints.Count > 1)
@@ -861,7 +1517,9 @@ public class SC_guard_movement : MonoBehaviour
         }
 
         if (validPoints.Count == 0)
+        {
             return;
+        }
 
         SC_guard_point targetPoint;
 
@@ -892,28 +1550,15 @@ public class SC_guard_movement : MonoBehaviour
         }
 
         if (targetPoint == null)
+        {
             return;
-
-        /*
-         * Déjà sur le point.
-         */
+        }
 
         if (targetPoint == currentNode)
         {
             BeginPatrolWait();
             return;
         }
-
-        /*
-         * ========================================================
-         * NOUVEAU CHEMIN A*
-         * ========================================================
-         *
-         * Après le sommeil, on arrive ici avec le nouveau
-         * currentNode.
-         *
-         * On calcule donc un nouveau trajet complet depuis ce node.
-         */
 
         List<SC_guard_point> newPath =
             FindShortestPath(
@@ -929,39 +1574,30 @@ public class SC_guard_movement : MonoBehaviour
 
             pathIndex = 0;
 
-            movingBackwardsOnChase = false;
-
             StartNextNodeMovement();
         }
         else
         {
-            /*
-             * Aucun chemin possible.
-             *
-             * On réessaiera au prochain Update.
-             */
-
             FinishPath();
         }
     }
 
     // ============================================================
-    // ATTENTE SUR UN POINT
+    // ATTENTE PATROUILLE
     // ============================================================
 
     private void BeginPatrolWait()
     {
         FinishPath();
 
-        isWaitingAtPatrolPoint =
-            true;
+        isWaitingAtPatrolPoint = true;
 
         patrolWaitTimer =
             patrolWaitTime;
     }
 
     // ============================================================
-    // DEMARRER LA PATROUILLE
+    // START PATROUILLE
     // ============================================================
 
     private void StartPatrol()
@@ -973,34 +1609,26 @@ public class SC_guard_movement : MonoBehaviour
 
         isWaitingAtPatrolPoint = false;
 
-        /*
-         * IMPORTANT :
-         *
-         * On efface toujours l'ancien chemin.
-         * La patrouille repartira avec un nouveau calcul A*.
-         */
-
         FinishPath();
 
         patrolWaitTimer = 0f;
 
         currentPatrolIndex = -1;
 
-        /*
-         * Lampe rallumée.
-         */
-
         SetFlashlight(true);
 
         /*
-         * Nouveau trajet de patrouille.
+         * On ne reset pas forcément le timer ici :
+         * FinishSleep() le fait déjà.
+         *
+         * Au lancement du garde, Start() l'a déjà initialisé.
          */
 
         ChooseNextPatrolPoint();
     }
 
     // ============================================================
-    // FIN DU CHEMIN
+    // FIN CHEMIN
     // ============================================================
 
     private void FinishPath()
@@ -1011,10 +1639,13 @@ public class SC_guard_movement : MonoBehaviour
 
         isMovingBetweenNodes = false;
 
-        movingBackwardsOnChase = false;
-
         segmentStartNode = null;
+
         segmentTargetNode = null;
+
+        hopTimer = 0f;
+
+        ResetGoofyScale();
 
         StopMovementAnimation();
     }
@@ -1058,7 +1689,9 @@ public class SC_guard_movement : MonoBehaviour
         AnimationMovement movement)
     {
         if (animator == null)
+        {
             return;
+        }
 
         animator.SetBool(
             walkParameter,
@@ -1102,6 +1735,8 @@ public class SC_guard_movement : MonoBehaviour
 
                 SetFlashlight(false);
 
+                ResetGoofyScale();
+
                 break;
 
             case AnimationMovement.LadderDown:
@@ -1113,6 +1748,8 @@ public class SC_guard_movement : MonoBehaviour
 
                 SetFlashlight(false);
 
+                ResetGoofyScale();
+
                 break;
         }
     }
@@ -1120,7 +1757,9 @@ public class SC_guard_movement : MonoBehaviour
     private void StopMovementAnimation()
     {
         if (animator == null)
+        {
             return;
+        }
 
         animator.SetBool(
             walkParameter,
@@ -1139,19 +1778,65 @@ public class SC_guard_movement : MonoBehaviour
     }
 
     // ============================================================
-    // FLASHLIGHT
+    // RESET SCALE
     // ============================================================
 
-    private void SetFlashlight(bool enabled)
+    private void ResetGoofyScale()
     {
-        if (flashlight == null)
-            return;
+        /*
+         * Attention :
+         * originalScale contient l'échelle originale,
+         * mais on doit conserver le flip horizontal.
+         */
 
-        flashlight.SetActive(enabled);
+        Vector3 scale =
+            originalScale;
+
+        if (flipCharacter)
+        {
+            float currentSign =
+                Mathf.Sign(
+                    transform.localScale.x
+                );
+
+            if (currentSign == 0f)
+            {
+                currentSign =
+                    facingRightByDefault
+                        ? 1f
+                        : -1f;
+            }
+
+            scale.x =
+                Mathf.Abs(
+                    originalScale.x
+                ) *
+                currentSign;
+        }
+
+        transform.localScale =
+            scale;
     }
 
     // ============================================================
-    // FLIP
+    // LAMPE
+    // ============================================================
+
+    private void SetFlashlight(
+        bool enabled)
+    {
+        if (flashlight == null)
+        {
+            return;
+        }
+
+        flashlight.SetActive(
+            enabled
+        );
+    }
+
+    // ============================================================
+    // FLIP NODE -> NODE
     // ============================================================
 
     private void UpdateFlip(
@@ -1159,7 +1844,9 @@ public class SC_guard_movement : MonoBehaviour
         SC_guard_point to)
     {
         if (!flipCharacter)
+        {
             return;
+        }
 
         if (from == null ||
             to == null)
@@ -1167,11 +1854,31 @@ public class SC_guard_movement : MonoBehaviour
             return;
         }
 
-        Vector3 direction =
-            to.transform.position -
-            from.transform.position;
+        UpdateFlip(
+            from.transform.position,
+            to.transform.position
+        );
+    }
 
-        if (Mathf.Abs(direction.x) < 0.01f)
+    // ============================================================
+    // FLIP POSITION -> POSITION
+    // ============================================================
+
+    private void UpdateFlip(
+        Vector3 from,
+        Vector3 to)
+    {
+        if (!flipCharacter)
+        {
+            return;
+        }
+
+        Vector3 direction =
+            to - from;
+
+        if (Mathf.Abs(
+                direction.x
+            ) < 0.01f)
         {
             return;
         }
@@ -1185,50 +1892,12 @@ public class SC_guard_movement : MonoBehaviour
                 : !movingRight;
 
         Vector3 scale =
-            originalScale;
+            transform.localScale;
 
         scale.x =
-            Mathf.Abs(originalScale.x) *
-            (
-                shouldFaceRight
-                    ? 1f
-                    : -1f
-            );
-
-        transform.localScale =
-            scale;
-    }
-
-    // ============================================================
-    // FLIP VERS UNE POSITION
-    // ============================================================
-
-    private void UpdateFlip(
-        Vector3 from,
-        Vector3 to)
-    {
-        if (!flipCharacter)
-            return;
-
-        Vector3 direction =
-            to - from;
-
-        if (Mathf.Abs(direction.x) < 0.01f)
-            return;
-
-        bool movingRight =
-            direction.x > 0f;
-
-        bool shouldFaceRight =
-            facingRightByDefault
-                ? movingRight
-                : !movingRight;
-
-        Vector3 scale =
-            originalScale;
-
-        scale.x =
-            Mathf.Abs(originalScale.x) *
+            Mathf.Abs(
+                originalScale.x
+            ) *
             (
                 shouldFaceRight
                     ? 1f
@@ -1254,9 +1923,13 @@ public class SC_guard_movement : MonoBehaviour
         }
 
         if (from.connections == null)
+        {
             return false;
+        }
 
-        return from.connections.Contains(to);
+        return from.connections.Contains(
+            to
+        );
     }
 
     // ============================================================
@@ -1329,20 +2002,25 @@ public class SC_guard_movement : MonoBehaviour
             for (
                 int i = 1;
                 i < openSet.Count;
-                i++
-            )
+                i++)
             {
                 SC_guard_point candidate =
                     openSet[i];
 
-                if (!fCost.ContainsKey(candidate))
+                if (!fCost.ContainsKey(
+                        candidate))
+                {
                     continue;
+                }
 
-                if (!fCost.ContainsKey(current) ||
+                if (!fCost.ContainsKey(
+                        current
+                    ) ||
                     fCost[candidate] <
                     fCost[current])
                 {
-                    current = candidate;
+                    current =
+                        candidate;
                 }
             }
 
@@ -1354,22 +2032,33 @@ public class SC_guard_movement : MonoBehaviour
                 );
             }
 
-            openSet.Remove(current);
+            openSet.Remove(
+                current
+            );
 
-            closedSet.Add(current);
+            closedSet.Add(
+                current
+            );
 
             if (current.connections == null)
+            {
                 continue;
+            }
 
             foreach (
                 SC_guard_point neighbour
                 in current.connections)
             {
                 if (neighbour == null)
+                {
                     continue;
+                }
 
-                if (closedSet.Contains(neighbour))
+                if (closedSet.Contains(
+                        neighbour))
+                {
                     continue;
+                }
 
                 if (!IsConnected(
                         current,
@@ -1388,7 +2077,8 @@ public class SC_guard_movement : MonoBehaviour
                     gCost[current] +
                     distance;
 
-                if (!gCost.ContainsKey(neighbour))
+                if (!gCost.ContainsKey(
+                        neighbour))
                 {
                     gCost[neighbour] =
                         Mathf.Infinity;
@@ -1410,9 +2100,12 @@ public class SC_guard_movement : MonoBehaviour
                             target
                         );
 
-                    if (!openSet.Contains(neighbour))
+                    if (!openSet.Contains(
+                            neighbour))
                     {
-                        openSet.Add(neighbour);
+                        openSet.Add(
+                            neighbour
+                        );
                     }
                 }
             }
@@ -1436,7 +2129,7 @@ public class SC_guard_movement : MonoBehaviour
     }
 
     // ============================================================
-    // RECONSTRUCTION DU CHEMIN
+    // RECONSTRUCTION A*
     // ============================================================
 
     private List<SC_guard_point> ReconstructPath(
@@ -1449,21 +2142,28 @@ public class SC_guard_movement : MonoBehaviour
         List<SC_guard_point> path =
             new List<SC_guard_point>();
 
-        path.Add(current);
+        path.Add(
+            current
+        );
 
-        while (cameFrom.ContainsKey(current))
+        while (
+            cameFrom.ContainsKey(
+                current
+            ))
         {
             current =
                 cameFrom[current];
 
-            path.Add(current);
+            path.Add(
+                current
+            );
         }
 
         path.Reverse();
 
         /*
-         * Le premier node est celui sur lequel
-         * se trouve déjà le garde.
+         * Le premier node est celui où se trouve
+         * déjà le garde.
          */
 
         if (path.Count > 0)
@@ -1475,7 +2175,7 @@ public class SC_guard_movement : MonoBehaviour
     }
 
     // ============================================================
-    // RECHERCHE DU POINT LE PLUS PROCHE
+    // NODE LE PLUS PROCHE
     // ============================================================
 
     private SC_guard_point FindClosestNode(
@@ -1496,7 +2196,9 @@ public class SC_guard_movement : MonoBehaviour
             in nodes)
         {
             if (node == null)
+            {
                 continue;
+            }
 
             float distance =
                 Vector3.Distance(
@@ -1518,7 +2220,7 @@ public class SC_guard_movement : MonoBehaviour
     }
 
     // ============================================================
-    // RECHERCHE DU NODE POUR LA TRAQUE
+    // NODE JOUEUR
     // ============================================================
 
     private SC_guard_point FindClosestNodeForChase(
@@ -1535,10 +2237,11 @@ public class SC_guard_movement : MonoBehaviour
             Mathf.Infinity;
 
         /*
-         * ========================================================
-         * ETAPE 1 :
-         * Y PROCHE -> LE X DU JOUEUR EST UTILISE
-         * ========================================================
+         * PRIORITE :
+         *
+         * 1. Même niveau
+         * 2. Distance horizontale
+         * 3. Distance verticale
          */
 
         foreach (
@@ -1546,7 +2249,9 @@ public class SC_guard_movement : MonoBehaviour
             in nodes)
         {
             if (node == null)
+            {
                 continue;
+            }
 
             Vector3 nodePosition =
                 node.transform.position;
@@ -1571,23 +2276,22 @@ public class SC_guard_movement : MonoBehaviour
 
             float score =
                 horizontalDistance +
-                (
-                    verticalDifference *
-                    verticalWeight
-                );
+                verticalDifference *
+                verticalWeight;
 
-            if (score < bestScore)
+            if (score <
+                bestScore)
             {
-                bestScore = score;
-                bestNode = node;
+                bestScore =
+                    score;
+
+                bestNode =
+                    node;
             }
         }
 
         /*
-         * ========================================================
-         * ETAPE 2 :
-         * AUCUN NODE SUR LE MEME NIVEAU
-         * ========================================================
+         * Aucun node au même niveau.
          */
 
         if (bestNode == null)
@@ -1600,7 +2304,9 @@ public class SC_guard_movement : MonoBehaviour
                 in nodes)
             {
                 if (node == null)
+                {
                     continue;
+                }
 
                 float verticalDifference =
                     Mathf.Abs(
@@ -1614,7 +2320,8 @@ public class SC_guard_movement : MonoBehaviour
                     bestVerticalDifference =
                         verticalDifference;
 
-                    bestNode = node;
+                    bestNode =
+                        node;
                 }
             }
         }
@@ -1623,25 +2330,32 @@ public class SC_guard_movement : MonoBehaviour
     }
 
     // ============================================================
-    // API
+    // API : CHASE
     // ============================================================
 
     public void SetChaseMode(
         bool enabled)
     {
         // ========================================================
-        // DEBUT DE TRAQUE
+        // DEBUT TRAQUE
         // ========================================================
 
         if (enabled)
         {
             /*
-             * Si le garde dort, on le réveille.
+             * ====================================================
+             * REVEIL IMMEDIAT
+             * ====================================================
+             *
+             * Même si le garde dormait au moment où le joueur
+             * est détecté, il se réveille instantanément.
              */
 
             if (isSleeping)
             {
                 isSleeping = false;
+
+                sleepTimer = 0f;
 
                 if (animator != null)
                 {
@@ -1650,27 +2364,41 @@ public class SC_guard_movement : MonoBehaviour
                         false
                     );
                 }
+
+                /*
+                 * On conserve sa position actuelle.
+                 * Il ne faut surtout pas le téléporter ici.
+                 */
+
+                ResetGoofyScale();
             }
 
             isChasing = true;
 
-            isWaitingAtPatrolPoint = false;
+            isWaitingAtPatrolPoint =
+                false;
 
             movementMode =
                 MovementMode.Chase;
 
             SetFlashlight(true);
 
+            chaseTimer = 0f;
+            currentChaseSpeed = 0f;
             /*
-             * S'il n'est pas déjà en déplacement,
-             * on commence immédiatement la traque.
+             * On force un nouveau bond dès le début
+             * de la traque.
+             */
+
+            hopTimer = 0f;
+
+            /*
+             * Le timer de sommeil est suspendu pendant
+             * toute la traque.
              */
 
             if (!isMovingBetweenNodes)
             {
-
-                chaseTimer = 0f;
-
                 RecalculateChasePath();
             }
 
@@ -1678,7 +2406,7 @@ public class SC_guard_movement : MonoBehaviour
         }
 
         // ========================================================
-        // FIN DE TRAQUE
+        // FIN TRAQUE
         // ========================================================
 
         isChasing = false;
@@ -1687,24 +2415,37 @@ public class SC_guard_movement : MonoBehaviour
             MovementMode.Patrol;
 
         /*
-         * On arrête immédiatement le garde à sa position actuelle.
-         */
-
-        /*
-         * Il s'endort immédiatement sur place.
+         * Le garde s'arrête immédiatement et dort.
+         *
+         * Ce sommeil n'est PAS le sommeil aléatoire :
+         * c'est le sommeil déclenché par la fin de la traque.
          */
 
         StartSleep();
     }
+    private void StartSleep()
+    {
+        isSleeping = true;
+        sleepTimer = sleepDuration;
 
+        FinishPath();
+
+        animator.SetBool("Sleep", true);
+        animator.SetBool("Walk", false);
+        animator.SetBool("LadderUp", false);
+        animator.SetBool("LadderDown", false);
+
+        SetFlashlight(false);
+    }
     // ============================================================
-    // CHANGEMENT MANUEL DU NODE
+    // CHANGER NODE
     // ============================================================
 
     public void SetCurrentNode(
         SC_guard_point node)
     {
-        currentNode = node;
+        currentNode =
+            node;
 
         if (node != null)
         {
@@ -1716,13 +2457,14 @@ public class SC_guard_movement : MonoBehaviour
     }
 
     // ============================================================
-    // DEFINIR LA BASE
+    // DEFINIR BASE
     // ============================================================
 
     public void SetBaseNode(
         SC_guard_point node)
     {
-        baseNode = node;
+        baseNode =
+            node;
     }
 
     // ============================================================

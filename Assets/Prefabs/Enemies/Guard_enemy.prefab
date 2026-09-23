@@ -466,8 +466,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bf3cdf50624d3b244b2b6de3d4e664c9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  sprite: {fileID: 2257961881246306323}
+  sleepDuration: 3
   flashlight: {fileID: 5514496821188086207}
+  animator: {fileID: 2519460489625166877}
   moveSpeed: 2
   movementMode: 0
   currentNode: {fileID: 0}
@@ -475,11 +476,24 @@ MonoBehaviour:
   patrolPoints: []
   patrolWaitTime: 1.5
   randomPatrol: 1
+  allowRandomSleep: 1
+  minSleepInterval: 8
+  maxSleepInterval: 20
+  minSleepDuration: 2
+  maxSleepDuration: 5
+  canSleepWhileMoving: 1
   chaseRefreshRate: 0.03
   verticalTolerance: 2
   verticalWeight: 0.15
-  baseReturnRefreshRate: 0.5
-  animator: {fileID: 2519460489625166877}
+  useNearestLadder: 1
+  ladderDecisionDistance: 8
+  allowMidSegmentTurn: 1
+  chaseHopHeight: 0.28
+  chaseHopDuration: 0.32
+  hopSquash: 0.12
+  hopStretch: 0.08
+  hopWobble: 0.025
+  sleepParameter: Sleep
   walkParameter: Walk
   ladderUpParameter: LadderUp
   ladderDownParameter: LadderDown
