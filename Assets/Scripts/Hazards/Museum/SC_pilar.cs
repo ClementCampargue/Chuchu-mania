@@ -31,7 +31,7 @@ public class SC_pilar : MonoBehaviour
 
     private void OnTriggerStay2D(Collider2D collision)
     {
-        if(collision.CompareTag("Player") && player.IsAnimationPlaying("land") && !statue_mode_ && player.transform.position.y> snap_point.position.y -0.1f)
+        if(collision.CompareTag("Player") && player.IsAnimationPlaying("land") && !SC_alarm_system.Instance.alarmActive&& !statue_mode_ && player.transform.position.y> snap_point.position.y -0.1f)
         {
             statue_mode();
         }

@@ -2430,7 +2430,7 @@ public class SC_guard_movement : MonoBehaviour
 
         FinishPath();
 
-        animator.SetBool("Sleep", true);
+        animator.SetTrigger("sleep");
         animator.SetBool("Walk", false);
         animator.SetBool("LadderUp", false);
         animator.SetBool("LadderDown", false);
