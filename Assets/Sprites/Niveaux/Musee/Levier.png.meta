@@ -43,7 +43,7 @@ TextureImporter:
   nPOTScale: 0
   lightmap: 0
   compressionQuality: 50
-  spriteMode: 1
+  spriteMode: 2
   spriteExtrude: 1
   spriteMeshType: 1
   alignment: 0
@@ -97,23 +97,45 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: HUD_0
+      name: Levier_0
       rect:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 448
-        height: 336
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        width: 17
+        height: 17
+      alignment: 9
+      pivot: {x: 0.59019613, y: 0.41372558}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 505e2544db04ba0a0800000000000000
-      internalID: -6869325624984279803
+      spriteID: 4cf01b948e7be3248827e50d9da3dbdb
+      internalID: -37577395
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Levier_1
+      rect:
+        serializedVersion: 2
+        x: 17
+        y: 0
+        width: 17
+        height: 17
+      alignment: 9
+      pivot: {x: 0.41372567, y: 0.41241837}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0a3b76534ec089d4ba1ed08d1715c0bf
+      internalID: 448007970
       vertices: []
       indices: 
       edges: []
@@ -133,6 +155,8 @@ TextureImporter:
       entries: []
     nameFileIdTable:
       HUD_0: -6869325624984279803
+      Levier_0: -37577395
+      Levier_1: 448007970
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

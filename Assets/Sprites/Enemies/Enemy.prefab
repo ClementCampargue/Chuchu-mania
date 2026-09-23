@@ -5040,6 +5040,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8636599317760690865}
   - component: {fileID: 8652064909510127099}
+  - component: {fileID: 823262656013927289}
   m_Layer: 8
   m_Name: Visual
   m_TagString: Untagged
@@ -5086,6 +5087,18 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!210 &823262656013927289
+SortingGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1299578869475446390}
+  m_Enabled: 1
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 5
+  m_SortAtRoot: 0
 --- !u!1 &1353773465998933858
 GameObject:
   m_ObjectHideFlags: 0
@@ -5537,7 +5550,6 @@ GameObject:
   - component: {fileID: 1117725058429507512}
   - component: {fileID: 6162067483996259934}
   - component: {fileID: 3255610440191343998}
-  - component: {fileID: 5399108673815413173}
   m_Layer: 8
   m_Name: Enemy
   m_TagString: Enemy
@@ -5645,18 +5657,6 @@ MonoBehaviour:
   warningDistance: 0.7
   warningSpawnOffset: 0.5
   warningPrefab: {fileID: 4181699033222870022, guid: 2c642d6e40fb2624287c03f9ace97d33, type: 3}
---- !u!210 &5399108673815413173
-SortingGroup:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3366398786417948820}
-  m_Enabled: 1
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
-  m_SortingOrder: 5
-  m_SortAtRoot: 0
 --- !u!1 &4426420307681049346
 GameObject:
   m_ObjectHideFlags: 0

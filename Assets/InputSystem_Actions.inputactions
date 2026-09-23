@@ -479,7 +479,7 @@
                 {
                     "name": "",
                     "id": "6a211673-860d-4f86-b051-c2a22931169e",
-                    "path": "<Gamepad>/leftStick/down",
+                    "path": "<Gamepad>/buttonEast",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
@@ -489,30 +489,8 @@
                 },
                 {
                     "name": "",
-                    "id": "e6b86a45-7b68-4a98-97f1-6c91398c9b90",
-                    "path": "<Gamepad>/dpad/down",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Eat",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "672107d4-7b90-4b96-b840-e72e85d874e4",
-                    "path": "<Keyboard>/downArrow",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Eat",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "5f8b28bf-bf4a-427a-ace3-ad50ab36af98",
-                    "path": "<Keyboard>/s",
+                    "id": "149a1293-81b7-440a-b877-83681d208db4",
+                    "path": "<Keyboard>/e",
                     "interactions": "",
                     "processors": "",
                     "groups": "",

@@ -79,7 +79,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &3794890088865274154
 Transform:
   m_ObjectHideFlags: 0
@@ -10021,7 +10021,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &4179548949721023686
 Transform:
   m_ObjectHideFlags: 0
@@ -31760,10 +31760,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d27d89f514c5be14194f1166b5887679, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  climb_delay: 1
   PowermoveSpeed: 5
   BasePowermoveSpeed: 5
   PowerJump: 6
   juice: {fileID: 1906161946050759491}
+  collision: {fileID: 636408113826853957}
   moveSpeed: 4
   base_speed: 0
   jumpForce: 6
@@ -31776,6 +31778,11 @@ MonoBehaviour:
   climbAttachUpThreshold: 0.6
   climbAttachDiagonalLimit: 1
   climbReattachDelay: 0.2
+  platformLayer:
+    serializedVersion: 2
+    m_Bits: 0
+  dropThroughTime: 0.25
+  dropThroughVelocity: 2
   hitFreezeTime: 0.51
   hitKnockback: {x: 10, y: 5}
   normalMaterial: {fileID: 2100000, guid: a97c105638bdf8b4a8650670310a4cd3, type: 2}
