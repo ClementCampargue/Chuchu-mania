@@ -1221,7 +1221,7 @@ PrefabInstance:
       objectReference: {fileID: 1459483161}
     - target: {fileID: 4239849883444337517, guid: 861f2e20df3d6b149801340216555e4b, type: 3}
       propertyPath: movementMode
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4239849883444337517, guid: 861f2e20df3d6b149801340216555e4b, type: 3}
       propertyPath: flipCharacter
@@ -1240,12 +1240,16 @@ PrefabInstance:
       value: ground
       objectReference: {fileID: 0}
     - target: {fileID: 4239849883444337517, guid: 861f2e20df3d6b149801340216555e4b, type: 3}
+      propertyPath: patrolWaitTime
+      value: 0.23
+      objectReference: {fileID: 0}
+    - target: {fileID: 4239849883444337517, guid: 861f2e20df3d6b149801340216555e4b, type: 3}
       propertyPath: spriteRenderer
       value: 
       objectReference: {fileID: 219697653}
     - target: {fileID: 4239849883444337517, guid: 861f2e20df3d6b149801340216555e4b, type: 3}
       propertyPath: verticalWeight
-      value: 1.14
+      value: 1.74
       objectReference: {fileID: 0}
     - target: {fileID: 4239849883444337517, guid: 861f2e20df3d6b149801340216555e4b, type: 3}
       propertyPath: ladderUpParameter
@@ -1257,7 +1261,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4239849883444337517, guid: 861f2e20df3d6b149801340216555e4b, type: 3}
       propertyPath: verticalTolerance
-      value: 0.32
+      value: 0.45
       objectReference: {fileID: 0}
     - target: {fileID: 4239849883444337517, guid: 861f2e20df3d6b149801340216555e4b, type: 3}
       propertyPath: groundLayer.m_Bits
