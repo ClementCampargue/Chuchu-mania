@@ -1721,7 +1721,7 @@ public class SC_guard_movement : MonoBehaviour
                     walkParameter,
                     true
                 );
-
+                currentChaseSpeed = 0;
                 SetFlashlight(true);
 
                 break;

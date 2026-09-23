@@ -565,6 +565,14 @@ PrefabInstance:
       value: 1.74
       objectReference: {fileID: 0}
     - target: {fileID: 4239849883444337517, guid: 861f2e20df3d6b149801340216555e4b, type: 3}
+      propertyPath: maxSleepDuration
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 4239849883444337517, guid: 861f2e20df3d6b149801340216555e4b, type: 3}
+      propertyPath: minSleepDuration
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 4239849883444337517, guid: 861f2e20df3d6b149801340216555e4b, type: 3}
       propertyPath: ladderUpParameter
       value: ladder
       objectReference: {fileID: 0}
@@ -1467,8 +1475,16 @@ PrefabInstance:
       value: 1.74
       objectReference: {fileID: 0}
     - target: {fileID: 4239849883444337517, guid: 861f2e20df3d6b149801340216555e4b, type: 3}
+      propertyPath: maxSleepDuration
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 4239849883444337517, guid: 861f2e20df3d6b149801340216555e4b, type: 3}
       propertyPath: maxSleepInterval
       value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 4239849883444337517, guid: 861f2e20df3d6b149801340216555e4b, type: 3}
+      propertyPath: minSleepDuration
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 4239849883444337517, guid: 861f2e20df3d6b149801340216555e4b, type: 3}
       propertyPath: minSleepInterval
