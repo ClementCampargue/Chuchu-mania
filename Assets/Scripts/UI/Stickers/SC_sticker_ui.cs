@@ -1,8 +1,10 @@
+using System.Collections;
 using UnityEngine;
-using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
+using static UnityEngine.Rendering.DebugUI;
 
 public class SC_sticker_UI : MonoBehaviour,
     IPointerEnterHandler,
@@ -11,7 +13,7 @@ public class SC_sticker_UI : MonoBehaviour,
     // =========================================================
     // DEFAULT STATE
     // =========================================================
-
+    public float hover_shader_value;
     private Vector2 defaultPosition;
     private float defaultRotationZ;
     private float defaultStickerScale;
@@ -91,6 +93,25 @@ public class SC_sticker_UI : MonoBehaviour,
     public float dragScaleSmoothSpeed = 8f;
 
     // =========================================================
+    // SHADER PROPERTY ANIMATION
+    // =========================================================
+
+    public string shaderFloatProperty = "_MyFloat";
+    public float shaderStartValue = 0f;
+    public float shaderEndValue = 1f;
+    public float shaderAnimationDuration = 0.5f;
+
+    public string shaderFloatProperty_2 = "_MyFloat";
+    public float shaderStartValue_2 = 0f;
+    public float shaderEndValue_2 = 1f;
+    public float shaderAnimationDuration_2 = 0.5f;
+
+    // Material réellement utilisé par l'Image.
+    private Material shaderMaterial;
+
+    private Coroutine shaderPropertyCoroutine;
+
+    // =========================================================
     // UI
     // =========================================================
 
@@ -167,11 +188,6 @@ public class SC_sticker_UI : MonoBehaviour,
             baseColor = img.color;
 
             img.alphaHitTestMinimumThreshold = 0.1f;
-
-            if (img.material != null)
-            {
-                img.material = new Material(img.material);
-            }
         }
 
         // -----------------------------------------------------
@@ -288,14 +304,12 @@ public class SC_sticker_UI : MonoBehaviour,
 
         if (spawnedSticker)
         {
-            // IMPORTANT :
-            // À ce moment-là, le code qui a Instantiate()
-            // le sticker a normalement déjà eu le temps de
-            // définir sa position.
-            //
-            // On mémorise donc la vraie position de spawn,
-            // et non (0,0).
+            PrepareShaderMaterial();
 
+            shaderMaterial.SetFloat(
+                shaderFloatProperty,
+                shaderStartValue_2
+            );
             stickerScale =
                 Mathf.Clamp(
                     Mathf.Abs(rect.localScale.x),
@@ -352,6 +366,7 @@ public class SC_sticker_UI : MonoBehaviour,
             anim.enabled = true;
         }
     }
+
     // =========================================================
     // UPDATE
     // =========================================================
@@ -658,6 +673,8 @@ public class SC_sticker_UI : MonoBehaviour,
             SC_scursorManager.instance != null &&
             !SC_scursorManager.instance.grabing)
         {
+            AnimateShaderFloat();
+
             StartDrag();
         }
         else if (dragging)
@@ -672,6 +689,7 @@ public class SC_sticker_UI : MonoBehaviour,
 
     private void StartDrag()
     {
+
         if (cut != null)
             cut.uncut();
 
@@ -734,7 +752,6 @@ public class SC_sticker_UI : MonoBehaviour,
         if (cut != null)
             cut.cut();
 
-        dragging = false;
 
         // -----------------------------------------------------
         // RESET VISUAL BALATRO AVANT SAVE
@@ -763,9 +780,7 @@ public class SC_sticker_UI : MonoBehaviour,
 
         if (selected != null)
             selected.SetActive(false);
-
-        if (img != null)
-            img.maskable = true;
+        AnimateShaderFloat_2();
 
         // -----------------------------------------------------
         // DELETE ZONE
@@ -805,6 +820,12 @@ public class SC_sticker_UI : MonoBehaviour,
             anim.ResetTrigger("grab");
             anim.SetTrigger("drop");
         }
+
+
+
+        // -----------------------------------------------------
+        // MENU
+        // -----------------------------------------------------
 
         if (SC_sticker_menu.instance != null)
             SC_sticker_menu.instance.quit_edit_mode();
@@ -956,8 +977,6 @@ public class SC_sticker_UI : MonoBehaviour,
                 1f
             );
 
-        // Si le sticker n'est pas en drag,
-        // on sauvegarde immédiatement.
         if (!dragging &&
             SC_StickerSaveSystem.instance != null)
         {
@@ -1057,10 +1076,23 @@ public class SC_sticker_UI : MonoBehaviour,
             if (SC_sticker_menu.instance != null)
                 SC_sticker_menu.instance.quit_edit_mode();
         }
+
         if (spawnedSticker)
         {
             if (SC_sticker_menu.instance != null)
                 SC_sticker_menu.instance.quit_edit_mode();
+        }
+
+        if (shaderPropertyCoroutine != null)
+        {
+            StopCoroutine(shaderPropertyCoroutine);
+            shaderPropertyCoroutine = null;
+        }
+
+        if (shaderMaterial != null)
+        {
+            Destroy(shaderMaterial);
+            shaderMaterial = null;
         }
 
         if (SC_StickerSaveSystem.instance != null)
@@ -1068,11 +1100,6 @@ public class SC_sticker_UI : MonoBehaviour,
 
         if (cursor != null)
             cursor.SetNormalCursor();
-
-        // Le SC_sticker_UI peut être sur l'enfant
-        // du prefab.
-        //
-        // On détruit donc le prefab parent.
 
         if (transform.parent != null)
         {
@@ -1096,9 +1123,11 @@ public class SC_sticker_UI : MonoBehaviour,
     {
         isHovered = true;
 
+
         if (!dragging &&
             cursor != null)
         {
+
             cursor.SetHoverCursor();
         }
     }
@@ -1115,12 +1144,13 @@ public class SC_sticker_UI : MonoBehaviour,
         if (!dragging &&
             cursor != null)
         {
+
             cursor.SetNormalCursor();
         }
     }
 
     // =========================================================
-    // DELETE IF DRAGGING
+    // DELETE IF  
     // =========================================================
 
     public void DeleteIfDragging()
@@ -1136,6 +1166,7 @@ public class SC_sticker_UI : MonoBehaviour,
         {
             DeleteSticker();
         }
+
         if (SC_StickerSaveSystem.instance != null)
         {
             SC_StickerSaveSystem.instance.AutoSave();
@@ -1144,13 +1175,6 @@ public class SC_sticker_UI : MonoBehaviour,
 
     // =========================================================
     // SAVE DEFAULT STATE
-    // =========================================================
-    //
-    // Utilisé pour un nouveau sticker.
-    //
-    // IMPORTANT :
-    // Cette fonction NE MODIFIE PAS le sticker.
-    // Elle mémorise seulement son état actuel.
     // =========================================================
 
     public void SaveDefaultState()
@@ -1173,12 +1197,6 @@ public class SC_sticker_UI : MonoBehaviour,
 
     // =========================================================
     // INITIALIZE LOADED STICKER
-    // =========================================================
-    //
-    // Appelé par SC_StickerSaveSystem après Instantiate.
-    //
-    // C'est cette méthode qui synchronise complètement
-    // le SC_sticker_UI avec les données sauvegardées.
     // =========================================================
 
     public void InitializeLoadedSticker(
@@ -1357,9 +1375,7 @@ public class SC_sticker_UI : MonoBehaviour,
         {
             img.color =
                 baseColor;
-
-            img.maskable =
-                true;
+            AnimateShaderFloat_2();
         }
 
         // -----------------------------------------------------
@@ -1387,11 +1403,400 @@ public class SC_sticker_UI : MonoBehaviour,
     }
 
     // =========================================================
-    // SAVE VALUES FOR SAVE SYSTEM
+    // SHADER MATERIAL
     // =========================================================
     //
-    // Ces fonctions permettent au SaveSystem de sauvegarder
-    // les vraies valeurs et PAS le scale/tilt visuel Balatro.
+    // Crée une instance du material actuellement utilisé
+    // par l'Image.
+    //
+    // Cela évite de modifier le material partagé du prefab.
+    // =========================================================
+
+    private void PrepareShaderMaterial()
+    {
+        if (img == null)
+            return;
+
+        Material currentMaterial =
+            img.material;
+
+        if (currentMaterial == null)
+            return;
+
+        // Si le material actuellement affiché n'est pas
+        // celui que nous animons, on crée une nouvelle instance.
+        if (shaderMaterial == null ||
+            img.material != shaderMaterial)
+        {
+            if (shaderMaterial != null)
+            {
+                Destroy(shaderMaterial);
+            }
+
+            shaderMaterial =
+                new Material(currentMaterial);
+
+            img.material =
+                shaderMaterial;
+        }
+    }
+
+    // =========================================================
+    // ANIMATE SHADER FLOAT
+    // =========================================================
+
+    public void AnimateShaderFloat()
+    {
+        if (shaderPropertyCoroutine != null)
+        {
+            StopCoroutine(
+                shaderPropertyCoroutine
+            );
+        }
+
+        shaderPropertyCoroutine =
+            StartCoroutine(
+                AnimateShaderFloatCoroutine()
+            );
+    }
+    public void AnimateShaderFloat_2()
+    {
+        if (shaderPropertyCoroutine != null)
+        {
+            StopCoroutine(
+                shaderPropertyCoroutine
+            );
+        }
+
+        shaderPropertyCoroutine =
+            StartCoroutine(
+                AnimateShaderFloatCoroutine_2()
+            );
+    }
+
+    // =========================================================
+    // SHADER FLOAT COROUTINE
+    // =========================================================
+
+    private IEnumerator AnimateShaderFloatCoroutine()
+    {
+        if (img == null)
+            yield break;
+
+        if (img.material == null)
+            yield break;
+
+        // -----------------------------------------------------
+        // PREPARE MATERIAL
+        // -----------------------------------------------------
+
+        PrepareShaderMaterial();
+
+        if (shaderMaterial == null)
+            yield break;
+
+        if (!shaderMaterial.HasProperty(
+            shaderFloatProperty))
+        {
+            Debug.LogWarning(
+                "SC_sticker_UI : La propriété Shader '" +
+                shaderFloatProperty +
+                "' n'existe pas sur le material.",
+                this
+            );
+
+            shaderPropertyCoroutine = null;
+
+            yield break;
+        }
+
+        // -----------------------------------------------------
+        // START VALUE
+        // -----------------------------------------------------
+
+        shaderMaterial.SetFloat(
+            shaderFloatProperty,
+            shaderStartValue
+        );
+
+        float elapsed = 0f;
+
+        // -----------------------------------------------------
+        // ANIMATION
+        // -----------------------------------------------------
+
+        while (elapsed <
+               shaderAnimationDuration)
+        {
+            // -----------------------------------------------
+            // Vérifie que l'Image utilise toujours
+            // le material que nous sommes en train d'animer.
+            // -----------------------------------------------
+
+            if (img.material != shaderMaterial)
+            {
+                Material currentMaterial =
+                    img.material;
+
+                if (currentMaterial == null)
+                {
+                    shaderPropertyCoroutine = null;
+                    yield break;
+                }
+
+                if (shaderMaterial != null)
+                {
+                    Destroy(shaderMaterial);
+                }
+
+                shaderMaterial =
+                    new Material(currentMaterial);
+
+                img.material =
+                    shaderMaterial;
+
+                // Remet la valeur correspondant
+                // à l'avancement actuel.
+                shaderMaterial.SetFloat(
+                    shaderFloatProperty,
+                    Mathf.Lerp(
+                        shaderStartValue,
+                        shaderEndValue,
+                        Mathf.Clamp01(
+                            elapsed /
+                            Mathf.Max(
+                                shaderAnimationDuration,
+                                0.0001f
+                            )
+                        )
+                    )
+                );
+            }
+
+            // -----------------------------------------------
+            // TIME
+            // -----------------------------------------------
+
+            elapsed +=
+                Time.deltaTime;
+
+            float t =
+                Mathf.Clamp01(
+                    elapsed /
+                    Mathf.Max(
+                        shaderAnimationDuration,
+                        0.0001f
+                    )
+                );
+
+            // Smooth transition.
+            t =
+                Mathf.SmoothStep(
+                    0f,
+                    1f,
+                    t
+                );
+
+            // -----------------------------------------------
+            // VALUE
+            // -----------------------------------------------
+
+            float value =
+                Mathf.Lerp(
+                    shaderStartValue,
+                    shaderEndValue,
+                    t
+                );
+
+            // -----------------------------------------------
+            // APPLY
+            // -----------------------------------------------
+
+            shaderMaterial.SetFloat(
+                shaderFloatProperty,
+                value
+            );
+
+            yield return null;
+        }
+
+        // -----------------------------------------------------
+        // FINAL VALUE
+        // -----------------------------------------------------
+
+        if (shaderMaterial != null)
+        {
+            shaderMaterial.SetFloat(
+                shaderFloatProperty,
+                shaderEndValue
+            );
+        }
+
+        shaderPropertyCoroutine = null;
+    }
+    private IEnumerator AnimateShaderFloatCoroutine_2()
+    {
+        if (img == null)
+            yield break;
+
+        if (img.material == null)
+            yield break;
+
+        // -----------------------------------------------------
+        // PREPARE MATERIAL
+        // -----------------------------------------------------
+
+        PrepareShaderMaterial();
+
+        if (shaderMaterial == null)
+            yield break;
+
+        if (!shaderMaterial.HasProperty(
+            shaderFloatProperty_2))
+        {
+            Debug.LogWarning(
+                "SC_sticker_UI : La propriété Shader '" +
+                shaderFloatProperty_2 +
+                "' n'existe pas sur le material.",
+                this
+            );
+
+            shaderPropertyCoroutine = null;
+
+            yield break;
+        }
+
+        // -----------------------------------------------------
+        // START VALUE
+        // -----------------------------------------------------
+        yield return new WaitForSecondsRealtime(0.5f);
+
+        shaderMaterial.SetFloat(
+            shaderFloatProperty_2,
+            shaderStartValue_2
+        );
+
+        float elapsed = 0f;
+
+        // -----------------------------------------------------
+        // ANIMATION
+        // -----------------------------------------------------
+
+        while (elapsed <
+               shaderAnimationDuration_2)
+        {
+            // -----------------------------------------------
+            // Vérifie que l'Image utilise toujours
+            // le material que nous sommes en train d'animer.
+            // -----------------------------------------------
+
+            if (img.material != shaderMaterial)
+            {
+                Material currentMaterial =
+                    img.material;
+
+                if (currentMaterial == null)
+                {
+                    shaderPropertyCoroutine = null;
+                    yield break;
+                }
+
+                if (shaderMaterial != null)
+                {
+                    Destroy(shaderMaterial);
+                }
+
+                shaderMaterial =
+                    new Material(currentMaterial);
+
+                img.material =
+                    shaderMaterial;
+
+                // Remet la valeur correspondant
+                // à l'avancement actuel.
+                shaderMaterial.SetFloat(
+                    shaderFloatProperty,
+                    Mathf.Lerp(
+                        shaderStartValue_2,
+                        shaderEndValue_2,
+                        Mathf.Clamp01(
+                            elapsed /
+                            Mathf.Max(
+                                shaderAnimationDuration_2,
+                                0.0001f
+                            )
+                        )
+                    )
+                );
+            }
+
+            // -----------------------------------------------
+            // TIME
+            // -----------------------------------------------
+
+            elapsed +=
+                Time.deltaTime;
+
+            float t =
+                Mathf.Clamp01(
+                    elapsed /
+                    Mathf.Max(
+                        shaderAnimationDuration_2,
+                        0.0001f
+                    )
+                );
+
+            // Smooth transition.
+            t =
+                Mathf.SmoothStep(
+                    0f,
+                    1f,
+                    t
+                );
+
+            // -----------------------------------------------
+            // VALUE
+            // -----------------------------------------------
+
+            float value =
+                Mathf.Lerp(
+                    shaderStartValue_2,
+                    shaderEndValue_2,
+                    t
+                );
+
+            // -----------------------------------------------
+            // APPLY
+            // -----------------------------------------------
+
+            shaderMaterial.SetFloat(
+                shaderFloatProperty_2,
+                value
+            );
+
+            yield return null;
+        }
+        img.maskable =
+true;
+        // -----------------------------------------------------
+        // FINAL VALUE
+        // -----------------------------------------------------
+        dragging = false;
+
+        if (shaderMaterial != null)
+        {
+            shaderMaterial.SetFloat(
+                shaderFloatProperty_2,
+                shaderEndValue_2
+            );
+        }
+  
+
+        shaderPropertyCoroutine = null;
+    }
+
+    // =========================================================
+    // SAVE VALUES FOR SAVE SYSTEM
     // =========================================================
 
     public float GetSaveRotationZ()

@@ -60,6 +60,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1b37697b217f67748ba94d3d3601b68f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  hover_shader_value: 0.1
   mouseScroll: {fileID: 6240969308177333660, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
   rotateModifier: {fileID: 7202051123191658014, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
   click: {fileID: 3001919216989983466, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
@@ -84,6 +85,14 @@ MonoBehaviour:
   maxTiltVelocity: 1000
   dragScaleMultiplier: 1.02
   dragScaleSmoothSpeed: 8
+  shaderFloatProperty: _Progress
+  shaderStartValue: 0.26
+  shaderEndValue: 0.15
+  shaderAnimationDuration: 0.25
+  shaderFloatProperty_2: _Progress
+  shaderStartValue_2: 0.15
+  shaderEndValue_2: 1
+  shaderAnimationDuration_2: 0.45
   img: {fileID: 3917524200838684608}
   selected: {fileID: 2986285596368804374}
   anim: {fileID: 7621659975062488614}
@@ -101,7 +110,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 2100000, guid: 1379f7df0d27c134bac641935d0afa1e, type: 2}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
