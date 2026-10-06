@@ -206,7 +206,7 @@ MonoBehaviour:
   speed: 1
   speed_player_on: 0.5
   minStartDelay: 0
-  maxStartDelay: 1
+  maxStartDelay: 0
   max_height: 4
   skin: 0
   skin_sprites:

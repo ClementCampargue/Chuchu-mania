@@ -144,7 +144,7 @@ Transform:
   m_GameObject: {fileID: 19549041}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.39239645, y: -5.8889704, z: 0}
+  m_LocalPosition: {x: -0.39239645, y: -5.822304, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -292,11 +292,11 @@ MonoBehaviour:
   - {fileID: 19549043}
   - {fileID: 781327564}
   - {fileID: 1034813436}
-  startDelay: 3
-  cycleDelay: 5
-  randomDelay: 1.5
-  columnDelay: 0.3
-  randomColumnDelay: 0.54
+  startDelay: 0
+  cycleDelay: 1
+  randomDelay: 0
+  columnDelay: 0
+  randomColumnDelay: 0
   proba_spe_1: 4
   proba_spe_2: 8
 --- !u!1 &573276840
