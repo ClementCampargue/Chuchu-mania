@@ -317,6 +317,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e591d54c12cb55c40940a915f8c4236d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  delay_to_destroy: 0
+  destroy_oncollisiion_tag: 
 --- !u!1 &2424841528686244583
 GameObject:
   m_ObjectHideFlags: 0

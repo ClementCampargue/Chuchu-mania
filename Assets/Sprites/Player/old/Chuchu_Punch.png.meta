@@ -1,7 +1,10 @@
 fileFormatVersion: 2
-guid: 6a453b8d1c552fd4a81d382a1d2d56c0
+guid: 162cd7052f8d4b645b8c02c4daab9539
 TextureImporter:
-  internalIDToNameTable: []
+  internalIDToNameTable:
+  - first:
+      213: 7778646048862678007
+    second: Chuchu_Punch_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -43,7 +46,7 @@ TextureImporter:
   nPOTScale: 0
   lightmap: 0
   compressionQuality: 50
-  spriteMode: 1
+  spriteMode: 2
   spriteExtrude: 1
   spriteMeshType: 1
   alignment: 0
@@ -72,7 +75,7 @@ TextureImporter:
     maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: -1
-    textureCompression: 0
+    textureCompression: 1
     compressionQuality: 50
     crunchedCompression: 0
     allowsAlphaSplitting: 0
@@ -97,23 +100,23 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: HUD_0
+      name: Chuchu_Punch_0
       rect:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 448
-        height: 336
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        width: 31
+        height: 31
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 505e2544db04ba0a0800000000000000
-      internalID: -6869325624984279803
+      spriteID: 7fba4ff4e5d43fb60800000000000000
+      internalID: 7778646048862678007
       vertices: []
       indices: 
       edges: []
@@ -122,7 +125,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 5e97eb03825dee720800000000000000
+    spriteID: 2267feab40ab0cc49aa94b81efa1ddae
     internalID: 0
     vertices: []
     indices: 
@@ -132,7 +135,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      HUD_0: -6869325624984279803
+      Chuchu_Punch_0: 7778646048862678007
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
