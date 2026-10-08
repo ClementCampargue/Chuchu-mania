@@ -34,46 +34,35 @@ public class SC_multiple_spawning : MonoBehaviour
 
     private IEnumerator SpawnRoutine()
     {
-        // Attente avant le premier cycle
         yield return new WaitForSeconds(startDelay);
 
         while (true)
         {
-            // Chaque spécial a maintenant son propre tirage indépendant
+            // Tirage indépendant
             bool spawnSpecial1 = Random.Range(0f, 100f) < proba_spe_1;
             bool spawnSpecial2 = Random.Range(0f, 100f) < proba_spe_2;
 
-            // Liste des colonnes disponibles
-            int[] specialColumns = new int[spawnPositions.Length];
-
-            for (int i = 0; i < specialColumns.Length; i++)
-            {
-                specialColumns[i] = i;
-            }
-
-            // Mélange des colonnes
-            ShuffleArray(specialColumns);
-
-            // On attribue les colonnes aux spéciaux
             int special1Column = -1;
             int special2Column = -1;
 
+            // Choisir une colonne aléatoire pour le spécial 1
             if (spawnSpecial1)
             {
-                special1Column = specialColumns[0];
+                special1Column = Random.Range(0, spawnPositions.Length);
             }
 
+            // Choisir une colonne aléatoire pour le spécial 2
             if (spawnSpecial2)
             {
-                // Si les deux doivent apparaître,
-                // on prend obligatoirement une autre colonne
+                special2Column = Random.Range(0, spawnPositions.Length);
+
+                // Éviter la même colonne si les deux apparaissent
                 if (spawnSpecial1 && spawnPositions.Length > 1)
                 {
-                    special2Column = specialColumns[1];
-                }
-                else
-                {
-                    special2Column = specialColumns[0];
+                    while (special2Column == special1Column)
+                    {
+                        special2Column = Random.Range(0, spawnPositions.Length);
+                    }
                 }
             }
 
@@ -101,7 +90,10 @@ public class SC_multiple_spawning : MonoBehaviour
                 if (i < spawnPositions.Length - 1)
                 {
                     float delay = columnDelay +
-                                  Random.Range(-randomColumnDelay, randomColumnDelay);
+                                  Random.Range(
+                                      -randomColumnDelay,
+                                      randomColumnDelay
+                                  );
 
                     delay = Mathf.Max(0.01f, delay);
 
@@ -109,25 +101,16 @@ public class SC_multiple_spawning : MonoBehaviour
                 }
             }
 
-            // Temps avant le prochain cycle
+            // Délai avant le prochain cycle
             float nextCycleDelay = cycleDelay +
-                                   Random.Range(-randomDelay, randomDelay);
+                                   Random.Range(
+                                       -randomDelay,
+                                       randomDelay
+                                   );
 
             nextCycleDelay = Mathf.Max(0.1f, nextCycleDelay);
 
             yield return new WaitForSeconds(nextCycleDelay);
-        }
-    }
-
-    private void ShuffleArray(int[] array)
-    {
-        for (int i = array.Length - 1; i > 0; i--)
-        {
-            int randomIndex = Random.Range(0, i + 1);
-
-            int temp = array[i];
-            array[i] = array[randomIndex];
-            array[randomIndex] = temp;
         }
     }
 }
