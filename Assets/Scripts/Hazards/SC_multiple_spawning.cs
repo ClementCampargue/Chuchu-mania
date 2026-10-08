@@ -5,8 +5,8 @@ public class SC_multiple_spawning : MonoBehaviour
 {
     [Header("Prefabs")]
     public GameObject normalPrefab;
-    public GameObject specialPrefab1; // Probabilité selon proba_spe_1
-    public GameObject specialPrefab2; // Probabilité selon proba_spe_2
+    public GameObject specialPrefab1; // Pourcentage selon proba_spe_1
+    public GameObject specialPrefab2; // Pourcentage selon proba_spe_2
 
     [Header("Positions de spawn")]
     public Transform[] spawnPositions = new Transform[3];
@@ -20,8 +20,11 @@ public class SC_multiple_spawning : MonoBehaviour
     public float columnDelay = 0.3f;
     public float randomColumnDelay = 0.15f;
 
-    [Header("Probas")]
+    [Header("Probabilités sur 100")]
+    [Range(0f, 100f)]
     public float proba_spe_1 = 3f;
+
+    [Range(0f, 100f)]
     public float proba_spe_2 = 5f;
 
     private void Start()
@@ -47,7 +50,7 @@ public class SC_multiple_spawning : MonoBehaviour
                 specialColumn = Random.Range(0, spawnPositions.Length);
             }
 
-            // Spawn des 3 colonnes
+            // Spawn des colonnes
             for (int i = 0; i < spawnPositions.Length; i++)
             {
                 GameObject prefabToSpawn = normalPrefab;
@@ -96,14 +99,17 @@ public class SC_multiple_spawning : MonoBehaviour
 
     private int GetSpecialType()
     {
+        // Tirage aléatoire entre 0 et 100
+        float randomValue = Random.Range(0f, 100f);
+
         // Spécial 2
-        if (Random.Range(0f, proba_spe_2) < 1f)
+        if (randomValue < proba_spe_2)
         {
             return 2;
         }
 
         // Spécial 1
-        if (Random.Range(0f, proba_spe_1) < 1f)
+        if (randomValue < proba_spe_2 + proba_spe_1)
         {
             return 1;
         }
