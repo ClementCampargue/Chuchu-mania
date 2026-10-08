@@ -357,7 +357,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 5
   m_Sprite: {fileID: 21300000, guid: 7ac94d8abfd32bf4c974a88aa631465c, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -431,6 +431,7 @@ MonoBehaviour:
   current_position: 0
   spawn_point: {fileID: 8162171071610552148}
   offScreenDistance: 0.5
+  damage: {fileID: 0}
 --- !u!95 &893491450388138056
 Animator:
   serializedVersion: 7
