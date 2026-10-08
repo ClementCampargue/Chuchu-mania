@@ -43,7 +43,7 @@ TextureImporter:
   nPOTScale: 0
   lightmap: 0
   compressionQuality: 50
-  spriteMode: 1
+  spriteMode: 2
   spriteExtrude: 1
   spriteMeshType: 1
   alignment: 0
@@ -97,23 +97,45 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: HUD_0
+      name: Chuchu_Grid_0
       rect:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 448
-        height: 336
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        width: 30
+        height: 37
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 505e2544db04ba0a0800000000000000
-      internalID: -6869325624984279803
+      spriteID: ba4e7960f8c6add4fbadb8b04d2c1eea
+      internalID: -2006000825
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Chuchu_Grid_1
+      rect:
+        serializedVersion: 2
+        x: 30
+        y: 0
+        width: 30
+        height: 37
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 516f91db5ce18c0418f8f1be74860af8
+      internalID: -1155943738
       vertices: []
       indices: 
       edges: []
@@ -132,6 +154,8 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
+      Chuchu_Grid_0: -2006000825
+      Chuchu_Grid_1: -1155943738
       HUD_0: -6869325624984279803
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
