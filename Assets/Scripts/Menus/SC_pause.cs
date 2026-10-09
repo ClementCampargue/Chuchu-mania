@@ -40,7 +40,7 @@ public class SC_pause : MonoBehaviour
 
     private SC_screenshot_transition transition;
 
-
+    public AudioSource cancel;
     private void OnEnable()
     {
         if (backAction != null)
@@ -271,7 +271,9 @@ public class SC_pause : MonoBehaviour
         isPaused = false;
         tuto = false;
         settings = false;
-
+        Hide_sure();
+        Hide_sure_retry();
+        Hide_sure_quit();
         if (pauseMenu != null)
             pauseMenu.SetActive(false);
 
@@ -392,6 +394,7 @@ public class SC_pause : MonoBehaviour
     }
     public void Hide_tutorial()
     {
+        cancel.Play();
         tuto = false;
 
         if (tuto_window != null)
@@ -418,6 +421,7 @@ public class SC_pause : MonoBehaviour
     }
     public void Hide_sure()
     {
+        cancel.Play();
         areyousure_ = false;
 
         if (areyousure != null)
@@ -444,6 +448,7 @@ public class SC_pause : MonoBehaviour
     }
     public void Hide_sure_retry()
     {
+        cancel.Play();
         areyousure_retry = false;
 
         if (areyousureretry != null)
@@ -471,6 +476,7 @@ public class SC_pause : MonoBehaviour
     }
     public void Hide_sure_quit()
     {
+        cancel.Play();
         areyousure_quit = false;
 
         if (areyousurequit != null)
@@ -483,6 +489,7 @@ public class SC_pause : MonoBehaviour
 
     public void Hide_settings()
     {
+        cancel.Play();
         settings = false;
 
         if (settings_ != null)

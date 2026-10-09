@@ -32,6 +32,10 @@ public class SC_sticker_popup : MonoBehaviour
     public bool can_quit;
     public GameObject new_;
     public GameObject rarity_;
+
+    public AudioSource source;
+    public AudioClip common_sfx;
+    public AudioClip rare_sfx;
     // --------------------------------------------------
     // QUEUES
     // --------------------------------------------------
@@ -91,6 +95,10 @@ public class SC_sticker_popup : MonoBehaviour
         {
             if (SC_shop_manager.instance != null)
             {
+                SC_shop_manager.instance.anim.ResetTrigger("Show_menu");
+                SC_shop_manager.instance.anim.SetTrigger("talk");
+                SC_shop_manager.instance.typewriter.clear_text();
+
                 SC_shop_manager.instance.canquit = false;
             }
         }
@@ -265,6 +273,7 @@ public class SC_sticker_popup : MonoBehaviour
 
     private void DisplaySticker(SO_Sticker sticker)
     {
+        SC_music_manager.instance.pause_music();
         if (sticker == null)
             return;
         new_.SetActive(!sticker.unlocked);
@@ -285,14 +294,17 @@ public class SC_sticker_popup : MonoBehaviour
             {
                 case 0:
                     rarity.text = common.GetLocalizedString();
+                    source.PlayOneShot(common_sfx);
                     break;
 
                 case 1:
                     rarity.text = rare.GetLocalizedString();
+                    source.PlayOneShot(rare_sfx);
                     break;
 
                 case 2:
                     rarity.text = epic.GetLocalizedString();
+                    source.PlayOneShot(rare_sfx);
                     break;
 
                 default:
@@ -412,13 +424,6 @@ public class SC_sticker_popup : MonoBehaviour
         // SHOP
         // ----------------------------------------------
 
-        if (SceneManager.GetActiveScene().name == "Shop")
-        {
-            if (SC_shop_manager.instance != null)
-            {
-                SC_shop_manager.instance.show_menu();
-            }
-        }
 
         // ----------------------------------------------
         // ACHIEVEMENTS
@@ -440,6 +445,7 @@ public class SC_sticker_popup : MonoBehaviour
         // ----------------------------------------------
         // ANIMATION
         // ----------------------------------------------
+        SC_music_manager.instance.resume_music();
 
         if (anim != null)
         {
@@ -458,6 +464,15 @@ public class SC_sticker_popup : MonoBehaviour
     private IEnumerator DisableAfterHide()
     {
         yield return new WaitForSeconds(0.5f);
+        if (SceneManager.GetActiveScene().name == "Shop")
+        {
+            if (SC_shop_manager.instance != null)
+            {
+                SC_money_shop.instance.Buy(SC_money_shop.instance.future_price);
+
+                SC_shop_manager.instance.Talk_();
+            }
+        }
 
         gameObject.SetActive(false);
 

@@ -8,6 +8,9 @@ public class SC_guard_movement : MonoBehaviour
         Chase,
         Patrol
     }
+    public GameObject exclamation;
+    public Transform exclamation_point;
+    public SC_damage_player damage;
     [Header("Accélération / Décélération - Traque")]
     [Tooltip("Vitesse maximale du garde pendant la traque.")]
     [SerializeField] private float chaseMaxSpeed = 4.5f;
@@ -393,6 +396,7 @@ public class SC_guard_movement : MonoBehaviour
          * Le garde peut donc réellement s'endormir
          * au milieu d'un déplacement.
          */
+        damage.enabled = false;
 
         isSleeping = true;
 
@@ -451,6 +455,8 @@ public class SC_guard_movement : MonoBehaviour
 
     private void FinishSleep()
     {
+        damage.enabled = true;
+
         isSleeping = false;
 
         if (animator != null)
@@ -1615,7 +1621,6 @@ public class SC_guard_movement : MonoBehaviour
 
         currentPatrolIndex = -1;
 
-        SetFlashlight(true);
 
         /*
          * On ne reset pas forcément le timer ici :
@@ -1722,8 +1727,11 @@ public class SC_guard_movement : MonoBehaviour
                     true
                 );
                 currentChaseSpeed = 0;
-                SetFlashlight(true);
+                if (!isChasing)
+                {
+                    SetFlashlight(true);
 
+                }
                 break;
 
             case AnimationMovement.LadderUp:
@@ -2328,7 +2336,10 @@ public class SC_guard_movement : MonoBehaviour
 
         return bestNode;
     }
-
+    private void OnDisable()
+    {
+        Destroy(GetComponent<Rigidbody2D>());
+    }
     // ============================================================
     // API : CHASE
     // ============================================================
@@ -2372,8 +2383,9 @@ public class SC_guard_movement : MonoBehaviour
 
                 ResetGoofyScale();
             }
-
+            Instantiate(exclamation, exclamation_point.transform.position,Quaternion.identity);
             isChasing = true;
+            SetFlashlight(false);
 
             isWaitingAtPatrolPoint =
                 false;
@@ -2381,7 +2393,6 @@ public class SC_guard_movement : MonoBehaviour
             movementMode =
                 MovementMode.Chase;
 
-            SetFlashlight(true);
 
             chaseTimer = 0f;
             currentChaseSpeed = 0f;
@@ -2414,12 +2425,6 @@ public class SC_guard_movement : MonoBehaviour
         movementMode =
             MovementMode.Patrol;
 
-        /*
-         * Le garde s'arrête immédiatement et dort.
-         *
-         * Ce sommeil n'est PAS le sommeil aléatoire :
-         * c'est le sommeil déclenché par la fin de la traque.
-         */
 
         StartSleep();
     }
@@ -2429,7 +2434,7 @@ public class SC_guard_movement : MonoBehaviour
         sleepTimer = sleepDuration;
 
         FinishPath();
-
+        damage.enabled  = false;
         animator.SetTrigger("sleep");
         animator.SetBool("Walk", false);
         animator.SetBool("LadderUp", false);

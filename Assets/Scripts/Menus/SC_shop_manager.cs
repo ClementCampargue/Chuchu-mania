@@ -30,6 +30,8 @@ public class SC_shop_manager : MonoBehaviour
 
     public bool cantalk;
     public bool canquit;
+
+    public AudioSource cancel;
     private void Awake()
     {
         instance = this;
@@ -124,6 +126,25 @@ public class SC_shop_manager : MonoBehaviour
         anim.ResetTrigger("Show_menu");
         anim.SetTrigger("Show_gacha");
         talking = false;
+    }
+
+    public void Talk_()
+    {
+        SC_Button currentButton = menu.GetCurrentButton();
+
+        if (currentButton != null)
+            currentButton.UnSelect();
+
+        cantalk = false;
+        canquit = false;
+        talking = true;
+
+        anim.ResetTrigger("Show_menu");
+        anim.SetTrigger("talk");
+
+        buttons_.SetActive(false);
+        typewriter.TriggerText(thanks.GetLocalizedString());
+
     }
 
     public void Talk()

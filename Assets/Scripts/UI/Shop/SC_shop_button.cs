@@ -26,6 +26,9 @@ public class SC_shop_button : MonoBehaviour
     public Animator anim;
     public GameObject cant_buy_visual;
     public GameObject new_;
+    public AudioSource meow;
+    public AudioSource buy;
+    public AudioSource cantbuy;
     private void OnEnable()
     {
         if (!random_sticker && item == null)
@@ -102,11 +105,13 @@ public class SC_shop_button : MonoBehaviour
         {
             if (SC_money_manager.instance.money >= 25)
             {
+                meow.Play();
                 shop.Show_gacha();
 
             }
             else
             {
+                cantbuy.Play();
                 anim.ResetTrigger("Hover");
                 anim.ResetTrigger("Unhover");
                 anim.ResetTrigger("Press");
@@ -116,19 +121,21 @@ public class SC_shop_button : MonoBehaviour
         }
         else
         {
+
             if (sticker != null)
             {
                 if (SC_money_manager.instance.money >= sticker.Price)
                 {
-                    SC_money_shop.instance.Buy(sticker.Price);
+                    buy.Play();
+                    SC_money_shop.instance.future_price = sticker.Price;
                     shop.buttons_.SetActive(false);
                     SC_sticker_popup.instance.update_visuals(sticker);
                     sticker.unlocked = true;
-                    description = shop.thanks;
                 }
                 else
                 {
                     anim.ResetTrigger("Hover");
+                    cantbuy.Play();
                     anim.ResetTrigger("Unhover");
                     anim.ResetTrigger("Press");
                     anim.SetTrigger("cant_buy");
@@ -139,14 +146,15 @@ public class SC_shop_button : MonoBehaviour
             {
                 if (SC_money_manager.instance.money >= item.Price)
                 {
-                    SC_money_shop.instance.Buy(item.Price);
+                    buy.Play();
+                    SC_money_shop.instance.future_price = item.Price;
                     shop.buttons_.SetActive(false);
                     SC_sticker_popup.instance.update_visuals(item);
-                    description = shop.thanks;
                 }
                 else
                 {
                     anim.ResetTrigger("Hover");
+                    cantbuy.Play();
                     anim.ResetTrigger("Unhover");
                     anim.ResetTrigger("Press");
                     anim.SetTrigger("cant_buy");

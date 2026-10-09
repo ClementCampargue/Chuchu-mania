@@ -27,8 +27,9 @@ public class SC_balloon : MonoBehaviour
 
     public SpriteRenderer sprite_renderer;
 
+    public SC_damage_player damage;
     public Animator anim;
-
+    public SC_enemy_damage enemy;
     private void Start()
     {
         // Choisit un skin aléatoire
@@ -108,7 +109,17 @@ public class SC_balloon : MonoBehaviour
     }
 
     private void PopBalloon()
-    {
+    {if(enemy != null)
+        {
+            enemy.knockbackForce = 0;
+            enemy.Knockback(transform);
+            enemy.transform.parent = null;
+            enemy.transform.position = transform.position;
+        }
+    if(damage != null)
+        {
+            Destroy(damage);
+        }
         anim.enabled = true;
         this.enabled = false;
     }

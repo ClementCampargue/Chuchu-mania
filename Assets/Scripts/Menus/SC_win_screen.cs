@@ -1,5 +1,6 @@
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.Audio;
 using UnityEngine.InputSystem;
 
 public class SC_win_screen : MonoBehaviour
@@ -11,6 +12,7 @@ public class SC_win_screen : MonoBehaviour
     public InputActionReference confirm;
     private bool once;
     private bool canact;
+    public AudioSource audioSource;
     private void Awake()
     {
         instance = this;
@@ -32,6 +34,7 @@ public class SC_win_screen : MonoBehaviour
 
     public void transition_()
     {
+        audioSource.Play();
         anim.ResetTrigger("show");
         anim.SetTrigger("hide");
         transition.Capture("Cutscene"+ (PlayerPrefs.GetInt("Level")+1));

@@ -88,6 +88,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   spr: {fileID: 166561941587018196}
   sticker: {fileID: 11400000, guid: 22be6fc2b8bda6c4d8db0dd194f3332e, type: 2}
+  item: {fileID: 0}
   selectAction: {fileID: -2099379676528639254, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
   price_: 0
   price: {fileID: 9041591597979747797}
@@ -106,6 +107,9 @@ MonoBehaviour:
   anim: {fileID: 6307130964858840321}
   cant_buy_visual: {fileID: 9075297190448921647}
   new_: {fileID: 793036437463494477}
+  meow: {fileID: 0}
+  buy: {fileID: 0}
+  cantbuy: {fileID: 0}
   references:
     version: 2
     RefIds: []
@@ -626,7 +630,7 @@ AudioSource:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3177000589460232220}
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: -7922330805884838864, guid: 9284900b67a66ab4e888b9bb58563f0e, type: 2}
   m_audioClip: {fileID: 0}

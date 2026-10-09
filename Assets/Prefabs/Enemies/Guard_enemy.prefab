@@ -162,6 +162,7 @@ Transform:
   m_Children:
   - {fileID: 7868333823818993558}
   - {fileID: 3799492006332694741}
+  - {fileID: 4326461346714959402}
   m_Father: {fileID: 5413536229409310387}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!95 &2519460489625166877
@@ -466,6 +467,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bf3cdf50624d3b244b2b6de3d4e664c9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  exclamation: {fileID: 4181699033222870022, guid: 2c642d6e40fb2624287c03f9ace97d33, type: 3}
+  exclamation_point: {fileID: 4326461346714959402}
+  damage: {fileID: 2680671972605215812}
   chaseMaxSpeed: 4.5
   chaseAccelerationTime: 0.8
   chaseDecelerationTime: 0.5
@@ -5408,6 +5412,37 @@ ParticleSystemRenderer:
   m_MeshWeighting2: 1
   m_MeshWeighting3: 1
   m_MaskInteraction: 0
+--- !u!1 &4310124918852321061
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4326461346714959402}
+  m_Layer: 8
+  m_Name: GameObject
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4326461346714959402
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4310124918852321061}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0.99, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1752671880555459536}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &5127640550307788510
 GameObject:
   m_ObjectHideFlags: 0
@@ -5518,6 +5553,7 @@ MonoBehaviour:
   animator: {fileID: 2519460489625166877}
   ps: {fileID: 5603709347258070891}
   visuals: {fileID: 1752671880555459536}
+  trs: {fileID: 1752671880555459536}
   collision: {fileID: 468162753760340700}
   stunDetection: {fileID: 468162753760340700}
   playerLayer:
@@ -5540,6 +5576,7 @@ MonoBehaviour:
   isKnockedBack: 0
   isStunned: 0
   die_burn: 1
+  script: {fileID: 4239849883444337517}
 --- !u!1 &5359757031228057345
 GameObject:
   m_ObjectHideFlags: 0

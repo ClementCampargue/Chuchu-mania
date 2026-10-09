@@ -1,4 +1,5 @@
 using System.Collections;
+using UnityEditor;
 using UnityEngine;
 
 public class SC_enemy_damage : MonoBehaviour
@@ -8,6 +9,7 @@ public class SC_enemy_damage : MonoBehaviour
     public Animator animator;
     public ParticleSystem ps;
     public Transform visuals;
+    public Transform trs;
 
     [Header("Collision")]
     public Transform collision;
@@ -46,8 +48,12 @@ public class SC_enemy_damage : MonoBehaviour
 
     private SC_player player;
     public bool die_burn;
+    public MonoBehaviour script;
     void Start()
-    {
+    {if(trs == null)
+        {
+            trs = transform;
+        }
         eat = SC_icecream_eat_system.instance;
         player = SC_player.instance;
     }
@@ -71,13 +77,13 @@ public class SC_enemy_damage : MonoBehaviour
         if (playerCollider != null && die_burn && player.burning)
         {
 
-            bool playerOnRight = playerCollider.transform.position.x > transform.position.x;
+            bool playerOnRight = playerCollider.transform.position.x > trs.position.x;
             Knockback(playerOnRight);
         }
         if (playerCollider != null && eat.isPowerUpActive)
         {
 
-            bool playerOnRight = playerCollider.transform.position.x > transform.position.x;
+            bool playerOnRight = playerCollider.transform.position.x > trs.position.x;
             Knockback(playerOnRight);
         }
     }
@@ -119,7 +125,7 @@ public class SC_enemy_damage : MonoBehaviour
     public void Knockback(bool playerOnRight)
     {
         if (isKnockedBack) return;
-
+        if (script != null) { script.enabled = false; }
         isStunned = false;
         isKnockedBack = true;
         player.anim.SetTrigger("Punch");
@@ -155,7 +161,7 @@ public class SC_enemy_damage : MonoBehaviour
     {
         knockbackVelocity.y -= gravity * Time.deltaTime;
 
-        transform.position += (Vector3)(knockbackVelocity * Time.deltaTime);
+        trs.position += (Vector3)(knockbackVelocity * Time.deltaTime);
 
         if (visuals != null)
             visuals.Rotate(Vector3.forward * spinSpeed * Time.deltaTime);

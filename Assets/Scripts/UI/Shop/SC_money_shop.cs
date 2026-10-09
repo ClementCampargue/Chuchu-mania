@@ -17,7 +17,7 @@ public class SC_money_shop : MonoBehaviour
     public static SC_money_shop instance;
 
     private Coroutine moneyAnimation;
-
+    public int future_price;
     private void Awake()
     {
         instance = this;

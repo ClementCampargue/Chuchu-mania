@@ -12,13 +12,14 @@ public class SC_alarm_system : MonoBehaviour
     public List<SC_levier> levers = new List<SC_levier>();
     public List<SC_guard_movement> guards = new List<SC_guard_movement>();
 
+    public AudioSource exclamation;
     public AudioClip default_music;
     public AudioClip alarm_music;
     public Animator anim;
     public SC_enemy_track_player robot;
 
     public bool hidden;
-
+    public List<Animator> anims;
     private void Awake()
     {
         Instance = this;
@@ -69,12 +70,15 @@ public class SC_alarm_system : MonoBehaviour
 
         anim.enabled = true;
         robot.start_tracking();
-
+        exclamation.Play();
         alarmActive = true;
 
         anim.SetBool("on", true);
 
-        SC_music_manager.instance.update_music(alarm_music);
+        if (!SC_player.instance.eat_system.isPowerUpActive)
+        {
+            SC_music_manager.instance.update_music(alarm_music);
+        }
 
         Debug.Log("ALARME ACTIVÉE");
 
@@ -85,6 +89,10 @@ public class SC_alarm_system : MonoBehaviour
             {
                 lever.ActivateLever();
             }
+        }
+        foreach (Animator anim in anims)
+        {
+            anim.SetBool("alarm", true);
         }
 
         foreach (SC_guard_movement guard in guards)
@@ -137,8 +145,10 @@ public class SC_alarm_system : MonoBehaviour
         anim.SetBool("on", false);
 
         robot.end_tracking();
-
-        SC_music_manager.instance.update_music(default_music);
+        if (!SC_player.instance.eat_system.isPowerUpActive)
+        {
+            SC_music_manager.instance.update_music(default_music);
+        }
 
         alarmActive = false;
 
@@ -146,7 +156,10 @@ public class SC_alarm_system : MonoBehaviour
         {
           guard.SetChaseMode(false);
         }
-
+        foreach (Animator anim in anims)
+        {
+            anim.SetBool("alarm", false);
+        }
         Debug.Log("ALARME ARRÊTÉE");
     }
 

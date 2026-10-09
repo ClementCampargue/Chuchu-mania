@@ -77,6 +77,18 @@ public class SC_player : MonoBehaviour
     public float groundCheckRadius = 0.2f;
     public LayerMask groundLayer;
 
+    [Header("Fall")]
+    [Tooltip("Nom de l'état Animator joué lorsque Chuchu tombe naturellement.")]
+    public string fallAnimName = "Fall";
+    [Tooltip("Déclenche le son de landing après une chute naturelle.")]
+    public bool playLandSoundAfterFall = true;
+
+    private bool wasGroundedBeforeCheck;
+    private bool isFalling;
+    private bool fallWasTriggeredByJump;
+    private bool landPending;
+
+
     [Header("Damage Detection")]
     public Transform damageCheck;
     public float damageRadius = 0.5f;
@@ -144,6 +156,7 @@ public class SC_player : MonoBehaviour
     public SC_juiciness transformation;
     public SC_juiciness die;
     public SC_juiciness land;
+    public SC_juiciness start;
 
     public AudioSource grid;
     public AudioSource run;
@@ -156,7 +169,6 @@ public class SC_player : MonoBehaviour
 
     public bool wasGrounded;
     public bool isFrozen;
-
 
     // =========================================================
     // AWAKE
@@ -206,6 +218,11 @@ public class SC_player : MonoBehaviour
         transformed.SetActive(false);
 
         base_gravity = rb.gravityScale;
+
+        isFalling = false;
+        fallWasTriggeredByJump = false;
+        wasGrounded = false;
+        wasGroundedBeforeCheck = false;
 
         spriteRenderer.material = normalMaterial;
     }
@@ -335,8 +352,21 @@ public class SC_player : MonoBehaviour
         // ANIMATION
         // -----------------------------------------------------
 
+        // Une chute naturelle commence uniquement lorsqu'on quitte
+        // le sol sans être dans une animation de saut volontaire.
+        if (!isGrounded &&
+            wasGroundedBeforeCheck &&
+            !isJumping &&
+            !isClimbing &&
+            rb.linearVelocity.y < 0f)
+        {
+            StartFallAnimation();
+        }
+
         if (isClimbing)
         {
+            StopFallAnimation();
+
             if (moveInput.sqrMagnitude > 0.01f)
             {
                 if (!grid.isPlaying)
@@ -350,19 +380,14 @@ public class SC_player : MonoBehaviour
                 anim.SetBool("Run", false);
             }
         }
-        else
+        else if (isGrounded)
         {
+            StopFallAnimation();
+
             if (Mathf.Abs(moveInput.x) > 0.1f)
             {
-                if (isGrounded)
-                {
-                    if (!run.isPlaying)
-                        run.Play();
-                }
-                else
-                {
-                    run.Stop();
-                }
+                if (!run.isPlaying)
+                    run.Play();
 
                 anim.SetBool("Run", true);
             }
@@ -372,97 +397,41 @@ public class SC_player : MonoBehaviour
                 anim.SetBool("Run", false);
             }
         }
+        else
+        {
+            // Dans les airs, Chuchu ne doit jamais conserver l'animation Run.
+            run.Stop();
+            anim.SetBool("Run", false);
 
+            // Une fois qu'on descend, on joue l'animation de chute.
+            if (!isJumping &&
+                !isClimbing &&
+                rb.linearVelocity.y < 0f)
+            {
+                StartFallAnimation();
+            }
+        }
 
         // -----------------------------------------------------
         // LANDING
         // -----------------------------------------------------
 
-        if (IsAnimationPlaying("jump_idle") &&
+        // Détection générique air -> sol.
+        // Elle fonctionne pour :
+        // - une chute depuis une plateforme ;
+        // - un saut ;
+        // - un drop-through ;
+        // - une chute après un knockback.
+        if (!wasGroundedBeforeCheck &&
             isGrounded &&
-            Mathf.Abs(rb.linearVelocity.y) < 0.01f &&
-            rb.gravityScale > 0)
+            !isClimbing &&
+            rb.gravityScale != 0f)
         {
-            anim.ResetTrigger("Jump");
-            anim.SetTrigger("Land");
-
-            moveSpeed = base_speed;
-
-            land.PlayJuice();
+            HandleLanding();
         }
 
-
-        if (IsAnimationPlaying("jump_idle") &&
-            isGrounded &&
-            Mathf.Abs(rb.linearVelocity.y) > -0.1f &&
-            rb.gravityScale < 0)
-        {
-            anim.ResetTrigger("Jump");
-            anim.SetTrigger("Land");
-
-            moveSpeed = base_speed;
-
-            land.PlayJuice();
-        }
-
-
-        if (IsAnimationPlaying("climb_move") &&
-            isGrounded &&
-            Mathf.Abs(rb.linearVelocity.y) < 0.01f &&
-            rb.gravityScale > 0)
-        {
-            anim.ResetTrigger("Jump");
-            anim.SetTrigger("Land");
-
-            moveSpeed = base_speed;
-
-            land.PlayJuice();
-        }
-
-
-        if (IsAnimationPlaying("climb_move") &&
-            isGrounded &&
-            Mathf.Abs(rb.linearVelocity.y) > -0.1f &&
-            rb.gravityScale < 0)
-        {
-            anim.ResetTrigger("Jump");
-            anim.SetTrigger("Land");
-
-            moveSpeed = base_speed;
-
-            land.PlayJuice();
-        }
-
-
-        if (IsAnimationPlaying("hit") &&
-            wasGrounded &&
-            isGrounded &&
-            Mathf.Abs(rb.linearVelocity.y) < 0.1f &&
-            rb.gravityScale > 0)
-        {
-            anim.ResetTrigger("Jump");
-            anim.SetTrigger("Land");
-
-            moveSpeed = base_speed;
-
-            land.PlayJuice();
-        }
-
-
-        if (IsAnimationPlaying("hit") &&
-            !wasGrounded &&
-            isGrounded &&
-            Mathf.Abs(rb.linearVelocity.y) > -0.01f &&
-            rb.gravityScale < 0)
-        {
-            anim.ResetTrigger("Jump");
-            anim.SetTrigger("Land");
-
-            moveSpeed = base_speed;
-
-            land.PlayJuice();
-        }
-
+        wasGrounded = isGrounded;
+        wasGroundedBeforeCheck = isGrounded;
 
         // -----------------------------------------------------
         // FACING
@@ -486,9 +455,6 @@ public class SC_player : MonoBehaviour
                 1
             );
         }
-
-
-        wasGrounded = isGrounded;
 
 
         // -----------------------------------------------------
@@ -840,23 +806,33 @@ public class SC_player : MonoBehaviour
 
         if (isClimbing)
         {
-            StopClimbingJump();
+            if (grillage.isLadder)
+            {
+                StopClimbing();
+            }
+            else
+            {
+                StopClimbingJump();
 
-            isJumping = true;
-            jumpTimeCounter = maxJumpTime;
+                StopFallAnimation();
+                isJumping = true;
+                jumpTimeCounter = maxJumpTime;
 
-            rb.linearVelocity =
-                new Vector2(
-                    rb.linearVelocity.x,
-                    jumpForce
-                );
+                rb.linearVelocity =
+                    new Vector2(
+                        rb.linearVelocity.x,
+                        jumpForce
+                    );
 
-            anim.SetTrigger("Jump");
+                anim.SetTrigger("Jump");
 
-            jump.PlayJuice();
+                jump.PlayJuice();
 
-            jumpBufferCounter = 0f;
-            coyoteTimeCounter = 0f;
+                jumpBufferCounter = 0f;
+                coyoteTimeCounter = 0f;
+            }
+
+
 
             return;
         }
@@ -875,6 +851,7 @@ public class SC_player : MonoBehaviour
 
             if (canPerformJump)
             {
+                StopFallAnimation();
                 isJumping = true;
                 jumpTimeCounter = maxJumpTime;
 
@@ -932,6 +909,83 @@ public class SC_player : MonoBehaviour
     // =========================================================
     // ANIMATION
     // =========================================================
+
+    // =========================================================
+    // FALL / LANDING
+    // =========================================================
+
+    private void StartFallAnimation()
+    {
+        if (isFalling)
+            return;
+
+        isFalling = true;
+        fallWasTriggeredByJump = isJumping;
+
+        run.Stop();
+        grid.Stop();
+
+        anim.SetBool("Run", false);
+
+        // Si ton Animator possède un état "Fall" nommé exactement
+        // "Fall", il sera utilisé directement.
+        anim.ResetTrigger("Land");
+        anim.SetTrigger("Fall");
+    }
+
+    private void StopFallAnimation()
+    {
+        if (!isFalling)
+            return;
+
+        isFalling = false;
+        fallWasTriggeredByJump = false;
+    }
+
+    private void HandleLanding()
+    {
+        bool landedFromFall = isFalling;
+        bool landedFromJump = isJumping || IsAnimationPlaying("jump_idle");
+        moveSpeed =
+base_speed;
+        burning = false;
+
+        PowermoveSpeed =
+            BasePowermoveSpeed;
+        canClimb = true;
+        isFalling = false;
+        fallWasTriggeredByJump = false;
+        isJumping = false;
+
+        run.Stop();
+        grid.Stop();
+
+        anim.SetBool("Run", false);
+        anim.ResetTrigger("Jump");
+
+        // L'animation Land est jouée pour tous les vrais passages air -> sol.
+        anim.SetTrigger("Land");
+
+        moveSpeed = base_speed;
+
+        if (landedFromFall && playLandSoundAfterFall)
+        {
+            if (land != null)
+                land.PlayJuice();
+        }
+        else if (landedFromJump)
+        {
+            if (land != null)
+                land.PlayJuice();
+        }
+        else
+        {
+            // Même une chute provoquée par un knockback doit produire
+            // le son de landing.
+            if (land != null)
+                land.PlayJuice();
+        }
+    }
 
     public bool IsAnimationPlaying(
         string animationName)
@@ -1304,7 +1358,14 @@ public class SC_player : MonoBehaviour
                 controlTime
             )
         );
-
+        anim.SetBool(
+       "Hit",
+       true
+   );
+        Invoke(
+         "delay",
+         0.15f
+     );
 
         if (isInvincible ||
             !canTakeDamage)
@@ -1321,11 +1382,7 @@ public class SC_player : MonoBehaviour
             false
         );
 
-        anim.SetBool(
-            "Hit",
-            true
-        );
-
+   
         isStunned = false;
         isFrozen = false;
 
@@ -1567,7 +1624,6 @@ public class SC_player : MonoBehaviour
         if (!other.CompareTag("Climb"))
             return;
 
-        canClimb = true;
 
         grillage =
             other.GetComponent<SC_grillage>();
@@ -1631,7 +1687,7 @@ public class SC_player : MonoBehaviour
     private void TryStartClimbing(
         Vector2 input)
     {
-        if (!canClimb ||!climb_delay ||
+        if (!canClimb || !climb_delay ||
             isClimbing ||
             grillage == null ||
             climbReattachTimer > 0f)
@@ -1690,6 +1746,7 @@ public class SC_player : MonoBehaviour
             climbReattachTimer > 0f)
             return;
         collision.isTrigger = true;
+        StopFallAnimation();
         isClimbing = true;
 
         // -----------------------------------------------------
@@ -1788,7 +1845,7 @@ public class SC_player : MonoBehaviour
     {
         if (!isClimbing)
             return;
-        Invoke("delay_climb",0.5f);
+        Invoke("delay_climb", 0.5f);
         grillage = null;
         canClimb = false;
         isClimbing = false;
@@ -1934,7 +1991,13 @@ public class SC_player : MonoBehaviour
         isInvincible = false;
         burning = false;
         canTakeDamage = true;
+        moveSpeed =
+base_speed;
+        burning = false;
 
+        PowermoveSpeed =
+            BasePowermoveSpeed;
+        canClimb = true;
         isClimbing = false;
         canClimb = false;
         grillage = null;
@@ -1958,6 +2021,11 @@ public class SC_player : MonoBehaviour
         coyoteTimeCounter = 0f;
         jumpBufferCounter = 0f;
         isJumping = false;
+
+        isFalling = false;
+        fallWasTriggeredByJump = false;
+        wasGrounded = false;
+        wasGroundedBeforeCheck = false;
 
         if (health != null)
             health.revive();

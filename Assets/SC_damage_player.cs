@@ -20,7 +20,10 @@ public class SC_damage_player : MonoBehaviour
     {
         if (collision.CompareTag("Player"))
         {
-            SC_player.instance.TakeDamage(damage, ejection_power,transform.position);
+            if (this.enabled)
+            {
+                SC_player.instance.TakeDamage(damage, ejection_power, transform.position);
+            }
         }
     }
 }

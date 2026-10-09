@@ -124,7 +124,8 @@ public class SC_fish_enemy : MonoBehaviour
     private bool leavingScreen = false;
     private Vector3 leaveStartPosition;
 
-
+    public SC_juiciness jump;
+    public SC_juiciness angry;
     private void Start()
     {
         water = SC_water_physic.instance;
@@ -232,6 +233,8 @@ public class SC_fish_enemy : MonoBehaviour
 
     private void SetAngryMode()
     {
+        angry.PlayJuice();
+
         TriggerAnimation("change_state");
         BoolAnimation("angry", true);
     }
@@ -467,7 +470,7 @@ public class SC_fish_enemy : MonoBehaviour
             StartChasingChuchu();
             return;
         }
-
+        jump.PlayJuice();
         TriggerAnimation("jump");
 
         jumpX =

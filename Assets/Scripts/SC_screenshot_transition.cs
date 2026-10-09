@@ -30,7 +30,6 @@ public class SC_screenshot_transition : MonoBehaviour
         // Sauvegarde état initial
         RenderTexture previousRT = targetCamera.targetTexture;
         SC_game_master.instance.previousScene = SceneManager.GetActiveScene().name;
-
         // Assure la RT active
         RenderTexture.active = outputTexture;
 

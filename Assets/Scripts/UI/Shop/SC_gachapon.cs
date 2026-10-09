@@ -66,6 +66,8 @@ public class SC_gachapon : MonoBehaviour
     // ============================================================
     // UPDATE
     // ============================================================
+    public AudioSource cancel;
+    public AudioSource buy_;
 
     void Start()
     {
@@ -84,6 +86,7 @@ public class SC_gachapon : MonoBehaviour
 
         if (quit.action.WasPerformedThisFrame())
         {
+            cancel.Play();
             opened = false;
             Invoke("close_gacha", 0.05f);
         }
@@ -191,7 +194,7 @@ public class SC_gachapon : MonoBehaviour
             return;
 
         shop.anim.SetTrigger("open");
-
+        buy_.Play();
         opened = false;
         canbuy = false;
 
@@ -204,7 +207,7 @@ public class SC_gachapon : MonoBehaviour
         SavePity();
 
         // Paiement
-        SC_money_shop.instance.Buy(totalPrice);
+        SC_money_shop.instance.future_price = totalPrice;
 
         Invoke("spawn_capsules", 1f);
         Invoke("show_screen", 2f);

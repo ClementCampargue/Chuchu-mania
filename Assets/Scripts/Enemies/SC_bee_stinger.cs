@@ -10,18 +10,36 @@ public class SC_bee_stinger : MonoBehaviour
     public float fire_rate = 3f;
     public float move_speed = 5f;
     public Animator anim;
-    public SpriteRenderer spriteRenderer;
 
     public int current_position;
 
     private bool isMoving;
     private bool isTeleporting;
+    private bool isCheeksSequence;
+
     public Transform spawn_point;
     private Coroutine attackCoroutine;
 
     // Distance hors écran avant de téléporter l'abeille
     public float offScreenDistance = 2f;
+
     public SC_enemy_damage damage;
+
+    public AudioSource fly;
+    public AudioSource inflate;
+    public SC_juiciness fire;
+
+    [Header("Dard / Cheeks")]
+    // Hauteur Y précise jusqu'à laquelle l'abeille monte
+    public float cheeksTargetY = 8f;
+
+    // Vitesse de montée linéaire
+    public float cheeksRiseSpeed = 5f;
+
+    // Temps d'attente une fois arrivée en hauteur
+    public float cheeksDelay = 1.5f;
+
+
     void Start()
     {
         if (positions == null || positions.Count < 4)
@@ -42,6 +60,8 @@ public class SC_bee_stinger : MonoBehaviour
         // Oriente l'abeille vers son premier point
         FlipTowards(positions[current_position].position);
 
+        fly.Play();
+
         // Commence immédiatement le déplacement vers le premier point
         isMoving = true;
 
@@ -49,46 +69,64 @@ public class SC_bee_stinger : MonoBehaviour
         attackCoroutine = StartCoroutine(AttackRoutine());
     }
 
+
     void Update()
     {
+        // Pendant la séquence Cheeks, le système normal est complètement arrêté
+        if (isCheeksSequence)
+            return;
+
         if (isMoving && !isTeleporting)
         {
             MoveBee();
         }
+
         if (damage.isKnockedBack)
         {
             StopAllCoroutines();
             this.enabled = false;
         }
+
+        if (Input.GetKeyDown(KeyCode.I)) 
+        {
+            StartCoroutine(CheeksSequence());
+        }
     }
+
 
     private IEnumerator AttackRoutine()
     {
         while (true)
         {
-           
             // Attend que l'abeille soit arrivée à sa position.
-            yield return new WaitUntil(() => !isMoving && !isTeleporting);
+            yield return new WaitUntil(() => !isMoving && !isTeleporting && !isCheeksSequence);
 
             // Le délai avant l'attaque commence seulement
             // une fois que l'abeille est arrivée.
             yield return new WaitForSeconds(fire_rate);
 
             // Vérification de sécurité
-            if (isMoving || isTeleporting)
+            if (isMoving || isTeleporting || isCheeksSequence)
                 continue;
 
             // Attaque
             attack();
-
         }
     }
 
+
     public void start_moving()
     {
+        if (isCheeksSequence)
+            return;
 
         // Choisir un autre bord
         ChooseNewPosition();
+
+        if (!fly.isPlaying)
+        {
+            fly.Play();
+        }
 
         // Si ce n'est pas un changement de côté,
         // on lance le déplacement normal.
@@ -98,33 +136,54 @@ public class SC_bee_stinger : MonoBehaviour
         }
     }
 
+
     public void spawn_dard()
     {
-        Instantiate(dard, spawn_point.position, spawn_point.rotation);
+        fire.PlayJuice();
+
+        Instantiate(
+            dard,
+            spawn_point.position,
+            spawn_point.rotation
+        );
     }
+
 
     public void attack()
     {
+        if (isCheeksSequence)
+            return;
+
         anim.SetTrigger("fire");
     }
 
+
     public void move()
     {
+        if (isCheeksSequence)
+            return;
+
         isMoving = true;
 
         // Oriente l'abeille vers sa nouvelle destination
         FlipTowards(positions[current_position].position);
     }
 
+
     private void MoveBee()
     {
-        if (isTeleporting)
+        if (isTeleporting || isCheeksSequence)
             return;
 
         Vector3 target = positions[current_position].position;
 
         // Oriente l'abeille dans la direction du déplacement
         FlipTowards(target);
+
+        if (!fly.isPlaying)
+        {
+            fly.Play();
+        }
 
         transform.position = Vector3.MoveTowards(
             transform.position,
@@ -135,13 +194,19 @@ public class SC_bee_stinger : MonoBehaviour
         // Si l'abeille est arrivée au point
         if (Vector3.Distance(transform.position, target) < 0.05f)
         {
+            fly.Stop();
+
             transform.position = target;
             isMoving = false;
         }
     }
 
+
     private void ChooseNewPosition()
     {
+        if (isCheeksSequence)
+            return;
+
         int newPosition;
 
         // Évite de reprendre exactement le même point
@@ -180,6 +245,7 @@ public class SC_bee_stinger : MonoBehaviour
         FlipTowards(positions[current_position].position);
     }
 
+
     private IEnumerator TeleportFromLeftToRight(int newPosition)
     {
         isTeleporting = true;
@@ -217,6 +283,11 @@ public class SC_bee_stinger : MonoBehaviour
 
         FlipTowards(target);
 
+        if (!fly.isPlaying)
+        {
+            fly.Play();
+        }
+
         while (Vector3.Distance(transform.position, target) > 0.05f)
         {
             FlipTowards(target);
@@ -235,6 +306,7 @@ public class SC_bee_stinger : MonoBehaviour
         isTeleporting = false;
         isMoving = false;
     }
+
 
     private IEnumerator TeleportFromRightToLeft(int newPosition)
     {
@@ -273,6 +345,11 @@ public class SC_bee_stinger : MonoBehaviour
 
         FlipTowards(target);
 
+        if (!fly.isPlaying)
+        {
+            fly.Play();
+        }
+
         while (Vector3.Distance(transform.position, target) > 0.05f)
         {
             FlipTowards(target);
@@ -292,6 +369,7 @@ public class SC_bee_stinger : MonoBehaviour
         isMoving = false;
     }
 
+
     private bool IsLeft(int position)
     {
         Vector3 pos = positions[position].position;
@@ -301,6 +379,7 @@ public class SC_bee_stinger : MonoBehaviour
         return viewportPos.x < 0.5f;
     }
 
+
     private bool IsRight(int position)
     {
         Vector3 pos = positions[position].position;
@@ -309,6 +388,7 @@ public class SC_bee_stinger : MonoBehaviour
 
         return viewportPos.x > 0.5f;
     }
+
 
     private Vector3 GetOffScreenPosition(bool left)
     {
@@ -347,29 +427,118 @@ public class SC_bee_stinger : MonoBehaviour
 
     private void FlipTowards(Vector3 target)
     {
-        if (spriteRenderer == null)
-            return;
-
         float direction = target.x - transform.position.x;
 
         // On ne flip que si la destination est réellement à gauche/droite
         if (Mathf.Abs(direction) > 0.01f)
         {
-            // Sprite original supposé regarder vers la droite.
-            spriteRenderer.flipX = direction < 0f;
+            Vector3 scale = transform.localScale;
+
+            // Sprite original supposé regarder vers la droite
+            scale.x = Mathf.Abs(scale.x) * (direction < 0f ? -1f : 1f);
+
+            transform.localScale = scale;
         }
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.CompareTag("Damage"))
+        // Si l'abeille touche un objet avec le tag "Dard"
+        if (collision.CompareTag("Dard") && !isCheeksSequence)
         {
-            Cheeks();
+            StartCoroutine(CheeksSequence());
         }
     }
 
+
+    private IEnumerator CheeksSequence()
+    {
+        // Empêche cette séquence de se déclencher plusieurs fois
+        isCheeksSequence = true;
+
+        // Arrête complètement le déplacement normal
+        isMoving = false;
+        isTeleporting = false;
+
+        // Arrête la coroutine d'attaque
+        if (attackCoroutine != null)
+        {
+            StopCoroutine(attackCoroutine);
+            attackCoroutine = null;
+        }
+
+        // Arrête le son de déplacement
+        if (fly.isPlaying)
+        {
+            fly.Stop();
+        }
+        // Active l'animation Cheeks
+        Cheeks();
+        yield return new WaitForSeconds(1);
+
+        // Position cible :
+        // on conserve X et Z et on monte jusqu'à une hauteur Y précise.
+        Vector3 targetPosition = transform.position;
+        targetPosition.y = cheeksTargetY;
+
+        // Monte verticalement à vitesse constante
+        while (Mathf.Abs(transform.position.y - cheeksTargetY) > 0.01f)
+        {
+            transform.position = Vector3.MoveTowards(
+                transform.position,
+                targetPosition,
+                cheeksRiseSpeed * Time.deltaTime
+            );
+
+            yield return null;
+        }
+
+        // Garantit qu'elle est exactement à la bonne hauteur
+        transform.position = targetPosition;
+
+        // Attend le délai demandé
+        yield return new WaitForSeconds(cheeksDelay);
+
+        // Choisit un nouveau point pour reprendre le pattern
+        int newPosition;
+
+        do
+        {
+            newPosition = Random.Range(0, 4);
+        }
+        while (newPosition == current_position);
+
+        current_position = newPosition;
+
+        // Détermine de quel côté elle doit revenir
+        bool spawnFromLeft = IsLeft(current_position);
+
+        // Respawn hors écran
+        transform.position = GetOffScreenPosition(spawnFromLeft);
+
+        // Oriente l'abeille vers son prochain point
+        FlipTowards(positions[current_position].position);
+
+        // Fin de la séquence spéciale
+        isCheeksSequence = false;
+
+        // Reprend le pattern normalement
+        isMoving = true;
+
+        anim.SetTrigger("reset");
+        if (!fly.isPlaying)
+        {
+            fly.Play();
+        }
+
+        // Relance le système d'attaque
+        attackCoroutine = StartCoroutine(AttackRoutine());
+    }
+
+
     public void Cheeks()
     {
-        anim.SetTrigger("Cheeks");
+        inflate.Play();
+        anim.SetTrigger("cheeks");
     }
 }

@@ -1052,4 +1052,11 @@ public class SC_typewriter : MonoBehaviour
             yield return null;
         }
     }
+
+    public void clear_text()
+    {
+        StopAllPopCoroutines();
+        fullText = string.Empty;
+        textMeshPro.text = string.Empty;
+    }
 }

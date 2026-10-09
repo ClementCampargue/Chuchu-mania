@@ -9,7 +9,8 @@ public class SC_water_physic : MonoBehaviour
     // =========================================================
     // WATER SIZE
     // =========================================================
-
+    public AudioSource splash;
+    public AudioClip splash_;
     [Header("Water Size")]
 
     [Min(0.1f)]
@@ -1275,7 +1276,7 @@ public class SC_water_physic : MonoBehaviour
     {
         Rigidbody2D rb =
             other.attachedRigidbody;
-
+        splash.PlayOneShot(splash_);
 
         float speed =
             0f;

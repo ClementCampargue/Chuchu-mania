@@ -54,7 +54,13 @@ MonoBehaviour:
   snap_point: {fileID: 6351557940221025805}
   statue_mode_: 0
   input: {fileID: -2099379676528639254, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
+  eat: {fileID: -7868807682114652187, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
   alarm: {fileID: 0}
+  statue_sprites:
+  - {fileID: 21300000, guid: 3a42fd36f4817be4d8863f65c24d6ca9, type: 3}
+  - {fileID: 21300000, guid: d8adacd38d739114887492c2ee168b6a, type: 3}
+  - {fileID: 21300000, guid: 97ff7888d33077d458b25ab5588d314d, type: 3}
+  collider_: {fileID: 6593188910056843041}
 --- !u!61 &6593188910056843041
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -89,7 +95,7 @@ BoxCollider2D:
   m_UsedByEffector: 1
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: 0, y: 0}
+  m_Offset: {x: 0, y: 0.33802748}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0, y: 0}
@@ -99,7 +105,7 @@ BoxCollider2D:
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Size: {x: 1.23, y: 0.78}
+  m_Size: {x: 1.23, y: 0.10414505}
   m_EdgeRadius: 0
 --- !u!251 &6684276571791856536
 PlatformEffector2D:
