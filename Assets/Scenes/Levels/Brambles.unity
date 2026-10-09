@@ -413,8 +413,8 @@ MonoBehaviour:
   randomDelay: 0
   columnDelay: 1.5
   randomColumnDelay: 0
-  proba_spe_1: 50
-  proba_spe_2: 50
+  proba_spe_1: 40
+  proba_spe_2: 80
 --- !u!1 &573276840
 GameObject:
   m_ObjectHideFlags: 0
@@ -769,7 +769,7 @@ Transform:
   m_GameObject: {fileID: 1162704428}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -0.7666667, z: 0}
+  m_LocalPosition: {x: 0, y: -0.6666667, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
