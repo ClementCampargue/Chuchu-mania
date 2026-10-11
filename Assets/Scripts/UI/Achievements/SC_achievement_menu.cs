@@ -119,7 +119,7 @@ public class SC_achievement_menu : MonoBehaviour
         }
         else
         {
-            text.text = achievement.requirement;
+            text.text = achievement.requirement.GetLocalizedString();
         }
 
         if (!star.debloque)

@@ -160,14 +160,14 @@ public class DialogueManager : MonoBehaviour
 
         if (characterNameText != null)
         {
-            if (string.IsNullOrEmpty(line.character.name))
+            if (string.IsNullOrEmpty(line.character.name.GetLocalizedString()))
             {
                 characterNameText.text = "";
             }
             else
             {
                 characterNameText.text =
-                    line.character.name + " <sprite index=0>";
+                    line.character.name.GetLocalizedString() + " <sprite index=0>";
             }
         }
 
@@ -187,7 +187,7 @@ public class DialogueManager : MonoBehaviour
             yield return new WaitForSeconds(dialogueStartDelay);
         }
 
-        typewriter.TriggerText(line.text);
+        typewriter.TriggerText(line.text.GetLocalizedString());
 
         while (typewriter.IsTyping())
         {
@@ -264,7 +264,7 @@ public class DialogueManager : MonoBehaviour
             {
                 choiceButtons[i].gameObject.SetActive(true);
 
-                choiceTexts[i].text = choices[i].choiceText;
+                choiceTexts[i].text = choices[i].choiceText.GetLocalizedString();
 
 
                 choiceButtons[i].onClick.AddListener(() =>

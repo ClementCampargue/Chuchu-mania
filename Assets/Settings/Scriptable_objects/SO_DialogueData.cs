@@ -1,5 +1,5 @@
 using UnityEngine;
-using UnityEngine.Events;
+using UnityEngine.Localization;
 
 [CreateAssetMenu(fileName = "New Dialogue", menuName = "Dialogue/System")]
 public class DialogueData : ScriptableObject
@@ -13,8 +13,7 @@ public class DialogueLine
 {
     public SO_dialogue_character character;
 
-    [TextArea(2, 4)]
-    public string text;
+    public LocalizedString text;
 
     public bool hasChoices;
 
@@ -25,7 +24,7 @@ public class DialogueLine
 [System.Serializable]
 public class Choice
 {
-    public string choiceText;
+    public LocalizedString choiceText;
 
 
     [Header("Réponse après le choix")]

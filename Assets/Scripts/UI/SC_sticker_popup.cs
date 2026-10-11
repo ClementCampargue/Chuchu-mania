@@ -285,7 +285,7 @@ public class SC_sticker_popup : MonoBehaviour
 
         if (name_ != null)
         {
-            name_.text = sticker.sticker_name;
+            name_.text = sticker.sticker_name.GetLocalizedString();
         }
 
         if (rarity != null)
@@ -330,7 +330,7 @@ public class SC_sticker_popup : MonoBehaviour
 
         if (name_ != null)
         {
-            name_.text = item.item_name;
+            name_.text = item.item_name.GetLocalizedString();
         }
 
         // Un item n'a pas de rareté.

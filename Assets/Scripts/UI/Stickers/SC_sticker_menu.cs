@@ -357,13 +357,13 @@ public class SC_sticker_menu : MonoBehaviour
             if (sticker_name != null)
             {
                 sticker_name.text =
-                    sticker.sticker_name;
+                    sticker.sticker_name.GetLocalizedString();
             }
 
             if (sticker_description != null)
             {
                 sticker_description.text =
-                    sticker.description;
+                    sticker.description.GetLocalizedString();
             }
 
             if (sprite_image != null)
@@ -396,7 +396,7 @@ public class SC_sticker_menu : MonoBehaviour
             if (sticker_description != null)
             {
                 sticker_description.text =
-                    sticker.unlock_conditions;
+                    sticker.unlock_conditions.GetLocalizedString();
             }
 
             if (sprite_image != null)
