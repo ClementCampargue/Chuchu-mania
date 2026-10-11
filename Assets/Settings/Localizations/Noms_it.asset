@@ -1,0 +1,91 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e9620f8c34305754d8cc9a7e49e852d9, type: 3}
+  m_Name: Noms_it
+  m_EditorClassIdentifier: 
+  m_LocaleId:
+    m_Code: it
+  m_SharedData: {fileID: 11400000, guid: e8f3ca06b0f27d0498992fb0155bc30c, type: 2}
+  m_Metadata:
+    m_Items: []
+  m_TableData:
+  - m_Id: 23473176576
+    m_Localized: Chuchu
+    m_Metadata:
+      m_Items: []
+  - m_Id: 23498342400
+    m_Localized: Magenta
+    m_Metadata:
+      m_Items: []
+  - m_Id: 23498342401
+    m_Localized: Cuicui
+    m_Metadata:
+      m_Items: []
+  - m_Id: 23498342402
+    m_Localized: Regina Litchi
+    m_Metadata:
+      m_Items: []
+  - m_Id: 23498342403
+    m_Localized: "Signor D\xF4"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 23498342404
+    m_Localized: "Signora D\xF4"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 23498342405
+    m_Localized: Yanya
+    m_Metadata:
+      m_Items: []
+  - m_Id: 23498342406
+    m_Localized: Lubin
+    m_Metadata:
+      m_Items: []
+  - m_Id: 23498342407
+    m_Localized: Stellaman
+    m_Metadata:
+      m_Items: []
+  - m_Id: 23498342408
+    m_Localized: Pioupiou
+    m_Metadata:
+      m_Items: []
+  - m_Id: 23498342409
+    m_Localized: Api-Api
+    m_Metadata:
+      m_Items: []
+  - m_Id: 23498342410
+    m_Localized: Vanavan
+    m_Metadata:
+      m_Items: []
+  - m_Id: 23498342411
+    m_Localized: Il Maggiordomo
+    m_Metadata:
+      m_Items: []
+  - m_Id: 23498342412
+    m_Localized: Tlatl
+    m_Metadata:
+      m_Items: []
+  - m_Id: 23498342413
+    m_Localized: Saxo
+    m_Metadata:
+      m_Items: []
+  - m_Id: 23498342414
+    m_Localized: Lilili
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3814637453312
+    m_Localized: Spirito Stellare
+    m_Metadata:
+      m_Items: []
+  references:
+    version: 2
+    RefIds: []

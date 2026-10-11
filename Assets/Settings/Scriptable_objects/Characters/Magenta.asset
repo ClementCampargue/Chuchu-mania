@@ -13,5 +13,16 @@ MonoBehaviour:
   m_Name: Magenta
   m_EditorClassIdentifier: 
   portrait: {fileID: 21300000, guid: 213c31c043d59aa47ae8428bae0b1479, type: 3}
-  name: Magenta
+  name:
+    m_TableReference:
+      m_TableCollectionName: GUID:e8f3ca06b0f27d0498992fb0155bc30c
+    m_TableEntryReference:
+      m_KeyId: 23498342400
+      m_Key: 
+    m_FallbackState: 0
+    m_WaitForCompletion: 0
+    m_LocalVariables: []
   typesound: {fileID: 8300000, guid: 3f5aad334b43c324185d0894a8241386, type: 3}
+  references:
+    version: 2
+    RefIds: []

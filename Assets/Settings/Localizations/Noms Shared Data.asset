@@ -1,0 +1,96 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5b11a58205ec3474ca216360e9fa74a8, type: 3}
+  m_Name: Noms Shared Data
+  m_EditorClassIdentifier: 
+  m_TableCollectionName: Noms
+  m_TableCollectionNameGuidString: e8f3ca06b0f27d0498992fb0155bc30c
+  m_Entries:
+  - m_Id: 23473176576
+    m_Key: Chuchu
+    m_Metadata:
+      m_Items: []
+  - m_Id: 23498342400
+    m_Key: Magenta
+    m_Metadata:
+      m_Items: []
+  - m_Id: 23498342401
+    m_Key: Cuicui
+    m_Metadata:
+      m_Items: []
+  - m_Id: 23498342402
+    m_Key: Litchi
+    m_Metadata:
+      m_Items: []
+  - m_Id: 23498342403
+    m_Key: Mr Do
+    m_Metadata:
+      m_Items: []
+  - m_Id: 23498342404
+    m_Key: Mme Do
+    m_Metadata:
+      m_Items: []
+  - m_Id: 23498342405
+    m_Key: Yanya
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3814637453312
+    m_Key: Etoile
+    m_Metadata:
+      m_Items: []
+  - m_Id: 23498342406
+    m_Key: Lubin
+    m_Metadata:
+      m_Items: []
+  - m_Id: 23498342407
+    m_Key: Stellaman
+    m_Metadata:
+      m_Items: []
+  - m_Id: 23498342408
+    m_Key: Pioupiou
+    m_Metadata:
+      m_Items: []
+  - m_Id: 23498342409
+    m_Key: Api
+    m_Metadata:
+      m_Items: []
+  - m_Id: 23498342410
+    m_Key: Vanavan
+    m_Metadata:
+      m_Items: []
+  - m_Id: 23498342411
+    m_Key: "Andr\xE9"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 23498342412
+    m_Key: Tlatl
+    m_Metadata:
+      m_Items: []
+  - m_Id: 23498342413
+    m_Key: Saxo
+    m_Metadata:
+      m_Items: []
+  - m_Id: 23498342414
+    m_Key: Lilili
+    m_Metadata:
+      m_Items: []
+  m_Metadata:
+    m_Items: []
+  m_KeyGenerator:
+    rid: 1772536152819499088
+  references:
+    version: 2
+    RefIds:
+    - rid: 1772536152819499088
+      type: {class: DistributedUIDGenerator, ns: UnityEngine.Localization.Tables, asm: Unity.Localization}
+      data:
+        m_CustomEpoch: 1791736785536

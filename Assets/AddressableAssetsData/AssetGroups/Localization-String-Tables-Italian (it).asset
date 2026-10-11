@@ -15,6 +15,12 @@ MonoBehaviour:
   m_GroupName: Localization-String-Tables-Italian (it)
   m_GUID: 7845e64584d7b234ba10e3197d3dd266
   m_SerializeEntries:
+  - m_GUID: 8a7766fc87e8ef84ea62dd9a2b698a59
+    m_Address: Noms_it
+    m_ReadOnly: 1
+    m_SerializedLabels:
+    - Locale-it
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 8f9112a80025af6469e7927b1eb9daa1
     m_Address: Cutscene1_it
     m_ReadOnly: 1
