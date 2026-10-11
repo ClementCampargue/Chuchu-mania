@@ -1,0 +1,201 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e9620f8c34305754d8cc9a7e49e852d9, type: 3}
+  m_Name: Cutscene1_fr
+  m_EditorClassIdentifier: 
+  m_LocaleId:
+    m_Code: fr
+  m_SharedData: {fileID: 11400000, guid: b3eec409a99cf0744945d380db858a5e, type: 2}
+  m_Metadata:
+    m_Items: []
+  m_TableData:
+  - m_Id: 41571598336
+    m_Localized: "Au centre de l'univers,<p=2> il existe un lieu magique dans lequel\u2026"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 48718692352
+    m_Localized: "On peut go\xFBter les saveurs les plus exotiques et exquises de
+      la galaxie!"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 56469766144
+    m_Localized: <sh>A l'aaaaaaaiiiiiiiiiide!!!</sh>
+    m_Metadata:
+      m_Items: []
+  - m_Id: 58717913088
+    m_Localized: "Une petite \xE9toile apparut soudainement et s'\xE9crasa contre
+      le stand de Chuchu!"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 60953477120
+    m_Localized: "H\xE9 bienvenue!<p=5> Tu veux une glace?<p=5> Quel parfum?"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 63247761408
+    m_Localized: "Je ne suis pas venue pour manger!<p=5> Mes amies ont \xE9t\xE9
+      captur\xE9es par la Reine Litchi pour sa grande f\xEAte!"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 65630126080
+    m_Localized: "<w>Oh<p=2>oh<p=2>oh<p=2>oh!<p=5></w> Ces petites peluches sont
+      la pi\xE8ce ma\xEEtresse pour que ma grande f\xEAte soit parfaite!"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 13208326520832
+    m_Localized: "Piti\xE9,<p=2> viens nous en aide,<p=2> stellanaute Chuchu!"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 13208326520833
+    m_Localized: "Il n'en fallut pas plus pour convaincre la petite gel\xE9e!"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 13208326520834
+    m_Localized: Tu peux compter sur moi!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 13208326520835
+    m_Localized: "Ainsi,<p=2> Chuchu partit \xE0 la rescousse des esprits \xE9toiles
+      captur\xE9s par les lapins lunaires dans toute la galaxie!"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 13208326520836
+    m_Localized: 'Direction: <p=2> Bubble Beach Galaxy!'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 13208326520837
+    m_Localized: '***'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6611818790912
+    m_Localized: '***'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 13208326520838
+    m_Localized: "Dans le chaleureux royaume des abeilles, <p=2>la voici faisant
+      face \xE0 la reine Api-Api."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 13208326520839
+    m_Localized: "Hey,<p=2> bienvenue dans mon \xE9den,<p=2> petite gel\xE9e. <p=5>Mets-toi
+      \xE0 l'aise.<p=5> C'est la devise de notre clan."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 13208326520840
+    m_Localized: "D\xEEtes,<p=2> je recherche un esprit \xE9toile qui se trouverait
+      dans votre ruche.<p=5> Ca vous dit quelque chose?"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 13208326520841
+    m_Localized: Ca a un rapport avec du miel?
+    m_Metadata:
+      m_Items: []
+  - m_Id: 13208326520842
+    m_Localized: Euh...<p=5> non?
+    m_Metadata:
+      m_Items: []
+  - m_Id: 13208326520843
+    m_Localized: "Alors \xE7a ne nous int\xE9resse pas.<p=5> Allez,<p=2> houste.
+      <p=5>C'est l'heure de notre neuvi\xE8me go\xFBter."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 13208326520844
+    m_Localized: "(et moi qui pensais \xEAtre une grosse goinfre...)"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 13208326520845
+    m_Localized: '***'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 13208326520846
+    m_Localized: "Haaaa...<p=5> C'est le pied d'\xEAtre reine\u2026"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 13208326520847
+    m_Localized: <sh>VOTRE MAJESTE!!!</sh>
+    m_Metadata:
+      m_Items: []
+  - m_Id: 13208326520848
+    m_Localized: Quoi encore,<p=2> Lubin?!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 13208326520849
+    m_Localized: "C'est une catastrophe!<p=5> Chuchu est en train de lib\xE9rer tous
+      les esprits \xE9toiles!"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 13208326520850
+    m_Localized: <sh>Que dis-tu?!</sh>
+    m_Metadata:
+      m_Items: []
+  - m_Id: 13208326520851
+    m_Localized: "Que faisons-nous?<p=5> Doit-on annuler la f\xEAte?..."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 13208326520852
+    m_Localized: Hmpf,<p=2> il n'en est pas question.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 13208326520853
+    m_Localized: "Jamais une pauvre gel\xE9e rondouillarde comme elle ne pourra suivre
+      le rythme d'une reine de la lune!"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 13208326520854
+    m_Localized: <w>OHOHOHOHOHOHOH!</w>
+    m_Metadata:
+      m_Items: []
+  - m_Id: 13208326520855
+    m_Localized: <p=5>.<p=5>.<p=5>.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 13208326520856
+    m_Localized: "Litchi,<p=2> arr\xEAte d'emb\xEAter les gentils!<p=5> Tu n'es qu'une
+      l\xE2che!"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 13208326520857
+    m_Localized: "Nous verrons bien qui de nous deux est la plus l\xE2che!<p=5> S\xE2che
+      que ton heure a sonn\xE9! <p=5>Lubin!"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 13208326520858
+    m_Localized: "Roger, <p=2>votre s\xE9r\xE9nissime!"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 13208326520859
+    m_Localized: .<p=2>.<p=2>.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 13208326520860
+    m_Localized: "Ben alors!<p=5> Il est o\xF9 le robot?!"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 13208326520861
+    m_Localized: "Euh,<p=2> altesse...<p=5> On a plus de budget pour le robot,<p=2>
+      c'est la fin de la d\xE9mo\u2026"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 13208326520862
+    m_Localized: "Ptn<p=2> journ\xE9e de merde\u2026"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 13208326520863
+    m_Localized: Victoire!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 13208326520864
+    m_Localized: "F\xE9licitations!<p=5> Vous avez atteint le bout de l'aventure!"
+    m_Metadata:
+      m_Items: []
+  references:
+    version: 2
+    RefIds: []

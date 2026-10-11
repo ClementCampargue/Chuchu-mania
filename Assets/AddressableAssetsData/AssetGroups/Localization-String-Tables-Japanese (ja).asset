@@ -21,6 +21,13 @@ MonoBehaviour:
     m_SerializedLabels:
     - Locale-ja
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 2c545887632dcf0458d45255ab731c21
+    m_Address: Cutscene1_ja
+    m_ReadOnly: 1
+    m_SerializedLabels:
+    - Locale-ja
+    - Preload
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 652eee90e8f75024ea34262c6e89dd61
     m_Address: UI_ja
     m_ReadOnly: 1

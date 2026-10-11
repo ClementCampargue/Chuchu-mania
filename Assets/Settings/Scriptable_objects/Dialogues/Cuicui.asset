@@ -14,249 +14,735 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   lines:
   - character: {fileID: 11400000, guid: d545f39ec73e8a94f874387ac2d04a27, type: 2}
-    text: "H\xE9 Chuchu,<p=2> tu penses quoi de Stellaman?"
+    text:
+      m_TableReference:
+        m_TableCollectionName: GUID:b3eec409a99cf0744945d380db858a5e
+      m_TableEntryReference:
+        m_KeyId: 63247761408
+        m_Key: 
+      m_FallbackState: 0
+      m_WaitForCompletion: 0
+      m_LocalVariables: []
     hasChoices: 1
     choices:
-    - choiceText: Connais pas
+    - choiceText:
+        m_TableReference:
+          m_TableCollectionName: 
+        m_TableEntryReference:
+          m_KeyId: 0
+          m_Key: 
+        m_FallbackState: 0
+        m_WaitForCompletion: 0
+        m_LocalVariables: []
       answer:
       - character: {fileID: 11400000, guid: d545f39ec73e8a94f874387ac2d04a27, type: 2}
-        text: <sh>COMMENT OSES-TU?!</sh>
+        text:
+          m_TableReference:
+            m_TableCollectionName: 
+          m_TableEntryReference:
+            m_KeyId: 0
+            m_Key: 
+          m_FallbackState: 0
+          m_WaitForCompletion: 0
+          m_LocalVariables: []
         hasChoices: 0
         choices:
-        - choiceText: Je rigooooole
+        - choiceText:
+            m_TableReference:
+              m_TableCollectionName: 
+            m_TableEntryReference:
+              m_KeyId: 0
+              m_Key: 
+            m_FallbackState: 0
+            m_WaitForCompletion: 0
+            m_LocalVariables: []
           answer:
           - character: {fileID: 11400000, guid: 201e18955e3c1254fae5fd2b355c5cac, type: 2}
-            text: ah merci
+            text:
+              m_TableReference:
+                m_TableCollectionName: 
+              m_TableEntryReference:
+                m_KeyId: 0
+                m_Key: 
+              m_FallbackState: 0
+              m_WaitForCompletion: 0
+              m_LocalVariables: []
             hasChoices: 0
             choices: []
           actionID: 
-        - choiceText: "allez d\xE9gage"
+        - choiceText:
+            m_TableReference:
+              m_TableCollectionName: 
+            m_TableEntryReference:
+              m_KeyId: 0
+              m_Key: 
+            m_FallbackState: 0
+            m_WaitForCompletion: 0
+            m_LocalVariables: []
           answer:
           - character: {fileID: 11400000, guid: 201e18955e3c1254fae5fd2b355c5cac, type: 2}
-            text: Ah
+            text:
+              m_TableReference:
+                m_TableCollectionName: 
+              m_TableEntryReference:
+                m_KeyId: 0
+                m_Key: 
+              m_FallbackState: 0
+              m_WaitForCompletion: 0
+              m_LocalVariables: []
             hasChoices: 0
             choices: []
           actionID: 
       - character: {fileID: 11400000, guid: d545f39ec73e8a94f874387ac2d04a27, type: 2}
-        text: Attends<p=5>.<p=5>.<p=5>.
+        text:
+          m_TableReference:
+            m_TableCollectionName: 
+          m_TableEntryReference:
+            m_KeyId: 0
+            m_Key: 
+          m_FallbackState: 0
+          m_WaitForCompletion: 0
+          m_LocalVariables: []
         hasChoices: 0
         choices:
-        - choiceText: Je rigooooole
+        - choiceText:
+            m_TableReference:
+              m_TableCollectionName: 
+            m_TableEntryReference:
+              m_KeyId: 0
+              m_Key: 
+            m_FallbackState: 0
+            m_WaitForCompletion: 0
+            m_LocalVariables: []
           answer:
           - character: {fileID: 11400000, guid: 201e18955e3c1254fae5fd2b355c5cac, type: 2}
-            text: ah merci
+            text:
+              m_TableReference:
+                m_TableCollectionName: 
+              m_TableEntryReference:
+                m_KeyId: 0
+                m_Key: 
+              m_FallbackState: 0
+              m_WaitForCompletion: 0
+              m_LocalVariables: []
             hasChoices: 0
             choices: []
           actionID: 
-        - choiceText: "allez d\xE9gage"
+        - choiceText:
+            m_TableReference:
+              m_TableCollectionName: 
+            m_TableEntryReference:
+              m_KeyId: 0
+              m_Key: 
+            m_FallbackState: 0
+            m_WaitForCompletion: 0
+            m_LocalVariables: []
           answer:
           - character: {fileID: 11400000, guid: 201e18955e3c1254fae5fd2b355c5cac, type: 2}
-            text: Ah
+            text:
+              m_TableReference:
+                m_TableCollectionName: 
+              m_TableEntryReference:
+                m_KeyId: 0
+                m_Key: 
+              m_FallbackState: 0
+              m_WaitForCompletion: 0
+              m_LocalVariables: []
             hasChoices: 0
             choices: []
           actionID: 
       - character: {fileID: 11400000, guid: d545f39ec73e8a94f874387ac2d04a27, type: 2}
-        text: "Tu blaguais c'est \xE7a?"
+        text:
+          m_TableReference:
+            m_TableCollectionName: 
+          m_TableEntryReference:
+            m_KeyId: 0
+            m_Key: 
+          m_FallbackState: 0
+          m_WaitForCompletion: 0
+          m_LocalVariables: []
         hasChoices: 0
         choices:
-        - choiceText: Je rigooooole
+        - choiceText:
+            m_TableReference:
+              m_TableCollectionName: 
+            m_TableEntryReference:
+              m_KeyId: 0
+              m_Key: 
+            m_FallbackState: 0
+            m_WaitForCompletion: 0
+            m_LocalVariables: []
           answer:
           - character: {fileID: 11400000, guid: 201e18955e3c1254fae5fd2b355c5cac, type: 2}
-            text: ah merci
+            text:
+              m_TableReference:
+                m_TableCollectionName: 
+              m_TableEntryReference:
+                m_KeyId: 0
+                m_Key: 
+              m_FallbackState: 0
+              m_WaitForCompletion: 0
+              m_LocalVariables: []
             hasChoices: 0
             choices: []
           actionID: 
-        - choiceText: "allez d\xE9gage"
+        - choiceText:
+            m_TableReference:
+              m_TableCollectionName: 
+            m_TableEntryReference:
+              m_KeyId: 0
+              m_Key: 
+            m_FallbackState: 0
+            m_WaitForCompletion: 0
+            m_LocalVariables: []
           answer:
           - character: {fileID: 11400000, guid: 201e18955e3c1254fae5fd2b355c5cac, type: 2}
-            text: Ah
+            text:
+              m_TableReference:
+                m_TableCollectionName: 
+              m_TableEntryReference:
+                m_KeyId: 0
+                m_Key: 
+              m_FallbackState: 0
+              m_WaitForCompletion: 0
+              m_LocalVariables: []
             hasChoices: 0
             choices: []
           actionID: 
       - character: {fileID: 11400000, guid: 358c18f725108b14d9b9efeb15db2fc1, type: 2}
-        text: Il faut vraiment que tu te calmes avec Stellaman,<p=2> Cuicui...
+        text:
+          m_TableReference:
+            m_TableCollectionName: 
+          m_TableEntryReference:
+            m_KeyId: 0
+            m_Key: 
+          m_FallbackState: 0
+          m_WaitForCompletion: 0
+          m_LocalVariables: []
         hasChoices: 0
         choices:
-        - choiceText: Je rigooooole
+        - choiceText:
+            m_TableReference:
+              m_TableCollectionName: 
+            m_TableEntryReference:
+              m_KeyId: 0
+              m_Key: 
+            m_FallbackState: 0
+            m_WaitForCompletion: 0
+            m_LocalVariables: []
           answer:
           - character: {fileID: 11400000, guid: 201e18955e3c1254fae5fd2b355c5cac, type: 2}
-            text: ah merci
+            text:
+              m_TableReference:
+                m_TableCollectionName: 
+              m_TableEntryReference:
+                m_KeyId: 0
+                m_Key: 
+              m_FallbackState: 0
+              m_WaitForCompletion: 0
+              m_LocalVariables: []
             hasChoices: 0
             choices: []
           actionID: 
-        - choiceText: "allez d\xE9gage"
+        - choiceText:
+            m_TableReference:
+              m_TableCollectionName: 
+            m_TableEntryReference:
+              m_KeyId: 0
+              m_Key: 
+            m_FallbackState: 0
+            m_WaitForCompletion: 0
+            m_LocalVariables: []
           answer:
           - character: {fileID: 11400000, guid: 201e18955e3c1254fae5fd2b355c5cac, type: 2}
-            text: Ah
+            text:
+              m_TableReference:
+                m_TableCollectionName: 
+              m_TableEntryReference:
+                m_KeyId: 0
+                m_Key: 
+              m_FallbackState: 0
+              m_WaitForCompletion: 0
+              m_LocalVariables: []
             hasChoices: 0
             choices: []
           actionID: 
       actionID: 
-    - choiceText: Juste le boss en fait
+    - choiceText:
+        m_TableReference:
+          m_TableCollectionName: 
+        m_TableEntryReference:
+          m_KeyId: 0
+          m_Key: 
+        m_FallbackState: 0
+        m_WaitForCompletion: 0
+        m_LocalVariables: []
       answer:
       - character: {fileID: 11400000, guid: d545f39ec73e8a94f874387ac2d04a27, type: 2}
-        text: <sh>MAIS OUI!</sh><p=5> C'est la plus grande oeuvre de la galaxie!
+        text:
+          m_TableReference:
+            m_TableCollectionName: 
+          m_TableEntryReference:
+            m_KeyId: 0
+            m_Key: 
+          m_FallbackState: 0
+          m_WaitForCompletion: 0
+          m_LocalVariables: []
         hasChoices: 0
         choices: []
       - character: {fileID: 11400000, guid: d545f39ec73e8a94f874387ac2d04a27, type: 2}
-        text: Alors pourquoi ta copine me dit que c'est juste mid?
+        text:
+          m_TableReference:
+            m_TableCollectionName: 
+          m_TableEntryReference:
+            m_KeyId: 0
+            m_Key: 
+          m_FallbackState: 0
+          m_WaitForCompletion: 0
+          m_LocalVariables: []
         hasChoices: 0
         choices: []
       - character: {fileID: 11400000, guid: 358c18f725108b14d9b9efeb15db2fc1, type: 2}
-        text: "Oh euh...<p=5> Magenta a des go\xFBts <w>tr\xE8s particuliers</w>
-          en mati\xE8re de s\xE9ries."
+        text:
+          m_TableReference:
+            m_TableCollectionName: 
+          m_TableEntryReference:
+            m_KeyId: 0
+            m_Key: 
+          m_FallbackState: 0
+          m_WaitForCompletion: 0
+          m_LocalVariables: []
         hasChoices: 0
         choices: []
       - character: {fileID: 11400000, guid: d545f39ec73e8a94f874387ac2d04a27, type: 2}
-        text: "Ah ouais?<p=5> Je veux tout savoir! <p=5>J'aimerais regarder une s\xE9rie
-          avec elle!"
+        text:
+          m_TableReference:
+            m_TableCollectionName: 
+          m_TableEntryReference:
+            m_KeyId: 0
+            m_Key: 
+          m_FallbackState: 0
+          m_WaitForCompletion: 0
+          m_LocalVariables: []
         hasChoices: 0
         choices:
-        - choiceText: Doki Doki Sparkling Star
+        - choiceText:
+            m_TableReference:
+              m_TableCollectionName: 
+            m_TableEntryReference:
+              m_KeyId: 0
+              m_Key: 
+            m_FallbackState: 0
+            m_WaitForCompletion: 0
+            m_LocalVariables: []
           answer:
           - character: {fileID: 11400000, guid: 358c18f725108b14d9b9efeb15db2fc1, type: 2}
-            text: "Je n'arrive pas \xE0 comprendre ce que c'est mais elle est parle
-              tout le temps!"
+            text:
+              m_TableReference:
+                m_TableCollectionName: 
+              m_TableEntryReference:
+                m_KeyId: 0
+                m_Key: 
+              m_FallbackState: 0
+              m_WaitForCompletion: 0
+              m_LocalVariables: []
             hasChoices: 0
             choices: []
           - character: {fileID: 11400000, guid: 358c18f725108b14d9b9efeb15db2fc1, type: 2}
-            text: "Je crois que c'est une histoire entre deux fille au lyc\xE9e?"
+            text:
+              m_TableReference:
+                m_TableCollectionName: 
+              m_TableEntryReference:
+                m_KeyId: 0
+                m_Key: 
+              m_FallbackState: 0
+              m_WaitForCompletion: 0
+              m_LocalVariables: []
             hasChoices: 0
             choices: []
           - character: {fileID: 11400000, guid: d545f39ec73e8a94f874387ac2d04a27, type: 2}
-            text: Ca al'air tout pourri
+            text:
+              m_TableReference:
+                m_TableCollectionName: 
+              m_TableEntryReference:
+                m_KeyId: 0
+                m_Key: 
+              m_FallbackState: 0
+              m_WaitForCompletion: 0
+              m_LocalVariables: []
             hasChoices: 0
             choices: []
           - character: {fileID: 11400000, guid: 201e18955e3c1254fae5fd2b355c5cac, type: 2}
-            text: "H\xE9 je vous entends d'ici bande d'idiots!"
+            text:
+              m_TableReference:
+                m_TableCollectionName: 
+              m_TableEntryReference:
+                m_KeyId: 0
+                m_Key: 
+              m_FallbackState: 0
+              m_WaitForCompletion: 0
+              m_LocalVariables: []
             hasChoices: 0
             choices: []
           - character: {fileID: 11400000, guid: 201e18955e3c1254fae5fd2b355c5cac, type: 2}
-            text: "Doki Doki Sparkling Star est un chef d'oeuvre de narration sur
-              la romance impossible entre deux lyc\xE9ennes!"
+            text:
+              m_TableReference:
+                m_TableCollectionName: 
+              m_TableEntryReference:
+                m_KeyId: 0
+                m_Key: 
+              m_FallbackState: 0
+              m_WaitForCompletion: 0
+              m_LocalVariables: []
             hasChoices: 0
             choices: []
           - character: {fileID: 11400000, guid: 201e18955e3c1254fae5fd2b355c5cac, type: 2}
-            text: "Tout cela habilement retranscris avec un dessin d\xE9licat et
-              po\xE9tique, arborant des sujets complexes."
+            text:
+              m_TableReference:
+                m_TableCollectionName: 
+              m_TableEntryReference:
+                m_KeyId: 0
+                m_Key: 
+              m_FallbackState: 0
+              m_WaitForCompletion: 0
+              m_LocalVariables: []
             hasChoices: 0
             choices: []
           - character: {fileID: 11400000, guid: 201e18955e3c1254fae5fd2b355c5cac, type: 2}
-            text: C'est un classique du yuri bande d'incultes!
+            text:
+              m_TableReference:
+                m_TableCollectionName: 
+              m_TableEntryReference:
+                m_KeyId: 0
+                m_Key: 
+              m_FallbackState: 0
+              m_WaitForCompletion: 0
+              m_LocalVariables: []
             hasChoices: 0
             choices: []
           - character: {fileID: 11400000, guid: d545f39ec73e8a94f874387ac2d04a27, type: 2}
-            text: ...
+            text:
+              m_TableReference:
+                m_TableCollectionName: 
+              m_TableEntryReference:
+                m_KeyId: 0
+                m_Key: 
+              m_FallbackState: 0
+              m_WaitForCompletion: 0
+              m_LocalVariables: []
             hasChoices: 0
             choices: []
           - character: {fileID: 11400000, guid: d545f39ec73e8a94f874387ac2d04a27, type: 2}
-            text: Y a de la bagarre?
+            text:
+              m_TableReference:
+                m_TableCollectionName: 
+              m_TableEntryReference:
+                m_KeyId: 0
+                m_Key: 
+              m_FallbackState: 0
+              m_WaitForCompletion: 0
+              m_LocalVariables: []
             hasChoices: 0
             choices: []
           - character: {fileID: 11400000, guid: 201e18955e3c1254fae5fd2b355c5cac, type: 2}
-            text: UGH!...
+            text:
+              m_TableReference:
+                m_TableCollectionName: 
+              m_TableEntryReference:
+                m_KeyId: 0
+                m_Key: 
+              m_FallbackState: 0
+              m_WaitForCompletion: 0
+              m_LocalVariables: []
             hasChoices: 0
             choices: []
           actionID: 
-        - choiceText: Stone Decay
+        - choiceText:
+            m_TableReference:
+              m_TableCollectionName: 
+            m_TableEntryReference:
+              m_KeyId: 0
+              m_Key: 
+            m_FallbackState: 0
+            m_WaitForCompletion: 0
+            m_LocalVariables: []
           answer:
           - character: {fileID: 11400000, guid: 358c18f725108b14d9b9efeb15db2fc1, type: 2}
-            text: "C'est une s\xE9rie polici\xE8re o\xF9 les gens se font transformer
-              en pierre!"
+            text:
+              m_TableReference:
+                m_TableCollectionName: 
+              m_TableEntryReference:
+                m_KeyId: 0
+                m_Key: 
+              m_FallbackState: 0
+              m_WaitForCompletion: 0
+              m_LocalVariables: []
             hasChoices: 0
             choices: []
           - character: {fileID: 11400000, guid: 358c18f725108b14d9b9efeb15db2fc1, type: 2}
-            text: "L'h\xE9roine est une harpie qui doit enqu\xEAter sur cette affaire
-              et elle rencontre une vampire et... euh..."
+            text:
+              m_TableReference:
+                m_TableCollectionName: 
+              m_TableEntryReference:
+                m_KeyId: 0
+                m_Key: 
+              m_FallbackState: 0
+              m_WaitForCompletion: 0
+              m_LocalVariables: []
             hasChoices: 0
             choices: []
           - character: {fileID: 11400000, guid: d545f39ec73e8a94f874387ac2d04a27, type: 2}
-            text: Et puis quoi?...
+            text:
+              m_TableReference:
+                m_TableCollectionName: 
+              m_TableEntryReference:
+                m_KeyId: 0
+                m_Key: 
+              m_FallbackState: 0
+              m_WaitForCompletion: 0
+              m_LocalVariables: []
             hasChoices: 0
             choices: []
           - character: {fileID: 11400000, guid: 358c18f725108b14d9b9efeb15db2fc1, type: 2}
-            text: "On en reparlera dans quelques ann\xE9es"
+            text:
+              m_TableReference:
+                m_TableCollectionName: 
+              m_TableEntryReference:
+                m_KeyId: 0
+                m_Key: 
+              m_FallbackState: 0
+              m_WaitForCompletion: 0
+              m_LocalVariables: []
             hasChoices: 0
             choices: []
           - character: {fileID: 11400000, guid: d545f39ec73e8a94f874387ac2d04a27, type: 2}
-            text: Ca a l'air giga degen ton truc
+            text:
+              m_TableReference:
+                m_TableCollectionName: 
+              m_TableEntryReference:
+                m_KeyId: 0
+                m_Key: 
+              m_FallbackState: 0
+              m_WaitForCompletion: 0
+              m_LocalVariables: []
             hasChoices: 0
             choices: []
           actionID: 
       - character: {fileID: 11400000, guid: d545f39ec73e8a94f874387ac2d04a27, type: 2}
-        text: Tu me conseilles quoi?
+        text:
+          m_TableReference:
+            m_TableCollectionName: 
+          m_TableEntryReference:
+            m_KeyId: 0
+            m_Key: 
+          m_FallbackState: 0
+          m_WaitForCompletion: 0
+          m_LocalVariables: []
         hasChoices: 1
         choices:
-        - choiceText: Doki Doki Sparkling Star
+        - choiceText:
+            m_TableReference:
+              m_TableCollectionName: 
+            m_TableEntryReference:
+              m_KeyId: 0
+              m_Key: 
+            m_FallbackState: 0
+            m_WaitForCompletion: 0
+            m_LocalVariables: []
           answer:
           - character: {fileID: 11400000, guid: 358c18f725108b14d9b9efeb15db2fc1, type: 2}
-            text: "Je n'arrive pas \xE0 comprendre ce que c'est mais elle en parle
-              tout le temps!"
+            text:
+              m_TableReference:
+                m_TableCollectionName: 
+              m_TableEntryReference:
+                m_KeyId: 0
+                m_Key: 
+              m_FallbackState: 0
+              m_WaitForCompletion: 0
+              m_LocalVariables: []
             hasChoices: 0
             choices: []
           - character: {fileID: 11400000, guid: 358c18f725108b14d9b9efeb15db2fc1, type: 2}
-            text: "Je crois que c'est l'histoire de deux filles qui pensent \xE0
-              des trucs compliqu\xE9s?"
+            text:
+              m_TableReference:
+                m_TableCollectionName: 
+              m_TableEntryReference:
+                m_KeyId: 0
+                m_Key: 
+              m_FallbackState: 0
+              m_WaitForCompletion: 0
+              m_LocalVariables: []
             hasChoices: 0
             choices: []
           - character: {fileID: 11400000, guid: d545f39ec73e8a94f874387ac2d04a27, type: 2}
-            text: Ca a l'air tout pourri
+            text:
+              m_TableReference:
+                m_TableCollectionName: 
+              m_TableEntryReference:
+                m_KeyId: 0
+                m_Key: 
+              m_FallbackState: 0
+              m_WaitForCompletion: 0
+              m_LocalVariables: []
             hasChoices: 0
             choices: []
           - character: {fileID: 11400000, guid: 201e18955e3c1254fae5fd2b355c5cac, type: 2}
-            text: "H\xE9, <p=2>je vous entends d'ici bande de d\xE9chets stellaires!"
+            text:
+              m_TableReference:
+                m_TableCollectionName: 
+              m_TableEntryReference:
+                m_KeyId: 0
+                m_Key: 
+              m_FallbackState: 0
+              m_WaitForCompletion: 0
+              m_LocalVariables: []
             hasChoices: 0
             choices: []
           - character: {fileID: 11400000, guid: 201e18955e3c1254fae5fd2b355c5cac, type: 2}
-            text: "Doki Doki est un chef d'oeuvre de narration sur la romance impossible
-              entre deux lyc\xE9ennes!"
+            text:
+              m_TableReference:
+                m_TableCollectionName: 
+              m_TableEntryReference:
+                m_KeyId: 0
+                m_Key: 
+              m_FallbackState: 0
+              m_WaitForCompletion: 0
+              m_LocalVariables: []
             hasChoices: 0
             choices: []
           - character: {fileID: 11400000, guid: 201e18955e3c1254fae5fd2b355c5cac, type: 2}
-            text: "Tout cela habilement retranscris avec un dessin d\xE9licat et
-              po\xE9tique,<p=2> arborant des sujets complexes."
+            text:
+              m_TableReference:
+                m_TableCollectionName: 
+              m_TableEntryReference:
+                m_KeyId: 0
+                m_Key: 
+              m_FallbackState: 0
+              m_WaitForCompletion: 0
+              m_LocalVariables: []
             hasChoices: 0
             choices: []
           - character: {fileID: 11400000, guid: 201e18955e3c1254fae5fd2b355c5cac, type: 2}
-            text: C'est un classique du yuri,<p=2> bande d'incultes!
+            text:
+              m_TableReference:
+                m_TableCollectionName: 
+              m_TableEntryReference:
+                m_KeyId: 0
+                m_Key: 
+              m_FallbackState: 0
+              m_WaitForCompletion: 0
+              m_LocalVariables: []
             hasChoices: 0
             choices: []
           - character: {fileID: 11400000, guid: d545f39ec73e8a94f874387ac2d04a27, type: 2}
-            text: ...
+            text:
+              m_TableReference:
+                m_TableCollectionName: 
+              m_TableEntryReference:
+                m_KeyId: 0
+                m_Key: 
+              m_FallbackState: 0
+              m_WaitForCompletion: 0
+              m_LocalVariables: []
             hasChoices: 0
             choices: []
           - character: {fileID: 11400000, guid: d545f39ec73e8a94f874387ac2d04a27, type: 2}
-            text: Y a de la bagarre?
+            text:
+              m_TableReference:
+                m_TableCollectionName: 
+              m_TableEntryReference:
+                m_KeyId: 0
+                m_Key: 
+              m_FallbackState: 0
+              m_WaitForCompletion: 0
+              m_LocalVariables: []
             hasChoices: 0
             choices: []
           - character: {fileID: 11400000, guid: 201e18955e3c1254fae5fd2b355c5cac, type: 2}
-            text: <sh>URGH!...</sh>
+            text:
+              m_TableReference:
+                m_TableCollectionName: 
+              m_TableEntryReference:
+                m_KeyId: 0
+                m_Key: 
+              m_FallbackState: 0
+              m_WaitForCompletion: 0
+              m_LocalVariables: []
             hasChoices: 0
             choices: []
           actionID: 
-        - choiceText: Stone Decay
+        - choiceText:
+            m_TableReference:
+              m_TableCollectionName: 
+            m_TableEntryReference:
+              m_KeyId: 0
+              m_Key: 
+            m_FallbackState: 0
+            m_WaitForCompletion: 0
+            m_LocalVariables: []
           answer:
           - character: {fileID: 11400000, guid: 358c18f725108b14d9b9efeb15db2fc1, type: 2}
-            text: "C'est une s\xE9rie polici\xE8re o\xF9 les gens se font transformer
-              en pierre!"
+            text:
+              m_TableReference:
+                m_TableCollectionName: 
+              m_TableEntryReference:
+                m_KeyId: 0
+                m_Key: 
+              m_FallbackState: 0
+              m_WaitForCompletion: 0
+              m_LocalVariables: []
             hasChoices: 0
             choices: []
           - character: {fileID: 11400000, guid: 358c18f725108b14d9b9efeb15db2fc1, type: 2}
-            text: "L'h\xE9roine est une harpie qui doit enqu\xEAter sur cette affaire
-              et elle rencontre une vampire et... <p=5>euh..."
+            text:
+              m_TableReference:
+                m_TableCollectionName: 
+              m_TableEntryReference:
+                m_KeyId: 0
+                m_Key: 
+              m_FallbackState: 0
+              m_WaitForCompletion: 0
+              m_LocalVariables: []
             hasChoices: 0
             choices: []
           - character: {fileID: 11400000, guid: d545f39ec73e8a94f874387ac2d04a27, type: 2}
-            text: Et puis quoi?...
+            text:
+              m_TableReference:
+                m_TableCollectionName: 
+              m_TableEntryReference:
+                m_KeyId: 0
+                m_Key: 
+              m_FallbackState: 0
+              m_WaitForCompletion: 0
+              m_LocalVariables: []
             hasChoices: 0
             choices: []
           - character: {fileID: 11400000, guid: 358c18f725108b14d9b9efeb15db2fc1, type: 2}
-            text: "On en reparlera dans quelques ann\xE9es..."
+            text:
+              m_TableReference:
+                m_TableCollectionName: 
+              m_TableEntryReference:
+                m_KeyId: 0
+                m_Key: 
+              m_FallbackState: 0
+              m_WaitForCompletion: 0
+              m_LocalVariables: []
             hasChoices: 0
             choices: []
           - character: {fileID: 11400000, guid: d545f39ec73e8a94f874387ac2d04a27, type: 2}
-            text: Ca a l'air giga degen ton truc
+            text:
+              m_TableReference:
+                m_TableCollectionName: 
+              m_TableEntryReference:
+                m_KeyId: 0
+                m_Key: 
+              m_FallbackState: 0
+              m_WaitForCompletion: 0
+              m_LocalVariables: []
             hasChoices: 0
             choices: []
           actionID: 
       actionID: 
+  references:
+    version: 2
+    RefIds: []
