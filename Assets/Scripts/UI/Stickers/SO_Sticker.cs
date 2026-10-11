@@ -6,9 +6,7 @@ public class SO_Sticker : ScriptableObject
 {
     public Sprite sticker_sprite;
     public LocalizedString sticker_name;
-    [TextArea(3, 3)]
     public LocalizedString description;
-    [TextArea(3, 3)]
     public LocalizedString unlock_conditions;
     public string artist;
     public int rarity;
