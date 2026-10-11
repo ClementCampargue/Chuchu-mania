@@ -1205,7 +1205,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2e692919e38f3e14898a7bc29ec91f8d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isTyping: 0
+  finished: 0
   textMeshPro: {fileID: 20518823985305923}
+  fullText: 
   typeSpeed: 0.02
   shakeAmplitude: 0.05
   shakeFrequency: 0.05
