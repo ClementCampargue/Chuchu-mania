@@ -380,7 +380,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   gamemaster: {fileID: 5541224540911051492, guid: 894c74b520a88a24e88966d64bc5ea3e, type: 3}
   vector: {x: 0.33333334, y: -1.9333334, z: 0}
-  reload: 0
+  reload_: 1
 --- !u!4 &520920333
 Transform:
   m_ObjectHideFlags: 0
@@ -638,6 +638,10 @@ PrefabInstance:
       propertyPath: cutscene
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 6498484494696396655, guid: 6b3448e9366ca4c489d926ad86cd539b, type: 3}
+      propertyPath: currentDialogue
+      value: 
+      objectReference: {fileID: 11400000, guid: c62bcf850164b8b4e8563ec6c8107c5e, type: 2}
     - target: {fileID: 7836593702784402468, guid: 6b3448e9366ca4c489d926ad86cd539b, type: 3}
       propertyPath: m_IsActive
       value: 0

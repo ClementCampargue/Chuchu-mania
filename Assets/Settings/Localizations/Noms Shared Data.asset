@@ -83,6 +83,10 @@ MonoBehaviour:
     m_Key: Lilili
     m_Metadata:
       m_Items: []
+  - m_Id: 4773188767744
+    m_Key: Interactive
+    m_Metadata:
+      m_Items: []
   m_Metadata:
     m_Items: []
   m_KeyGenerator:

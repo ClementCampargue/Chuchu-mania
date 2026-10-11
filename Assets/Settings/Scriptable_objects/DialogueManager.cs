@@ -160,7 +160,7 @@ public class DialogueManager : MonoBehaviour
 
         if (characterNameText != null)
         {
-            if (string.IsNullOrEmpty(line.character.name.GetLocalizedString()))
+            if (line.character.name == null)
             {
                 characterNameText.text = "";
             }
