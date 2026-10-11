@@ -2,6 +2,8 @@ using System.Collections;
 using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.Localization;
+using UnityEngine.Localization.Settings;
 
 public class DialogueManager : MonoBehaviour
 {
@@ -160,7 +162,8 @@ public class DialogueManager : MonoBehaviour
 
         if (characterNameText != null)
         {
-            if (line.character.name == null)
+
+            if (line.character.name.GetLocalizedString() == "No translation found for 'Interactive' in Noms")
             {
                 characterNameText.text = "";
             }
