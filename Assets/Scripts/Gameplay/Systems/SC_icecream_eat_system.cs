@@ -19,7 +19,7 @@ public class SC_icecream_eat_system : MonoBehaviour
     private bool isSelecting = false;
     private bool forceEatAll = false;
 
-    private List<SC_icecream_fall> selectedCreams =
+    public List<SC_icecream_fall> selectedCreams =
         new List<SC_icecream_fall>();
 
     [Header("Ice Cream")]
@@ -634,5 +634,43 @@ public class SC_icecream_eat_system : MonoBehaviour
 
         if (player != null)
             player.moveInput = Vector2.zero;
+    }
+// =========================================================
+// SPAWN MAX ICE CREAMS
+// =========================================================
+
+public void SpawnMaxIceCreams(GameObject cream_type)
+    {
+        Debug.Log("spawned;")
+;        if (cream_type == null)
+            return;
+
+        while (creams.Count < creams_points.Count)
+        {
+            int previousCount = creams.Count;
+
+            SC_icecream_fall cream =
+                Instantiate(
+                    cream_type,
+                    creams_points[
+                        creams_points.Count - 1
+                    ].position,
+                    Quaternion.identity
+                ).GetComponent<SC_icecream_fall>();
+
+            cream.currentTargetPosition =
+                creams_points[creams.Count];
+
+            cream.hasLanded = false;
+
+            creams.Add(cream);
+
+            currrent_ice_cream =
+                creams.Count;
+
+            // Évite une boucle infinie si le spawn est bloqué
+            if (creams.Count == previousCount)
+                break;
+        }
     }
 }

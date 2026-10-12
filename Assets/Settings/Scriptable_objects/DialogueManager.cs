@@ -30,7 +30,7 @@ public class DialogueManager : MonoBehaviour
     public InputActionReference action;
 
 
-    private int currentLineIndex;
+    public int currentLineIndex;
     private DialogueLine currentLine;
 
     private bool waitingInput;
@@ -358,14 +358,6 @@ public class DialogueManager : MonoBehaviour
         {
             npc.EndTalking();
         }
-
-
-        if (anim != null)
-        {
-            anim.Play("popup_dialogue_hide");
-        }
-        typewriter.textMeshPro.enabled = false;
-
 
     }
 }

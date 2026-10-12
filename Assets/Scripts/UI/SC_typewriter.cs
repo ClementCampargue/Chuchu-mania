@@ -2,19 +2,22 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class SC_typewriter : MonoBehaviour
 {
+    public UnityEvent Event;
+
     public bool isTyping = false;
     public bool finished = false;
-
+    public DialogueManager dialogueManager;
     [Header("Text Settings")]
-    public TMP_Text textMeshPro;
 
     [TextArea]
     public string fullText;
 
     public float typeSpeed = 0.05f;
+    public TMP_Text textMeshPro;
 
     [Header("Shake (Movement)")]
     public float shakeAmplitude = 5f;
@@ -79,14 +82,24 @@ public class SC_typewriter : MonoBehaviour
     // nouveau texte.
     // ---------------------------------------------------------
     private int textVersion = 0;
+    private int dialogue_to_trigger_event = 0;
 
-
+    private bool event_onstart;
     private void Awake()
     {
         // On lance UNE SEULE fois l'animation permanente.
         animateCoroutine = StartCoroutine(AnimateText());
     }
-
+    private void Start()
+    {
+        dialogueManager = DialogueManager.instance;
+    }
+    public void SetEvent(UnityEvent newEvent, int dialogue_to_trigger_, bool start_)
+    {
+        event_onstart = start_;
+        Event = newEvent;
+        dialogue_to_trigger_event = dialogue_to_trigger_;
+    }
 
     private void OnDisable()
     {
@@ -104,7 +117,7 @@ public class SC_typewriter : MonoBehaviour
         if (audioSource != null && audioSource.isPlaying)
             audioSource.Stop();
 
-        textMeshPro.text = "";
+      //  textMeshPro.text = "";
 
         isTyping = false;
         finished = true;
@@ -119,7 +132,10 @@ public class SC_typewriter : MonoBehaviour
     {
         if (wait_input_logo != null)
             wait_input_logo.SetActive(false);
-
+        if (dialogueManager.currentLineIndex == dialogue_to_trigger_event && event_onstart)
+        {
+            Event?.Invoke();
+        }
         textMeshPro.enabled = true;
 
         // -----------------------------------------------------
@@ -283,6 +299,10 @@ public class SC_typewriter : MonoBehaviour
         // pas à l'état du nouveau texte.
         if (version != textVersion)
             yield break;
+        if(dialogueManager.currentLineIndex == dialogue_to_trigger_event && !event_onstart)
+        {
+            Event?.Invoke();
+        }
 
         isTyping = false;
         finished = true;
@@ -364,6 +384,7 @@ public class SC_typewriter : MonoBehaviour
 
     public void FinishText()
     {
+
         // Invalide les anciennes coroutines
         textVersion++;
 
@@ -411,7 +432,10 @@ public class SC_typewriter : MonoBehaviour
     {
         if (textInfo == null)
             return;
-
+        if (dialogueManager.currentLineIndex == dialogue_to_trigger_event && !event_onstart)
+        {
+            Event?.Invoke();
+        }
         for (int i = 0; i < textInfo.characterCount; i++)
         {
             TMP_CharacterInfo charInfo =

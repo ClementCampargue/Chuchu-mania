@@ -19,6 +19,8 @@ public class SC_starbit_spawning : MonoBehaviour
     private List<GameObject> currentCollectibles = new List<GameObject>();
     public static SC_starbit_spawning instance;
 
+    public bool manual_respawn;
+
     private void Awake()
     {
         instance = this;
@@ -92,7 +94,7 @@ public class SC_starbit_spawning : MonoBehaviour
     {
         currentCollectibles.Remove(obj);
 
-        if (currentCollectibles.Count == 0)
+        if (currentCollectibles.Count == 0 && !manual_respawn)
         {
             Invoke(nameof(StartRespawn), delay_respawn);
         }

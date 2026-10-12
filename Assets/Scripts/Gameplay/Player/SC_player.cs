@@ -416,12 +416,6 @@ public class SC_player : MonoBehaviour
         // LANDING
         // -----------------------------------------------------
 
-        // Détection générique air -> sol.
-        // Elle fonctionne pour :
-        // - une chute depuis une plateforme ;
-        // - un saut ;
-        // - un drop-through ;
-        // - une chute après un knockback.
         if (!wasGroundedBeforeCheck &&
             isGrounded &&
             !isClimbing &&
@@ -946,9 +940,6 @@ public class SC_player : MonoBehaviour
     {
         bool landedFromFall = isFalling;
         bool landedFromJump = isJumping || IsAnimationPlaying("jump_idle");
-        moveSpeed =
-base_speed;
-        burning = false;
 
         PowermoveSpeed =
             BasePowermoveSpeed;
@@ -957,34 +948,100 @@ base_speed;
         fallWasTriggeredByJump = false;
         isJumping = false;
 
-        run.Stop();
-        grid.Stop();
 
-        anim.SetBool("Run", false);
-        anim.ResetTrigger("Jump");
 
-        // L'animation Land est jouée pour tous les vrais passages air -> sol.
-        anim.SetTrigger("Land");
 
-        moveSpeed = base_speed;
-
-        if (landedFromFall && playLandSoundAfterFall)
+        if (rb.gravityScale > 0f && rb.linearVelocityY < 0.5f)
         {
-            if (land != null)
-                land.PlayJuice();
+            anim.SetTrigger("Land");
+            moveSpeed = base_speed;
+            PowermoveSpeed = BasePowermoveSpeed;
+            anim.SetBool("Run", false);
+            anim.ResetTrigger("Jump");
+            run.Stop();
+            grid.Stop();
+            burning = false;
+
+            if (landedFromFall && playLandSoundAfterFall)
+            {
+                if (land != null)
+                    land.PlayJuice();
+            }
+            else if (landedFromJump)
+            {
+                if (land != null)
+                    land.PlayJuice();
+            }
+            else
+            {
+                // Même une chute provoquée par un knockback doit produire
+                // le son de landing.
+                if (land != null)
+                    land.PlayJuice();
+            }
         }
-        else if (landedFromJump)
+
+        else if (rb.gravityScale < 0f && rb.linearVelocityY > -0.5f)
         {
-            if (land != null)
-                land.PlayJuice();
+            anim.SetTrigger("Land");
+            moveSpeed = base_speed;
+            PowermoveSpeed = BasePowermoveSpeed;
+            anim.SetBool("Run", false);
+            anim.ResetTrigger("Jump");
+            run.Stop();
+            grid.Stop();
+            burning = false;
+
+            if (landedFromFall && playLandSoundAfterFall)
+            {
+                if (land != null)
+                    land.PlayJuice();
+            }
+            else if (landedFromJump)
+            {
+                if (land != null)
+                    land.PlayJuice();
+            }
+            else
+            {
+                // Même une chute provoquée par un knockback doit produire
+                // le son de landing.
+                if (land != null)
+                    land.PlayJuice();
+            }
         }
-        else
+        else if (!canTakeDamage)
         {
-            // Même une chute provoquée par un knockback doit produire
-            // le son de landing.
-            if (land != null)
-                land.PlayJuice();
+            anim.SetTrigger("Land");
+            moveSpeed = base_speed;
+            PowermoveSpeed = BasePowermoveSpeed;
+            anim.SetBool("Run", false);
+            anim.ResetTrigger("Jump");
+            run.Stop();
+            grid.Stop();
+            burning = false;
+
+            if (landedFromFall && playLandSoundAfterFall)
+            {
+                if (land != null)
+                    land.PlayJuice();
+            }
+            else if (landedFromJump)
+            {
+                if (land != null)
+                    land.PlayJuice();
+            }
+            else
+            {
+                // Même une chute provoquée par un knockback doit produire
+                // le son de landing.
+                if (land != null)
+                    land.PlayJuice();
+            }
         }
+
+
+
     }
 
     public bool IsAnimationPlaying(

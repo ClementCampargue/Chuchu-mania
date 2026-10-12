@@ -1,6 +1,6 @@
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.Events;
 
 public class SC_NPC : MonoBehaviour
 {
@@ -13,6 +13,12 @@ public class SC_NPC : MonoBehaviour
     private bool hasFinishedDialogue = false;
     private bool interactWasPressed = false;
 
+    [Header("Events")]
+    [Tooltip("Appelé lorsque le dialogue se termine.")]
+    public UnityEvent event_;
+    public bool event_onstart;
+    public int dialogue_to_trigger_event;
+
     [Header("Interaction")]
     public GameObject interaction_popup;
     public InputActionReference interactAction;
@@ -23,7 +29,11 @@ public class SC_NPC : MonoBehaviour
 
     public static bool dialogueActive = false;
 
-
+    public bool disable_player_on_start = true;
+    public bool enable_player_on_end = true;
+    public bool player_look_at_npc = true;
+    public bool hide_dialogue_box_end = true;
+    public bool player_onground_required = true;
     void Awake()
     {
         if (player == null)
@@ -74,7 +84,13 @@ public class SC_NPC : MonoBehaviour
 
         if (interactPressed && !interactWasPressed)
         {
-            if (!dialogueActive && player.enabled && player.canMove && player.isGrounded && player.wasGrounded && Mathf.Abs(player.rb.linearVelocityX) < 0.1f && Mathf.Abs(player.rb.linearVelocityY) <0.1f)
+            if (!dialogueActive &&
+                player.enabled &&
+                player.canMove &&
+                player.isGrounded &&
+                player.wasGrounded &&
+                Mathf.Abs(player.rb.linearVelocityX) < 0.1f &&
+                Mathf.Abs(player.rb.linearVelocityY) < 0.1f)
             {
                 StartTalking();
             }
@@ -83,8 +99,12 @@ public class SC_NPC : MonoBehaviour
         interactWasPressed = interactPressed;
 
         if (!dialogueActive && !hasFinishedDialogue)
-            interaction_popup.SetActive(true);
+        {
+            if (interaction_popup != null)
+                interaction_popup.SetActive(true);
+        }
     }
+
 
     private void OnTriggerStay2D(Collider2D collision)
     {
@@ -110,11 +130,11 @@ public class SC_NPC : MonoBehaviour
     }
 
 
-    void StartTalking()
+    public void StartTalking()
     {
-        if (dialogueActive || !player.isGrounded)
-            return;
 
+        if (dialogueActive || !player.isGrounded && player_onground_required)
+            return;
 
         if (dialogues.Length == 0)
         {
@@ -122,10 +142,8 @@ public class SC_NPC : MonoBehaviour
             return;
         }
 
-
         if (dialogue == null)
             dialogue = DialogueManager.instance;
-
 
         if (dialogue == null)
         {
@@ -133,31 +151,42 @@ public class SC_NPC : MonoBehaviour
             return;
         }
 
-
         dialogue.currentDialogue = dialogues[currentDialogueIndex];
         dialogue.npc = this;
         dialogue.StartDialogue();
 
-
         dialogueActive = true;
 
+        if (interaction_popup != null)
+            interaction_popup.SetActive(false);
+        if(player_look_at_npc)
+        {
+            player.FaceTarget(transform);
+        }
+        if (disable_player_on_start)
+        {
+            player.canMove = false;
+            player.rb.linearVelocity = Vector2.zero;
+            player.anim.Play("Idle");
+        }
+        dialogue.typewriter.SetEvent(event_, dialogue_to_trigger_event, event_onstart);
 
-        interaction_popup.SetActive(false);
-
-
-        player.FaceTarget(transform);
-        player.canMove = false;
-        player.rb.linearVelocity = Vector2.zero;
-        player.anim.Play("Idle");
     }
 
 
     public void EndTalking()
     {
-        NextDialogue();
 
+        NextDialogue();
+        if (dialogue.anim != null && hide_dialogue_box_end)
+        {
+            dialogue.anim.Play("popup_dialogue_hide");
+        }
         player.jumpBufferCounter = 0;
-        player.enabled = false;
+        if (disable_player_on_start)
+        {
+            player.enabled = false;
+        }
         Invoke(nameof(DelayEnd), 0.1f);
     }
 
@@ -187,8 +216,7 @@ public class SC_NPC : MonoBehaviour
     {
         dialogueActive = false;
 
-
-        if (player != null)
+        if (player != null && enable_player_on_end)
         {
             player.enabled = true;
             player.rb.constraints = RigidbodyConstraints2D.FreezeRotation;
