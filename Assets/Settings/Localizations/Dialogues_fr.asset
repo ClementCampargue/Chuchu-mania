@@ -18,8 +18,425 @@ MonoBehaviour:
   m_Metadata:
     m_Items: []
   m_TableData:
-  - m_Id: 4945362944
-    m_Localized: Salut c'ets mr do le rigolo
+  - m_Id: 13540277396193280
+    m_Localized: "H\xE9 Chuchu,<p=2> tu penses quoi de Stellaman?"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 13540277396193281
+    m_Localized: ///
+    m_Metadata:
+      m_Items: []
+  - m_Id: 13540277396193282
+    m_Localized: Connais pas
+    m_Metadata:
+      m_Items: []
+  - m_Id: 13540277396193283
+    m_Localized: <sh>COMMENT OSES-TU?!</sh>
+    m_Metadata:
+      m_Items: []
+  - m_Id: 13540277396193284
+    m_Localized: Attends<p=5>.<p=5>.<p=5>.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 13540277396193285
+    m_Localized: "Tu blaguais c'est \xE7a?"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 13540277396193286
+    m_Localized: Il faut vraiment que tu te calmes avec Stellaman,<p=2> Cuicui...
+    m_Metadata:
+      m_Items: []
+  - m_Id: 13540277396193287
+    m_Localized: ///
+    m_Metadata:
+      m_Items: []
+  - m_Id: 13540277396193288
+    m_Localized: Juste le boss en fait
+    m_Metadata:
+      m_Items: []
+  - m_Id: 13540277396193289
+    m_Localized: "<sh>MAIS OUI!</sh><p=5> C'est la plus grande \u0153uvre de la galaxie!"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 13540277396193290
+    m_Localized: Alors pourquoi ta copine me dit que c'est juste mid?
+    m_Metadata:
+      m_Items: []
+  - m_Id: 13540277396193291
+    m_Localized: "Oh euh...<p=5> Magenta a des go\xFBts <w>tr\xE8s particuliers</w>
+      en mati\xE8re de s\xE9ries."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 13540277396193292
+    m_Localized: "Ah ouais?<p=5> Je veux tout savoir! <p=5>J'aimerais regarder une
+      s\xE9rie avec elle!"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 13540277396193293
+    m_Localized: Tu me conseilles quoi?
+    m_Metadata:
+      m_Items: []
+  - m_Id: 13540277396193294
+    m_Localized: ///
+    m_Metadata:
+      m_Items: []
+  - m_Id: 13540277396193295
+    m_Localized: Doki Doki Sparkling Star
+    m_Metadata:
+      m_Items: []
+  - m_Id: 13540277396193296
+    m_Localized: "Je n'arrive pas \xE0 comprendre ce que c'est mais elle en parle
+      tout le temps!"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 13540277396193297
+    m_Localized: "Je crois que c'est l'histoire de deux filles qui pensent \xE0 des
+      trucs compliqu\xE9s?"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 13540277396193298
+    m_Localized: Ca a l'air tout pourri
+    m_Metadata:
+      m_Items: []
+  - m_Id: 13540277396193299
+    m_Localized: "H\xE9, <p=2>je vous entends d'ici bande de d\xE9chets stellaires!"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 13540277396193300
+    m_Localized: "Doki Doki est un chef-d'\u0153uvre de narration sur la romance
+      impossible entre deux lyc\xE9ennes!"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 13540277396193301
+    m_Localized: "Tout cela habilement retranscrit avec un dessin d\xE9licat et po\xE9tique,<p=2>
+      arborant des sujets complexes."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 13540277396193302
+    m_Localized: C'est un classique du yuri,<p=2> bande d'incultes!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 13540277396193303
+    m_Localized: ...
+    m_Metadata:
+      m_Items: []
+  - m_Id: 13540277396193304
+    m_Localized: Y a de la bagarre?
+    m_Metadata:
+      m_Items: []
+  - m_Id: 13540277396193305
+    m_Localized: <sh>URGH!...</sh>
+    m_Metadata:
+      m_Items: []
+  - m_Id: 13540277396193306
+    m_Localized: ///
+    m_Metadata:
+      m_Items: []
+  - m_Id: 13540277396193307
+    m_Localized: Stone Decay
+    m_Metadata:
+      m_Items: []
+  - m_Id: 13540277396193308
+    m_Localized: "C'est une s\xE9rie polici\xE8re o\xF9 les gens se font transformer
+      en pierre!"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 13540277396193309
+    m_Localized: "L'h\xE9ro\xEFne est une harpie qui doit enqu\xEAter sur cette affaire
+      et elle rencontre une vampire et... <p=5>euh\u2026"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 13540277396193310
+    m_Localized: Et puis quoi?...
+    m_Metadata:
+      m_Items: []
+  - m_Id: 13540277396193311
+    m_Localized: "On en reparlera dans quelques ann\xE9es..."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 13540277396193312
+    m_Localized: Ca a l'air giga degen ton truc
+    m_Metadata:
+      m_Items: []
+  - m_Id: 13540277396193314
+    m_Localized: <w>Salut Maggy!</w>
+    m_Metadata:
+      m_Items: []
+  - m_Id: 13540277396193315
+    m_Localized: "Yo Marshmallow, <p=2>t'as un truc de pr\xE9vu ce soir?"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 13540277396193316
+    m_Localized: ///
+    m_Metadata:
+      m_Items: []
+  - m_Id: 13540277396193317
+    m_Localized: Et si on se faisait un restau?
+    m_Metadata:
+      m_Items: []
+  - m_Id: 13540277396193318
+    m_Localized: Oh?<p=5> Tu te sens d'humeur chic?
+    m_Metadata:
+      m_Items: []
+  - m_Id: 13540277396193319
+    m_Localized: J'ai surtout la dalle...
+    m_Metadata:
+      m_Items: []
+  - m_Id: 13540277396193320
+    m_Localized: "Ca m'aurait \xE9tonn\xE9e\u2026"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 13540277396193321
+    m_Localized: ///
+    m_Metadata:
+      m_Items: []
+  - m_Id: 13540277396193322
+    m_Localized: Go se mater un nanar!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 13540277396193323
+    m_Localized: Tu sais parler aux filles toi.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 13540277396193324
+    m_Localized: Ce sera tout?
+    m_Metadata:
+      m_Items: []
+  - m_Id: 13540277396193325
+    m_Localized: ///
+    m_Metadata:
+      m_Items: []
+  - m_Id: 13540277396193326
+    m_Localized: Un bon gros dodo!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 13540277396193327
+    m_Localized: "J'avoue \xE7a me plairait bien. <p=5>J'ai besoin de mon oreiller
+      pr\xE9f\xE9r\xE9"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 13540277396193328
+    m_Localized: ///
+    m_Metadata:
+      m_Items: []
+  - m_Id: 13540277396193329
+    m_Localized: "Je te ferai un go\xFBter!"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 13540277396193330
+    m_Localized: "Hmm\u2026"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 13540277396193331
+    m_Localized: <w>Ouais...</w>
+    m_Metadata:
+      m_Items: []
+  - m_Id: 13540277396193332
+    m_Localized: "Ce serait une super soir\xE9e\u2026"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 13540277396193333
+    m_Localized: "<w>L'heure du go\xFBter</w>"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 13540277396193334
+    m_Localized: "J'ai pas la r\xE9f"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 13540277396193335
+    m_Localized: Ne changes pas Chuchu. <p=5>Ne changes jamais
+    m_Metadata:
+      m_Items: []
+  - m_Id: 13540277396193337
+    m_Localized: "Hmpf...<p=5> Jolli-Jelli,<p=2> encore en train de sauter partout
+      comme un macaque de l'espace. <p=5>O\xF9 vas-tu comme \xE7a?"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 13540277396193338
+    m_Localized: "C'est marrant de sauter!<p=5> J'ai l'impression \xE0 chaque bond
+      de m'approcher des \xE9toiles!"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 13540277396193339
+    m_Localized: "Quel manque de discernement\u2026"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 13540277396193340
+    m_Localized: "Oh ne sois pas si dure avec la petite,<p=2> ch\xE9rie."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 13540277396193341
+    m_Localized: Toi,<p=2> occupe-toi de trouver un moyen de redescendre sur terre
+      et payer tes dettes au lieu de l'ouvrir.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 13540277404581888
+    m_Localized: "O<p=1>-oui Merry ch\xE9rie..."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 13540277404581890
+    m_Localized: "Bonjour Mr D\xF4!"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 13540277404581891
+    m_Localized: <sh>MISTER DOOOOOOOOOOOOOOOOOOOOOOOOOOOOO!!!</sh>
+    m_Metadata:
+      m_Items: []
+  - m_Id: 13540277404581892
+    m_Localized: Euh...<p=2> dacodac...<p=5> Je vais vous laisser hein...
+    m_Metadata:
+      m_Items: []
+  - m_Id: 13540277404581894
+    m_Localized: <sh>CHUCHUUUUUUUUUUUUUUUUUUUU!</sh>
+    m_Metadata:
+      m_Items: []
+  - m_Id: 13540277404581895
+    m_Localized: <w>Coucou!</w>
+    m_Metadata:
+      m_Items: []
+  - m_Id: 13540277404581896
+    m_Localized: "Il faut que tu m'aides \xE0 enfreindre la loi!"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 13540277404581897
+    m_Localized: Q<p=1>-quoi?
+    m_Metadata:
+      m_Items: []
+  - m_Id: 13540277404581898
+    m_Localized: Y a un tournoi d'aventuriers ou j'sais pas quoi et Cuicui y participe
+      et pas moi car on dit que j'suis trop petite!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 13540277404581899
+    m_Localized: Moi aussi je veux ma super bille magique qui donne des pouvoirs!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 13540277404581900
+    m_Localized: "J'aimerais pouvoir t'aider PiouPiou mais mon truc c'est manger
+      et taper sur les m\xE9chants..."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 13540277404581901
+    m_Localized: "Grmbl\u2026"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 13540277404581902
+    m_Localized: T'es trop nulle en fait
+    m_Metadata:
+      m_Items: []
+  - m_Id: 13540277404581903
+    m_Localized: "Etrangement, <p=2>se faire juger par cette morveuse de 5 ans vous
+      fait plus mal que pr\xE9vu..."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 13540277404581905
+    m_Localized: Elle regarde dans le vide sans bouger, <p=2>presque en bavant
+    m_Metadata:
+      m_Items: []
+  - m_Id: 13540277404581906
+    m_Localized: ///
+    m_Metadata:
+      m_Items: []
+  - m_Id: 13540277404581907
+    m_Localized: La laisser tranquille
+    m_Metadata:
+      m_Items: []
+  - m_Id: 13540277404581908
+    m_Localized: ///
+    m_Metadata:
+      m_Items: []
+  - m_Id: 13540277404581909
+    m_Localized: "L'emb\xEAter"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 13540277404581910
+    m_Localized: Tu fais quoi Yanya?
+    m_Metadata:
+      m_Items: []
+  - m_Id: 13540277404581911
+    m_Localized: <sh>!!!</sh>
+    m_Metadata:
+      m_Items: []
+  - m_Id: 13540277404581912
+    m_Localized: Oh euh...<p=5> salut Chuchu...
+    m_Metadata:
+      m_Items: []
+  - m_Id: 13540277404581913
+    m_Localized: "Je...<p=5> J'\xE9tais en train de r\xE9fl\xE9chir"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 13540277404581914
+    m_Localized: "Tu avais l'air tr\xE8s concentr\xE9e!"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 13540277404581915
+    m_Localized: "C'est du shadow boxing. <p=5>Enfin... <p=5>pas vraiment. <p=5>Je
+      m'entra\xEEne dans ma t\xEAte \xE0 mon jeu."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 13540277404581916
+    m_Localized: "Oh tu parles de celui o\xF9 tu ramasses les fruits avec les musiques
+      bizarres?"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 13540277404581917
+    m_Localized: "Oui! <p=5>Ca me d\xE9tend d'y penser pendant ma pause."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 13540277404581918
+    m_Localized: "<sh>Yanya!</sh> <p=5>Bouge tes fesses toutes p\xE2les au lieu de
+      r\xEAvasser! <p=5>On ouvre bient\xF4t!"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 13542003104825344
+    m_Localized: 
+    m_Metadata:
+      m_Items: []
+  - m_Id: 13540277404581919
+    m_Localized: "En parlant de pause... <p=5>La mienne est d\xE9j\xE0 finie..."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 13540277404581921
+    m_Localized: "Oh?<p=5> On s'est pas d\xE9j\xE0 vu?"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 13540277404581922
+    m_Localized: TOI!!! Tout est de ta faute!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 13540277404581923
+    m_Localized: Quoi?
+    m_Metadata:
+      m_Items: []
+  - m_Id: 13540277404581924
+    m_Localized: "J'\xE9tais la star de ce jeu,<p=2> et on m'a jet\xE9 comme une
+      vieille chaussette une fois que tu es arriv\xE9e!"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 13540277404581925
+    m_Localized: "Je suis vraiment navr\xE9e pour ce qui t'es arriv\xE9e...<p=5>
+      Ca te dit une glace?<p=5> Ca fait toujours du bien!"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 13540277404581926
+    m_Localized: ...
+    m_Metadata:
+      m_Items: []
+  - m_Id: 13540277404581927
+    m_Localized: "Heh...<p=5> Je suis qu'un placeholder tu sais.<p=5> J'\xE9tais
+      destin\xE9 \xE0 te passer le flambeau."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 13540277404581928
+    m_Localized: "T'as int\xE9r\xEAt \xE0 les impressionner.<p=5> Fais-le pour moi."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 13540277404581929
+    m_Localized: "Je te rendrai fi\xE8re!<p=5> Mais du coup,<p=2> pour la glace?"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 13540277404581930
+    m_Localized: "T'es irr\xE9cup\xE9rable"
     m_Metadata:
       m_Items: []
   references:

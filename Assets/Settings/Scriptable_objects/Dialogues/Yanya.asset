@@ -14,55 +14,159 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   lines:
   - character: {fileID: 11400000, guid: f1b273b5eefe3a6408d92c0f6cb1c256, type: 2}
-    text: Elle regarde dans le vide sans bouger, <p=2>presque en bavant
+    text:
+      m_TableReference:
+        m_TableCollectionName: GUID:138a4e0e2d3e70b4ebfbd993cc4371bc
+      m_TableEntryReference:
+        m_KeyId: 13540277404581905
+        m_Key: 
+      m_FallbackState: 0
+      m_WaitForCompletion: 0
+      m_LocalVariables: []
     hasChoices: 1
     choices:
-    - choiceText: La laisser tranquille
+    - choiceText:
+        m_TableReference:
+          m_TableCollectionName: GUID:138a4e0e2d3e70b4ebfbd993cc4371bc
+        m_TableEntryReference:
+          m_KeyId: 13540277404581907
+          m_Key: 
+        m_FallbackState: 0
+        m_WaitForCompletion: 0
+        m_LocalVariables: []
       answer: []
       actionID: 
-    - choiceText: "L'emb\xEAter"
+    - choiceText:
+        m_TableReference:
+          m_TableCollectionName: GUID:138a4e0e2d3e70b4ebfbd993cc4371bc
+        m_TableEntryReference:
+          m_KeyId: 13540277404581909
+          m_Key: 
+        m_FallbackState: 0
+        m_WaitForCompletion: 0
+        m_LocalVariables: []
       answer:
       - character: {fileID: 11400000, guid: 358c18f725108b14d9b9efeb15db2fc1, type: 2}
-        text: Tu fais quoi Yanya?
+        text:
+          m_TableReference:
+            m_TableCollectionName: GUID:138a4e0e2d3e70b4ebfbd993cc4371bc
+          m_TableEntryReference:
+            m_KeyId: 13540277404581910
+            m_Key: 
+          m_FallbackState: 0
+          m_WaitForCompletion: 0
+          m_LocalVariables: []
         hasChoices: 0
         choices: []
       - character: {fileID: 11400000, guid: 9bb439f5fd2ff414da01625643e8aff3, type: 2}
-        text: <sh>!!!</sh>
+        text:
+          m_TableReference:
+            m_TableCollectionName: GUID:138a4e0e2d3e70b4ebfbd993cc4371bc
+          m_TableEntryReference:
+            m_KeyId: 13540277404581911
+            m_Key: 
+          m_FallbackState: 0
+          m_WaitForCompletion: 0
+          m_LocalVariables: []
         hasChoices: 0
         choices: []
       - character: {fileID: 11400000, guid: 9bb439f5fd2ff414da01625643e8aff3, type: 2}
-        text: Oh euh...<p=5> salut Chuchu...
+        text:
+          m_TableReference:
+            m_TableCollectionName: GUID:138a4e0e2d3e70b4ebfbd993cc4371bc
+          m_TableEntryReference:
+            m_KeyId: 13540277404581912
+            m_Key: 
+          m_FallbackState: 0
+          m_WaitForCompletion: 0
+          m_LocalVariables: []
         hasChoices: 0
         choices: []
       - character: {fileID: 11400000, guid: 9bb439f5fd2ff414da01625643e8aff3, type: 2}
-        text: "Je...<p=5> J'\xE9tais en train de r\xE9fl\xE9chir"
+        text:
+          m_TableReference:
+            m_TableCollectionName: GUID:138a4e0e2d3e70b4ebfbd993cc4371bc
+          m_TableEntryReference:
+            m_KeyId: 13540277404581913
+            m_Key: 
+          m_FallbackState: 0
+          m_WaitForCompletion: 0
+          m_LocalVariables: []
         hasChoices: 0
         choices: []
       - character: {fileID: 11400000, guid: 358c18f725108b14d9b9efeb15db2fc1, type: 2}
-        text: "Tu avais l'air tr\xE8s concentr\xE9e!"
+        text:
+          m_TableReference:
+            m_TableCollectionName: GUID:138a4e0e2d3e70b4ebfbd993cc4371bc
+          m_TableEntryReference:
+            m_KeyId: 13540277404581914
+            m_Key: 
+          m_FallbackState: 0
+          m_WaitForCompletion: 0
+          m_LocalVariables: []
         hasChoices: 0
         choices: []
       - character: {fileID: 11400000, guid: 9bb439f5fd2ff414da01625643e8aff3, type: 2}
-        text: "C'est du shadow boxing. <p=5>Enfin... <p=5>pas vraiment. <p=5>Je m'entraine
-          dans ma t\xEAte \xE0 mon jeu."
+        text:
+          m_TableReference:
+            m_TableCollectionName: GUID:138a4e0e2d3e70b4ebfbd993cc4371bc
+          m_TableEntryReference:
+            m_KeyId: 13540277404581915
+            m_Key: 
+          m_FallbackState: 0
+          m_WaitForCompletion: 0
+          m_LocalVariables: []
         hasChoices: 0
         choices: []
       - character: {fileID: 11400000, guid: 358c18f725108b14d9b9efeb15db2fc1, type: 2}
-        text: "Oh tu parles de celui o\xF9 tu ramasses les fruits avec les musiques
-          bizarres?"
+        text:
+          m_TableReference:
+            m_TableCollectionName: GUID:138a4e0e2d3e70b4ebfbd993cc4371bc
+          m_TableEntryReference:
+            m_KeyId: 13540277404581916
+            m_Key: 
+          m_FallbackState: 0
+          m_WaitForCompletion: 0
+          m_LocalVariables: []
         hasChoices: 0
         choices: []
       - character: {fileID: 11400000, guid: 9bb439f5fd2ff414da01625643e8aff3, type: 2}
-        text: "Oui! <p=5>Ca me d\xE9tend d'y penser pendant ma pause."
+        text:
+          m_TableReference:
+            m_TableCollectionName: GUID:138a4e0e2d3e70b4ebfbd993cc4371bc
+          m_TableEntryReference:
+            m_KeyId: 13540277404581917
+            m_Key: 
+          m_FallbackState: 0
+          m_WaitForCompletion: 0
+          m_LocalVariables: []
         hasChoices: 0
         choices: []
       - character: {fileID: 11400000, guid: a4442d57da2b0864093b6599e15d9f31, type: 2}
-        text: "<sh>Yanya!</sh> <p=5>Bouge tes fesses toutes p\xE2les au lieu de r\xEAvasser!
-          <p=5>On ouvre bient\xF4t!"
+        text:
+          m_TableReference:
+            m_TableCollectionName: GUID:138a4e0e2d3e70b4ebfbd993cc4371bc
+          m_TableEntryReference:
+            m_KeyId: 13540277404581918
+            m_Key: 
+          m_FallbackState: 0
+          m_WaitForCompletion: 0
+          m_LocalVariables: []
         hasChoices: 0
         choices: []
       - character: {fileID: 11400000, guid: 9bb439f5fd2ff414da01625643e8aff3, type: 2}
-        text: "En parlant de pause... <p=5>La mienne est d\xE9j\xE0 finie..."
+        text:
+          m_TableReference:
+            m_TableCollectionName: GUID:138a4e0e2d3e70b4ebfbd993cc4371bc
+          m_TableEntryReference:
+            m_KeyId: 13540277404581919
+            m_Key: 
+          m_FallbackState: 0
+          m_WaitForCompletion: 0
+          m_LocalVariables: []
         hasChoices: 0
         choices: []
       actionID: 
+  references:
+    version: 2
+    RefIds: []

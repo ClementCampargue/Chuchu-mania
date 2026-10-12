@@ -33,9 +33,10 @@ MonoBehaviour:
     m_ReadOnly: 1
     m_SerializedLabels:
     - Locale-en
+    - Preload
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: e7fcc3f80b15a364bb06f609e0cb3576
-    m_Address: Cutscene1_en
+    m_Address: Cutscenes_en
     m_ReadOnly: 1
     m_SerializedLabels:
     - Locale-en

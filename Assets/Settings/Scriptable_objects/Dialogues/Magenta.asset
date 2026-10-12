@@ -14,149 +14,479 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   lines:
   - character: {fileID: 11400000, guid: 358c18f725108b14d9b9efeb15db2fc1, type: 2}
-    text: <w>Salut Maggy!</w>
+    text:
+      m_TableReference:
+        m_TableCollectionName: GUID:138a4e0e2d3e70b4ebfbd993cc4371bc
+      m_TableEntryReference:
+        m_KeyId: 13540277396193314
+        m_Key: 
+      m_FallbackState: 0
+      m_WaitForCompletion: 0
+      m_LocalVariables: []
     hasChoices: 0
     choices:
-    - choiceText: 
+    - choiceText:
+        m_TableReference:
+          m_TableCollectionName: 
+        m_TableEntryReference:
+          m_KeyId: 0
+          m_Key: 
+        m_FallbackState: 0
+        m_WaitForCompletion: 0
+        m_LocalVariables: []
       answer: []
       actionID: 
-    - choiceText: 
+    - choiceText:
+        m_TableReference:
+          m_TableCollectionName: 
+        m_TableEntryReference:
+          m_KeyId: 0
+          m_Key: 
+        m_FallbackState: 0
+        m_WaitForCompletion: 0
+        m_LocalVariables: []
       answer: []
       actionID: 
   - character: {fileID: 11400000, guid: 201e18955e3c1254fae5fd2b355c5cac, type: 2}
-    text: "Yo Marshmallow, <p=2>t'as un truc de pr\xE9vu ce soir?"
+    text:
+      m_TableReference:
+        m_TableCollectionName: GUID:138a4e0e2d3e70b4ebfbd993cc4371bc
+      m_TableEntryReference:
+        m_KeyId: 13540277396193315
+        m_Key: 
+      m_FallbackState: 0
+      m_WaitForCompletion: 0
+      m_LocalVariables: []
     hasChoices: 1
     choices:
-    - choiceText: Et si on se faisait un restau?
+    - choiceText:
+        m_TableReference:
+          m_TableCollectionName: GUID:138a4e0e2d3e70b4ebfbd993cc4371bc
+        m_TableEntryReference:
+          m_KeyId: 13540277396193317
+          m_Key: 
+        m_FallbackState: 0
+        m_WaitForCompletion: 0
+        m_LocalVariables: []
       answer:
       - character: {fileID: 11400000, guid: 201e18955e3c1254fae5fd2b355c5cac, type: 2}
-        text: Oh?<p=5> Tu te sens d'humeur chic?
+        text:
+          m_TableReference:
+            m_TableCollectionName: GUID:138a4e0e2d3e70b4ebfbd993cc4371bc
+          m_TableEntryReference:
+            m_KeyId: 13540277396193318
+            m_Key: 
+          m_FallbackState: 0
+          m_WaitForCompletion: 0
+          m_LocalVariables: []
         hasChoices: 0
         choices:
-        - choiceText: Je rigooooole
+        - choiceText:
+            m_TableReference:
+              m_TableCollectionName: 
+            m_TableEntryReference:
+              m_KeyId: 0
+              m_Key: 
+            m_FallbackState: 0
+            m_WaitForCompletion: 0
+            m_LocalVariables: []
           answer:
           - character: {fileID: 11400000, guid: 201e18955e3c1254fae5fd2b355c5cac, type: 2}
-            text: ah merci
+            text:
+              m_TableReference:
+                m_TableCollectionName: 
+              m_TableEntryReference:
+                m_KeyId: 0
+                m_Key: 
+              m_FallbackState: 0
+              m_WaitForCompletion: 0
+              m_LocalVariables: []
             hasChoices: 0
             choices: []
           actionID: 
-        - choiceText: "allez d\xE9gage"
+        - choiceText:
+            m_TableReference:
+              m_TableCollectionName: 
+            m_TableEntryReference:
+              m_KeyId: 0
+              m_Key: 
+            m_FallbackState: 0
+            m_WaitForCompletion: 0
+            m_LocalVariables: []
           answer:
           - character: {fileID: 11400000, guid: 201e18955e3c1254fae5fd2b355c5cac, type: 2}
-            text: Ah
+            text:
+              m_TableReference:
+                m_TableCollectionName: 
+              m_TableEntryReference:
+                m_KeyId: 0
+                m_Key: 
+              m_FallbackState: 0
+              m_WaitForCompletion: 0
+              m_LocalVariables: []
             hasChoices: 0
             choices: []
           actionID: 
       - character: {fileID: 11400000, guid: 358c18f725108b14d9b9efeb15db2fc1, type: 2}
-        text: J'ai surtout la dalle...
+        text:
+          m_TableReference:
+            m_TableCollectionName: GUID:138a4e0e2d3e70b4ebfbd993cc4371bc
+          m_TableEntryReference:
+            m_KeyId: 13540277396193319
+            m_Key: 
+          m_FallbackState: 0
+          m_WaitForCompletion: 0
+          m_LocalVariables: []
         hasChoices: 0
         choices:
-        - choiceText: Je rigooooole
+        - choiceText:
+            m_TableReference:
+              m_TableCollectionName: 
+            m_TableEntryReference:
+              m_KeyId: 0
+              m_Key: 
+            m_FallbackState: 0
+            m_WaitForCompletion: 0
+            m_LocalVariables: []
           answer:
           - character: {fileID: 11400000, guid: 201e18955e3c1254fae5fd2b355c5cac, type: 2}
-            text: ah merci
+            text:
+              m_TableReference:
+                m_TableCollectionName: 
+              m_TableEntryReference:
+                m_KeyId: 0
+                m_Key: 
+              m_FallbackState: 0
+              m_WaitForCompletion: 0
+              m_LocalVariables: []
             hasChoices: 0
             choices: []
           actionID: 
-        - choiceText: "allez d\xE9gage"
+        - choiceText:
+            m_TableReference:
+              m_TableCollectionName: 
+            m_TableEntryReference:
+              m_KeyId: 0
+              m_Key: 
+            m_FallbackState: 0
+            m_WaitForCompletion: 0
+            m_LocalVariables: []
           answer:
           - character: {fileID: 11400000, guid: 201e18955e3c1254fae5fd2b355c5cac, type: 2}
-            text: Ah
+            text:
+              m_TableReference:
+                m_TableCollectionName: 
+              m_TableEntryReference:
+                m_KeyId: 0
+                m_Key: 
+              m_FallbackState: 0
+              m_WaitForCompletion: 0
+              m_LocalVariables: []
             hasChoices: 0
             choices: []
           actionID: 
       - character: {fileID: 11400000, guid: 201e18955e3c1254fae5fd2b355c5cac, type: 2}
-        text: "Ca m'aurait \xE9tonn\xE9e..."
+        text:
+          m_TableReference:
+            m_TableCollectionName: GUID:138a4e0e2d3e70b4ebfbd993cc4371bc
+          m_TableEntryReference:
+            m_KeyId: 13540277396193320
+            m_Key: 
+          m_FallbackState: 0
+          m_WaitForCompletion: 0
+          m_LocalVariables: []
         hasChoices: 0
         choices:
-        - choiceText: Je rigooooole
+        - choiceText:
+            m_TableReference:
+              m_TableCollectionName: 
+            m_TableEntryReference:
+              m_KeyId: 0
+              m_Key: 
+            m_FallbackState: 0
+            m_WaitForCompletion: 0
+            m_LocalVariables: []
           answer:
           - character: {fileID: 11400000, guid: 201e18955e3c1254fae5fd2b355c5cac, type: 2}
-            text: ah merci
+            text:
+              m_TableReference:
+                m_TableCollectionName: 
+              m_TableEntryReference:
+                m_KeyId: 0
+                m_Key: 
+              m_FallbackState: 0
+              m_WaitForCompletion: 0
+              m_LocalVariables: []
             hasChoices: 0
             choices: []
           actionID: 
-        - choiceText: "allez d\xE9gage"
+        - choiceText:
+            m_TableReference:
+              m_TableCollectionName: 
+            m_TableEntryReference:
+              m_KeyId: 0
+              m_Key: 
+            m_FallbackState: 0
+            m_WaitForCompletion: 0
+            m_LocalVariables: []
           answer:
           - character: {fileID: 11400000, guid: 201e18955e3c1254fae5fd2b355c5cac, type: 2}
-            text: Ah
+            text:
+              m_TableReference:
+                m_TableCollectionName: 
+              m_TableEntryReference:
+                m_KeyId: 0
+                m_Key: 
+              m_FallbackState: 0
+              m_WaitForCompletion: 0
+              m_LocalVariables: []
             hasChoices: 0
             choices: []
           actionID: 
       actionID: 
-    - choiceText: Go se mater un nanar!
+    - choiceText:
+        m_TableReference:
+          m_TableCollectionName: GUID:138a4e0e2d3e70b4ebfbd993cc4371bc
+        m_TableEntryReference:
+          m_KeyId: 13540277396193322
+          m_Key: 
+        m_FallbackState: 0
+        m_WaitForCompletion: 0
+        m_LocalVariables: []
       answer:
       - character: {fileID: 11400000, guid: 201e18955e3c1254fae5fd2b355c5cac, type: 2}
-        text: Tu sais parler aux filles toi.
+        text:
+          m_TableReference:
+            m_TableCollectionName: GUID:138a4e0e2d3e70b4ebfbd993cc4371bc
+          m_TableEntryReference:
+            m_KeyId: 13540277396193323
+            m_Key: 
+          m_FallbackState: 0
+          m_WaitForCompletion: 0
+          m_LocalVariables: []
         hasChoices: 0
         choices: []
       - character: {fileID: 11400000, guid: 201e18955e3c1254fae5fd2b355c5cac, type: 2}
-        text: Ce sera tout?
+        text:
+          m_TableReference:
+            m_TableCollectionName: GUID:138a4e0e2d3e70b4ebfbd993cc4371bc
+          m_TableEntryReference:
+            m_KeyId: 13540277396193324
+            m_Key: 
+          m_FallbackState: 0
+          m_WaitForCompletion: 0
+          m_LocalVariables: []
         hasChoices: 1
         choices:
-        - choiceText: Un bon gros dodo!
+        - choiceText:
+            m_TableReference:
+              m_TableCollectionName: GUID:138a4e0e2d3e70b4ebfbd993cc4371bc
+            m_TableEntryReference:
+              m_KeyId: 13540277396193326
+              m_Key: 
+            m_FallbackState: 0
+            m_WaitForCompletion: 0
+            m_LocalVariables: []
           answer:
           - character: {fileID: 11400000, guid: 201e18955e3c1254fae5fd2b355c5cac, type: 2}
-            text: "J'avoue \xE7a me plairait bien. <p=5>J'ai besoin de mon oreiller
-              pr\xE9f\xE9r\xE9"
+            text:
+              m_TableReference:
+                m_TableCollectionName: GUID:138a4e0e2d3e70b4ebfbd993cc4371bc
+              m_TableEntryReference:
+                m_KeyId: 13540277396193327
+                m_Key: 
+              m_FallbackState: 0
+              m_WaitForCompletion: 0
+              m_LocalVariables: []
             hasChoices: 0
             choices: []
           actionID: 
-        - choiceText: "Je te ferai un go\xFBter!"
+        - choiceText:
+            m_TableReference:
+              m_TableCollectionName: GUID:138a4e0e2d3e70b4ebfbd993cc4371bc
+            m_TableEntryReference:
+              m_KeyId: 13540277396193329
+              m_Key: 
+            m_FallbackState: 0
+            m_WaitForCompletion: 0
+            m_LocalVariables: []
           answer:
           - character: {fileID: 11400000, guid: 201e18955e3c1254fae5fd2b355c5cac, type: 2}
-            text: Hmm...
+            text:
+              m_TableReference:
+                m_TableCollectionName: GUID:138a4e0e2d3e70b4ebfbd993cc4371bc
+              m_TableEntryReference:
+                m_KeyId: 13540277396193330
+                m_Key: 
+              m_FallbackState: 0
+              m_WaitForCompletion: 0
+              m_LocalVariables: []
             hasChoices: 0
             choices: []
           - character: {fileID: 11400000, guid: 201e18955e3c1254fae5fd2b355c5cac, type: 2}
-            text: <w>Ouais...</w>
+            text:
+              m_TableReference:
+                m_TableCollectionName: GUID:138a4e0e2d3e70b4ebfbd993cc4371bc
+              m_TableEntryReference:
+                m_KeyId: 13540277396193331
+                m_Key: 
+              m_FallbackState: 0
+              m_WaitForCompletion: 0
+              m_LocalVariables: []
             hasChoices: 0
             choices: []
           - character: {fileID: 11400000, guid: 201e18955e3c1254fae5fd2b355c5cac, type: 2}
-            text: "Ce serait une super soir\xE9e..."
+            text:
+              m_TableReference:
+                m_TableCollectionName: GUID:138a4e0e2d3e70b4ebfbd993cc4371bc
+              m_TableEntryReference:
+                m_KeyId: 13540277396193332
+                m_Key: 
+              m_FallbackState: 0
+              m_WaitForCompletion: 0
+              m_LocalVariables: []
             hasChoices: 0
             choices: []
           - character: {fileID: 11400000, guid: 201e18955e3c1254fae5fd2b355c5cac, type: 2}
-            text: "<w>L'heure du go\xFBter</w>"
+            text:
+              m_TableReference:
+                m_TableCollectionName: GUID:138a4e0e2d3e70b4ebfbd993cc4371bc
+              m_TableEntryReference:
+                m_KeyId: 13540277396193333
+                m_Key: 
+              m_FallbackState: 0
+              m_WaitForCompletion: 0
+              m_LocalVariables: []
             hasChoices: 0
             choices:
-            - choiceText: LE SEXE
+            - choiceText:
+                m_TableReference:
+                  m_TableCollectionName: 
+                m_TableEntryReference:
+                  m_KeyId: 0
+                  m_Key: 
+                m_FallbackState: 0
+                m_WaitForCompletion: 0
+                m_LocalVariables: []
               answer:
               - character: {fileID: 0}
-                text: 
+                text:
+                  m_TableReference:
+                    m_TableCollectionName: 
+                  m_TableEntryReference:
+                    m_KeyId: 0
+                    m_Key: 
+                  m_FallbackState: 0
+                  m_WaitForCompletion: 0
+                  m_LocalVariables: []
                 hasChoices: 0
                 choices: []
               actionID: 
-            - choiceText: 
+            - choiceText:
+                m_TableReference:
+                  m_TableCollectionName: 
+                m_TableEntryReference:
+                  m_KeyId: 0
+                  m_Key: 
+                m_FallbackState: 0
+                m_WaitForCompletion: 0
+                m_LocalVariables: []
               answer: []
               actionID: 
           - character: {fileID: 11400000, guid: 358c18f725108b14d9b9efeb15db2fc1, type: 2}
-            text: "J'ai pas la r\xE9f"
+            text:
+              m_TableReference:
+                m_TableCollectionName: GUID:138a4e0e2d3e70b4ebfbd993cc4371bc
+              m_TableEntryReference:
+                m_KeyId: 13540277396193334
+                m_Key: 
+              m_FallbackState: 0
+              m_WaitForCompletion: 0
+              m_LocalVariables: []
             hasChoices: 0
             choices:
-            - choiceText: LE SEXE
+            - choiceText:
+                m_TableReference:
+                  m_TableCollectionName: 
+                m_TableEntryReference:
+                  m_KeyId: 0
+                  m_Key: 
+                m_FallbackState: 0
+                m_WaitForCompletion: 0
+                m_LocalVariables: []
               answer:
               - character: {fileID: 0}
-                text: 
+                text:
+                  m_TableReference:
+                    m_TableCollectionName: 
+                  m_TableEntryReference:
+                    m_KeyId: 0
+                    m_Key: 
+                  m_FallbackState: 0
+                  m_WaitForCompletion: 0
+                  m_LocalVariables: []
                 hasChoices: 0
                 choices: []
               actionID: 
-            - choiceText: 
+            - choiceText:
+                m_TableReference:
+                  m_TableCollectionName: 
+                m_TableEntryReference:
+                  m_KeyId: 0
+                  m_Key: 
+                m_FallbackState: 0
+                m_WaitForCompletion: 0
+                m_LocalVariables: []
               answer: []
               actionID: 
           - character: {fileID: 11400000, guid: 201e18955e3c1254fae5fd2b355c5cac, type: 2}
-            text: Ne changes pas Chuchu. <p=5>Ne changes jamais
+            text:
+              m_TableReference:
+                m_TableCollectionName: GUID:138a4e0e2d3e70b4ebfbd993cc4371bc
+              m_TableEntryReference:
+                m_KeyId: 13540277396193335
+                m_Key: 
+              m_FallbackState: 0
+              m_WaitForCompletion: 0
+              m_LocalVariables: []
             hasChoices: 0
             choices:
-            - choiceText: LE SEXE
+            - choiceText:
+                m_TableReference:
+                  m_TableCollectionName: 
+                m_TableEntryReference:
+                  m_KeyId: 0
+                  m_Key: 
+                m_FallbackState: 0
+                m_WaitForCompletion: 0
+                m_LocalVariables: []
               answer:
               - character: {fileID: 0}
-                text: 
+                text:
+                  m_TableReference:
+                    m_TableCollectionName: 
+                  m_TableEntryReference:
+                    m_KeyId: 0
+                    m_Key: 
+                  m_FallbackState: 0
+                  m_WaitForCompletion: 0
+                  m_LocalVariables: []
                 hasChoices: 0
                 choices: []
               actionID: 
-            - choiceText: 
+            - choiceText:
+                m_TableReference:
+                  m_TableCollectionName: 
+                m_TableEntryReference:
+                  m_KeyId: 0
+                  m_Key: 
+                m_FallbackState: 0
+                m_WaitForCompletion: 0
+                m_LocalVariables: []
               answer: []
               actionID: 
           actionID: 
       actionID: 
+  references:
+    version: 2
+    RefIds: []

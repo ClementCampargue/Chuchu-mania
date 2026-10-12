@@ -14,94 +14,311 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   lines:
   - character: {fileID: 11400000, guid: 358c18f725108b14d9b9efeb15db2fc1, type: 2}
-    text: "Litchi,<p=2> arr\xEAte d'emb\xEAter les gentils!<p=5> Tu n'es qu'une l\xE2che!"
+    text:
+      m_TableReference:
+        m_TableCollectionName: GUID:b3eec409a99cf0744945d380db858a5e
+      m_TableEntryReference:
+        m_KeyId: 13208326520856
+        m_Key: 
+      m_FallbackState: 0
+      m_WaitForCompletion: 0
+      m_LocalVariables: []
     hasChoices: 0
     choices:
-    - choiceText: Oui
+    - choiceText:
+        m_TableReference:
+          m_TableCollectionName: 
+        m_TableEntryReference:
+          m_KeyId: 0
+          m_Key: 
+        m_FallbackState: 0
+        m_WaitForCompletion: 0
+        m_LocalVariables: []
       answer: []
       actionID: LOAD_GAME
-    - choiceText: Non
+    - choiceText:
+        m_TableReference:
+          m_TableCollectionName: 
+        m_TableEntryReference:
+          m_KeyId: 0
+          m_Key: 
+        m_FallbackState: 0
+        m_WaitForCompletion: 0
+        m_LocalVariables: []
       answer: []
       actionID: 
   - character: {fileID: 11400000, guid: 999170bf34540294a957e7f2408c8a18, type: 2}
-    text: "Nous verrons bien qui de nous deux est la plus l\xE2che!<p=5> S\xE2che
-      que ton heure a sonn\xE9! <p=5>Lubin!"
+    text:
+      m_TableReference:
+        m_TableCollectionName: GUID:b3eec409a99cf0744945d380db858a5e
+      m_TableEntryReference:
+        m_KeyId: 13208326520857
+        m_Key: 
+      m_FallbackState: 0
+      m_WaitForCompletion: 0
+      m_LocalVariables: []
     hasChoices: 0
     choices:
-    - choiceText: Oui
+    - choiceText:
+        m_TableReference:
+          m_TableCollectionName: 
+        m_TableEntryReference:
+          m_KeyId: 0
+          m_Key: 
+        m_FallbackState: 0
+        m_WaitForCompletion: 0
+        m_LocalVariables: []
       answer: []
       actionID: LOAD_GAME
-    - choiceText: Non
+    - choiceText:
+        m_TableReference:
+          m_TableCollectionName: 
+        m_TableEntryReference:
+          m_KeyId: 0
+          m_Key: 
+        m_FallbackState: 0
+        m_WaitForCompletion: 0
+        m_LocalVariables: []
       answer: []
       actionID: 
   - character: {fileID: 11400000, guid: 25116a902d5a6794396e07c249d676de, type: 2}
-    text: "Roger, <p=2>votre s\xE9rnissime!"
+    text:
+      m_TableReference:
+        m_TableCollectionName: GUID:b3eec409a99cf0744945d380db858a5e
+      m_TableEntryReference:
+        m_KeyId: 13208326520858
+        m_Key: 
+      m_FallbackState: 0
+      m_WaitForCompletion: 0
+      m_LocalVariables: []
     hasChoices: 0
     choices:
-    - choiceText: Oui
+    - choiceText:
+        m_TableReference:
+          m_TableCollectionName: 
+        m_TableEntryReference:
+          m_KeyId: 0
+          m_Key: 
+        m_FallbackState: 0
+        m_WaitForCompletion: 0
+        m_LocalVariables: []
       answer: []
       actionID: LOAD_GAME
-    - choiceText: Non
+    - choiceText:
+        m_TableReference:
+          m_TableCollectionName: 
+        m_TableEntryReference:
+          m_KeyId: 0
+          m_Key: 
+        m_FallbackState: 0
+        m_WaitForCompletion: 0
+        m_LocalVariables: []
       answer: []
       actionID: 
   - character: {fileID: 11400000, guid: 999170bf34540294a957e7f2408c8a18, type: 2}
-    text: .<p=2>.<p=2>.
+    text:
+      m_TableReference:
+        m_TableCollectionName: GUID:b3eec409a99cf0744945d380db858a5e
+      m_TableEntryReference:
+        m_KeyId: 13208326520859
+        m_Key: 
+      m_FallbackState: 0
+      m_WaitForCompletion: 0
+      m_LocalVariables: []
     hasChoices: 0
     choices:
-    - choiceText: Oui
+    - choiceText:
+        m_TableReference:
+          m_TableCollectionName: 
+        m_TableEntryReference:
+          m_KeyId: 0
+          m_Key: 
+        m_FallbackState: 0
+        m_WaitForCompletion: 0
+        m_LocalVariables: []
       answer: []
       actionID: LOAD_GAME
-    - choiceText: Non
+    - choiceText:
+        m_TableReference:
+          m_TableCollectionName: 
+        m_TableEntryReference:
+          m_KeyId: 0
+          m_Key: 
+        m_FallbackState: 0
+        m_WaitForCompletion: 0
+        m_LocalVariables: []
       answer: []
       actionID: 
   - character: {fileID: 11400000, guid: 999170bf34540294a957e7f2408c8a18, type: 2}
-    text: "Ben alors!<p=5> Il est o\xF9 le robot?!"
+    text:
+      m_TableReference:
+        m_TableCollectionName: GUID:b3eec409a99cf0744945d380db858a5e
+      m_TableEntryReference:
+        m_KeyId: 13208326520860
+        m_Key: 
+      m_FallbackState: 0
+      m_WaitForCompletion: 0
+      m_LocalVariables: []
     hasChoices: 0
     choices:
-    - choiceText: Oui
+    - choiceText:
+        m_TableReference:
+          m_TableCollectionName: 
+        m_TableEntryReference:
+          m_KeyId: 0
+          m_Key: 
+        m_FallbackState: 0
+        m_WaitForCompletion: 0
+        m_LocalVariables: []
       answer: []
       actionID: LOAD_GAME
-    - choiceText: Non
+    - choiceText:
+        m_TableReference:
+          m_TableCollectionName: 
+        m_TableEntryReference:
+          m_KeyId: 0
+          m_Key: 
+        m_FallbackState: 0
+        m_WaitForCompletion: 0
+        m_LocalVariables: []
       answer: []
       actionID: 
   - character: {fileID: 11400000, guid: 25116a902d5a6794396e07c249d676de, type: 2}
-    text: "Euh,<p=2> altesse...<p=5> On a plus de budget pour le robot,<p=2> c'est
-      la fin de la d\xE9mo..."
+    text:
+      m_TableReference:
+        m_TableCollectionName: GUID:b3eec409a99cf0744945d380db858a5e
+      m_TableEntryReference:
+        m_KeyId: 13208326520861
+        m_Key: 
+      m_FallbackState: 0
+      m_WaitForCompletion: 0
+      m_LocalVariables: []
     hasChoices: 0
     choices:
-    - choiceText: Oui
+    - choiceText:
+        m_TableReference:
+          m_TableCollectionName: 
+        m_TableEntryReference:
+          m_KeyId: 0
+          m_Key: 
+        m_FallbackState: 0
+        m_WaitForCompletion: 0
+        m_LocalVariables: []
       answer: []
       actionID: LOAD_GAME
-    - choiceText: Non
+    - choiceText:
+        m_TableReference:
+          m_TableCollectionName: 
+        m_TableEntryReference:
+          m_KeyId: 0
+          m_Key: 
+        m_FallbackState: 0
+        m_WaitForCompletion: 0
+        m_LocalVariables: []
       answer: []
       actionID: 
   - character: {fileID: 11400000, guid: 999170bf34540294a957e7f2408c8a18, type: 2}
-    text: "Ptn<p=2> journ\xE9e de merde..."
+    text:
+      m_TableReference:
+        m_TableCollectionName: GUID:b3eec409a99cf0744945d380db858a5e
+      m_TableEntryReference:
+        m_KeyId: 13208326520862
+        m_Key: 
+      m_FallbackState: 0
+      m_WaitForCompletion: 0
+      m_LocalVariables: []
     hasChoices: 0
     choices:
-    - choiceText: Oui
+    - choiceText:
+        m_TableReference:
+          m_TableCollectionName: 
+        m_TableEntryReference:
+          m_KeyId: 0
+          m_Key: 
+        m_FallbackState: 0
+        m_WaitForCompletion: 0
+        m_LocalVariables: []
       answer: []
       actionID: LOAD_GAME
-    - choiceText: Non
+    - choiceText:
+        m_TableReference:
+          m_TableCollectionName: 
+        m_TableEntryReference:
+          m_KeyId: 0
+          m_Key: 
+        m_FallbackState: 0
+        m_WaitForCompletion: 0
+        m_LocalVariables: []
       answer: []
       actionID: 
   - character: {fileID: 11400000, guid: 358c18f725108b14d9b9efeb15db2fc1, type: 2}
-    text: Victoire!
+    text:
+      m_TableReference:
+        m_TableCollectionName: GUID:b3eec409a99cf0744945d380db858a5e
+      m_TableEntryReference:
+        m_KeyId: 13208326520863
+        m_Key: 
+      m_FallbackState: 0
+      m_WaitForCompletion: 0
+      m_LocalVariables: []
     hasChoices: 0
     choices:
-    - choiceText: Oui
+    - choiceText:
+        m_TableReference:
+          m_TableCollectionName: 
+        m_TableEntryReference:
+          m_KeyId: 0
+          m_Key: 
+        m_FallbackState: 0
+        m_WaitForCompletion: 0
+        m_LocalVariables: []
       answer: []
       actionID: LOAD_GAME
-    - choiceText: Non
+    - choiceText:
+        m_TableReference:
+          m_TableCollectionName: 
+        m_TableEntryReference:
+          m_KeyId: 0
+          m_Key: 
+        m_FallbackState: 0
+        m_WaitForCompletion: 0
+        m_LocalVariables: []
       answer: []
       actionID: 
   - character: {fileID: 11400000, guid: f1b273b5eefe3a6408d92c0f6cb1c256, type: 2}
-    text: "F\xE9licitations!<p=5> Vous avez atteint le bout de l'aventure!"
+    text:
+      m_TableReference:
+        m_TableCollectionName: GUID:b3eec409a99cf0744945d380db858a5e
+      m_TableEntryReference:
+        m_KeyId: 13208326520864
+        m_Key: 
+      m_FallbackState: 0
+      m_WaitForCompletion: 0
+      m_LocalVariables: []
     hasChoices: 0
     choices:
-    - choiceText: Oui
+    - choiceText:
+        m_TableReference:
+          m_TableCollectionName: 
+        m_TableEntryReference:
+          m_KeyId: 0
+          m_Key: 
+        m_FallbackState: 0
+        m_WaitForCompletion: 0
+        m_LocalVariables: []
       answer: []
       actionID: LOAD_GAME
-    - choiceText: Non
+    - choiceText:
+        m_TableReference:
+          m_TableCollectionName: 
+        m_TableEntryReference:
+          m_KeyId: 0
+          m_Key: 
+        m_FallbackState: 0
+        m_WaitForCompletion: 0
+        m_LocalVariables: []
       answer: []
       actionID: 
+  references:
+    version: 2
+    RefIds: []

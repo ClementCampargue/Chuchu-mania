@@ -22,7 +22,7 @@ MonoBehaviour:
     - Locale-it
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 8f9112a80025af6469e7927b1eb9daa1
-    m_Address: Cutscene1_it
+    m_Address: Cutscenes_it
     m_ReadOnly: 1
     m_SerializedLabels:
     - Locale-it
@@ -33,6 +33,7 @@ MonoBehaviour:
     m_ReadOnly: 1
     m_SerializedLabels:
     - Locale-it
+    - Preload
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: cb8e60250df8dee43ae4c8944ff286c8
     m_Address: UI_it

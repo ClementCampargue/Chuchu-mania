@@ -14,87 +14,277 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   lines:
   - character: {fileID: 11400000, guid: f1b273b5eefe3a6408d92c0f6cb1c256, type: 2}
-    text: "Apr\xE8s avoir sauv\xE9 l'esprit \xE9toile de Bubble Beach, <p=2>Chuchu
-      se dirige vers Honey Hoop Galaxy!"
+    text:
+      m_TableReference:
+        m_TableCollectionName: GUID:b3eec409a99cf0744945d380db858a5e
+      m_TableEntryReference:
+        m_KeyId: 13208326520838
+        m_Key: 
+      m_FallbackState: 0
+      m_WaitForCompletion: 0
+      m_LocalVariables: []
     hasChoices: 0
     choices:
-    - choiceText: Oui
+    - choiceText:
+        m_TableReference:
+          m_TableCollectionName: 
+        m_TableEntryReference:
+          m_KeyId: 0
+          m_Key: 
+        m_FallbackState: 0
+        m_WaitForCompletion: 0
+        m_LocalVariables: []
       answer: []
       actionID: LOAD_GAME
-    - choiceText: Non
+    - choiceText:
+        m_TableReference:
+          m_TableCollectionName: 
+        m_TableEntryReference:
+          m_KeyId: 0
+          m_Key: 
+        m_FallbackState: 0
+        m_WaitForCompletion: 0
+        m_LocalVariables: []
       answer: []
       actionID: 
   - character: {fileID: 11400000, guid: f1b273b5eefe3a6408d92c0f6cb1c256, type: 2}
-    text: "Dans le chaleureux royaume des abeilles, <p=2>la voici faisant face \xE0
-      la reine Api-Api."
+    text:
+      m_TableReference:
+        m_TableCollectionName: GUID:b3eec409a99cf0744945d380db858a5e
+      m_TableEntryReference:
+        m_KeyId: 13208326520839
+        m_Key: 
+      m_FallbackState: 0
+      m_WaitForCompletion: 0
+      m_LocalVariables: []
     hasChoices: 0
     choices:
-    - choiceText: Oui
+    - choiceText:
+        m_TableReference:
+          m_TableCollectionName: 
+        m_TableEntryReference:
+          m_KeyId: 0
+          m_Key: 
+        m_FallbackState: 0
+        m_WaitForCompletion: 0
+        m_LocalVariables: []
       answer: []
       actionID: LOAD_GAME
-    - choiceText: Non
+    - choiceText:
+        m_TableReference:
+          m_TableCollectionName: 
+        m_TableEntryReference:
+          m_KeyId: 0
+          m_Key: 
+        m_FallbackState: 0
+        m_WaitForCompletion: 0
+        m_LocalVariables: []
       answer: []
       actionID: 
   - character: {fileID: 11400000, guid: b1ce399ef06d9a5419786dbbca23aee3, type: 2}
-    text: "Hey,<p=2> bienvenue dans mon \xE9den,<p=2> petite gel\xE9e. <p=5>Mets-toi
-      \xE0 l'aise.<p=5> C'est la devise de notre clan."
+    text:
+      m_TableReference:
+        m_TableCollectionName: GUID:b3eec409a99cf0744945d380db858a5e
+      m_TableEntryReference:
+        m_KeyId: 13208326520840
+        m_Key: 
+      m_FallbackState: 0
+      m_WaitForCompletion: 0
+      m_LocalVariables: []
     hasChoices: 0
     choices:
-    - choiceText: Oui
+    - choiceText:
+        m_TableReference:
+          m_TableCollectionName: 
+        m_TableEntryReference:
+          m_KeyId: 0
+          m_Key: 
+        m_FallbackState: 0
+        m_WaitForCompletion: 0
+        m_LocalVariables: []
       answer: []
       actionID: LOAD_GAME
-    - choiceText: Non
+    - choiceText:
+        m_TableReference:
+          m_TableCollectionName: 
+        m_TableEntryReference:
+          m_KeyId: 0
+          m_Key: 
+        m_FallbackState: 0
+        m_WaitForCompletion: 0
+        m_LocalVariables: []
       answer: []
       actionID: 
   - character: {fileID: 11400000, guid: 358c18f725108b14d9b9efeb15db2fc1, type: 2}
-    text: "D\xEEtes,<p=2> je recherche un esprit \xE9toile qui se trouverait dans
-      votre ruche.<p=5> Ca vous dit quelque chose?"
+    text:
+      m_TableReference:
+        m_TableCollectionName: GUID:b3eec409a99cf0744945d380db858a5e
+      m_TableEntryReference:
+        m_KeyId: 13208326520841
+        m_Key: 
+      m_FallbackState: 0
+      m_WaitForCompletion: 0
+      m_LocalVariables: []
     hasChoices: 0
     choices:
-    - choiceText: Oui
+    - choiceText:
+        m_TableReference:
+          m_TableCollectionName: 
+        m_TableEntryReference:
+          m_KeyId: 0
+          m_Key: 
+        m_FallbackState: 0
+        m_WaitForCompletion: 0
+        m_LocalVariables: []
       answer: []
       actionID: LOAD_GAME
-    - choiceText: Non
+    - choiceText:
+        m_TableReference:
+          m_TableCollectionName: 
+        m_TableEntryReference:
+          m_KeyId: 0
+          m_Key: 
+        m_FallbackState: 0
+        m_WaitForCompletion: 0
+        m_LocalVariables: []
       answer: []
       actionID: 
   - character: {fileID: 11400000, guid: b1ce399ef06d9a5419786dbbca23aee3, type: 2}
-    text: Ca a un rapport avec du miel?
+    text:
+      m_TableReference:
+        m_TableCollectionName: GUID:b3eec409a99cf0744945d380db858a5e
+      m_TableEntryReference:
+        m_KeyId: 13208326520842
+        m_Key: 
+      m_FallbackState: 0
+      m_WaitForCompletion: 0
+      m_LocalVariables: []
     hasChoices: 0
     choices:
-    - choiceText: Oui
+    - choiceText:
+        m_TableReference:
+          m_TableCollectionName: 
+        m_TableEntryReference:
+          m_KeyId: 0
+          m_Key: 
+        m_FallbackState: 0
+        m_WaitForCompletion: 0
+        m_LocalVariables: []
       answer: []
       actionID: LOAD_GAME
-    - choiceText: Non
+    - choiceText:
+        m_TableReference:
+          m_TableCollectionName: 
+        m_TableEntryReference:
+          m_KeyId: 0
+          m_Key: 
+        m_FallbackState: 0
+        m_WaitForCompletion: 0
+        m_LocalVariables: []
       answer: []
       actionID: 
   - character: {fileID: 11400000, guid: 358c18f725108b14d9b9efeb15db2fc1, type: 2}
-    text: Euh...<p=5> non?
+    text:
+      m_TableReference:
+        m_TableCollectionName: GUID:b3eec409a99cf0744945d380db858a5e
+      m_TableEntryReference:
+        m_KeyId: 13208326520843
+        m_Key: 
+      m_FallbackState: 0
+      m_WaitForCompletion: 0
+      m_LocalVariables: []
     hasChoices: 0
     choices:
-    - choiceText: Oui
+    - choiceText:
+        m_TableReference:
+          m_TableCollectionName: 
+        m_TableEntryReference:
+          m_KeyId: 0
+          m_Key: 
+        m_FallbackState: 0
+        m_WaitForCompletion: 0
+        m_LocalVariables: []
       answer: []
       actionID: LOAD_GAME
-    - choiceText: Non
+    - choiceText:
+        m_TableReference:
+          m_TableCollectionName: 
+        m_TableEntryReference:
+          m_KeyId: 0
+          m_Key: 
+        m_FallbackState: 0
+        m_WaitForCompletion: 0
+        m_LocalVariables: []
       answer: []
       actionID: 
   - character: {fileID: 11400000, guid: b1ce399ef06d9a5419786dbbca23aee3, type: 2}
-    text: "Alors \xE7a ne nous int\xE9resse pas.<p=5> Allez,<p=2> houste. <p=5>C'est
-      l'heure de notre neuvi\xE8me go\xFBter."
+    text:
+      m_TableReference:
+        m_TableCollectionName: GUID:b3eec409a99cf0744945d380db858a5e
+      m_TableEntryReference:
+        m_KeyId: 13208326520844
+        m_Key: 
+      m_FallbackState: 0
+      m_WaitForCompletion: 0
+      m_LocalVariables: []
     hasChoices: 0
     choices:
-    - choiceText: Oui
+    - choiceText:
+        m_TableReference:
+          m_TableCollectionName: 
+        m_TableEntryReference:
+          m_KeyId: 0
+          m_Key: 
+        m_FallbackState: 0
+        m_WaitForCompletion: 0
+        m_LocalVariables: []
       answer: []
       actionID: LOAD_GAME
-    - choiceText: Non
+    - choiceText:
+        m_TableReference:
+          m_TableCollectionName: 
+        m_TableEntryReference:
+          m_KeyId: 0
+          m_Key: 
+        m_FallbackState: 0
+        m_WaitForCompletion: 0
+        m_LocalVariables: []
       answer: []
       actionID: 
   - character: {fileID: 11400000, guid: 358c18f725108b14d9b9efeb15db2fc1, type: 2}
-    text: "(et moi qui pensait \xEAtre une grosse goinfre...)"
+    text:
+      m_TableReference:
+        m_TableCollectionName: GUID:b3eec409a99cf0744945d380db858a5e
+      m_TableEntryReference:
+        m_KeyId: 13208326520845
+        m_Key: 
+      m_FallbackState: 0
+      m_WaitForCompletion: 0
+      m_LocalVariables: []
     hasChoices: 0
     choices:
-    - choiceText: Oui
+    - choiceText:
+        m_TableReference:
+          m_TableCollectionName: 
+        m_TableEntryReference:
+          m_KeyId: 0
+          m_Key: 
+        m_FallbackState: 0
+        m_WaitForCompletion: 0
+        m_LocalVariables: []
       answer: []
       actionID: LOAD_GAME
-    - choiceText: Non
+    - choiceText:
+        m_TableReference:
+          m_TableCollectionName: 
+        m_TableEntryReference:
+          m_KeyId: 0
+          m_Key: 
+        m_FallbackState: 0
+        m_WaitForCompletion: 0
+        m_LocalVariables: []
       answer: []
       actionID: 
+  references:
+    version: 2
+    RefIds: []

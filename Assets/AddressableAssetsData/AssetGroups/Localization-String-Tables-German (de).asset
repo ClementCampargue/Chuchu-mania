@@ -16,7 +16,7 @@ MonoBehaviour:
   m_GUID: e23e968921a10dc4985c6c623a9a7266
   m_SerializeEntries:
   - m_GUID: 6888a4d430d57b740af50da9dd245d7f
-    m_Address: Cutscene1_de
+    m_Address: Cutscenes_de
     m_ReadOnly: 1
     m_SerializedLabels:
     - Locale-de
@@ -33,6 +33,7 @@ MonoBehaviour:
     m_ReadOnly: 1
     m_SerializedLabels:
     - Locale-de
+    - Preload
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: e88608a757795764790479e296b8b677
     m_Address: UI_de

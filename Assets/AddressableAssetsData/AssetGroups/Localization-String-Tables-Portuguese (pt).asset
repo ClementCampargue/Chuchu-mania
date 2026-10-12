@@ -29,7 +29,7 @@ MonoBehaviour:
     - Preload
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 51d1efb6ef509654aaf4292b4f68d953
-    m_Address: Cutscene1_pt
+    m_Address: Cutscenes_pt
     m_ReadOnly: 1
     m_SerializedLabels:
     - Locale-pt
@@ -40,6 +40,7 @@ MonoBehaviour:
     m_ReadOnly: 1
     m_SerializedLabels:
     - Locale-pt
+    - Preload
     FlaggedDuringContentUpdateRestriction: 0
   m_ReadOnly: 1
   m_Settings: {fileID: 11400000, guid: 81a29239053a8aa46bf9eb55d08dc7e3, type: 2}

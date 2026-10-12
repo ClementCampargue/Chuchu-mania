@@ -16,9 +16,9 @@ MonoBehaviour:
   - character: {fileID: 11400000, guid: d545f39ec73e8a94f874387ac2d04a27, type: 2}
     text:
       m_TableReference:
-        m_TableCollectionName: GUID:b3eec409a99cf0744945d380db858a5e
+        m_TableCollectionName: GUID:138a4e0e2d3e70b4ebfbd993cc4371bc
       m_TableEntryReference:
-        m_KeyId: 63247761408
+        m_KeyId: 13540277396193280
         m_Key: 
       m_FallbackState: 0
       m_WaitForCompletion: 0
@@ -27,9 +27,9 @@ MonoBehaviour:
     choices:
     - choiceText:
         m_TableReference:
-          m_TableCollectionName: 
+          m_TableCollectionName: GUID:138a4e0e2d3e70b4ebfbd993cc4371bc
         m_TableEntryReference:
-          m_KeyId: 0
+          m_KeyId: 13540277396193282
           m_Key: 
         m_FallbackState: 0
         m_WaitForCompletion: 0
@@ -38,9 +38,9 @@ MonoBehaviour:
       - character: {fileID: 11400000, guid: d545f39ec73e8a94f874387ac2d04a27, type: 2}
         text:
           m_TableReference:
-            m_TableCollectionName: 
+            m_TableCollectionName: GUID:138a4e0e2d3e70b4ebfbd993cc4371bc
           m_TableEntryReference:
-            m_KeyId: 0
+            m_KeyId: 13540277396193283
             m_Key: 
           m_FallbackState: 0
           m_WaitForCompletion: 0
@@ -96,9 +96,9 @@ MonoBehaviour:
       - character: {fileID: 11400000, guid: d545f39ec73e8a94f874387ac2d04a27, type: 2}
         text:
           m_TableReference:
-            m_TableCollectionName: 
+            m_TableCollectionName: GUID:138a4e0e2d3e70b4ebfbd993cc4371bc
           m_TableEntryReference:
-            m_KeyId: 0
+            m_KeyId: 13540277396193284
             m_Key: 
           m_FallbackState: 0
           m_WaitForCompletion: 0
@@ -154,9 +154,9 @@ MonoBehaviour:
       - character: {fileID: 11400000, guid: d545f39ec73e8a94f874387ac2d04a27, type: 2}
         text:
           m_TableReference:
-            m_TableCollectionName: 
+            m_TableCollectionName: GUID:138a4e0e2d3e70b4ebfbd993cc4371bc
           m_TableEntryReference:
-            m_KeyId: 0
+            m_KeyId: 13540277396193285
             m_Key: 
           m_FallbackState: 0
           m_WaitForCompletion: 0
@@ -212,9 +212,9 @@ MonoBehaviour:
       - character: {fileID: 11400000, guid: 358c18f725108b14d9b9efeb15db2fc1, type: 2}
         text:
           m_TableReference:
-            m_TableCollectionName: 
+            m_TableCollectionName: GUID:138a4e0e2d3e70b4ebfbd993cc4371bc
           m_TableEntryReference:
-            m_KeyId: 0
+            m_KeyId: 13540277396193286
             m_Key: 
           m_FallbackState: 0
           m_WaitForCompletion: 0
@@ -270,9 +270,9 @@ MonoBehaviour:
       actionID: 
     - choiceText:
         m_TableReference:
-          m_TableCollectionName: 
+          m_TableCollectionName: GUID:138a4e0e2d3e70b4ebfbd993cc4371bc
         m_TableEntryReference:
-          m_KeyId: 0
+          m_KeyId: 13540277396193288
           m_Key: 
         m_FallbackState: 0
         m_WaitForCompletion: 0
@@ -281,9 +281,9 @@ MonoBehaviour:
       - character: {fileID: 11400000, guid: d545f39ec73e8a94f874387ac2d04a27, type: 2}
         text:
           m_TableReference:
-            m_TableCollectionName: 
+            m_TableCollectionName: GUID:138a4e0e2d3e70b4ebfbd993cc4371bc
           m_TableEntryReference:
-            m_KeyId: 0
+            m_KeyId: 13540277396193289
             m_Key: 
           m_FallbackState: 0
           m_WaitForCompletion: 0
@@ -293,9 +293,9 @@ MonoBehaviour:
       - character: {fileID: 11400000, guid: d545f39ec73e8a94f874387ac2d04a27, type: 2}
         text:
           m_TableReference:
-            m_TableCollectionName: 
+            m_TableCollectionName: GUID:138a4e0e2d3e70b4ebfbd993cc4371bc
           m_TableEntryReference:
-            m_KeyId: 0
+            m_KeyId: 13540277396193290
             m_Key: 
           m_FallbackState: 0
           m_WaitForCompletion: 0
@@ -305,9 +305,9 @@ MonoBehaviour:
       - character: {fileID: 11400000, guid: 358c18f725108b14d9b9efeb15db2fc1, type: 2}
         text:
           m_TableReference:
-            m_TableCollectionName: 
+            m_TableCollectionName: GUID:138a4e0e2d3e70b4ebfbd993cc4371bc
           m_TableEntryReference:
-            m_KeyId: 0
+            m_KeyId: 13540277396193291
             m_Key: 
           m_FallbackState: 0
           m_WaitForCompletion: 0
@@ -317,9 +317,9 @@ MonoBehaviour:
       - character: {fileID: 11400000, guid: d545f39ec73e8a94f874387ac2d04a27, type: 2}
         text:
           m_TableReference:
-            m_TableCollectionName: 
+            m_TableCollectionName: GUID:138a4e0e2d3e70b4ebfbd993cc4371bc
           m_TableEntryReference:
-            m_KeyId: 0
+            m_KeyId: 13540277396193292
             m_Key: 
           m_FallbackState: 0
           m_WaitForCompletion: 0
@@ -531,9 +531,9 @@ MonoBehaviour:
       - character: {fileID: 11400000, guid: d545f39ec73e8a94f874387ac2d04a27, type: 2}
         text:
           m_TableReference:
-            m_TableCollectionName: 
+            m_TableCollectionName: GUID:138a4e0e2d3e70b4ebfbd993cc4371bc
           m_TableEntryReference:
-            m_KeyId: 0
+            m_KeyId: 13540277396193293
             m_Key: 
           m_FallbackState: 0
           m_WaitForCompletion: 0
@@ -542,9 +542,9 @@ MonoBehaviour:
         choices:
         - choiceText:
             m_TableReference:
-              m_TableCollectionName: 
+              m_TableCollectionName: GUID:138a4e0e2d3e70b4ebfbd993cc4371bc
             m_TableEntryReference:
-              m_KeyId: 0
+              m_KeyId: 13540277396193295
               m_Key: 
             m_FallbackState: 0
             m_WaitForCompletion: 0
@@ -553,9 +553,9 @@ MonoBehaviour:
           - character: {fileID: 11400000, guid: 358c18f725108b14d9b9efeb15db2fc1, type: 2}
             text:
               m_TableReference:
-                m_TableCollectionName: 
+                m_TableCollectionName: GUID:138a4e0e2d3e70b4ebfbd993cc4371bc
               m_TableEntryReference:
-                m_KeyId: 0
+                m_KeyId: 13540277396193296
                 m_Key: 
               m_FallbackState: 0
               m_WaitForCompletion: 0
@@ -565,9 +565,9 @@ MonoBehaviour:
           - character: {fileID: 11400000, guid: 358c18f725108b14d9b9efeb15db2fc1, type: 2}
             text:
               m_TableReference:
-                m_TableCollectionName: 
+                m_TableCollectionName: GUID:138a4e0e2d3e70b4ebfbd993cc4371bc
               m_TableEntryReference:
-                m_KeyId: 0
+                m_KeyId: 13540277396193297
                 m_Key: 
               m_FallbackState: 0
               m_WaitForCompletion: 0
@@ -577,9 +577,9 @@ MonoBehaviour:
           - character: {fileID: 11400000, guid: d545f39ec73e8a94f874387ac2d04a27, type: 2}
             text:
               m_TableReference:
-                m_TableCollectionName: 
+                m_TableCollectionName: GUID:138a4e0e2d3e70b4ebfbd993cc4371bc
               m_TableEntryReference:
-                m_KeyId: 0
+                m_KeyId: 13540277396193298
                 m_Key: 
               m_FallbackState: 0
               m_WaitForCompletion: 0
@@ -589,9 +589,9 @@ MonoBehaviour:
           - character: {fileID: 11400000, guid: 201e18955e3c1254fae5fd2b355c5cac, type: 2}
             text:
               m_TableReference:
-                m_TableCollectionName: 
+                m_TableCollectionName: GUID:138a4e0e2d3e70b4ebfbd993cc4371bc
               m_TableEntryReference:
-                m_KeyId: 0
+                m_KeyId: 13540277396193299
                 m_Key: 
               m_FallbackState: 0
               m_WaitForCompletion: 0
@@ -601,9 +601,9 @@ MonoBehaviour:
           - character: {fileID: 11400000, guid: 201e18955e3c1254fae5fd2b355c5cac, type: 2}
             text:
               m_TableReference:
-                m_TableCollectionName: 
+                m_TableCollectionName: GUID:138a4e0e2d3e70b4ebfbd993cc4371bc
               m_TableEntryReference:
-                m_KeyId: 0
+                m_KeyId: 13540277396193300
                 m_Key: 
               m_FallbackState: 0
               m_WaitForCompletion: 0
@@ -613,9 +613,9 @@ MonoBehaviour:
           - character: {fileID: 11400000, guid: 201e18955e3c1254fae5fd2b355c5cac, type: 2}
             text:
               m_TableReference:
-                m_TableCollectionName: 
+                m_TableCollectionName: GUID:138a4e0e2d3e70b4ebfbd993cc4371bc
               m_TableEntryReference:
-                m_KeyId: 0
+                m_KeyId: 13540277396193301
                 m_Key: 
               m_FallbackState: 0
               m_WaitForCompletion: 0
@@ -625,9 +625,9 @@ MonoBehaviour:
           - character: {fileID: 11400000, guid: 201e18955e3c1254fae5fd2b355c5cac, type: 2}
             text:
               m_TableReference:
-                m_TableCollectionName: 
+                m_TableCollectionName: GUID:138a4e0e2d3e70b4ebfbd993cc4371bc
               m_TableEntryReference:
-                m_KeyId: 0
+                m_KeyId: 13540277396193301
                 m_Key: 
               m_FallbackState: 0
               m_WaitForCompletion: 0
@@ -637,9 +637,9 @@ MonoBehaviour:
           - character: {fileID: 11400000, guid: d545f39ec73e8a94f874387ac2d04a27, type: 2}
             text:
               m_TableReference:
-                m_TableCollectionName: 
+                m_TableCollectionName: GUID:138a4e0e2d3e70b4ebfbd993cc4371bc
               m_TableEntryReference:
-                m_KeyId: 0
+                m_KeyId: 13540277396193302
                 m_Key: 
               m_FallbackState: 0
               m_WaitForCompletion: 0
@@ -649,9 +649,9 @@ MonoBehaviour:
           - character: {fileID: 11400000, guid: d545f39ec73e8a94f874387ac2d04a27, type: 2}
             text:
               m_TableReference:
-                m_TableCollectionName: 
+                m_TableCollectionName: GUID:138a4e0e2d3e70b4ebfbd993cc4371bc
               m_TableEntryReference:
-                m_KeyId: 0
+                m_KeyId: 13540277396193303
                 m_Key: 
               m_FallbackState: 0
               m_WaitForCompletion: 0
@@ -661,9 +661,9 @@ MonoBehaviour:
           - character: {fileID: 11400000, guid: 201e18955e3c1254fae5fd2b355c5cac, type: 2}
             text:
               m_TableReference:
-                m_TableCollectionName: 
+                m_TableCollectionName: GUID:138a4e0e2d3e70b4ebfbd993cc4371bc
               m_TableEntryReference:
-                m_KeyId: 0
+                m_KeyId: 13540277396193304
                 m_Key: 
               m_FallbackState: 0
               m_WaitForCompletion: 0
@@ -673,9 +673,9 @@ MonoBehaviour:
           actionID: 
         - choiceText:
             m_TableReference:
-              m_TableCollectionName: 
+              m_TableCollectionName: GUID:138a4e0e2d3e70b4ebfbd993cc4371bc
             m_TableEntryReference:
-              m_KeyId: 0
+              m_KeyId: 13540277396193307
               m_Key: 
             m_FallbackState: 0
             m_WaitForCompletion: 0
@@ -684,9 +684,9 @@ MonoBehaviour:
           - character: {fileID: 11400000, guid: 358c18f725108b14d9b9efeb15db2fc1, type: 2}
             text:
               m_TableReference:
-                m_TableCollectionName: 
+                m_TableCollectionName: GUID:138a4e0e2d3e70b4ebfbd993cc4371bc
               m_TableEntryReference:
-                m_KeyId: 0
+                m_KeyId: 13540277396193308
                 m_Key: 
               m_FallbackState: 0
               m_WaitForCompletion: 0
@@ -696,9 +696,9 @@ MonoBehaviour:
           - character: {fileID: 11400000, guid: 358c18f725108b14d9b9efeb15db2fc1, type: 2}
             text:
               m_TableReference:
-                m_TableCollectionName: 
+                m_TableCollectionName: GUID:138a4e0e2d3e70b4ebfbd993cc4371bc
               m_TableEntryReference:
-                m_KeyId: 0
+                m_KeyId: 13540277396193309
                 m_Key: 
               m_FallbackState: 0
               m_WaitForCompletion: 0
@@ -708,9 +708,9 @@ MonoBehaviour:
           - character: {fileID: 11400000, guid: d545f39ec73e8a94f874387ac2d04a27, type: 2}
             text:
               m_TableReference:
-                m_TableCollectionName: 
+                m_TableCollectionName: GUID:138a4e0e2d3e70b4ebfbd993cc4371bc
               m_TableEntryReference:
-                m_KeyId: 0
+                m_KeyId: 13540277396193310
                 m_Key: 
               m_FallbackState: 0
               m_WaitForCompletion: 0
@@ -720,9 +720,9 @@ MonoBehaviour:
           - character: {fileID: 11400000, guid: 358c18f725108b14d9b9efeb15db2fc1, type: 2}
             text:
               m_TableReference:
-                m_TableCollectionName: 
+                m_TableCollectionName: GUID:138a4e0e2d3e70b4ebfbd993cc4371bc
               m_TableEntryReference:
-                m_KeyId: 0
+                m_KeyId: 13540277396193311
                 m_Key: 
               m_FallbackState: 0
               m_WaitForCompletion: 0
@@ -732,9 +732,9 @@ MonoBehaviour:
           - character: {fileID: 11400000, guid: d545f39ec73e8a94f874387ac2d04a27, type: 2}
             text:
               m_TableReference:
-                m_TableCollectionName: 
+                m_TableCollectionName: GUID:138a4e0e2d3e70b4ebfbd993cc4371bc
               m_TableEntryReference:
-                m_KeyId: 0
+                m_KeyId: 13540277396193312
                 m_Key: 
               m_FallbackState: 0
               m_WaitForCompletion: 0

@@ -15,8 +15,424 @@ MonoBehaviour:
   m_TableCollectionName: Dialogues
   m_TableCollectionNameGuidString: 138a4e0e2d3e70b4ebfbd993cc4371bc
   m_Entries:
-  - m_Id: 4945362944
-    m_Key: Salut c'ets mr do le rigolo
+  - m_Id: 13540277396193280
+    m_Key: Cuicui01
+    m_Metadata:
+      m_Items: []
+  - m_Id: 13540277396193281
+    m_Key: Cuicui02
+    m_Metadata:
+      m_Items: []
+  - m_Id: 13540277396193282
+    m_Key: Cuicui03
+    m_Metadata:
+      m_Items: []
+  - m_Id: 13540277396193283
+    m_Key: Cuicui04
+    m_Metadata:
+      m_Items: []
+  - m_Id: 13540277396193284
+    m_Key: Cuicui05
+    m_Metadata:
+      m_Items: []
+  - m_Id: 13540277396193285
+    m_Key: Cuicui06
+    m_Metadata:
+      m_Items: []
+  - m_Id: 13540277396193286
+    m_Key: Cuicui07
+    m_Metadata:
+      m_Items: []
+  - m_Id: 13540277396193287
+    m_Key: Cuicui08
+    m_Metadata:
+      m_Items: []
+  - m_Id: 13540277396193288
+    m_Key: Cuicui09
+    m_Metadata:
+      m_Items: []
+  - m_Id: 13540277396193289
+    m_Key: Cuicui10
+    m_Metadata:
+      m_Items: []
+  - m_Id: 13540277396193290
+    m_Key: Cuicui11
+    m_Metadata:
+      m_Items: []
+  - m_Id: 13540277396193291
+    m_Key: Cuicui12
+    m_Metadata:
+      m_Items: []
+  - m_Id: 13540277396193292
+    m_Key: Cuicui13
+    m_Metadata:
+      m_Items: []
+  - m_Id: 13540277396193293
+    m_Key: Cuicui14
+    m_Metadata:
+      m_Items: []
+  - m_Id: 13540277396193294
+    m_Key: Cuicui15
+    m_Metadata:
+      m_Items: []
+  - m_Id: 13540277396193295
+    m_Key: Cuicui16
+    m_Metadata:
+      m_Items: []
+  - m_Id: 13540277396193296
+    m_Key: Cuicui17
+    m_Metadata:
+      m_Items: []
+  - m_Id: 13540277396193297
+    m_Key: Cuicui18
+    m_Metadata:
+      m_Items: []
+  - m_Id: 13540277396193298
+    m_Key: Cuicui19
+    m_Metadata:
+      m_Items: []
+  - m_Id: 13540277396193299
+    m_Key: Cuicui20
+    m_Metadata:
+      m_Items: []
+  - m_Id: 13540277396193300
+    m_Key: Cuicui21
+    m_Metadata:
+      m_Items: []
+  - m_Id: 13540277396193301
+    m_Key: Cuicui22
+    m_Metadata:
+      m_Items: []
+  - m_Id: 13540277396193302
+    m_Key: Cuicui23
+    m_Metadata:
+      m_Items: []
+  - m_Id: 13540277396193303
+    m_Key: Cuicui24
+    m_Metadata:
+      m_Items: []
+  - m_Id: 13540277396193304
+    m_Key: Cuicui25
+    m_Metadata:
+      m_Items: []
+  - m_Id: 13540277396193305
+    m_Key: Cuicui26
+    m_Metadata:
+      m_Items: []
+  - m_Id: 13540277396193306
+    m_Key: Cuicui27
+    m_Metadata:
+      m_Items: []
+  - m_Id: 13540277396193307
+    m_Key: Cuicui28
+    m_Metadata:
+      m_Items: []
+  - m_Id: 13540277396193308
+    m_Key: Cuicui29
+    m_Metadata:
+      m_Items: []
+  - m_Id: 13540277396193309
+    m_Key: Cuicui30
+    m_Metadata:
+      m_Items: []
+  - m_Id: 13540277396193310
+    m_Key: Cuicui31
+    m_Metadata:
+      m_Items: []
+  - m_Id: 13540277396193311
+    m_Key: Cuicui32
+    m_Metadata:
+      m_Items: []
+  - m_Id: 13540277396193312
+    m_Key: Cuicui33
+    m_Metadata:
+      m_Items: []
+  - m_Id: 13542003104825344
+    m_Key: '*'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 13540277396193314
+    m_Key: Magenta01
+    m_Metadata:
+      m_Items: []
+  - m_Id: 13540277396193315
+    m_Key: Magenta02
+    m_Metadata:
+      m_Items: []
+  - m_Id: 13540277396193316
+    m_Key: Magenta03
+    m_Metadata:
+      m_Items: []
+  - m_Id: 13540277396193317
+    m_Key: Magenta04
+    m_Metadata:
+      m_Items: []
+  - m_Id: 13540277396193318
+    m_Key: Magenta05
+    m_Metadata:
+      m_Items: []
+  - m_Id: 13540277396193319
+    m_Key: Magenta06
+    m_Metadata:
+      m_Items: []
+  - m_Id: 13540277396193320
+    m_Key: Magenta07
+    m_Metadata:
+      m_Items: []
+  - m_Id: 13540277396193321
+    m_Key: Magenta08
+    m_Metadata:
+      m_Items: []
+  - m_Id: 13540277396193322
+    m_Key: Magenta09
+    m_Metadata:
+      m_Items: []
+  - m_Id: 13540277396193323
+    m_Key: Magenta10
+    m_Metadata:
+      m_Items: []
+  - m_Id: 13540277396193324
+    m_Key: Magenta11
+    m_Metadata:
+      m_Items: []
+  - m_Id: 13540277396193325
+    m_Key: Magenta12
+    m_Metadata:
+      m_Items: []
+  - m_Id: 13540277396193326
+    m_Key: Magenta13
+    m_Metadata:
+      m_Items: []
+  - m_Id: 13540277396193327
+    m_Key: Magenta14
+    m_Metadata:
+      m_Items: []
+  - m_Id: 13540277396193328
+    m_Key: Magenta15
+    m_Metadata:
+      m_Items: []
+  - m_Id: 13540277396193329
+    m_Key: Magenta16
+    m_Metadata:
+      m_Items: []
+  - m_Id: 13540277396193330
+    m_Key: Magenta17
+    m_Metadata:
+      m_Items: []
+  - m_Id: 13540277396193331
+    m_Key: Magenta18
+    m_Metadata:
+      m_Items: []
+  - m_Id: 13540277396193332
+    m_Key: Magenta19
+    m_Metadata:
+      m_Items: []
+  - m_Id: 13540277396193333
+    m_Key: Magenta20
+    m_Metadata:
+      m_Items: []
+  - m_Id: 13540277396193334
+    m_Key: Magenta21
+    m_Metadata:
+      m_Items: []
+  - m_Id: 13540277396193335
+    m_Key: Magenta22
+    m_Metadata:
+      m_Items: []
+  - m_Id: 13542003104825344
+    m_Key: '*'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 13540277396193337
+    m_Key: MmeDo01
+    m_Metadata:
+      m_Items: []
+  - m_Id: 13540277396193338
+    m_Key: MmeDo02
+    m_Metadata:
+      m_Items: []
+  - m_Id: 13540277396193339
+    m_Key: MmeDo03
+    m_Metadata:
+      m_Items: []
+  - m_Id: 13540277396193340
+    m_Key: MmeDo04
+    m_Metadata:
+      m_Items: []
+  - m_Id: 13540277396193341
+    m_Key: MmeDo05
+    m_Metadata:
+      m_Items: []
+  - m_Id: 13540277404581888
+    m_Key: MmeDo06
+    m_Metadata:
+      m_Items: []
+  - m_Id: 13542003104825344
+    m_Key: '*'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 13540277404581890
+    m_Key: MrDo01
+    m_Metadata:
+      m_Items: []
+  - m_Id: 13540277404581891
+    m_Key: MrDo02
+    m_Metadata:
+      m_Items: []
+  - m_Id: 13540277404581892
+    m_Key: MrDo03
+    m_Metadata:
+      m_Items: []
+  - m_Id: 13542003104825344
+    m_Key: '*'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 13540277404581894
+    m_Key: Pioupiou01
+    m_Metadata:
+      m_Items: []
+  - m_Id: 13540277404581895
+    m_Key: Pioupiou02
+    m_Metadata:
+      m_Items: []
+  - m_Id: 13540277404581896
+    m_Key: Pioupiou03
+    m_Metadata:
+      m_Items: []
+  - m_Id: 13540277404581897
+    m_Key: Pioupiou04
+    m_Metadata:
+      m_Items: []
+  - m_Id: 13540277404581898
+    m_Key: Pioupiou05
+    m_Metadata:
+      m_Items: []
+  - m_Id: 13540277404581899
+    m_Key: Pioupiou06
+    m_Metadata:
+      m_Items: []
+  - m_Id: 13540277404581900
+    m_Key: Pioupiou07
+    m_Metadata:
+      m_Items: []
+  - m_Id: 13540277404581901
+    m_Key: Pioupiou08
+    m_Metadata:
+      m_Items: []
+  - m_Id: 13540277404581902
+    m_Key: Pioupiou09
+    m_Metadata:
+      m_Items: []
+  - m_Id: 13540277404581903
+    m_Key: Pioupiou10
+    m_Metadata:
+      m_Items: []
+  - m_Id: 13542003104825344
+    m_Key: '*'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 13540277404581905
+    m_Key: Yanya01
+    m_Metadata:
+      m_Items: []
+  - m_Id: 13540277404581906
+    m_Key: Yanya02
+    m_Metadata:
+      m_Items: []
+  - m_Id: 13540277404581907
+    m_Key: Yanya03
+    m_Metadata:
+      m_Items: []
+  - m_Id: 13540277404581908
+    m_Key: Yanya04
+    m_Metadata:
+      m_Items: []
+  - m_Id: 13540277404581909
+    m_Key: Yanya05
+    m_Metadata:
+      m_Items: []
+  - m_Id: 13540277404581910
+    m_Key: Yanya06
+    m_Metadata:
+      m_Items: []
+  - m_Id: 13540277404581911
+    m_Key: Yanya07
+    m_Metadata:
+      m_Items: []
+  - m_Id: 13540277404581912
+    m_Key: Yanya08
+    m_Metadata:
+      m_Items: []
+  - m_Id: 13540277404581913
+    m_Key: Yanya09
+    m_Metadata:
+      m_Items: []
+  - m_Id: 13540277404581914
+    m_Key: Yanya10
+    m_Metadata:
+      m_Items: []
+  - m_Id: 13540277404581915
+    m_Key: Yanya11
+    m_Metadata:
+      m_Items: []
+  - m_Id: 13540277404581916
+    m_Key: Yanya12
+    m_Metadata:
+      m_Items: []
+  - m_Id: 13540277404581917
+    m_Key: Yanya13
+    m_Metadata:
+      m_Items: []
+  - m_Id: 13540277404581918
+    m_Key: Yanya14
+    m_Metadata:
+      m_Items: []
+  - m_Id: 13540277404581919
+    m_Key: Yanya15
+    m_Metadata:
+      m_Items: []
+  - m_Id: 13542003104825344
+    m_Key: '*'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 13540277404581921
+    m_Key: Chuchu01
+    m_Metadata:
+      m_Items: []
+  - m_Id: 13540277404581922
+    m_Key: Chuchu02
+    m_Metadata:
+      m_Items: []
+  - m_Id: 13540277404581923
+    m_Key: Chuchu03
+    m_Metadata:
+      m_Items: []
+  - m_Id: 13540277404581924
+    m_Key: Chuchu04
+    m_Metadata:
+      m_Items: []
+  - m_Id: 13540277404581925
+    m_Key: Chuchu05
+    m_Metadata:
+      m_Items: []
+  - m_Id: 13540277404581926
+    m_Key: Chuchu06
+    m_Metadata:
+      m_Items: []
+  - m_Id: 13540277404581927
+    m_Key: Chuchu07
+    m_Metadata:
+      m_Items: []
+  - m_Id: 13540277404581928
+    m_Key: Chuchu08
+    m_Metadata:
+      m_Items: []
+  - m_Id: 13540277404581929
+    m_Key: Chuchu09
+    m_Metadata:
+      m_Items: []
+  - m_Id: 13540277404581930
+    m_Key: Chuchu10
     m_Metadata:
       m_Items: []
   m_Metadata:
