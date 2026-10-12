@@ -2,6 +2,7 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Audio;
 using UnityEngine.InputSystem;
+using UnityEngine.SceneManagement;
 
 public class SC_win_screen : MonoBehaviour
 {
@@ -37,7 +38,15 @@ public class SC_win_screen : MonoBehaviour
         audioSource.Play();
         anim.ResetTrigger("show");
         anim.SetTrigger("hide");
-        transition.Capture("Cutscene"+ (PlayerPrefs.GetInt("Level")+1));
+        if (SceneManager.GetActiveScene().name == "TUTO")
+        {
+            transition.Capture("HUB");
+        }
+        else
+        {
+            transition.Capture("Cutscene" + (PlayerPrefs.GetInt("Level") + 1));
+
+        }
         canact = false;
         once = false;
     }
@@ -49,8 +58,17 @@ public class SC_win_screen : MonoBehaviour
 
     public void Start_screen()
     {
-        anim.enabled = true;
-        anim.SetTrigger("show");
+        if(SceneManager.GetActiveScene().name == "TUTO")
+        {
+            anim.enabled = true;
+            anim.SetTrigger("tuto");
+        }
+        else
+        {
+            anim.enabled = true;
+            anim.SetTrigger("show");
+
+        }
 
     }
 }

@@ -342,6 +342,8 @@ public class DialogueManager : MonoBehaviour
 
     private void EndDialogue()
     {
+       typewriter.InvokeDialogueFinishedIfNeeded();
+
         StopAllCoroutines();
         waitingInput = false;
         if (cutscene)

@@ -2,17 +2,15 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
-using UnityEngine.Events;
 
 public class SC_typewriter : MonoBehaviour
 {
-    public UnityEvent Event;
-
     public bool isTyping = false;
     public bool finished = false;
-    public DialogueManager dialogueManager;
-    [Header("Text Settings")]
 
+    public DialogueManager dialogueManager;
+
+    [Header("Text Settings")]
     [TextArea]
     public string fullText;
 
@@ -48,62 +46,48 @@ public class SC_typewriter : MonoBehaviour
     public GameObject wait_input_logo;
 
     private TMP_TextInfo textInfo;
-
-    // Vertices originaux du texte
     private Vector3[][] originalVertices;
 
-    // Offset actuel de chaque lettre qui utilise le shake
-    private Dictionary<int, Vector3> shakeOffsets = new();
+    private readonly Dictionary<int, Vector3> shakeOffsets = new();
+    private readonly HashSet<int> revealedChars = new();
 
-    // Lettres déjà révélées
-    private HashSet<int> revealedChars = new();
+    private readonly HashSet<int> shakeChars = new();
+    private readonly HashSet<int> waveChars = new();
+    private readonly HashSet<int> scaleChars = new();
+    private readonly HashSet<int> colorChars = new();
 
-    // Lettres affectées par chaque effet
-    private HashSet<int> shakeChars = new();
-    private HashSet<int> waveChars = new();
-    private HashSet<int> scaleChars = new();
-    private HashSet<int> colorChars = new();
-
-    // Pauses
-    private List<(int index, float duration)> pauseChars = new();
+    private readonly List<(int index, float duration)> pauseChars = new();
+    private readonly List<Coroutine> popCoroutines = new();
 
     private float shakeTimer;
 
     private Coroutine typeCoroutine;
     private Coroutine animateCoroutine;
 
-    // Toutes les coroutines POP actuellement actives
-    private List<Coroutine> popCoroutines = new();
-
-    // ---------------------------------------------------------
-    // IMPORTANT :
-    // Chaque nouveau TriggerText crée une nouvelle "version".
-    // Une ancienne coroutine ne peut donc plus modifier le
-    // nouveau texte.
-    // ---------------------------------------------------------
     private int textVersion = 0;
-    private int dialogue_to_trigger_event = 0;
 
-    private bool event_onstart;
+    // Empêche les événements de fin de ligne
+    // d'être appelés plusieurs fois pour le même texte.
+    private bool endEventInvoked = false;
+
+    // Empêche l'événement de fin du dialogue entier
+    // d'être appelé plusieurs fois.
+    private bool dialogueFinishedEventInvoked = false;
+
     private void Awake()
     {
-        // On lance UNE SEULE fois l'animation permanente.
-        animateCoroutine = StartCoroutine(AnimateText());
+        if (animateCoroutine == null)
+            animateCoroutine = StartCoroutine(AnimateText());
     }
+
     private void Start()
     {
-        dialogueManager = DialogueManager.instance;
-    }
-    public void SetEvent(UnityEvent newEvent, int dialogue_to_trigger_, bool start_)
-    {
-        event_onstart = start_;
-        Event = newEvent;
-        dialogue_to_trigger_event = dialogue_to_trigger_;
+        if (dialogueManager == null)
+            dialogueManager = DialogueManager.instance;
     }
 
     private void OnDisable()
     {
-        // Invalide toutes les anciennes coroutines.
         textVersion++;
 
         if (typeCoroutine != null)
@@ -114,15 +98,15 @@ public class SC_typewriter : MonoBehaviour
 
         StopAllPopCoroutines();
 
-        if (audioSource != null && audioSource.isPlaying)
+        if (audioSource != null &&
+            audioSource.isPlaying)
+        {
             audioSource.Stop();
-
-      //  textMeshPro.text = "";
+        }
 
         isTyping = false;
         finished = true;
     }
-
 
     // =========================================================
     // TRIGGER TEXT
@@ -130,55 +114,64 @@ public class SC_typewriter : MonoBehaviour
 
     public void TriggerText(string text)
     {
+        if (dialogueManager == null)
+            dialogueManager = DialogueManager.instance;
+
         if (wait_input_logo != null)
             wait_input_logo.SetActive(false);
-        if (dialogueManager.currentLineIndex == dialogue_to_trigger_event && event_onstart)
-        {
-            Event?.Invoke();
-        }
-        textMeshPro.enabled = true;
 
-        // -----------------------------------------------------
-        // NOUVEAU TEXTE
-        //
-        // On invalide immédiatement tout ce qui appartient
-        // au texte précédent.
-        // -----------------------------------------------------
+        textMeshPro.enabled = true;
 
         textVersion++;
 
-        // Arrête l'ancien typewriter
         if (typeCoroutine != null)
         {
             StopCoroutine(typeCoroutine);
             typeCoroutine = null;
         }
 
-        // Arrête tous les anciens POP
         StopAllPopCoroutines();
 
-        // Arrête le son précédent
-        if (audioSource != null && audioSource.isPlaying)
+        if (audioSource != null &&
+            audioSource.isPlaying)
+        {
             audioSource.Stop();
+        }
 
-        // Réinitialise l'état
         isTyping = false;
         finished = false;
 
+        // Reset de l'événement de fin de cette ligne.
+        endEventInvoked = false;
+
+        // IMPORTANT :
+        // On ne reset PAS dialogueFinishedEventInvoked ici.
+        // Il doit rester actif pendant toute la conversation.
+        //
+        // Il sera reset uniquement quand on commencera
+        // une nouvelle conversation complète.
+
         fullText = text;
 
-        // Recrée le mesh et les informations du nouveau texte
         ParseTags();
 
-        // Mémorise la version actuelle
         int currentVersion = textVersion;
 
-        // Lance le nouveau typewriter
-        typeCoroutine = StartCoroutine(
-            TypeText(currentVersion)
-        );
-    }
+        // Event au début de la ligne.
+        if (dialogueManager != null &&
+            dialogueManager.npc != null)
+        {
+            dialogueManager.npc.TriggerDialogueEvents(
+                dialogueManager.currentLineIndex,
+                true
+            );
+        }
 
+        typeCoroutine =
+            StartCoroutine(
+                TypeText(currentVersion)
+            );
+    }
 
     // =========================================================
     // TYPEWRITER
@@ -192,50 +185,37 @@ public class SC_typewriter : MonoBehaviour
         isTyping = true;
         finished = false;
 
-        int charCount = textInfo.characterCount;
+        int charCount =
+            textInfo.characterCount;
 
-        for (int i = 0; i < charCount; i++)
+        for (int i = 0;
+             i < charCount;
+             i++)
         {
-            // -------------------------------------------------
-            // IMPORTANT :
-            // Si un nouveau texte a été déclenché, cette
-            // coroutine n'a plus le droit de modifier quoi que
-            // ce soit.
-            // -------------------------------------------------
-
             if (version != textVersion)
                 yield break;
-
-
-            // -------------------------------------------------
-            // PAUSE
-            // -------------------------------------------------
 
             foreach (var pause in pauseChars)
             {
-                if (pause.index == i)
-                {
-                    if (audioSource != null)
-                        audioSource.Pause();
+                if (pause.index != i)
+                    continue;
 
-                    yield return new WaitForSeconds(
-                        pause.duration / 10f
-                    );
+                if (audioSource != null)
+                    audioSource.Pause();
 
-                    // Le texte a peut-être changé pendant la pause
-                    if (version != textVersion)
-                        yield break;
+                yield return new WaitForSeconds(
+                    pause.duration / 10f
+                );
 
-                    if (audioSource != null)
-                        audioSource.UnPause();
-                }
+                if (version != textVersion)
+                    yield break;
+
+                if (audioSource != null)
+                    audioSource.UnPause();
             }
 
-
-            // Vérification supplémentaire après la pause
             if (version != textVersion)
                 yield break;
-
 
             TMP_CharacterInfo charInfo =
                 textInfo.characterInfo[i];
@@ -243,41 +223,30 @@ public class SC_typewriter : MonoBehaviour
             if (!charInfo.isVisible)
                 continue;
 
+            int matIndex =
+                charInfo.materialReferenceIndex;
 
-            int matIndex = charInfo.materialReferenceIndex;
-            int vertIndex = charInfo.vertexIndex;
+            int vertIndex =
+                charInfo.vertexIndex;
 
             Color32[] vertexColors =
                 textInfo.meshInfo[matIndex].colors32;
 
-
-            // -------------------------------------------------
-            // REVEAL LETTER
-            // -------------------------------------------------
-
             for (int j = 0; j < 4; j++)
             {
-                vertexColors[vertIndex + j].a = 255;
+                vertexColors[
+                    vertIndex + j
+                ].a = 255;
             }
 
             revealedChars.Add(i);
 
-
-            // Initialise le shake
             if (shakeChars.Contains(i))
-            {
                 InitShakeOffset(i);
-            }
-
 
             textMeshPro.UpdateVertexData(
                 TMP_VertexDataUpdateFlags.Colors32
             );
-
-
-            // -------------------------------------------------
-            // POP
-            // -------------------------------------------------
 
             Coroutine popCoroutine =
                 StartCoroutine(
@@ -286,33 +255,77 @@ public class SC_typewriter : MonoBehaviour
 
             popCoroutines.Add(popCoroutine);
 
-
-            yield return new WaitForSeconds(typeSpeed);
+            yield return new WaitForSeconds(
+                typeSpeed
+            );
         }
 
-
-        // -----------------------------------------------------
-        // FIN
-        // -----------------------------------------------------
-
-        // Si un autre texte a été lancé, ne touche surtout
-        // pas à l'état du nouveau texte.
         if (version != textVersion)
             yield break;
-        if(dialogueManager.currentLineIndex == dialogue_to_trigger_event && !event_onstart)
-        {
-            Event?.Invoke();
-        }
 
         isTyping = false;
         finished = true;
 
         typeCoroutine = null;
 
-        if (audioSource != null && audioSource.isPlaying)
+        // Fin de la ligne.
+        InvokeEndEventOnce();
+
+        // Vérifie si c'est la fin du dialogue entier.
+
+        if (audioSource != null &&
+            audioSource.isPlaying)
+        {
             audioSource.Stop();
+        }
     }
 
+    // =========================================================
+    // DIALOGUE EVENTS
+    // =========================================================
+
+    private void InvokeEndEventOnce()
+    {
+        if (endEventInvoked)
+            return;
+
+        endEventInvoked = true;
+
+        if (dialogueManager == null)
+            dialogueManager = DialogueManager.instance;
+
+        if (dialogueManager == null ||
+            dialogueManager.npc == null)
+        {
+            return;
+        }
+
+        // Event de fin de ligne.
+        dialogueManager.npc.TriggerDialogueEvents(
+            dialogueManager.currentLineIndex,
+            false
+        );
+    }
+
+    // =========================================================
+    // FIN DU DIALOGUE ENTIER
+    // =========================================================
+
+    public void InvokeDialogueFinishedIfNeeded()
+    {
+
+        if (dialogueManager == null)
+            dialogueManager = DialogueManager.instance;
+
+        if (dialogueManager == null ||
+            dialogueManager.npc == null)
+        {
+            return;
+        }
+
+
+        dialogueManager.npc.CheckDialogueFinished();
+    }
 
     // =========================================================
     // SHAKE INITIALIZATION
@@ -336,7 +349,6 @@ public class SC_typewriter : MonoBehaviour
         );
     }
 
-
     // =========================================================
     // WAIT INPUT
     // =========================================================
@@ -347,7 +359,6 @@ public class SC_typewriter : MonoBehaviour
             wait_input_logo.SetActive(visible);
     }
 
-
     // =========================================================
     // COMPLETE TYPING
     // =========================================================
@@ -357,7 +368,6 @@ public class SC_typewriter : MonoBehaviour
         if (!isTyping)
             return;
 
-        // Invalide les anciennes coroutines
         textVersion++;
 
         if (typeCoroutine != null)
@@ -373,10 +383,17 @@ public class SC_typewriter : MonoBehaviour
 
         RevealAllCharacters();
 
-        if (audioSource != null && audioSource.isPlaying)
-            audioSource.Stop();
-    }
+        // Fin de la ligne.
+        InvokeEndEventOnce();
 
+        // Vérifie également la fin du dialogue entier.
+
+        if (audioSource != null &&
+            audioSource.isPlaying)
+        {
+            audioSource.Stop();
+        }
+    }
 
     // =========================================================
     // FINISH TEXT
@@ -384,8 +401,6 @@ public class SC_typewriter : MonoBehaviour
 
     public void FinishText()
     {
-
-        // Invalide les anciennes coroutines
         textVersion++;
 
         if (typeCoroutine != null)
@@ -401,42 +416,49 @@ public class SC_typewriter : MonoBehaviour
 
         RevealAllCharacters();
 
-        if (audioSource != null && audioSource.isPlaying)
+        // Fin de la ligne.
+        InvokeEndEventOnce();
+
+        // Vérifie également la fin du dialogue entier.
+ 
+        if (audioSource != null &&
+            audioSource.isPlaying)
+        {
             audioSource.Stop();
+        }
     }
 
-
     // =========================================================
-    // STOP ALL POP COROUTINES
+    // STOP POP COROUTINES
     // =========================================================
 
     private void StopAllPopCoroutines()
     {
-        for (int i = 0; i < popCoroutines.Count; i++)
+        for (int i = 0;
+             i < popCoroutines.Count;
+             i++)
         {
             if (popCoroutines[i] != null)
-            {
-                StopCoroutine(popCoroutines[i]);
-            }
+                StopCoroutine(
+                    popCoroutines[i]
+                );
         }
 
         popCoroutines.Clear();
     }
 
-
     // =========================================================
-    // REVEAL ALL
+    // REVEAL ALL CHARACTERS
     // =========================================================
 
     private void RevealAllCharacters()
     {
         if (textInfo == null)
             return;
-        if (dialogueManager.currentLineIndex == dialogue_to_trigger_event && !event_onstart)
-        {
-            Event?.Invoke();
-        }
-        for (int i = 0; i < textInfo.characterCount; i++)
+
+        for (int i = 0;
+             i < textInfo.characterCount;
+             i++)
         {
             TMP_CharacterInfo charInfo =
                 textInfo.characterInfo[i];
@@ -455,12 +477,13 @@ public class SC_typewriter : MonoBehaviour
 
             for (int j = 0; j < 4; j++)
             {
-                colors[vertIndex + j].a = 255;
+                colors[
+                    vertIndex + j
+                ].a = 255;
             }
 
             revealedChars.Add(i);
 
-            // Prépare également les shakes
             if (shakeChars.Contains(i))
                 InitShakeOffset(i);
         }
@@ -470,16 +493,10 @@ public class SC_typewriter : MonoBehaviour
         );
     }
 
-
-    // =========================================================
-    // IS TYPING
-    // =========================================================
-
     public bool IsTyping()
     {
         return isTyping;
     }
-
 
     // =========================================================
     // PARSE TAGS
@@ -491,36 +508,33 @@ public class SC_typewriter : MonoBehaviour
         waveChars.Clear();
         scaleChars.Clear();
         colorChars.Clear();
-
         pauseChars.Clear();
-
         revealedChars.Clear();
         shakeOffsets.Clear();
 
         string raw = fullText;
         string clean = "";
 
-        Stack<string> activeTags = new();
+        Stack<string> activeTags =
+            new Stack<string>();
 
         int visibleIndex = 0;
 
-
-        // -----------------------------------------------------
-        // PARSE DU TEXTE
-        // -----------------------------------------------------
-
-        for (int i = 0; i < raw.Length; i++)
+        for (int i = 0;
+             i < raw.Length;
+             i++)
         {
-            // -------------------------------------------------
-            // TAG
-            // -------------------------------------------------
-
             if (raw[i] == '<')
             {
-                int end = raw.IndexOf('>', i);
+                int end =
+                    raw.IndexOf('>', i);
 
                 if (end == -1)
+                {
+                    clean += raw[i];
+                    visibleIndex++;
                     continue;
+                }
 
                 string tag =
                     raw.Substring(
@@ -528,17 +542,11 @@ public class SC_typewriter : MonoBehaviour
                         end - i - 1
                     );
 
-
-                // -------------------------------------------------
-                // PAUSE
-                // -------------------------------------------------
-
                 if (tag.StartsWith("p="))
                 {
                     if (float.TryParse(
                         tag.Replace("p=", ""),
-                        out float time
-                    ))
+                        out float time))
                     {
                         pauseChars.Add(
                             (visibleIndex, time)
@@ -549,88 +557,52 @@ public class SC_typewriter : MonoBehaviour
                     continue;
                 }
 
-
-                // -------------------------------------------------
-                // OPEN TAG
-                // -------------------------------------------------
-
                 if (!tag.StartsWith("/"))
                 {
                     activeTags.Push(tag);
                 }
-
-
-                // -------------------------------------------------
-                // CLOSE TAG
-                // -------------------------------------------------
-
                 else if (activeTags.Count > 0)
                 {
                     activeTags.Pop();
                 }
 
-
                 i = end;
                 continue;
             }
-
-
-            // -------------------------------------------------
-            // APPLY ACTIVE TAGS
-            // -------------------------------------------------
 
             foreach (string tag in activeTags)
             {
                 switch (tag)
                 {
                     case "sh":
-                        shakeChars.Add(visibleIndex);
+                        shakeChars.Add(
+                            visibleIndex
+                        );
                         break;
 
                     case "w":
-                        waveChars.Add(visibleIndex);
+                        waveChars.Add(
+                            visibleIndex
+                        );
                         break;
 
                     case "sc":
-                        scaleChars.Add(visibleIndex);
+                        scaleChars.Add(
+                            visibleIndex
+                        );
                         break;
 
                     case "c":
-                        colorChars.Add(visibleIndex);
-                        break;
-
-                    default:
-
-                        if (tag.StartsWith("p="))
-                        {
-                            if (float.TryParse(
-                                tag.Replace("p=", ""),
-                                out float time
-                            ))
-                            {
-                                pauseChars.Add(
-                                    (visibleIndex, time)
-                                );
-                            }
-                        }
-
+                        colorChars.Add(
+                            visibleIndex
+                        );
                         break;
                 }
             }
 
-
-            // -------------------------------------------------
-            // ADD CHARACTER
-            // -------------------------------------------------
-
             clean += raw[i];
             visibleIndex++;
         }
-
-
-        // -----------------------------------------------------
-        // CREATE TMP TEXT
-        // -----------------------------------------------------
 
         textMeshPro.text = clean;
 
@@ -638,28 +610,21 @@ public class SC_typewriter : MonoBehaviour
 
         textInfo = textMeshPro.textInfo;
 
-
-        // -----------------------------------------------------
-        // SAVE ORIGINAL VERTICES
-        // -----------------------------------------------------
-
         originalVertices =
-            new Vector3[textInfo.meshInfo.Length][];
+            new Vector3[
+                textInfo.meshInfo.Length
+            ][];
 
         for (int i = 0;
              i < textInfo.meshInfo.Length;
              i++)
         {
             originalVertices[i] =
-                (Vector3[])textInfo.meshInfo[i]
+                (Vector3[])textInfo
+                    .meshInfo[i]
                     .vertices
                     .Clone();
         }
-
-
-        // -----------------------------------------------------
-        // HIDE ALL CHARACTERS
-        // -----------------------------------------------------
 
         for (int i = 0;
              i < textInfo.characterCount;
@@ -678,25 +643,24 @@ public class SC_typewriter : MonoBehaviour
                 charInfo.vertexIndex;
 
             Color32[] vertexColors =
-                textInfo.meshInfo[matIndex].colors32;
+                textInfo.meshInfo[
+                    matIndex
+                ].colors32;
 
             for (int j = 0; j < 4; j++)
             {
-                vertexColors[vertIndex + j].a = 0;
+                vertexColors[
+                    vertIndex + j
+                ].a = 0;
             }
         }
-
 
         textMeshPro.UpdateVertexData(
             TMP_VertexDataUpdateFlags.Colors32
         );
 
-
-        // -----------------------------------------------------
-        // SOUND
-        // -----------------------------------------------------
-
-        if (audioSource != null && typeSound != null)
+        if (audioSource != null &&
+            typeSound != null)
         {
             audioSource.clip = typeSound;
             audioSource.loop = true;
@@ -704,26 +668,22 @@ public class SC_typewriter : MonoBehaviour
         }
     }
 
-
     // =========================================================
     // POP LETTER
     // =========================================================
 
     private IEnumerator PopLetter(
         int index,
-        int version
-    )
+        int version)
     {
-        // Le texte a changé avant même que le POP commence
-        if (version != textVersion)
+        if (version != textVersion ||
+            textInfo == null)
+        {
             yield break;
-
-        if (textInfo == null)
-            yield break;
+        }
 
         if (index >= textInfo.characterCount)
             yield break;
-
 
         TMP_CharacterInfo charInfo =
             textInfo.characterInfo[index];
@@ -731,20 +691,19 @@ public class SC_typewriter : MonoBehaviour
         if (!charInfo.isVisible)
             yield break;
 
-
         int matIndex =
             charInfo.materialReferenceIndex;
 
         int vertIndex =
             charInfo.vertexIndex;
 
-
         Vector3[] verts =
-            textInfo.meshInfo[matIndex].vertices;
+            textInfo.meshInfo[
+                matIndex
+            ].vertices;
 
         Vector3[] original =
             new Vector3[4];
-
 
         for (int j = 0; j < 4; j++)
         {
@@ -752,32 +711,19 @@ public class SC_typewriter : MonoBehaviour
                 verts[vertIndex + j];
         }
 
-
         Vector3 mid =
-            (original[0] + original[2]) / 2f;
-
+            (original[0] +
+             original[2]) / 2f;
 
         float elapsed = 0f;
 
-
-        // -----------------------------------------------------
-        // POP ANIMATION
-        // -----------------------------------------------------
-
         while (elapsed < popDuration)
         {
-            // -------------------------------------------------
-            // IMPORTANT :
-            // Si le texte a changé, on abandonne immédiatement.
-            // -------------------------------------------------
-
             if (version != textVersion)
                 yield break;
 
-
             float t =
                 elapsed / popDuration;
-
 
             float scale =
                 Mathf.Lerp(
@@ -786,33 +732,24 @@ public class SC_typewriter : MonoBehaviour
                     t
                 );
 
-
             for (int j = 0; j < 4; j++)
             {
                 verts[vertIndex + j] =
-                    (original[j] - mid) * scale + mid;
+                    (original[j] - mid) *
+                    scale + mid;
             }
-
 
             textMeshPro.UpdateVertexData(
                 TMP_VertexDataUpdateFlags.Vertices
             );
-
 
             elapsed += Time.deltaTime;
 
             yield return null;
         }
 
-
-        // Le texte a changé pendant la dernière frame
         if (version != textVersion)
             yield break;
-
-
-        // -----------------------------------------------------
-        // RESET
-        // -----------------------------------------------------
 
         for (int j = 0; j < 4; j++)
         {
@@ -820,12 +757,10 @@ public class SC_typewriter : MonoBehaviour
                 original[j];
         }
 
-
         textMeshPro.UpdateVertexData(
             TMP_VertexDataUpdateFlags.Vertices
         );
     }
-
 
     // =========================================================
     // ANIMATE TEXT
@@ -835,13 +770,6 @@ public class SC_typewriter : MonoBehaviour
     {
         while (true)
         {
-            // -------------------------------------------------
-            // IMPORTANT :
-            // On ne fait PAS ForceMeshUpdate() ici.
-            // Le mesh n'a pas besoin d'être reconstruit
-            // à chaque frame.
-            // -------------------------------------------------
-
             if (textMeshPro == null ||
                 !textMeshPro.enabled ||
                 textInfo == null ||
@@ -851,35 +779,24 @@ public class SC_typewriter : MonoBehaviour
                 continue;
             }
 
-
             shakeTimer += Time.deltaTime;
-
 
             bool updateShake =
                 shakeTimer >= shakeFrequency;
 
-
             if (updateShake)
                 shakeTimer = 0f;
-
-
-            // -------------------------------------------------
-            // ANIMATION DES LETTRES REVEALED
-            // -------------------------------------------------
 
             foreach (int i in revealedChars)
             {
                 if (i >= textInfo.characterCount)
                     continue;
 
-
                 TMP_CharacterInfo charInfo =
                     textInfo.characterInfo[i];
 
-
                 if (!charInfo.isVisible)
                     continue;
-
 
                 int matIndex =
                     charInfo.materialReferenceIndex;
@@ -887,16 +804,20 @@ public class SC_typewriter : MonoBehaviour
                 int vertIndex =
                     charInfo.vertexIndex;
 
-
                 Vector3[] verts =
-                    textInfo.meshInfo[matIndex].vertices;
+                    textInfo.meshInfo[
+                        matIndex
+                    ].vertices;
 
                 Vector3[] baseVerts =
-                    originalVertices[matIndex];
+                    originalVertices[
+                        matIndex
+                    ];
 
                 Color32[] colors =
-                    textInfo.meshInfo[matIndex].colors32;
-
+                    textInfo.meshInfo[
+                        matIndex
+                    ].colors32;
 
                 Vector3 mid =
                     (
@@ -904,23 +825,13 @@ public class SC_typewriter : MonoBehaviour
                         baseVerts[vertIndex + 2]
                     ) / 2f;
 
-
                 Vector3 offset =
                     Vector3.zero;
 
-
-                // -------------------------------------------------
-                // SHAKE
-                // -------------------------------------------------
-
                 if (shakeChars.Contains(i))
                 {
-                    // L'offset existe déjà normalement.
-                    // On ne fait donc pas de Random au premier frame.
-
                     if (!shakeOffsets.ContainsKey(i))
                         InitShakeOffset(i);
-
 
                     if (updateShake)
                     {
@@ -938,63 +849,45 @@ public class SC_typewriter : MonoBehaviour
                             );
                     }
 
-
                     offset += shakeOffsets[i];
                 }
-
-
-                // -------------------------------------------------
-                // WAVE
-                // -------------------------------------------------
 
                 if (waveChars.Contains(i))
                 {
                     offset.y +=
                         Mathf.Sin(
                             Time.time *
-                            waveFrequency +
-                            i
-                        ) * waveAmplitude;
+                            waveFrequency + i
+                        ) *
+                        waveAmplitude;
                 }
 
-
-                // -------------------------------------------------
-                // SCALE
-                // -------------------------------------------------
-
                 float scale = 1f;
-
 
                 if (scaleChars.Contains(i))
                 {
                     scale +=
                         Mathf.Sin(
                             Time.time *
-                            scaleFrequency +
-                            i
-                        ) * scaleAmplitude;
+                            scaleFrequency + i
+                        ) *
+                        scaleAmplitude;
                 }
-
-
-                // -------------------------------------------------
-                // APPLY POSITION + SCALE
-                // -------------------------------------------------
 
                 for (int j = 0; j < 4; j++)
                 {
                     verts[vertIndex + j] =
                         mid +
                         (
-                            baseVerts[vertIndex + j] -
-                            mid
-                        ) * scale +
+                            baseVerts[
+                                vertIndex + j
+                            ] - mid
+                        ) *
+                        scale +
                         offset;
                 }
 
-
-                // -------------------------------------------------
-                // COLOR
-                // -------------------------------------------------
+                Color32 c;
 
                 if (colorChars.Contains(i))
                 {
@@ -1006,57 +899,42 @@ public class SC_typewriter : MonoBehaviour
                             ) + 1f
                         ) / 2f;
 
-
-                    Color32 c =
-                        Color.Lerp(
-                            baseColor,
-                            glowColor,
-                            t
-                        );
-
-
-                    for (int j = 0; j < 4; j++)
-                    {
-                        colors[vertIndex + j] = c;
-                    }
+                    c = Color.Lerp(
+                        baseColor,
+                        glowColor,
+                        t
+                    );
                 }
                 else
                 {
-                    Color32 c =
-                        new Color32(
-                            (byte)(
-                                textMeshPro.color.r *
-                                255f
-                            ),
-                            (byte)(
-                                textMeshPro.color.g *
-                                255f
-                            ),
-                            (byte)(
-                                textMeshPro.color.b *
-                                255f
-                            ),
-                            255
-                        );
+                    c = new Color32(
+                        (byte)(
+                            textMeshPro.color.r *
+                            255f
+                        ),
+                        (byte)(
+                            textMeshPro.color.g *
+                            255f
+                        ),
+                        (byte)(
+                            textMeshPro.color.b *
+                            255f
+                        ),
+                        255
+                    );
+                }
 
-
-                    for (int j = 0; j < 4; j++)
-                    {
-                        colors[vertIndex + j] = c;
-                    }
+                for (int j = 0; j < 4; j++)
+                {
+                    colors[
+                        vertIndex + j
+                    ] = c;
                 }
             }
 
-
-            // -------------------------------------------------
-            // UPDATE MESH
-            // -------------------------------------------------
-
-            for (
-                int i = 0;
-                i < textInfo.meshInfo.Length;
-                i++
-            )
+            for (int i = 0;
+                 i < textInfo.meshInfo.Length;
+                 i++)
             {
                 textInfo.meshInfo[i].mesh.vertices =
                     textInfo.meshInfo[i].vertices;
@@ -1067,20 +945,45 @@ public class SC_typewriter : MonoBehaviour
                 );
             }
 
-
             textMeshPro.UpdateVertexData(
                 TMP_VertexDataUpdateFlags.Colors32
             );
-
 
             yield return null;
         }
     }
 
+    // =========================================================
+    // CLEAR TEXT
+    // =========================================================
+
     public void clear_text()
     {
+        textVersion++;
+
+        if (typeCoroutine != null)
+        {
+            StopCoroutine(typeCoroutine);
+            typeCoroutine = null;
+        }
+
         StopAllPopCoroutines();
+
+        isTyping = false;
+        finished = true;
+
+        endEventInvoked = true;
+        dialogueFinishedEventInvoked = true;
+
+        if (audioSource != null &&
+            audioSource.isPlaying)
+        {
+            audioSource.Stop();
+        }
+
         fullText = string.Empty;
-        textMeshPro.text = string.Empty;
+
+        if (textMeshPro != null)
+            textMeshPro.text = string.Empty;
     }
 }

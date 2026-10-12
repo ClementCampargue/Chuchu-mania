@@ -80,6 +80,7 @@ public class SC_enemy_track_player : MonoBehaviour
 
     void FixedUpdate()
     {
+
         // Si le tracking est OFF, on ne fait rien
         if (!tracking)
         {
@@ -94,6 +95,13 @@ public class SC_enemy_track_player : MonoBehaviour
             {
                 player = SC_player.instance.transform;
             }
+
+            return;
+        }
+
+        // Recherche du joueur si nécessaire
+        if (!SC_player.instance.canMove)
+        {
 
             return;
         }

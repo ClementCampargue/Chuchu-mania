@@ -47,6 +47,40 @@ MonoBehaviour:
         m_LocalVariables: []
       answer: []
       actionID: 
+  - character: {fileID: 11400000, guid: 456faa55488673345bff3bece093b18c, type: 2}
+    text:
+      m_TableReference:
+        m_TableCollectionName: GUID:6d1405209915e0e42a30b70f3369f33c
+      m_TableEntryReference:
+        m_KeyId: 12027948711943
+        m_Key: 
+      m_FallbackState: 0
+      m_WaitForCompletion: 0
+      m_LocalVariables: []
+    hasChoices: 0
+    choices:
+    - choiceText:
+        m_TableReference:
+          m_TableCollectionName: GUID:71d64c1e148486e4887f3f66640476cd
+        m_TableEntryReference:
+          m_KeyId: 31948510807212032
+          m_Key: 
+        m_FallbackState: 0
+        m_WaitForCompletion: 0
+        m_LocalVariables: []
+      answer: []
+      actionID: LOAD_GAME
+    - choiceText:
+        m_TableReference:
+          m_TableCollectionName: GUID:71d64c1e148486e4887f3f66640476cd
+        m_TableEntryReference:
+          m_KeyId: 31761941026586624
+          m_Key: 
+        m_FallbackState: 0
+        m_WaitForCompletion: 0
+        m_LocalVariables: []
+      answer: []
+      actionID: 
   references:
     version: 2
     RefIds: []

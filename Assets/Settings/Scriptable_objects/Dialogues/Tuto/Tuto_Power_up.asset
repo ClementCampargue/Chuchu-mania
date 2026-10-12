@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 890a21243a4f94d498c5fc6c8bce112f, type: 3}
-  m_Name: Tuto_02
+  m_Name: Tuto_Power_up
   m_EditorClassIdentifier: 
   lines:
   - character: {fileID: 11400000, guid: 456faa55488673345bff3bece093b18c, type: 2}
@@ -18,7 +18,7 @@ MonoBehaviour:
       m_TableReference:
         m_TableCollectionName: GUID:6d1405209915e0e42a30b70f3369f33c
       m_TableEntryReference:
-        m_KeyId: 12027948711939
+        m_KeyId: 12027948711956
         m_Key: 
       m_FallbackState: 0
       m_WaitForCompletion: 0
@@ -52,7 +52,7 @@ MonoBehaviour:
       m_TableReference:
         m_TableCollectionName: GUID:6d1405209915e0e42a30b70f3369f33c
       m_TableEntryReference:
-        m_KeyId: 12027948711940
+        m_KeyId: 12027952906240
         m_Key: 
       m_FallbackState: 0
       m_WaitForCompletion: 0
@@ -86,7 +86,7 @@ MonoBehaviour:
       m_TableReference:
         m_TableCollectionName: GUID:6d1405209915e0e42a30b70f3369f33c
       m_TableEntryReference:
-        m_KeyId: 12027948711941
+        m_KeyId: 12027952906241
         m_Key: 
       m_FallbackState: 0
       m_WaitForCompletion: 0

@@ -4,14 +4,15 @@ using UnityEngine.InputSystem;
 
 public class SC_Tuto_master : MonoBehaviour
 {
+    public AudioClip tuto_zic;
     public SC_NPC npc;
     public SC_NPC npc_wall;
     public SC_NPC npc_wall_stupido;
     public SC_NPC npc_wall2 ;
-    public SC_NPC npc_stomach;
     public SC_NPC npc_eat_creams;
     public SC_NPC npc_eat_creams_finished;
     public SC_NPC npc_eat_creams_failed;
+    public SC_NPC npc_power_up;
     public SC_starbit_spawning starbits;
     public int tutorial_index;
 
@@ -22,10 +23,15 @@ public class SC_Tuto_master : MonoBehaviour
     public bool wait_talk;
     private bool npc_eat_creamsçhas_talked;
     private bool npc_eat_creams_finishedhas_talked;
+    private bool npc_power_up_done;
     public SC_starbit_spawning spawning;
     public InputActionReference talk;
 
     private SC_icecream_eat_system eat;
+
+    public GameObject enemy;
+    public GameObject spawner;
+    public GameObject wall;
     void Start()
     {
         eat = SC_icecream_eat_system.instance;
@@ -40,11 +46,12 @@ public class SC_Tuto_master : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (wait_talk && talk.action.WasPerformedThisFrame())
+        if(!npc_power_up_done)
         {
-            wait_talk = false;
-            npc_stomach.StartTalking();
-
+            if (eat.isPowerUpActive) {
+                npc_power_up_done = true;
+                npc_power_up.StartTalking();
+            }
         }
         if(eat.currrent_ice_cream>= 10 && !npc_eat_creamsçhas_talked)
         {
@@ -54,17 +61,20 @@ public class SC_Tuto_master : MonoBehaviour
         if(eat.selectedCreams.Count >= 10 && !npc_eat_creams_finishedhas_talked && eat.isEating)
         {
             npc_eat_creams_finishedhas_talked = true;
+            CancelInvoke("delay_eat_finished");
             Invoke("delay_eat_finished", 1);
         }
-        if(eat.selectedCreams.Count < 10 && npc_eat_creamsçhas_talked && eat.isEating)
+        if(eat.selectedCreams.Count < 10 && npc_eat_creamsçhas_talked && eat.isEating && !npc_eat_creams_finishedhas_talked)
         {
             npc_eat_creamsçhas_talked = false;
+            CancelInvoke("delay_eat_failed");
             Invoke("delay_eat_failed", 0.5f);
         }
     }
 
     void delay_eat_finished()
     {
+        npc_eat_creams_finishedhas_talked = true;
         npc_eat_creams_finished.StartTalking();
     }
 
@@ -75,22 +85,26 @@ public class SC_Tuto_master : MonoBehaviour
 
     public void spawn_creams()
     {
-        Debug.Log("ça marche");
+        if (npc_eat_creams_finishedhas_talked)
+        {
+            return;
+        }
         eat.SpawnMaxIceCreams(cream);
     }
 
-    public void next_tuto()
+    public void start_level()
     {
-        tutorial_index++;
-        if(tutorial_index == 1)
-        {
-            starbits.Spawn_collectibles();
-        }
-        else if (tutorial_index == 2)
-        {
-
-        }
+        SC_music_manager.instance.update_music(tuto_zic);
+        spawning.manual_respawn = false;
+        spawner.SetActive(true);
+        wall.SetActive(false);
     }
+
+    public void spawn_enemy()
+    {
+        enemy.SetActive(true);
+    }
+
 
     public void spawn_cream()
     {
