@@ -1,0 +1,132 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5b11a58205ec3474ca216360e9fa74a8, type: 3}
+  m_Name: Tutoriel Shared Data
+  m_EditorClassIdentifier: 
+  m_TableCollectionName: Tutoriel
+  m_TableCollectionNameGuidString: 6d1405209915e0e42a30b70f3369f33c
+  m_Entries:
+  - m_Id: 15071985664
+    m_Key: Tuto01
+    m_Metadata:
+      m_Items: []
+  - m_Id: 12027948711936
+    m_Key: Tuto02
+    m_Metadata:
+      m_Items: []
+  - m_Id: 12027948711937
+    m_Key: Tuto03
+    m_Metadata:
+      m_Items: []
+  - m_Id: 12027948711938
+    m_Key: Tuto04
+    m_Metadata:
+      m_Items: []
+  - m_Id: 12027948711939
+    m_Key: Tuto05
+    m_Metadata:
+      m_Items: []
+  - m_Id: 12027948711940
+    m_Key: Tuto06
+    m_Metadata:
+      m_Items: []
+  - m_Id: 12027948711941
+    m_Key: Tuto07
+    m_Metadata:
+      m_Items: []
+  - m_Id: 12027948711942
+    m_Key: Tuto08
+    m_Metadata:
+      m_Items: []
+  - m_Id: 12027948711943
+    m_Key: Tuto09
+    m_Metadata:
+      m_Items: []
+  - m_Id: 12027948711944
+    m_Key: Tuto10
+    m_Metadata:
+      m_Items: []
+  - m_Id: 12027948711945
+    m_Key: Tuto11
+    m_Metadata:
+      m_Items: []
+  - m_Id: 12027948711946
+    m_Key: Tuto12
+    m_Metadata:
+      m_Items: []
+  - m_Id: 12027948711947
+    m_Key: Tuto13
+    m_Metadata:
+      m_Items: []
+  - m_Id: 12027948711948
+    m_Key: Tuto14
+    m_Metadata:
+      m_Items: []
+  - m_Id: 12027948711949
+    m_Key: Tuto15
+    m_Metadata:
+      m_Items: []
+  - m_Id: 12027948711950
+    m_Key: Tuto16
+    m_Metadata:
+      m_Items: []
+  - m_Id: 12027948711951
+    m_Key: Tuto17
+    m_Metadata:
+      m_Items: []
+  - m_Id: 12027948711952
+    m_Key: Tuto18
+    m_Metadata:
+      m_Items: []
+  - m_Id: 12027948711953
+    m_Key: Tuto19
+    m_Metadata:
+      m_Items: []
+  - m_Id: 12027948711954
+    m_Key: Tuto20
+    m_Metadata:
+      m_Items: []
+  - m_Id: 12027948711955
+    m_Key: Tuto21
+    m_Metadata:
+      m_Items: []
+  - m_Id: 12027948711956
+    m_Key: Tuto22
+    m_Metadata:
+      m_Items: []
+  - m_Id: 12027952906240
+    m_Key: Tuto23
+    m_Metadata:
+      m_Items: []
+  - m_Id: 12027952906241
+    m_Key: Tuto24
+    m_Metadata:
+      m_Items: []
+  - m_Id: 12027952906242
+    m_Key: Tuto25
+    m_Metadata:
+      m_Items: []
+  - m_Id: 12027952906243
+    m_Key: Tuto26
+    m_Metadata:
+      m_Items: []
+  m_Metadata:
+    m_Items: []
+  m_KeyGenerator:
+    rid: 1772536172511232000
+  references:
+    version: 2
+    RefIds:
+    - rid: 1772536172511232000
+      type: {class: DistributedUIDGenerator, ns: UnityEngine.Localization.Tables, asm: Unity.Localization}
+      data:
+        m_CustomEpoch: 1791806852604

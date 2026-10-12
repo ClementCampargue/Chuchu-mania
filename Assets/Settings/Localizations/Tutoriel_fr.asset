@@ -1,0 +1,148 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e9620f8c34305754d8cc9a7e49e852d9, type: 3}
+  m_Name: Tutoriel_fr
+  m_EditorClassIdentifier: 
+  m_LocaleId:
+    m_Code: fr
+  m_SharedData: {fileID: 11400000, guid: 6d1405209915e0e42a30b70f3369f33c, type: 2}
+  m_Metadata:
+    m_Items: []
+  m_TableData:
+  - m_Id: 15071985664
+    m_Localized: "HEYA!<p=5> Stellaman arrive \xE0 la rescousse!"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 12027948711936
+    m_Localized: "N\u2019aies crainte,<p=2> jeune stellanaute en herbe!<p=5> Cette
+      simulation va te r\xE9apprendre les bases pour ton odyss\xE9e!"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 12027948711937
+    m_Localized: "Un stellanaute digne de ce nom se doit d\u2019\xEAtre au top de
+      sa forme!<p=5> Sapristi!<p=5> Ton estomac crie famine!..."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 12027948711938
+    m_Localized: "Dans cet \xE9tat,<p=2> tu es sans d\xE9fense...<p=5> Et pas moyen
+      de d\xE9truire cette cage enfermant ton amie!"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 12027948711939
+    m_Localized: "Que vois-je?<p=5> Des morceaux d'\xE9toiles sont tomb\xE9s depuis
+      la voute c\xE9leste!"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 12027948711940
+    m_Localized: "Ces morceaux d\u2019\xE9toiles arrivent \xE0 point nomm\xE9!<p=5>
+      Collectes-en 10,<p=2> brave stellanaute!"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 12027948711941
+    m_Localized: En avant!<p=5> Bondis pour atteindre ces sucreries cosmiques!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 12027948711942
+    m_Localized: "Qu\u2019est-ce donc?<p=5> Un mur ennemi nous barre la route!<p=5>
+      Il doit bien avoir un moyen de le contourner..."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 12027948711943
+    m_Localized: Parfois,<p=2> il faut voir les choses sous un autre angle...<p=5>
+      Ou une autre direction!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 12027948711944
+    m_Localized: "Bravo,<p=2> Stellanaute!<p=5> Il semblerait que tu puisses tourner
+      autour de l\u2019espace!<p=5> C'est une information cruciale!"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 12027948711945
+    m_Localized: "Regarde,<p=2> ces morceux d\u2019\xE9toiles se sont empil\xE9s
+      comme des boules de glace!<p=5> Tu vas pouvoir te r\xE9galer!"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 12027948711946
+    m_Localized: Laisse appuyer sur E pour valider les boules sur ton cornet et les
+      manger d'un coup!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 12027948711947
+    m_Localized: A table!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 12027948711948
+    m_Localized: "Ressens-tu ton pouvoir cosmique monter?<p=5> Chaque glace consomm\xE9e
+      remplira ton estomac peu \xE0 peu."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 12027948711949
+    m_Localized: "Manger 10 boules de glace d\u2019un coup t\u2019octroient un coeur
+      suppl\xE9mentaire!<p=5> Ne l\u2019oublies pas!"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 12027948711950
+    m_Localized: Mais attention!<p=5> Lorsque tu es en train de manger,<p=2> tu ne
+      peux plus bouger.<p=5> Choisis donc le bon moment!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 12027948711951
+    m_Localized: "Lorsque tous les morceux d\u2019\xE9toiles ont \xE9t\xE9 ramass\xE9s,<p=5>
+      une nouvelle fourn\xE9e r\xE9appara\xEEt!"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 12027948711952
+    m_Localized: "Sapristi!<p=5> On dirait que les gargouillis de ton estomac cosmique
+      ont attir\xE9 une vile cr\xE9ature!"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 12027948711953
+    m_Localized: Il semblerait que divers ennemis et obstacles puissent apparaitre
+      lorsque ton estomac se remplit...
+    m_Metadata:
+      m_Items: []
+  - m_Id: 12027948711954
+    m_Localized: Alors sois toujours sur tes gardes,<p=2> car tout peut arriver pendant
+      ton aventure!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 12027948711955
+    m_Localized: "Courage,<p=2> stellanaute!<p=5> L\u2019univers compte sur toi!"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 12027948711956
+    m_Localized: "Te voil\xE0 enfin repue,<p=2> stellanaute!<p=5> Tes pouvoirs cosmiques
+      font surface!<p=5> Tu es invincible!"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 12027952906240
+    m_Localized: "A pr\xE9sent,<p=2> tu peux \xE9liminer toute menace et m\xEAme
+      sauter \xE0 l'infini!<p=5> Va lib\xE9rer ton amie!"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 12027952906241
+    m_Localized: GO STELLANAUT!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 12027952906242
+    m_Localized: "L'espace semble distordu sur les bords...<p=5> Essaie de passer
+      par l'autre c\xF4t\xE9,<p=2> Stellanaute!"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 12027952906243
+    m_Localized: "C'est presque \xE7a,<p=2> mais tu dois appuyer sur E plus longuement
+      pour s\xE9lectionner toutes les boules!"
+    m_Metadata:
+      m_Items: []
+  references:
+    version: 2
+    RefIds: []
