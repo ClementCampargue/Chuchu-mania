@@ -609,7 +609,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_Enabled
-    path: Audio Source
+    path: Countdown_audio
     classID: 82
     script: {fileID: 0}
     flags: 0
@@ -639,7 +639,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_Enabled
-    path: Audio Source (1)
+    path: Start_audio
     classID: 82
     script: {fileID: 0}
     flags: 0
@@ -787,7 +787,7 @@ AnimationClip:
       isIntCurve: 0
       isSerializeReferenceCurve: 0
     - serializedVersion: 2
-      path: 1480065241
+      path: 4212278824
       attribute: 3305885265
       script: {fileID: 0}
       typeID: 82
@@ -796,7 +796,7 @@ AnimationClip:
       isIntCurve: 0
       isSerializeReferenceCurve: 0
     - serializedVersion: 2
-      path: 448031626
+      path: 3954484147
       attribute: 3305885265
       script: {fileID: 0}
       typeID: 82
@@ -1620,7 +1620,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_Enabled
-    path: Audio Source
+    path: Countdown_audio
     classID: 82
     script: {fileID: 0}
     flags: 0
@@ -1650,7 +1650,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_Enabled
-    path: Audio Source (1)
+    path: Start_audio
     classID: 82
     script: {fileID: 0}
     flags: 0

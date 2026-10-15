@@ -31058,7 +31058,7 @@ MonoBehaviour:
   shakeDuration: 0.15
   shakeIntensity: 0.13
   freeze: 1
-  freezeDuration: 0
+  freezeDuration: 0.15
   slowMoScale: 0
   fovCurve:
     serializedVersion: 2
@@ -31974,6 +31974,7 @@ MonoBehaviour:
   base_speed: 0
   jumpForce: 6
   maxJumpTime: 0.3
+  knockbackInvincibilityTime: 0.2
   coyoteTime: 0.2
   jumpBufferTime: 0.1
   jumpBufferCounter: 0
