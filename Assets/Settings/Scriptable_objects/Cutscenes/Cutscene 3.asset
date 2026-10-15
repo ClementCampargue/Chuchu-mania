@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Cutscene 3
   m_EditorClassIdentifier: 
   lines:
-  - character: {fileID: 11400000, guid: f1b273b5eefe3a6408d92c0f6cb1c256, type: 2}
+  - character: {fileID: 11400000, guid: 999170bf34540294a957e7f2408c8a18, type: 2}
     text:
       m_TableReference:
         m_TableCollectionName: GUID:b3eec409a99cf0744945d380db858a5e

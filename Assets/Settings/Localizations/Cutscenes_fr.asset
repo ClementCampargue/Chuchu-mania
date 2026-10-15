@@ -113,12 +113,11 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 13208326520846
-    m_Localized: "Apr\xE8s avoir sauv\xE9 les esprits \xE9toiles de la ruche,<p=2>
-      Chuchu se dirige vers la Lune!"
+    m_Localized: "Haaaa...<p=5> C'est le pied d'\xEAtre reine..."
     m_Metadata:
       m_Items: []
   - m_Id: 13208326520847
-    m_Localized: "Haaaa...<p=5> C'est le pied d'\xEAtre reine..."
+    m_Localized: "Rien ne pourra troubler mon s\xE9rinissime bain de mousse lunaire..."
     m_Metadata:
       m_Items: []
   - m_Id: 13208326520848
@@ -130,8 +129,8 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 13208326520850
-    m_Localized: "C'est une catastrophe!<p=5> Chuchu est en train de lib\xE9rer tous
-      les esprits \xE9toiles!"
+    m_Localized: "C'est une catastrophe!<p=5> Chuchu a d\xE9j\xE0 infiltr\xE9 la
+      Lune!"
     m_Metadata:
       m_Items: []
   - m_Id: 13208326520851
@@ -187,7 +186,7 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 13208326520863
-    m_Localized: Victoire!
+    m_Localized: <w>Victoire!</w>
     m_Metadata:
       m_Items: []
   - m_Id: 13208326520864
@@ -196,6 +195,114 @@ MonoBehaviour:
       m_Items: []
   - m_Id: 55575863640064
     m_Localized: <p=5>.<p=5>.<p=5>.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 683898018787328
+    m_Localized: "Notre stellanaute continue sa recherche pour trouver d\u2019autres
+      esprits \xE9toiles.<p=5> La voici parcourant la mangrove Han\u2019Bo."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 683898106867712
+    m_Localized: "Urgh...<p=5> Je <w>meurs</w> de faim...<p=5> Il doit bien y avoir
+      des fruits \xE0 grignoter dans le coin..."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 683898106867713
+    m_Localized: "<sh>Cuicui \xE0 la rescousse!</sh>"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 683898106867714
+    m_Localized: "Tiens,<p=2> Chuchu!<p=5> J\u2019ai trouv\xE9 des morceaux d\u2019\xE9toiles
+      pas loin d\u2019ici!<p=5> T\u2019as vu,<p=2> je suis un grand h\xE9ros moi
+      aussi!"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 683898106867715
+    m_Localized: "Oh merci,<p=2> Cuicui,<p=2> c\u2019est tr\xE8s..."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 683898106867716
+    m_Localized: GULP
+    m_Metadata:
+      m_Items: []
+  - m_Id: 683898106867717
+    m_Localized: .<p=2>.<p=2>.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 683898106867718
+    m_Localized: J'vais m'les faire...
+    m_Metadata:
+      m_Items: []
+  - m_Id: 683898106867719
+    m_Localized: <w>[Connexion au Royaume des Abeilles]</w>
+    m_Metadata:
+      m_Items: []
+  - m_Id: 683898106867720
+    m_Localized: "<w>Nyom<p=1> glurk<p=1> hmpf...</w><p=5> Vous nous...<p=2> <w>nom...</w><p=2>
+      d\xE9rangez pendant notre quatre-heures...<p=2> <w>nyom nyom nyom</w>"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 683898106867721
+    m_Localized: "Tr\xE8s ch\xE8re Api-Api,<p=2> je suis venue m\u2019assurer que
+      les esprits \xE9toiles sont toujours bien gard\xE9s dans votre ruche."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 683898106867722
+    m_Localized: "Ah ces petits bonbons?<p=5> La petite gel\xE9e en a d\xE9j\xE0
+      lib\xE9r\xE9.<p=5> Elle ferait une bonne servante."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 683898106867723
+    m_Localized: <sh>QUOI?!<p=5> VOUS N'AVIEZ QU'UNE CHOSE A FAIRE, ESPECE DE GR-</sh>
+    m_Metadata:
+      m_Items: []
+  - m_Id: 683898106867724
+    m_Localized: <sh>URGH...</sh>
+    m_Metadata:
+      m_Items: []
+  - m_Id: 683898106867725
+    m_Localized: "On s\u2019\xE9tait mises d\u2019accord pour que vous les gardiez
+      ici en attendant les pr\xE9paratifs pour ma f\xEAte..."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 683898106867726
+    m_Localized: "<w>Relax</w>,<p=2> blanche-neige.<p=5> A l'heure qu'il est,<p=2>
+      elle doit se faire piquer l'arri\xE8re-train dans nos for\xEAts de ronce."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 683898106867727
+    m_Localized: .<p=2>.<p=2>.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 683898106867728
+    m_Localized: Je suis moyennement convaincue...
+    m_Metadata:
+      m_Items: []
+  - m_Id: 683898106867729
+    m_Localized: "Apr\xE8s avoir sauv\xE9 les esprits \xE9toiles de la ruche,<p=2>
+      Chuchu se dirige vers la Lune!"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 683898115256320
+    m_Localized: "Prudence,<p=2> je dois me faire discr\xE8te...<p=5> Les lapins
+      semblent sur leur gardes..."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 683898115256321
+    m_Localized: <sh>HA!!!</sh>
+    m_Metadata:
+      m_Items: []
+  - m_Id: 683898115256322
+    m_Localized: .<p=2>.<p=2>.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 683898115256323
+    m_Localized: (heureusement que leur cerveau est fait de mochis)
+    m_Metadata:
+      m_Items: []
+  - m_Id: 683898115256324
+    m_Localized: "J'arrive Litchi!<p=5> Je lib\xE8rerai ces pauvres esprits \xE9toiles
+      enferm\xE9es pour ta f\xEAte mal\xE9fique!"
     m_Metadata:
       m_Items: []
   references:

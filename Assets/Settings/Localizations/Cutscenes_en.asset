@@ -114,12 +114,11 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 13208326520846
-    m_Localized: After saving the Star Spirits from the hive,<p=2> Chuchu is coming
-      to the Moon!
+    m_Localized: Haaaa...<p=5> Being a queen is the life...
     m_Metadata:
       m_Items: []
   - m_Id: 13208326520847
-    m_Localized: Haaaa...<p=5> Being a queen is the life...
+    m_Localized: Nothing can disturb my most serene moony bubble bath...
     m_Metadata:
       m_Items: []
   - m_Id: 13208326520848
@@ -131,7 +130,8 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 13208326520850
-    m_Localized: This is terrible!<p=5> Chuchu is freeing every Star Spirit!
+    m_Localized: This is terrible!<p=5> Chuchu is already roaming somewhere on the
+      Moon!
     m_Metadata:
       m_Items: []
   - m_Id: 13208326520851
@@ -147,7 +147,7 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 13208326520854
-    m_Localized: A chubby jeely like her will never be able to follow the rhythm
+    m_Localized: A chubby jelly like her will never be able to follow the rhythm
       of a moon queen!
     m_Metadata:
       m_Items: []
@@ -185,11 +185,118 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 13208326520863
-    m_Localized: Victory!
+    m_Localized: <w>Victory!</w>
     m_Metadata:
       m_Items: []
   - m_Id: 13208326520864
     m_Localized: Congratulations!<p=5> You went all the way to the end!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 683898018787328
+    m_Localized: "Our stellanaut continues her search for other star spirits.<p=5>
+      Here she is exploring the Han\u2019Bo mangrove forest."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 683898106867712
+    m_Localized: Urgh...<p=5> I'm <w>starving</w>...<p=5> There must be something
+      to snack on around here...
+    m_Metadata:
+      m_Items: []
+  - m_Id: 683898106867713
+    m_Localized: <sh>Cuicui on the rescue!</sh>
+    m_Metadata:
+      m_Items: []
+  - m_Id: 683898106867714
+    m_Localized: Here,<p=2> Chuchu!<p=5> I found these star bits not far from here!<p=5>
+      You see?<p=5> I'm a great hero too!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 683898106867715
+    m_Localized: Oh thanks,<p=2> Cuicui,<p=2> that's very nice of...
+    m_Metadata:
+      m_Items: []
+  - m_Id: 683898106867716
+    m_Localized: GULP
+    m_Metadata:
+      m_Items: []
+  - m_Id: 683898106867717
+    m_Localized: .<p=2>.<p=2>.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 683898106867718
+    m_Localized: They won't get away with this...
+    m_Metadata:
+      m_Items: []
+  - m_Id: 683898106867719
+    m_Localized: <w>[CONNECTING TO HONEYHIVE KINGDOM]</w>
+    m_Metadata:
+      m_Items: []
+  - m_Id: 683898106867720
+    m_Localized: <w>Nyom<p=1> glurk<p=1> hmpf...</w><p=5> You're...<p=2> <w>nom...</w><p=2>
+      bothering our snack...<p=2> <w>nyom nyom nyom</w>
+    m_Metadata:
+      m_Items: []
+  - m_Id: 683898106867721
+    m_Localized: My dear Api-Api,<p=2> I just came to make sure that the star spirits
+      are still safely kept in your hive.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 683898106867722
+    m_Localized: Oh these tiny snacks?<p=5> Little jelly already freed some.<p=5>
+      She'd make a nice servant.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 683898106867723
+    m_Localized: <sh>WHAT?!<p=5> YOU HAD ONE JOB YOU BIG-</sh>
+    m_Metadata:
+      m_Items: []
+  - m_Id: 683898106867724
+    m_Localized: <sh>URGH...</sh>
+    m_Metadata:
+      m_Items: []
+  - m_Id: 683898106867725
+    m_Localized: We had both agreed that you would keep them here while I got ready
+      for my grand party...
+    m_Metadata:
+      m_Items: []
+  - m_Id: 683898106867726
+    m_Localized: <w>Relax</w>,<p=2> snow white.<p=5> Right about now,<p=2> she must
+      be getting her butt stung in our bramble forests.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 683898106867727
+    m_Localized: .<p=2>.<p=2>.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 683898106867728
+    m_Localized: I'm not entirely convinced...
+    m_Metadata:
+      m_Items: []
+  - m_Id: 683898106867729
+    m_Localized: After saving the Star Spirits from the hive,<p=2> Chuchu is coming
+      to the Moon!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 683898115256320
+    m_Localized: Be careful,<p=2> I need to keep a low profile...<p=5> The bunnies
+      seem to be on their guard...
+    m_Metadata:
+      m_Items: []
+  - m_Id: 683898115256321
+    m_Localized: <sh>HA!!!</sh>
+    m_Metadata:
+      m_Items: []
+  - m_Id: 683898115256322
+    m_Localized: .<p=2>.<p=2>.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 683898115256323
+    m_Localized: (good thing their brains are made of mochi.)
+    m_Metadata:
+      m_Items: []
+  - m_Id: 683898115256324
+    m_Localized: I'm coming, Lychee!<p=5> I'll set these poor, imprisoned star spirits
+      free for your evil party!
     m_Metadata:
       m_Items: []
   references:
