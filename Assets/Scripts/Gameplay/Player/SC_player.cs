@@ -22,7 +22,11 @@ public class SC_player : MonoBehaviour
     [HideInInspector] public float base_speed;
     public float jumpForce = 10f;
     public float maxJumpTime = 0.3f;
+    [Header("Knockback Invincibility")]
+    public float knockbackInvincibilityTime = 0.1f;
 
+    private bool isKnockbackInvincible;
+    private Coroutine knockbackInvincibilityCoroutine;
     [Header("Coyote Time")]
     public float coyoteTime = 0.1f;
     private float coyoteTimeCounter;
@@ -416,12 +420,36 @@ public class SC_player : MonoBehaviour
         // LANDING
         // -----------------------------------------------------
 
+
         if (!wasGroundedBeforeCheck &&
             isGrounded &&
             !isClimbing &&
             rb.gravityScale != 0f)
         {
             HandleLanding();
+        }
+
+
+        if (IsAnimationPlaying("jump_idle") && isGrounded && rb.linearVelocityY == 0|| IsAnimationPlaying("Jump") && isGrounded && rb.linearVelocityY ==0 )
+        {
+            if (rb.gravityScale > 0f && rb.linearVelocity.y < 0.5f)
+            {
+                anim.SetTrigger("Land");
+                moveSpeed = base_speed;
+                burning = false;
+
+                if (land != null)
+                    land.PlayJuice();
+            }
+            else if (rb.gravityScale < 0f && rb.linearVelocity.y > -0.5f)
+            {
+                anim.SetTrigger("Land");
+                moveSpeed = base_speed;
+                burning = false;
+
+                if (land != null)
+                    land.PlayJuice();
+            }
         }
 
         wasGrounded = isGrounded;
@@ -936,112 +964,48 @@ public class SC_player : MonoBehaviour
         fallWasTriggeredByJump = false;
     }
 
+
     private void HandleLanding()
     {
         bool landedFromFall = isFalling;
         bool landedFromJump = isJumping || IsAnimationPlaying("jump_idle");
 
-        PowermoveSpeed =
-            BasePowermoveSpeed;
-        canClimb = true;
+        // Réinitialisation de l'état du saut
+        isJumping = false;
+        jumpTimeCounter = 0f;
+        jumpBufferCounter = 0f;
         isFalling = false;
         fallWasTriggeredByJump = false;
-        isJumping = false;
 
+        PowermoveSpeed = BasePowermoveSpeed;
+        canClimb = true;
 
+        // Arrêter les animations aériennes
+        anim.ResetTrigger("Jump");
+        anim.ResetTrigger("Fall");
+        anim.SetBool("Run", false);
 
+        run.Stop();
+        grid.Stop();
 
-        if (rb.gravityScale > 0f && rb.linearVelocityY < 0.5f)
+        if (rb.gravityScale > 0f && rb.linearVelocity.y < 0.5f)
         {
             anim.SetTrigger("Land");
             moveSpeed = base_speed;
-            PowermoveSpeed = BasePowermoveSpeed;
-            anim.SetBool("Run", false);
-            anim.ResetTrigger("Jump");
-            run.Stop();
-            grid.Stop();
             burning = false;
 
-            if (landedFromFall && playLandSoundAfterFall)
-            {
-                if (land != null)
-                    land.PlayJuice();
-            }
-            else if (landedFromJump)
-            {
-                if (land != null)
-                    land.PlayJuice();
-            }
-            else
-            {
-                // Même une chute provoquée par un knockback doit produire
-                // le son de landing.
-                if (land != null)
-                    land.PlayJuice();
-            }
+            if (land != null)
+                land.PlayJuice();
         }
-
-        else if (rb.gravityScale < 0f && rb.linearVelocityY > -0.5f)
+        else if (rb.gravityScale < 0f && rb.linearVelocity.y > -0.5f)
         {
             anim.SetTrigger("Land");
             moveSpeed = base_speed;
-            PowermoveSpeed = BasePowermoveSpeed;
-            anim.SetBool("Run", false);
-            anim.ResetTrigger("Jump");
-            run.Stop();
-            grid.Stop();
             burning = false;
 
-            if (landedFromFall && playLandSoundAfterFall)
-            {
-                if (land != null)
-                    land.PlayJuice();
-            }
-            else if (landedFromJump)
-            {
-                if (land != null)
-                    land.PlayJuice();
-            }
-            else
-            {
-                // Même une chute provoquée par un knockback doit produire
-                // le son de landing.
-                if (land != null)
-                    land.PlayJuice();
-            }
+            if (land != null)
+                land.PlayJuice();
         }
-        else if (!canTakeDamage)
-        {
-            anim.SetTrigger("Land");
-            moveSpeed = base_speed;
-            PowermoveSpeed = BasePowermoveSpeed;
-            anim.SetBool("Run", false);
-            anim.ResetTrigger("Jump");
-            run.Stop();
-            grid.Stop();
-            burning = false;
-
-            if (landedFromFall && playLandSoundAfterFall)
-            {
-                if (land != null)
-                    land.PlayJuice();
-            }
-            else if (landedFromJump)
-            {
-                if (land != null)
-                    land.PlayJuice();
-            }
-            else
-            {
-                // Même une chute provoquée par un knockback doit produire
-                // le son de landing.
-                if (land != null)
-                    land.PlayJuice();
-            }
-        }
-
-
-
     }
 
     public bool IsAnimationPlaying(
@@ -1209,6 +1173,9 @@ public class SC_player : MonoBehaviour
         Vector2 ejection_power,
         Vector3 sourcePosition)
     {
+        if (damage == 0 && isKnockbackInvincible)
+            return;
+
         if (!canTakeDamage ||
             isInvincible ||
             burning)
@@ -1242,10 +1209,17 @@ public class SC_player : MonoBehaviour
         {
             bounce_sfx.PlayJuice();
 
+            // Active l'invincibilité de knockback
+            if (knockbackInvincibilityCoroutine != null)
+            {
+                StopCoroutine(knockbackInvincibilityCoroutine);
+            }
+
+            knockbackInvincibilityCoroutine =
+                StartCoroutine(KnockbackInvincibility());
+
             if (hitCoroutine != null)
-                StopCoroutine(
-                    hitCoroutine
-                );
+                StopCoroutine(hitCoroutine);
 
             hitCoroutine =
                 StartCoroutine(
@@ -1332,7 +1306,17 @@ public class SC_player : MonoBehaviour
             0.1f
         );
     }
+    private IEnumerator KnockbackInvincibility()
+    {
+        isKnockbackInvincible = true;
 
+        yield return new WaitForSeconds(
+            knockbackInvincibilityTime
+        );
+
+        isKnockbackInvincible = false;
+        knockbackInvincibilityCoroutine = null;
+    }
 
     // =========================================================
     // HIT FREEZE
@@ -2036,6 +2020,8 @@ public class SC_player : MonoBehaviour
 
     public void Revive()
     {
+        isKnockbackInvincible = false;
+        knockbackInvincibilityCoroutine = null;
         Time.timeScale = 1f;
 
         normal.SetActive(true);

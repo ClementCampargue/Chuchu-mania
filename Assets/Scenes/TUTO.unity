@@ -265,7 +265,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   damage: 0
-  ejection_power: {x: 3, y: 3}
+  ejection_power: {x: 30, y: 3}
 --- !u!61 &225596922
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -1351,7 +1351,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 9042987386885964439, guid: 894c74b520a88a24e88966d64bc5ea3e, type: 3}
       propertyPath: orthographic size
-      value: 6
+      value: 8.733334
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -5856,8 +5856,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3cab93887c1fb5d4a858f0443af4921e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  damage: 1
-  ejection_power: {x: 1, y: 1}
+  damage: 0
+  ejection_power: {x: 1.5, y: 1.5}
 --- !u!1 &8618586042509494096
 GameObject:
   m_ObjectHideFlags: 0

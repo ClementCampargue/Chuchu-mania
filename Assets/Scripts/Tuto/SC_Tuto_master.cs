@@ -37,6 +37,8 @@ public class SC_Tuto_master : MonoBehaviour
         eat = SC_icecream_eat_system.instance;
         SC_player.instance.canMove = false;
         Invoke("delay", 1);
+        SC_icecream_eat_system.instance.caneat = false;
+        SC_icecream_eat_system.instance.canfillup = false;
     }
     void delay()
     {
@@ -60,15 +62,14 @@ public class SC_Tuto_master : MonoBehaviour
         }
         if(eat.selectedCreams.Count >= 10 && !npc_eat_creams_finishedhas_talked && eat.isEating)
         {
+            SC_icecream_eat_system.instance.canfillup = true;
             npc_eat_creams_finishedhas_talked = true;
             CancelInvoke("delay_eat_finished");
             Invoke("delay_eat_finished", 1);
         }
         if(eat.selectedCreams.Count < 10 && npc_eat_creamsçhas_talked && eat.isEating && !npc_eat_creams_finishedhas_talked)
         {
-            npc_eat_creamsçhas_talked = false;
-            CancelInvoke("delay_eat_failed");
-            Invoke("delay_eat_failed", 0.5f);
+            delay_eat_failed();
         }
     }
 
@@ -113,6 +114,8 @@ public class SC_Tuto_master : MonoBehaviour
 
     public void show_cream()
     {
+        SC_icecream_eat_system.instance.caneat = true;
+
         infos.SetTrigger("cream");
     }
 

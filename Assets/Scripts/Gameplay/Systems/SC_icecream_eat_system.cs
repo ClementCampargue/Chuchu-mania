@@ -62,6 +62,8 @@ public class SC_icecream_eat_system : MonoBehaviour
     public AudioSource eating_sfx;
 
     public AudioClip music;
+    public bool caneat = true;
+    public bool canfillup = true;
 
     // =========================================================
     // AWAKE
@@ -97,6 +99,9 @@ public class SC_icecream_eat_system : MonoBehaviour
             return;
 
         if (!player.enabled)
+            return;
+
+        if (!caneat)
             return;
 
         // -----------------------------------------------------
@@ -291,6 +296,27 @@ public class SC_icecream_eat_system : MonoBehaviour
 
     private IEnumerator EatSelectedCreamsCoroutine()
     {
+        if (selectedCreams.Count == 10)
+        {
+            canfillup = true;
+        }
+        if (!canfillup)
+        {
+            isEating = true;
+
+            for (int i =selectedCreams.Count - 1;i >= 0;i--)
+            {
+                SC_icecream_fall cream =
+                selectedCreams[i];
+
+                cream.Deselect();
+            }
+            yield return new WaitForSeconds(1);
+            isEating = false;
+            yield break;
+
+        }
+     
 
 
         player.moveInput = Vector2.zero;
@@ -339,60 +365,62 @@ public class SC_icecream_eat_system : MonoBehaviour
             creams.Remove(cream);
 
             currrent_ice_cream--;
-
-            float targetFill =
-                displayedFill +
-                stomach_fill_per_cream;
-
-            // -------------------------------------------------
-            // PROGRESSIVE
-            // -------------------------------------------------
-
-            if (progressiveEat)
+            if (canfillup)
             {
-                while (displayedFill <
-                       targetFill - 0.001f)
+                float targetFill =
+                    displayedFill +
+                    stomach_fill_per_cream;
+
+                // -------------------------------------------------
+                // PROGRESSIVE
+                // -------------------------------------------------
+
+                if (progressiveEat)
                 {
-                    if (!eat_input.action.IsPressed() &&
-                        !forceEatAll)
+                    while (displayedFill <
+                           targetFill - 0.001f)
                     {
-                        FinishEating();
+                        if (!eat_input.action.IsPressed() &&
+                            !forceEatAll)
+                        {
+                            FinishEating();
 
-                        yield break;
-                    }
+                            yield break;
+                        }
 
-                    displayedFill =
-                        Mathf.MoveTowards(
-                            displayedFill,
-                            targetFill,
-                            eatSpeed *
-                            Time.deltaTime
+                        displayedFill =
+                            Mathf.MoveTowards(
+                                displayedFill,
+                                targetFill,
+                                eatSpeed *
+                                Time.deltaTime
+                            );
+
+                        mat.SetFloat(
+                            "_Fill_amount",
+                            displayedFill
                         );
 
-                    mat.SetFloat(
-                        "_Fill_amount",
-                        displayedFill
-                    );
+                        CheckPhases();
 
-                    CheckPhases();
+                        CheckPowerUp();
 
-                    CheckPowerUp();
-
-                    yield return null;
+                        yield return null;
+                    }
                 }
+
+                // -------------------------------------------------
+                // FILL DIRECT
+                // -------------------------------------------------
+
+                displayedFill =
+                    targetFill;
+
+                mat.SetFloat(
+                    "_Fill_amount",
+                    displayedFill
+                );
             }
-
-            // -------------------------------------------------
-            // FILL DIRECT
-            // -------------------------------------------------
-
-            displayedFill =
-                targetFill;
-
-            mat.SetFloat(
-                "_Fill_amount",
-                displayedFill
-            );
 
             CheckPhases();
 

@@ -96,9 +96,9 @@ public class SC_enemy_random_teleport : MonoBehaviour
 
     }
 
-    public  void TeleportToRandomPoint()
+public void TeleportToRandomPoint()
     {
-        if (teleportPoints.Count == 0)
+        if (teleportPoints == null || teleportPoints.Count == 0)
             return;
 
         int randomStart = Random.Range(0, teleportPoints.Count);
@@ -106,20 +106,38 @@ public class SC_enemy_random_teleport : MonoBehaviour
         for (int i = 0; i < teleportPoints.Count; i++)
         {
             int index = (randomStart + i) % teleportPoints.Count;
-
             Transform targetPoint = teleportPoints[index];
 
-            Vector2 checkPos =
-                (Vector2)targetPoint.position + detectionOffset;
+            if (targetPoint == null)
+                continue;
 
-            // Check rectangle avec offset
-            Collider2D blocked =
-                Physics2D.OverlapBox(
-                    checkPos,
-                    checkSize,
-                    0f,
-                    blockedLayers
-                );
+            // Vérifie si un autre worm occupe déjà ce point
+            bool occupied = false;
+
+            foreach (SC_enemy_random_teleport worm in SC_worm_manager.manager.worms)
+            {
+                if (worm == null || worm == this)
+                    continue;
+
+                if (Vector2.Distance(worm.transform.position, targetPoint.position) < 0.1f)
+                {
+                    occupied = true;
+                    break;
+                }
+            }
+
+            if (occupied)
+                continue;
+
+            // Vérifie si la zone est bloquée
+            Vector2 checkPos = (Vector2)targetPoint.position + detectionOffset;
+
+            Collider2D blocked = Physics2D.OverlapBox(
+                checkPos,
+                checkSize,
+                0f,
+                blockedLayers
+            );
 
             if (blocked == null)
             {
@@ -128,9 +146,8 @@ public class SC_enemy_random_teleport : MonoBehaviour
             }
         }
 
-        Debug.Log("Aucun point valide pour le téléport.");
+        Debug.Log("Aucun point libre pour le téléport.");
     }
-
     void OnDrawGizmosSelected()
     {
         if (teleportPoints == null)
