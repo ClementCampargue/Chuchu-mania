@@ -4,13 +4,17 @@ using UnityEngine.Events;
 [RequireComponent(typeof(Collider2D))]
 public class SC_Button : MonoBehaviour
 {
+    public bool select_on_enable;
     [Header("Animations")]
     public string hover;
     public string unhover;
     public string press;
 
+
     [Header("Events")]
     public UnityEvent onClick;
+    public UnityEvent onHover;
+    public UnityEvent onUnhover;
 
     private Animator anim;
 
@@ -30,8 +34,10 @@ public class SC_Button : MonoBehaviour
 
 
     public void Select()
-    {
-        juice.PlayJuice();
+    {if (juice != null)
+        {
+            juice.PlayJuice();
+        }
         isSelected = true;
         if (indicator != null)
         {
@@ -50,6 +56,13 @@ public class SC_Button : MonoBehaviour
         isSelected = false;
         isPressed = false;
         isHovered = false;
+    }
+    private void OnEnable()
+    {
+        if (select_on_enable)
+        {
+            Select();
+        }
     }
 
     // Appelé par EventSystem Deselect()
@@ -92,8 +105,13 @@ public class SC_Button : MonoBehaviour
         if (!clickable)
             {
                 return;
-            }
-        juice.PlayJuice();
+        }
+        Hover();
+
+        if (juice != null)
+        {
+            juice.PlayJuice();
+        }
 
         isPressed = false;
         isHovered = true;
@@ -115,7 +133,7 @@ public class SC_Button : MonoBehaviour
         if (SC_controller_manager.instance != null &&
             SC_controller_manager.instance.using_controller)
             return;
-
+        OnUnhover();
         isHovered = false;
         if (indicator != null)
         {
@@ -183,7 +201,10 @@ public class SC_Button : MonoBehaviour
         indicator.SetActive(false);
 
         }
-        juice2.PlayJuice();
+        if (juice2 != null)
+        {
+            juice2.PlayJuice();
+        }
         PlayAnimation(press);
         Invoke("delay",0.5f);
     }
@@ -192,9 +213,23 @@ public class SC_Button : MonoBehaviour
         isPressed = false;
     }
 
-    private void Click()
+    public void Click()
     {
+      
         onClick?.Invoke();
+    }
+
+    public void Hover()
+    {
+        onHover?.Invoke();
+    }
+
+    public void OnUnhover()
+    {
+        if (!isPressed)
+        {
+            onUnhover?.Invoke();
+        }
     }
 
 
@@ -207,5 +242,18 @@ public class SC_Button : MonoBehaviour
 
         anim.ResetTrigger(trigger);
         anim.SetTrigger(trigger);
+    }
+    private void OnDrawGizmosSelected()
+    {
+        Collider2D col = GetComponent<Collider2D>();
+
+        if (col != null)
+        {
+            Gizmos.color = Color.green;
+            Gizmos.DrawWireCube(
+                col.bounds.center,
+                col.bounds.size
+            );
+        }
     }
 }
