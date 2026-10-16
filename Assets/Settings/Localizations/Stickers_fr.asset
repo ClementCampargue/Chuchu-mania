@@ -1,0 +1,244 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e9620f8c34305754d8cc9a7e49e852d9, type: 3}
+  m_Name: Stickers_fr
+  m_EditorClassIdentifier: 
+  m_LocaleId:
+    m_Code: fr
+  m_SharedData: {fileID: 11400000, guid: a84988ee60d3ba6479ed08b1ee2387ec, type: 2}
+  m_Metadata:
+    m_Items: []
+  m_TableData:
+  - m_Id: 140592607232
+    m_Localized: Absolute Chuchu
+    m_Metadata:
+      m_Items: []
+  - m_Id: 140592607233
+    m_Localized: Faites lui honneur en proposant un gameplay digne de cette ovation!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 140592607234
+    m_Localized: Api-Api
+    m_Metadata:
+      m_Items: []
+  - m_Id: 140592607235
+    m_Localized: "[Ins\xE9rer citation de The Bee Movie]"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 140592607236
+    m_Localized: Bubble Quest
+    m_Metadata:
+      m_Items: []
+  - m_Id: 140592607237
+    m_Localized: "Le jeu pr\xE9f\xE9r\xE9 de Cuicui!"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 140592607238
+    m_Localized: Chuchu esprit Shonen
+    m_Metadata:
+      m_Items: []
+  - m_Id: 140592607239
+    m_Localized: CHA-LA HEAD-CHA-LA
+    m_Metadata:
+      m_Items: []
+  - m_Id: 140592607240
+    m_Localized: Trinity Homerun
+    m_Metadata:
+      m_Items: []
+  - m_Id: 140592607241
+    m_Localized: "D\xE9passez vos limites!"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 140592607242
+    m_Localized: Cuicui
+    m_Metadata:
+      m_Items: []
+  - m_Id: 140592607243
+    m_Localized: "Il est simplement content d'\xEAtre ici"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 140592607244
+    m_Localized: WTF
+    m_Metadata:
+      m_Items: []
+  - m_Id: 140592607245
+    m_Localized: "Cuicui est compl\xE8tement shockbar!"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 140592607246
+    m_Localized: Ma nouvelle amie
+    m_Metadata:
+      m_Items: []
+  - m_Id: 140592607247
+    m_Localized: "Dans l'espace, deux \xE9toiles peuvent se rencontrer et devenir
+      ins\xE9parables"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 140592607248
+    m_Localized: Soleil Vermeil
+    m_Metadata:
+      m_Items: []
+  - m_Id: 140592607249
+    m_Localized: C'est l'heure de la bagarre
+    m_Metadata:
+      m_Items: []
+  - m_Id: 140592607250
+    m_Localized: Glace Chocomenthe
+    m_Metadata:
+      m_Items: []
+  - m_Id: 140592607251
+    m_Localized: "La fra\xEEcheur de la menthe combin\xE9e \xE0 la gourmandise du
+      chocolat"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 140592607252
+    m_Localized: Glace Cookie Cream
+    m_Metadata:
+      m_Items: []
+  - m_Id: 140592607253
+    m_Localized: "Vraiment pour les gros tas \xE7a"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 140592607254
+    m_Localized: Glace Fraise
+    m_Metadata:
+      m_Items: []
+  - m_Id: 140592607255
+    m_Localized: "La glace pr\xE9f\xE9r\xE9e de Chuchu!"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 140592607256
+    m_Localized: Breakdown
+    m_Metadata:
+      m_Items: []
+  - m_Id: 140592607257
+    m_Localized: Quand c'est trop, c'est trop
+    m_Metadata:
+      m_Items: []
+  - m_Id: 140592607258
+    m_Localized: Chuchu spatiale
+    m_Metadata:
+      m_Items: []
+  - m_Id: 140592607259
+    m_Localized: "Quelle gr\xE2ce, quel style"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 140592607260
+    m_Localized: Subordination
+    m_Metadata:
+      m_Items: []
+  - m_Id: 140592607261
+    m_Localized: "Toujours l\xE0 pour servir leur reine!"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 140592607262
+    m_Localized: Beach Episode
+    m_Metadata:
+      m_Items: []
+  - m_Id: 140592607263
+    m_Localized: Bizarre le dessin
+    m_Metadata:
+      m_Items: []
+  - m_Id: 140592607264
+    m_Localized: Lubin
+    m_Metadata:
+      m_Items: []
+  - m_Id: 140592607265
+    m_Localized: "Votre gameplay ne le laisse pas indiff\xE9rent"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 140592607266
+    m_Localized: Magenta flottante
+    m_Metadata:
+      m_Items: []
+  - m_Id: 140592607267
+    m_Localized: "Pourquoi m\xEAme dans l'espace, elle tire toujours autant la tronche?"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 140592607268
+    m_Localized: "Mme D\xF4"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 140592607269
+    m_Localized: "Si vous voyez cette expression sur son visgae, vous \xEAtes d\xE9j\xE0
+      mort"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 140592607270
+    m_Localized: Entrepreneur
+    m_Metadata:
+      m_Items: []
+  - m_Id: 140592607271
+    m_Localized: MR DOOOOOOOO
+    m_Metadata:
+      m_Items: []
+  - m_Id: 140592607272
+    m_Localized: A l'aise
+    m_Metadata:
+      m_Items: []
+  - m_Id: 140592607273
+    m_Localized: "Alors, on attend pas Mr D\xF4?"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 140592607274
+    m_Localized: Stellaman
+    m_Metadata:
+      m_Items: []
+  - m_Id: 140592607275
+    m_Localized: "Croyez en vos r\xEAves car m\xEAme un petit piaf peut invoquer
+      l'esprit d'un super h\xE9ros"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 140592607276
+    m_Localized: Wat
+    m_Metadata:
+      m_Items: []
+  - m_Id: 140592607277
+    m_Localized: "Quel sticker au-dessus va mettre Chuchu dans cet \xE9tat?"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 140592607278
+    m_Localized: Bisou tout doux
+    m_Metadata:
+      m_Items: []
+  - m_Id: 140592607279
+    m_Localized: "Il faudra une semaine pour que \xE7a s'efface"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 140592607280
+    m_Localized: Yanya's Adventure
+    m_Metadata:
+      m_Items: []
+  - m_Id: 140592607281
+    m_Localized: Gotta work fast!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 140592607282
+    m_Localized: Salutations!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 140592607283
+    m_Localized: "Yanya garde toujours le sourire pour oublier sa condition pr\xE9caire
+      de stagiaire non r\xE9mun\xE9r\xE9e!"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 140592607284
+    m_Localized: Chuchu Vs Magenta
+    m_Metadata:
+      m_Items: []
+  - m_Id: 140592607285
+    m_Localized: Teaser du mode 2 Joueurs?
+    m_Metadata:
+      m_Items: []
+  references:
+    version: 2
+    RefIds: []

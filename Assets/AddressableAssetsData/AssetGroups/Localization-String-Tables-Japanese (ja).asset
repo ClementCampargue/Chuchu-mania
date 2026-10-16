@@ -35,6 +35,12 @@ MonoBehaviour:
     - Locale-ja
     - Preload
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 8673d2db87ae59d40addd4dac7895bd2
+    m_Address: Stickers_ja
+    m_ReadOnly: 1
+    m_SerializedLabels:
+    - Locale-ja
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: a523645594fedc84bbb961d701ee99ff
     m_Address: Noms_ja
     m_ReadOnly: 1

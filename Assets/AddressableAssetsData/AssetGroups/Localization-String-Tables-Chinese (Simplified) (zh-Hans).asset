@@ -21,6 +21,12 @@ MonoBehaviour:
     m_SerializedLabels:
     - Locale-zh-Hans
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 525dd22c3d098204fa323e5f9e9a6ea2
+    m_Address: Stickers_zh-Hans
+    m_ReadOnly: 1
+    m_SerializedLabels:
+    - Locale-zh-Hans
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 63b0400c14637dd499c366f58de5d750
     m_Address: UI_zh-Hans
     m_ReadOnly: 1

@@ -41,6 +41,12 @@ MonoBehaviour:
     - Locale-es
     - Preload
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: acf639e7311755e4786184ba06dcd312
+    m_Address: Stickers_es
+    m_ReadOnly: 1
+    m_SerializedLabels:
+    - Locale-es
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: ad9aecd4f16448541af2316e5d94092d
     m_Address: Cutscenes_es
     m_ReadOnly: 1

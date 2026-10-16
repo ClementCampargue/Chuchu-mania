@@ -13,11 +13,38 @@ MonoBehaviour:
   m_Name: SO_Sticker 12
   m_EditorClassIdentifier: 
   sticker_sprite: {fileID: 21300000, guid: 515703e401e60a343abf6f8ec240287d, type: 3}
-  sticker_name: Api-Api
-  description: "Ins\xE9rer citation de Bee Movie"
-  unlock_conditions: "pas d\xE9bloqu\xE9 bouffon va"
-  artist: Martin Scorcese
+  sticker_name:
+    m_TableReference:
+      m_TableCollectionName: GUID:a84988ee60d3ba6479ed08b1ee2387ec
+    m_TableEntryReference:
+      m_KeyId: 140592607234
+      m_Key: 
+    m_FallbackState: 0
+    m_WaitForCompletion: 0
+    m_LocalVariables: []
+  description:
+    m_TableReference:
+      m_TableCollectionName: GUID:a84988ee60d3ba6479ed08b1ee2387ec
+    m_TableEntryReference:
+      m_KeyId: 140592607235
+      m_Key: 
+    m_FallbackState: 0
+    m_WaitForCompletion: 0
+    m_LocalVariables: []
+  unlock_conditions:
+    m_TableReference:
+      m_TableCollectionName: 
+    m_TableEntryReference:
+      m_KeyId: 0
+      m_Key: 
+    m_FallbackState: 0
+    m_WaitForCompletion: 0
+    m_LocalVariables: []
+  artist: 
   rarity: 2
   Price: 0
   unlocked: 0
   special_mat: {fileID: 0}
+  references:
+    version: 2
+    RefIds: []
