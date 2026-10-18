@@ -1,9 +1,10 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.LightTransport;
 
 public class SC_planet_menu : MonoBehaviour
 {
-    public SO_level level;
+    public SO_world world;
     public SpriteRenderer sprite;
     public Color selected;
     public Color unselected;
@@ -17,14 +18,14 @@ public class SC_planet_menu : MonoBehaviour
         {
             sprite.color = selected;
         }
-        SC_level_selection_screen.instance.update_header(level);
+        SC_level_selection_screen.instance.update_header(world);
     }
 
     public void close_header()
     {
         if (sprite != null)
         {
-            if (level.unlocked)
+            if (world.unlocked)
             {
                 sprite.color = locked;
             }
@@ -39,7 +40,7 @@ public class SC_planet_menu : MonoBehaviour
 
     void Start()
     {
-        if(level.unlocked)
+        if(world.unlocked)
         {
             if (sprite != null)
             {
@@ -50,7 +51,7 @@ public class SC_planet_menu : MonoBehaviour
 
     public void click()
     {
-        SC_level_selection_screen.instance.open_planet(level);
+        SC_level_selection_screen.instance.open_planet(world);
     }
 
     // Update is called once per frame

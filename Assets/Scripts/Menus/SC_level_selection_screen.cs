@@ -47,7 +47,7 @@ public class SC_level_selection_screen : MonoBehaviour
     public AudioSource cancel;
     public bool boss;
 
-    private SO_level level_;
+    private SO_world world;
     private void Awake()
     {
         instance = this;
@@ -64,27 +64,27 @@ public class SC_level_selection_screen : MonoBehaviour
        SC_screenshot_transition.instance.Capture(scene);
     }
 
-    public void open_planet(SO_level level)
+    public void open_planet(SO_world level)
     {
 
 
-        level_ = level;
+        world = level;
         
         for (int i = 0; i < buttons.Count; i++)
         {
-            if (i >= level_.levels.Count)
+            if (i >= world.levels.Count)
             {
                 buttons[i].gameObject.SetActive(false);
             }
             else
             {
                 buttons[i].gameObject.SetActive(true);
-                buttons[i].GetComponent<TextMeshPro>().text = level_.levels[i];
+                buttons[i].GetComponent<TextMeshPro>().text = world.levels[i].levelname;
             }
         }
         if (level.unlocked)
         {
-            spr.sprite = level_.planet_sprite;
+            spr.sprite = world.planet_sprite;
             base_menu.SetActive(true);
             locked_menu.SetActive(false);
             price.SetActive(false);
@@ -124,8 +124,9 @@ public class SC_level_selection_screen : MonoBehaviour
         locked_menu.SetActive(false);
         new_menu.SetActive(true);
 
-        level_.unlocked = true;
-        spr.sprite = level_.planet_sprite;
+        world.unlocked = true;
+        spr.sprite = world.planet_sprite;
+        update_header(world);
     }
 
     public void unlock_level()
@@ -160,7 +161,7 @@ public class SC_level_selection_screen : MonoBehaviour
     {
         header_nothing.SetActive(true);
     }
-    public void update_header(SO_level level)
+    public void update_header(SO_world level)
     {
 
         if (level == null)

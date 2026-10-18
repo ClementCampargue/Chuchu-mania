@@ -410,7 +410,13 @@ public class SC_player : MonoBehaviour
             // Une fois qu'on descend, on joue l'animation de chute.
             if (!isJumping &&
                 !isClimbing &&
-                rb.linearVelocity.y < 0f)
+                rb.linearVelocity.y < 0f && rb.gravityScale > 0f)
+            {
+                StartFallAnimation();
+            }
+            if (!isJumping &&
+                !isClimbing &&
+                rb.linearVelocity.y > 0f && rb.gravityScale < 0f)
             {
                 StartFallAnimation();
             }

@@ -1,12 +1,13 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "SO_level", menuName = "Scriptable Objects/SO_level")]
-public class SO_level : ScriptableObject
+[CreateAssetMenu(fileName = "SO_world", menuName = "Scriptable Objects/SO_world")]
+public class SO_world : ScriptableObject
 {
+    public List<SO_level> levels;
+
     public Sprite header_background;
     public Sprite planet_sprite;
-    public List<string> levels;
     public List<Sprite> spirits;
     public List<bool> spirits_unlocked;
 
