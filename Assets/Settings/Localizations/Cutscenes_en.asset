@@ -61,12 +61,11 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 13208326520835
-    m_Localized: And thus,<p=2> Chuchu went to the rescue to save these little star
-      spirits, captures by the moon bunnies in the whole galaxy!
+    m_Localized: <w>GROAN</w>
     m_Metadata:
       m_Items: []
   - m_Id: 13208326520836
-    m_Localized: 'Direction: <p=2> Bubble Beach Galaxy!'
+    m_Localized: Hum...<p=5> First things first,<p=2> a little meal,<p=2> hehe...
     m_Metadata:
       m_Items: []
   - m_Id: 55575863640064
@@ -194,7 +193,7 @@ MonoBehaviour:
       m_Items: []
   - m_Id: 683898018787328
     m_Localized: "Our stellanaut continues her search for other star spirits.<p=5>
-      Here she is exploring the Han\u2019Bo mangrove forest."
+      Here she is in the Han\u2019Bo mangrove forest."
     m_Metadata:
       m_Items: []
   - m_Id: 683898106867712
@@ -297,6 +296,46 @@ MonoBehaviour:
   - m_Id: 683898115256324
     m_Localized: I'm coming, Lychee!<p=5> I'll set these poor, imprisoned star spirits
       free for your evil party!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2503254537203712
+    m_Localized: Chuchu starts her adventure in Bubble Beach Galaxy!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2503254583341056
+    m_Localized: The moon bunnies have captured another Star Spirit!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2503254583341057
+    m_Localized: <sh>Save me!!!</sh>
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2503254583341058
+    m_Localized: Let her go!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2503254583341059
+    m_Localized: I'm gonna...<p=5> huff...<p=5> free her...<p=5> right now...
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2503254583341060
+    m_Localized: .<p=2>.<p=2>.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2503254583341061
+    m_Localized: Ugh,<p=2> I should've brought a snack...
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2503254583341062
+    m_Localized: Oh!<p=5> Star Bits!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2503254583341063
+    m_Localized: They're so tasty and spakly! I'm gonna stuff myself silly with these!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2503254583341064
+    m_Localized: Hey uh...<p=5> don't forget about me,<p=2> okay?...
     m_Metadata:
       m_Items: []
   references:

@@ -1,0 +1,244 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5b11a58205ec3474ca216360e9fa74a8, type: 3}
+  m_Name: Stickers Shared Data
+  m_EditorClassIdentifier: 
+  m_TableCollectionName: Stickers
+  m_TableCollectionNameGuidString: a84988ee60d3ba6479ed08b1ee2387ec
+  m_Entries:
+  - m_Id: 140592607232
+    m_Key: Sticker01
+    m_Metadata:
+      m_Items: []
+  - m_Id: 140592607233
+    m_Key: Sticker02
+    m_Metadata:
+      m_Items: []
+  - m_Id: 140592607234
+    m_Key: Sticker03
+    m_Metadata:
+      m_Items: []
+  - m_Id: 140592607235
+    m_Key: Sticker04
+    m_Metadata:
+      m_Items: []
+  - m_Id: 140592607236
+    m_Key: Sticker05
+    m_Metadata:
+      m_Items: []
+  - m_Id: 140592607237
+    m_Key: Sticker06
+    m_Metadata:
+      m_Items: []
+  - m_Id: 140592607238
+    m_Key: Sticker07
+    m_Metadata:
+      m_Items: []
+  - m_Id: 140592607239
+    m_Key: Sticker08
+    m_Metadata:
+      m_Items: []
+  - m_Id: 140592607240
+    m_Key: Sticker09
+    m_Metadata:
+      m_Items: []
+  - m_Id: 140592607241
+    m_Key: Sticker10
+    m_Metadata:
+      m_Items: []
+  - m_Id: 140592607242
+    m_Key: Sticker11
+    m_Metadata:
+      m_Items: []
+  - m_Id: 140592607243
+    m_Key: Sticker12
+    m_Metadata:
+      m_Items: []
+  - m_Id: 140592607244
+    m_Key: Sticker13
+    m_Metadata:
+      m_Items: []
+  - m_Id: 140592607245
+    m_Key: Sticker14
+    m_Metadata:
+      m_Items: []
+  - m_Id: 140592607246
+    m_Key: Sticker15
+    m_Metadata:
+      m_Items: []
+  - m_Id: 140592607247
+    m_Key: Sticker16
+    m_Metadata:
+      m_Items: []
+  - m_Id: 140592607248
+    m_Key: Sticker17
+    m_Metadata:
+      m_Items: []
+  - m_Id: 140592607249
+    m_Key: Sticker18
+    m_Metadata:
+      m_Items: []
+  - m_Id: 140592607250
+    m_Key: Sticker19
+    m_Metadata:
+      m_Items: []
+  - m_Id: 140592607251
+    m_Key: Sticker20
+    m_Metadata:
+      m_Items: []
+  - m_Id: 140592607252
+    m_Key: Sticker21
+    m_Metadata:
+      m_Items: []
+  - m_Id: 140592607253
+    m_Key: Sticker22
+    m_Metadata:
+      m_Items: []
+  - m_Id: 140592607254
+    m_Key: Sticker23
+    m_Metadata:
+      m_Items: []
+  - m_Id: 140592607255
+    m_Key: Sticker24
+    m_Metadata:
+      m_Items: []
+  - m_Id: 140592607256
+    m_Key: Sticker25
+    m_Metadata:
+      m_Items: []
+  - m_Id: 140592607257
+    m_Key: Sticker26
+    m_Metadata:
+      m_Items: []
+  - m_Id: 140592607258
+    m_Key: Sticker27
+    m_Metadata:
+      m_Items: []
+  - m_Id: 140592607259
+    m_Key: Sticker28
+    m_Metadata:
+      m_Items: []
+  - m_Id: 140592607260
+    m_Key: Sticker29
+    m_Metadata:
+      m_Items: []
+  - m_Id: 140592607261
+    m_Key: Sticker30
+    m_Metadata:
+      m_Items: []
+  - m_Id: 140592607262
+    m_Key: Sticker31
+    m_Metadata:
+      m_Items: []
+  - m_Id: 140592607263
+    m_Key: Sticker32
+    m_Metadata:
+      m_Items: []
+  - m_Id: 140592607264
+    m_Key: Sticker33
+    m_Metadata:
+      m_Items: []
+  - m_Id: 140592607265
+    m_Key: Sticker34
+    m_Metadata:
+      m_Items: []
+  - m_Id: 140592607266
+    m_Key: Sticker35
+    m_Metadata:
+      m_Items: []
+  - m_Id: 140592607267
+    m_Key: Sticker36
+    m_Metadata:
+      m_Items: []
+  - m_Id: 140592607268
+    m_Key: Sticker37
+    m_Metadata:
+      m_Items: []
+  - m_Id: 140592607269
+    m_Key: Sticker38
+    m_Metadata:
+      m_Items: []
+  - m_Id: 140592607270
+    m_Key: Sticker39
+    m_Metadata:
+      m_Items: []
+  - m_Id: 140592607271
+    m_Key: Sticker40
+    m_Metadata:
+      m_Items: []
+  - m_Id: 140592607272
+    m_Key: Sticker41
+    m_Metadata:
+      m_Items: []
+  - m_Id: 140592607273
+    m_Key: Sticker42
+    m_Metadata:
+      m_Items: []
+  - m_Id: 140592607274
+    m_Key: Sticker43
+    m_Metadata:
+      m_Items: []
+  - m_Id: 140592607275
+    m_Key: Sticker44
+    m_Metadata:
+      m_Items: []
+  - m_Id: 140592607276
+    m_Key: Sticker45
+    m_Metadata:
+      m_Items: []
+  - m_Id: 140592607277
+    m_Key: Sticker46
+    m_Metadata:
+      m_Items: []
+  - m_Id: 140592607278
+    m_Key: Sticker47
+    m_Metadata:
+      m_Items: []
+  - m_Id: 140592607279
+    m_Key: Sticker48
+    m_Metadata:
+      m_Items: []
+  - m_Id: 140592607280
+    m_Key: Sticker49
+    m_Metadata:
+      m_Items: []
+  - m_Id: 140592607281
+    m_Key: Sticker50
+    m_Metadata:
+      m_Items: []
+  - m_Id: 140592607282
+    m_Key: Sticker51
+    m_Metadata:
+      m_Items: []
+  - m_Id: 140592607283
+    m_Key: Sticker52
+    m_Metadata:
+      m_Items: []
+  - m_Id: 140592607284
+    m_Key: Sticker53
+    m_Metadata:
+      m_Items: []
+  - m_Id: 140592607285
+    m_Key: Sticker54
+    m_Metadata:
+      m_Items: []
+  m_Metadata:
+    m_Items: []
+  m_KeyGenerator:
+    rid: 2319063908670505038
+  references:
+    version: 2
+    RefIds:
+    - rid: 2319063908670505038
+      type: {class: DistributedUIDGenerator, ns: UnityEngine.Localization.Tables, asm: Unity.Localization}
+      data:
+        m_CustomEpoch: 1792150472003

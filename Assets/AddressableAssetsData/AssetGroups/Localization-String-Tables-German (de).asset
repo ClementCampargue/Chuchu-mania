@@ -21,6 +21,18 @@ MonoBehaviour:
     m_SerializedLabels:
     - Locale-de
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 6cc55c3d06b1b644286c4460be47001a
+    m_Address: "Succ\xE8s_de"
+    m_ReadOnly: 1
+    m_SerializedLabels:
+    - Locale-de
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 6f86fa2947aa07d4a8599ea74c679df6
+    m_Address: Stickers_de
+    m_ReadOnly: 1
+    m_SerializedLabels:
+    - Locale-de
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 8096f78daf3ec5740b1003c15d811400
     m_Address: Noms_de
     m_ReadOnly: 1

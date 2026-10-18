@@ -15,6 +15,12 @@ MonoBehaviour:
   m_GroupName: Localization-String-Tables-Italian (it)
   m_GUID: 7845e64584d7b234ba10e3197d3dd266
   m_SerializeEntries:
+  - m_GUID: 4b6d2ba6ca2b08d46a4edc1dd4163f7c
+    m_Address: Stickers_it
+    m_ReadOnly: 1
+    m_SerializedLabels:
+    - Locale-it
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 8a7766fc87e8ef84ea62dd9a2b698a59
     m_Address: Noms_it
     m_ReadOnly: 1
@@ -33,6 +39,12 @@ MonoBehaviour:
     m_SerializedLabels:
     - Locale-it
     - Preload
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: ba09ad1d3dd9ca7428af8e8a5e6a45f1
+    m_Address: "Succ\xE8s_it"
+    m_ReadOnly: 1
+    m_SerializedLabels:
+    - Locale-it
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: cb8e60250df8dee43ae4c8944ff286c8
     m_Address: UI_it

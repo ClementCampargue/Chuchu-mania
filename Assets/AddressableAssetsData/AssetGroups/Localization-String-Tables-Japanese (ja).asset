@@ -28,12 +28,24 @@ MonoBehaviour:
     m_SerializedLabels:
     - Locale-ja
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 446ee831c06d63543bc9d40a75dee68d
+    m_Address: "Succ\xE8s_ja"
+    m_ReadOnly: 1
+    m_SerializedLabels:
+    - Locale-ja
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 652eee90e8f75024ea34262c6e89dd61
     m_Address: UI_ja
     m_ReadOnly: 1
     m_SerializedLabels:
     - Locale-ja
     - Preload
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 8673d2db87ae59d40addd4dac7895bd2
+    m_Address: Stickers_ja
+    m_ReadOnly: 1
+    m_SerializedLabels:
+    - Locale-ja
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: a523645594fedc84bbb961d701ee99ff
     m_Address: Noms_ja

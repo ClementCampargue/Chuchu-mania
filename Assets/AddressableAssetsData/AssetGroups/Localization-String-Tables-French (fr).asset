@@ -33,12 +33,24 @@ MonoBehaviour:
     m_SerializedLabels:
     - Locale-fr
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: c1f0d410533d7a744a46777069f4e5c1
+    m_Address: Stickers_fr
+    m_ReadOnly: 1
+    m_SerializedLabels:
+    - Locale-fr
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: c55124c66ab41c740b74fe6db462d671
     m_Address: UI_fr
     m_ReadOnly: 1
     m_SerializedLabels:
     - Locale-fr
     - Preload
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: c9f60e34993d0ad4eb2519c780385797
+    m_Address: "Succ\xE8s_fr"
+    m_ReadOnly: 1
+    m_SerializedLabels:
+    - Locale-fr
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: e0cc1943456295949a189497bf554b59
     m_Address: Dialogues_fr

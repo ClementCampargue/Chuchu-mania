@@ -1,0 +1,100 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e9620f8c34305754d8cc9a7e49e852d9, type: 3}
+  m_Name: Stickers_en
+  m_EditorClassIdentifier: 
+  m_LocaleId:
+    m_Code: en
+  m_SharedData: {fileID: 11400000, guid: a84988ee60d3ba6479ed08b1ee2387ec, type: 2}
+  m_Metadata:
+    m_Items: []
+  m_TableData:
+  - m_Id: 140592607232
+    m_Localized: Absolute Chuchu
+    m_Metadata:
+      m_Items: []
+  - m_Id: 140592607234
+    m_Localized: Api-Api
+    m_Metadata:
+      m_Items: []
+  - m_Id: 140592607235
+    m_Localized: '[Insert a quote from The Bee Movie]'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 140592607236
+    m_Localized: Bubble Quest
+    m_Metadata:
+      m_Items: []
+  - m_Id: 140592607237
+    m_Localized: Cuicui's favorite game!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 140592607239
+    m_Localized: CHA-LA HEAD-CHA-LA
+    m_Metadata:
+      m_Items: []
+  - m_Id: 140592607246
+    m_Localized: My new friend
+    m_Metadata:
+      m_Items: []
+  - m_Id: 140592607247
+    m_Localized: In space, two stars may collide and become inseparables
+    m_Metadata:
+      m_Items: []
+  - m_Id: 140592607248
+    m_Localized: Crimson Sunset
+    m_Metadata:
+      m_Items: []
+  - m_Id: 140592607262
+    m_Localized: Beach Episode
+    m_Metadata:
+      m_Items: []
+  - m_Id: 140592607263
+    m_Localized: Eyes up here!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 140592607264
+    m_Localized: Lubin
+    m_Metadata:
+      m_Items: []
+  - m_Id: 140592607274
+    m_Localized: Stellaman
+    m_Metadata:
+      m_Items: []
+  - m_Id: 140592607278
+    m_Localized: xoxo
+    m_Metadata:
+      m_Items: []
+  - m_Id: 140592607280
+    m_Localized: Yanya's Adventure
+    m_Metadata:
+      m_Items: []
+  - m_Id: 140592607281
+    m_Localized: Gotta work fast!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 140592607282
+    m_Localized: Greetings!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 140592607283
+    m_Localized: Yanya always keeps a smile on her face to take her mind off her
+      precarious situation as an unpaid intern!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 140592607284
+    m_Localized: Chuchu Vs Magenta
+    m_Metadata:
+      m_Items: []
+  references:
+    version: 2
+    RefIds: []

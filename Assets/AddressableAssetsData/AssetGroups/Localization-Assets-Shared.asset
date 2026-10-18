@@ -30,6 +30,16 @@ MonoBehaviour:
     m_ReadOnly: 1
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 976456d53a24ec242b5bf82b25f149e2
+    m_Address: "Assets/Settings/Localizations/Succ\xE8s Shared Data.asset"
+    m_ReadOnly: 1
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: a84988ee60d3ba6479ed08b1ee2387ec
+    m_Address: Assets/Settings/Localizations/Stickers Shared Data.asset
+    m_ReadOnly: 1
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: b3eec409a99cf0744945d380db858a5e
     m_Address: Assets/Settings/Localizations/Cutscene1 Shared Data.asset
     m_ReadOnly: 1
