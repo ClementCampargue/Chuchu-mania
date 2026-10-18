@@ -63,16 +63,15 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 13208326520835
-    m_Localized: "Ainsi,<p=2> Chuchu partit \xE0 la rescousse des esprits \xE9toiles
-      captur\xE9s par les lapins lunaires dans toute la galaxie!"
+    m_Localized: <w>GROAN</w>
     m_Metadata:
       m_Items: []
   - m_Id: 13208326520836
-    m_Localized: 'Direction: <p=2> Bubble Beach Galaxy!'
+    m_Localized: Euh...<p=5> D'abord un petit en-cas avant,<p=2> hehe...
     m_Metadata:
       m_Items: []
   - m_Id: 6611818790912
-    m_Localized: '***'
+    m_Localized: 
     m_Metadata:
       m_Items: []
   - m_Id: 13208326520838
@@ -199,7 +198,7 @@ MonoBehaviour:
       m_Items: []
   - m_Id: 683898018787328
     m_Localized: "Notre stellanaute continue sa recherche pour trouver d\u2019autres
-      esprits \xE9toiles.<p=5> La voici parcourant la mangrove Han\u2019Bo."
+      esprits \xE9toiles.<p=5> La voici dans la mangrove Han\u2019Bo."
     m_Metadata:
       m_Items: []
   - m_Id: 683898106867712
@@ -244,7 +243,7 @@ MonoBehaviour:
       m_Items: []
   - m_Id: 683898106867721
     m_Localized: "Tr\xE8s ch\xE8re Api-Api,<p=2> je suis venue m\u2019assurer que
-      les esprits \xE9toiles sont toujours bien gard\xE9s dans votre ruche."
+      les esprits \xE9toiles sont toujours dans votre ruche."
     m_Metadata:
       m_Items: []
   - m_Id: 683898106867722
@@ -303,6 +302,47 @@ MonoBehaviour:
   - m_Id: 683898115256324
     m_Localized: "J'arrive Litchi!<p=5> Je lib\xE8rerai ces pauvres esprits \xE9toiles
       enferm\xE9es pour ta f\xEAte mal\xE9fique!"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2503254537203712
+    m_Localized: Chuchu commence son aventure sur Bubble Beach Galaxy!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2503254583341056
+    m_Localized: "Les lapins lunaires se sont empar\xE9s d'un autre esprit \xE9toile!"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2503254583341057
+    m_Localized: <sh>Sauvez-moi!!!</sh>
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2503254583341058
+    m_Localized: "Lib\xE9rez-la!"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2503254583341059
+    m_Localized: "Je vais la...<p=5> fiou...<p=5> lib\xE9rer...<p=5> tr\xE8s vite..."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2503254583341060
+    m_Localized: .<p=2>.<p=2>.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2503254583341061
+    m_Localized: Huff,<p=2> j'aurai du emporter un casse-croute...
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2503254583341062
+    m_Localized: "Oh!<p=5> Des morceaux d'\xE9toiles!"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2503254583341063
+    m_Localized: "Ils sont si savoureux!<p=5> Je vais en manger jusqu'\xE0 m'exploser
+      la panse!"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2503254583341064
+    m_Localized: Euh...<p=5> m'oubliez pas,<p=2> hein...
     m_Metadata:
       m_Items: []
   references:

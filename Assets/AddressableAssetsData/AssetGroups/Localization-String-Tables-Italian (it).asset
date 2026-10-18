@@ -40,6 +40,12 @@ MonoBehaviour:
     - Locale-it
     - Preload
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: ba09ad1d3dd9ca7428af8e8a5e6a45f1
+    m_Address: "Succ\xE8s_it"
+    m_ReadOnly: 1
+    m_SerializedLabels:
+    - Locale-it
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: cb8e60250df8dee43ae4c8944ff286c8
     m_Address: UI_it
     m_ReadOnly: 1

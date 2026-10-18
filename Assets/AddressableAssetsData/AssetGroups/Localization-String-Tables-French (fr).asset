@@ -46,6 +46,12 @@ MonoBehaviour:
     - Locale-fr
     - Preload
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: c9f60e34993d0ad4eb2519c780385797
+    m_Address: "Succ\xE8s_fr"
+    m_ReadOnly: 1
+    m_SerializedLabels:
+    - Locale-fr
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: e0cc1943456295949a189497bf554b59
     m_Address: Dialogues_fr
     m_ReadOnly: 1

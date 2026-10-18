@@ -40,6 +40,12 @@ MonoBehaviour:
     m_SerializedLabels:
     - Locale-pt
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 791dbff8ec70a734499dfb5cef9cdf3e
+    m_Address: "Succ\xE8s_pt"
+    m_ReadOnly: 1
+    m_SerializedLabels:
+    - Locale-pt
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: a163693a9160f67418b2f59241c27660
     m_Address: Dialogues_pt
     m_ReadOnly: 1
