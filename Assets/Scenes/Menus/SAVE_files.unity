@@ -237,6 +237,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   scene: HUB
   scene_first_launch: CS_Intro
+  button: {fileID: 1892158125}
   delete: {fileID: 1781555164194001046, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
   quit: {fileID: 7727032971491509709, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
   delete_menu: {fileID: 1161617940}
@@ -3181,6 +3182,17 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 7074827046419805813, guid: 51c9fe1471651184ab4e013fae6373b7, type: 3}
   m_PrefabInstance: {fileID: 4607638307819426685}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1892158125 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5063090626152368103, guid: 51c9fe1471651184ab4e013fae6373b7, type: 3}
+  m_PrefabInstance: {fileID: 4607638307819426685}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2e893645860fd154a88d411c92fd8b3b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1978794892
 GameObject:
   m_ObjectHideFlags: 0

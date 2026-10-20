@@ -12,6 +12,28 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8de40c3b1331b374eb85df61112c5e1a, type: 3}
   m_Name: SO_achievement 3
   m_EditorClassIdentifier: 
-  requirement: Faire la ballade la plus longue de l'histoire
+  achievementId: win 100 coins
+  achievement_name:
+    m_TableReference:
+      m_TableCollectionName: GUID:b3eec409a99cf0744945d380db858a5e
+    m_TableEntryReference:
+      m_KeyId: 13208326520834
+      m_Key: 
+    m_FallbackState: 0
+    m_WaitForCompletion: 0
+    m_LocalVariables: []
+  requirement:
+    m_TableReference:
+      m_TableCollectionName: GUID:b3eec409a99cf0744945d380db858a5e
+    m_TableEntryReference:
+      m_KeyId: 48718692352
+      m_Key: 
+    m_FallbackState: 0
+    m_WaitForCompletion: 0
+    m_LocalVariables: []
   sticker_reward: {fileID: 11400000, guid: 1381a621d76c1024791e889a25598180, type: 2}
-  "r\xE9ussi": 1
+  type: 3
+  objectif: 1
+  references:
+    version: 2
+    RefIds: []

@@ -27,6 +27,5 @@ public class SO_world : ScriptableObject
         new List<bool>();
 
     public string name_;
-    public int rank;
     public int price;
 }

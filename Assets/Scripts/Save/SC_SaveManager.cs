@@ -13,6 +13,32 @@ public class SC_SaveManager : MonoBehaviour
     public int activeSlot = -1;
     public SC_SaveData data;
 
+    [Header("Achievements")]
+    public List<SO_achievement> achievements =
+        new List<SO_achievement>();
+
+    public void ClearAllSaves()
+    {
+        bool allDeleted = true;
+
+        for (int i = 0; i < SLOT_COUNT; i++)
+        {
+            if (!DeleteSlot(i))
+            {
+                allDeleted = false;
+            }
+        }
+
+        data = null;
+        activeSlot = -1;
+
+        Debug.Log(
+            allDeleted
+                ? "Toutes les sauvegardes ont été supprimées."
+                : "Certaines sauvegardes n'ont pas pu être supprimées."
+        );
+    }
+
     private void Start()
     {
         for (int i = 0; i < SLOT_COUNT; i++)
@@ -102,6 +128,26 @@ public class SC_SaveManager : MonoBehaviour
             if (loaded.stickers == null)
                 loaded.stickers = new System.Collections.Generic
                     .List<SC_StickerProgress>();
+
+            if (loaded.achievements == null)
+            {
+                loaded.achievements =
+                    new List<SC_AchievementProgress>();
+            }
+            foreach (SC_AchievementProgress progress in loaded.achievements)
+            {
+                if (progress == null)
+                    continue;
+
+                // Ancien système : un succès débloqué donnait
+                // déjà sa récompense automatiquement.
+                if (progress.unlocked && !progress.finished)
+                {
+                    progress.finished = true;
+                    progress.collected = true;
+                }
+            }
+
             foreach (var world in loaded.worlds)
             {
                 if (world.spiritsUnlocked == null)
@@ -189,6 +235,7 @@ public class SC_SaveManager : MonoBehaviour
         }
     }
 
+
     public bool DeleteSlot(int slot)
     {
         if (!IsValidSlot(slot))
@@ -265,6 +312,21 @@ public class SC_SaveManager : MonoBehaviour
         return progress != null
             ? progress.unlocked
             : world.startUnlocked;
+    }
+    public int GetCompletedLevelsCount()
+    {
+        if (data == null || data.levels == null)
+            return 0;
+
+        int count = 0;
+
+        foreach (SC_LevelProgress progress in data.levels)
+        {
+            if (progress.completed)
+                count++;
+        }
+
+        return count;
     }
 
     public void SetWorldUnlocked(SO_world world, bool unlocked)
@@ -582,6 +644,311 @@ public class SC_SaveManager : MonoBehaviour
             " | Score : " + record.bestScore +
             " | Rang : " + record.bestRank
         );
+    }
+
+    private SO_achievement GetAchievementDefinition(AchievementType type)
+    {
+        if (achievements == null)
+            return null;
+
+        foreach (SO_achievement achievement in achievements)
+        {
+            if (achievement != null && achievement.type == type)
+                return achievement;
+        }
+
+        return null;
+    }
+
+    private SC_AchievementProgress GetAchievementProgress(
+        SO_achievement achievement,
+        bool create)
+    {
+        if (data == null || achievement == null)
+            return null;
+
+        if (string.IsNullOrWhiteSpace(achievement.achievementId))
+        {
+            Debug.LogError(
+                "achievementId manquant : " + achievement.name
+            );
+            return null;
+        }
+
+        if (data.achievements == null)
+            data.achievements = new List<SC_AchievementProgress>();
+
+        foreach (SC_AchievementProgress progress in data.achievements)
+        {
+            if (progress != null &&
+                progress.achievementId == achievement.achievementId)
+            {
+                return progress;
+            }
+        }
+
+        if (!create)
+            return null;
+
+        SC_AchievementProgress newProgress = new SC_AchievementProgress
+        {
+            achievementId = achievement.achievementId,
+            progress = 0,
+            unlocked = false,
+            finished = false,
+            collected = false
+        };
+
+        data.achievements.Add(newProgress);
+        return newProgress;
+    }
+
+    // Le succès a-t-il été terminé ?
+    public bool IsAchievementFinished(SO_achievement achievement)
+    {
+        SC_AchievementProgress progress =
+            GetAchievementProgress(achievement, false);
+
+        return progress != null && progress.finished;
+    }
+
+    // La récompense est-elle disponible ?
+
+
+    public bool CollectAchievementReward(
+        SO_achievement achievement,
+        bool useJoker = false)
+    {
+        if (data == null)
+        {
+            Debug.LogError("Aucune sauvegarde active !");
+            return false;
+        }
+
+        if (achievement == null)
+        {
+            Debug.LogError("Achievement null !");
+            return false;
+        }
+
+        Debug.Log("Achievements avant : " + data.achievements.Count);
+
+        // IMPORTANT : true crée l'entrée si elle n'existe pas.
+        SC_AchievementProgress progress =
+            GetAchievementProgress(achievement, true);
+
+        if (progress == null)
+        {
+            Debug.LogError(
+                "Impossible de créer la progression : "
+                + achievement.achievementId
+            );
+            return false;
+        }
+
+        if (progress.collected)
+        {
+            Debug.LogWarning("Récompense déjà récupérée !");
+            return false;
+        }
+
+        if (!progress.finished && !useJoker)
+        {
+            Debug.LogWarning("Succès non terminé : joker nécessaire.");
+            return false;
+        }
+
+        // Avec un joker, le succès peut être validé sans objectif atteint.
+        progress.finished = true;
+        progress.unlocked = true;
+
+        if (achievement.sticker_reward != null)
+        {
+            UnlockSticker(achievement.sticker_reward);
+        }
+
+        progress.collected = true;
+
+        SaveGame();
+
+        Debug.Log("Achievements après : " + data.achievements.Count);
+        Debug.Log(
+            "Succès enregistré : " +
+            JsonUtility.ToJson(progress, true)
+        );
+
+        return true;
+    }
+
+
+    // La récompense a-t-elle déjà été récupérée ?
+    public bool IsAchievementCollected(SO_achievement achievement)
+    {
+        SC_AchievementProgress progress =
+            GetAchievementProgress(achievement, false);
+
+        return progress != null && progress.collected;
+    }
+
+    // Progression actuelle.
+    public int GetAchievementProgressValue(
+        SO_achievement achievement)
+    {
+        SC_AchievementProgress progress =
+            GetAchievementProgress(achievement, false);
+
+        return progress != null ? progress.progress : 0;
+    }
+
+    // Progression complète du succès.
+    public SC_AchievementProgress GetAchievementCollectionProgress(
+        SO_achievement achievement)
+    {
+        return GetAchievementProgress(achievement, false);
+    }
+
+    // Ajoute de la progression au succès.
+    public void AddAchievementProgress(
+        AchievementType type,
+        int amount = 1)
+    {
+        if (data == null || amount <= 0)
+            return;
+
+        SO_achievement achievement = GetAchievementDefinition(type);
+
+        if (achievement == null)
+        {
+            Debug.LogWarning(
+                "Aucun succès configuré pour : " + type
+            );
+            return;
+        }
+
+        SC_AchievementProgress progress =
+            GetAchievementProgress(achievement, true);
+
+        if (progress == null || progress.finished)
+            return;
+
+        int objectif = Mathf.Max(1, achievement.objectif);
+
+        progress.progress = (int)Math.Min(
+            (long)progress.progress + amount,
+            (long)objectif
+        );
+
+        if (progress.progress >= objectif)
+        {
+            UnlockAchievement(achievement);
+            return;
+        }
+        Debug.Log("achievement " + achievement + " " + progress.progress);
+        SaveGame();
+    }
+
+    // Termine immédiatement un succès.
+    public void CompleteAchievement(AchievementType type)
+    {
+        if (data == null)
+            return;
+
+        SO_achievement achievement = GetAchievementDefinition(type);
+
+        if (achievement == null)
+        {
+            Debug.LogWarning(
+                "Aucun succès configuré pour : " + type
+            );
+            return;
+        }
+
+        UnlockAchievement(achievement);
+    }
+
+    // Termine le succès, mais ne récupère PAS la récompense.
+    public void UnlockAchievement(SO_achievement achievement)
+    {
+        if (data == null || achievement == null)
+            return;
+
+        SC_AchievementProgress progress =
+            GetAchievementProgress(achievement, true);
+
+        if (progress == null || progress.finished)
+            return;
+
+        progress.progress = Mathf.Max(
+            progress.progress,
+            Mathf.Max(1, achievement.objectif)
+        );
+
+        progress.unlocked = true;
+        progress.finished = true;
+        progress.collected = false;
+
+        SaveGame();
+
+        Debug.Log(
+            "Succès terminé : " + achievement.achievementId
+        );
+
+        // La récompense sera attribuée au moment de la récupération.
+    }
+
+    // Récupère la récompense une seule fois.
+    public bool CollectAchievementReward(
+        SO_achievement achievement)
+    {
+        if (data == null || achievement == null)
+            return false;
+
+        SC_AchievementProgress progress =
+            GetAchievementProgress(achievement, false);
+
+        // Impossible de récupérer un succès non terminé
+        // ou dont la récompense a déjà été récupérée.
+        if (progress == null ||
+            !progress.finished ||
+            progress.collected)
+        {
+            return false;
+        }
+
+        // Attribue la récompense.
+        if (achievement.sticker_reward != null)
+        {
+            UnlockSticker(achievement.sticker_reward);
+        }
+
+        // Marque la récompense comme récupérée.
+        progress.collected = true;
+
+        SaveGame();
+
+        Debug.Log(
+            "Récompense récupérée : " + achievement.achievementId
+        );
+
+        return true;
+    }
+
+    // Compatibilité avec les appels existants.
+    // Ne permet pas de récupérer une récompense sans la terminer.
+    public void SetAchievementCollected(
+        SO_achievement achievement,
+        bool collected)
+    {
+        if (!collected)
+            return;
+
+        CollectAchievementReward(achievement);
+    }
+
+    // Compatibilité avec le code existant.
+    public bool IsAchievementUnlocked(SO_achievement achievement)
+    {
+        return IsAchievementFinished(achievement);
     }
 
 }

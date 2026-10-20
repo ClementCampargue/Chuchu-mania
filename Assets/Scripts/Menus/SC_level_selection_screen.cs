@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
@@ -6,6 +7,9 @@ using UnityEngine.InputSystem;
 
 public class SC_level_selection_screen : MonoBehaviour
 {
+    public int spirits_count;
+    public TextMeshPro world_price;
+    public TextMeshPro current_saved;
     public TextMeshPro record_score;
     public TextMeshPro record_time;
     public int record_rank;
@@ -104,6 +108,14 @@ public class SC_level_selection_screen : MonoBehaviour
         {
             SC_scursorManager.instance.enable_cursor();
         }
+        UpdateProgression();
+    }
+    public void UpdateProgression()
+    {
+        int completed =
+            SC_SaveManager.instance.GetCompletedLevelsCount();
+        spirits_count = completed;
+        current_saved.text = completed.ToString();
     }
     public void start_game(int i)
     {
@@ -126,7 +138,7 @@ public class SC_level_selection_screen : MonoBehaviour
     public void open_planet(SO_world level)
     {
         SC_SaveManager saveManager = SC_SaveManager.instance;
-
+        world_price.text = level.price.ToString();
         record_.SetActive(false);
 
         if (level == null)
@@ -251,8 +263,10 @@ public class SC_level_selection_screen : MonoBehaviour
 
     public void unlock_level()
     {
-
-        anim.SetTrigger("unlock");
+        if(spirits_count>= world.price)
+        {
+            anim.SetTrigger("unlock");
+        }
     }
 
     public void resume_music()
@@ -321,15 +335,46 @@ public class SC_level_selection_screen : MonoBehaviour
             name_.text = level.name_;
 
         // Rang du monde
+        // Rang du monde
         if (rank != null)
         {
-            if (level.rank >= 0 && level.rank < ranks.Count)
-                rank.sprite = ranks[level.rank];
-            else
-                rank.sprite = null;
+            SC_SaveManager saveManager = SC_SaveManager.instance;
+
+            float totalRank = 0f;
+            int count = 0;
+
+            for (int i = 0; i < level.levels.Count; i++)
+            {
+                SC_LevelRecord record =
+                    saveManager.GetLevelRecord(level.levels[i]);
+
+                if (record != null)
+                {
+                    totalRank += record.bestRank;
+                    count++;
+                }
+            }
+
+            float averageRank = count > 0 ? totalRank / count : 0f;
+
+            rank.sprite = ranks[(int)averageRank];
         }
 
-        // Mise à jour des esprits
+if (spirits == null || level == null)
+            return;
+
+        if (level.levels == null)
+        {
+            // Désactiver tous les esprits si la liste des niveaux est absente
+            foreach (SpriteRenderer renderer in spirits)
+            {
+                if (renderer != null)
+                    renderer.gameObject.SetActive(false);
+            }
+
+            return;
+        }
+
         for (int i = 0; i < spirits.Count; i++)
         {
             SpriteRenderer spiritRenderer = spirits[i];
@@ -337,37 +382,27 @@ public class SC_level_selection_screen : MonoBehaviour
             if (spiritRenderer == null)
                 continue;
 
-            // Masquer les emplacements inutilisés
-            if (level.spirits == null || i >= level.spirits.Count)
-            {
-                spiritRenderer.gameObject.SetActive(false);
+            // Vérifier que l'esprit existe dans la liste
+            bool hasSpirit = i < level.levels.Count &&
+                             level.levels[i] != null;
+
+            spiritRenderer.gameObject.SetActive(hasSpirit);
+
+            if (!hasSpirit)
                 continue;
-            }
 
-            spiritRenderer.gameObject.SetActive(true);
-            spiritRenderer.sprite = level.spirits[i];
+            // Appliquer le sprite
+            spiritRenderer.sprite = level.levels[i].spirit;
 
-            // Vérifier si l'esprit est débloqué dans la sauvegarde
-            bool isUnlocked;
+            bool isCompleted =
 
-            if (SC_SaveManager.instance != null &&
-                SC_SaveManager.instance.data != null)
-            {
-                isUnlocked =
-                    SC_SaveManager.instance.IsSpiritUnlocked(level, i);
-            }
-            else
-            {
-                isUnlocked =
-                    level.defaultSpiritsUnlocked != null &&
-                    i < level.defaultSpiritsUnlocked.Count &&
-                    level.defaultSpiritsUnlocked[i];
-            }
+              SC_SaveManager.instance.IsLevelCompleted(level.levels[i]);
 
-            // Appliquer le matériau correspondant
-            spiritRenderer.sharedMaterial = isUnlocked
+            Material targetMaterial = isCompleted
                 ? unlocked_spirit
                 : locked_spirit;
+
+            spirits[i].material = targetMaterial;
         }
     }
 

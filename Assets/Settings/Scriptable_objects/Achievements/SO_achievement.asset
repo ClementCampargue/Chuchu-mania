@@ -12,26 +12,26 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8de40c3b1331b374eb85df61112c5e1a, type: 3}
   m_Name: SO_achievement
   m_EditorClassIdentifier: 
+  achievementId: S_rank
   achievement_name:
     m_TableReference:
-      m_TableCollectionName: 
+      m_TableCollectionName: GUID:b3eec409a99cf0744945d380db858a5e
     m_TableEntryReference:
-      m_KeyId: 0
+      m_KeyId: 13208326520834
       m_Key: 
     m_FallbackState: 0
     m_WaitForCompletion: 0
     m_LocalVariables: []
   requirement:
     m_TableReference:
-      m_TableCollectionName: 
+      m_TableCollectionName: GUID:b3eec409a99cf0744945d380db858a5e
     m_TableEntryReference:
-      m_KeyId: 0
+      m_KeyId: 48718692352
       m_Key: 
     m_FallbackState: 0
     m_WaitForCompletion: 0
     m_LocalVariables: []
   sticker_reward: {fileID: 11400000, guid: aef49bf6c79aeea4bb038956ff423525, type: 2}
-  "r\xE9ussi": 0
   type: 0
   objectif: 1
   references:

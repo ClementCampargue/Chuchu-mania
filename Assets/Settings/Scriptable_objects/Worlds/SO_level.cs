@@ -14,6 +14,7 @@ public class SO_level : ScriptableObject
     public string levelname;
     public string scene_to_load;
 
+    public Sprite spirit;
     [Header("Unlock")]
     public bool startUnlocked;
 }

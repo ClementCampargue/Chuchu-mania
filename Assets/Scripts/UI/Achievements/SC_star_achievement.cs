@@ -16,6 +16,7 @@ public class SC_star_achievement : MonoBehaviour
     public SC_Button button;
     [Header("Condition")]
     public bool debloque = false;
+    public bool récolté = false;
     public bool red = false;
 
     [Header("Connexions")]
@@ -35,9 +36,16 @@ public class SC_star_achievement : MonoBehaviour
     public Animator anim;
     void Start()
     {
-        if (achievement.réussi)
+        Debug.Log(SC_SaveManager.instance.IsAchievementCollected(achievement));
+
+        if (SC_SaveManager.instance.IsAchievementFinished(achievement))
         {
             debloque = true;
+        }
+
+        if (SC_SaveManager.instance.IsAchievementCollected(achievement))
+        {
+            récolté = true;
         }
 
         UpdateRedState();
@@ -51,7 +59,7 @@ public class SC_star_achievement : MonoBehaviour
     
             SC_achievement_menu.instance.update_display(achievement, this);
         }
-        if (achievement.réussi || SC_achievement_menu.instance.current_wishes>0)
+        if (SC_SaveManager.instance.IsAchievementCollected(achievement) || SC_achievement_menu.instance.current_wishes>0)
         {
             anim.SetBool("Unlockable", true);
 
@@ -140,27 +148,66 @@ public class SC_star_achievement : MonoBehaviour
         return false;
     }
 
+
     public void unlock()
     {
-        if (debloque) return;
+        if (récolté)
+            return;
 
-        if (SC_achievement_menu.instance.current_wishes > 0)
+        SC_SaveManager save = SC_SaveManager.instance;
+
+        if (save == null || achievement == null)
+            return;
+
+        SC_achievement_menu menu = SC_achievement_menu.instance;
+
+        if (menu == null)
+            return;
+
+        // Le succès est-il terminé normalement ?
+        bool finished = save.IsAchievementFinished(achievement);
+
+        // Si le succès n'est pas terminé, il faut un joker.
+        bool useWish = !finished;
+
+        if (useWish && menu.current_wishes <= 0)
         {
-            SC_achievement_menu.instance.use_wish();
-            debloque = true;
-            UpdateLines();
-            button.UnSelect();
-
+            Debug.Log("Pas assez de jokers pour débloquer ce succès.");
+            return;
         }
-        else if (achievement.réussi)
+
+        // Tente de récupérer la récompense.
+        bool success = save.CollectAchievementReward(
+            achievement,
+            useWish
+        );
+
+        if (!success)
         {
-            debloque = true;
-            UpdateLines();
-            button.UnSelect();
+            Debug.LogWarning(
+                "Impossible de récupérer le succès : "
+                + achievement.achievementId
+            );
+            return;
         }
 
-     
+        // Le joker n'est consommé qu'après une récupération réussie.
+        if (useWish)
+        {
+            menu.use_wish();
+        }
+
+        debloque = true;
+
+        UpdateLines();
+        button.UnSelect();
+
+        Debug.Log(
+            "Succès enregistré et débloqué : "
+            + achievement.achievementId
+        );
     }
+
 
     public void disable_movement()
     {

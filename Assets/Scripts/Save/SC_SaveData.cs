@@ -20,12 +20,25 @@ public class SC_SaveData
     public List<SC_StickerProgress> stickers =
         new List<SC_StickerProgress>();
 
-    // Records de chaque niveau
     public List<SC_LevelRecord> levelRecords =
         new List<SC_LevelRecord>();
 
+    public List<SC_AchievementProgress> achievements =
+        new List<SC_AchievementProgress>();
+
     public bool tutorialCompleted = false;
 }
+
+[Serializable]
+public class SC_AchievementProgress
+{
+    public bool finished;
+    public bool collected;
+    public string achievementId;
+    public int progress;
+    public bool unlocked;
+}
+
 
 [Serializable]
 public class SC_WorldProgress

@@ -869,10 +869,20 @@ MonoBehaviour:
     saveVersion: 1
     saveName: Nouvelle partie
     lastPlayedDate: 
-    coins: 0
+    money: 0
     worlds: []
     levels: []
+    stickers: []
+    levelRecords: []
+    achievements: []
     tutorialCompleted: 0
+  achievements:
+  - {fileID: 11400000, guid: 51c7a4d49ee2bfc42b1b24f71ac06352, type: 2}
+  - {fileID: 11400000, guid: c570146344f4c0a42a20d3dbb0d655c9, type: 2}
+  - {fileID: 11400000, guid: e1071dfb25b208744a33736d1d911528, type: 2}
+  - {fileID: 11400000, guid: 5a7854cd67fd3a54ba89f266527af175, type: 2}
+  - {fileID: 11400000, guid: 6d9e24cabf2c95a45974e6d008db7728, type: 2}
+  - {fileID: 11400000, guid: 759863b31864fd94696b6c06a51ec0db, type: 2}
 --- !u!1 &3583162067977784093
 GameObject:
   m_ObjectHideFlags: 0
@@ -1872,6 +1882,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   previousScene: 
+  world: {fileID: 0}
 --- !u!1 &6011331018052213524
 GameObject:
   m_ObjectHideFlags: 0

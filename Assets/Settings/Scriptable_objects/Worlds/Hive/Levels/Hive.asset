@@ -15,4 +15,5 @@ MonoBehaviour:
   levelId: Hive
   levelname: Hive
   scene_to_load: CS_Hive1
+  spirit: {fileID: 21300000, guid: 201183dde677bda46897618b80c00ce6, type: 3}
   startUnlocked: 1

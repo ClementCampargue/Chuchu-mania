@@ -220,7 +220,7 @@ public class SC_winscreen_scoring : MonoBehaviour
         {
             SC_SaveManager.instance.SaveLevelRecord(
                 currentLevel,
-                (int)time.base_time,
+                Mathf.Abs((int)time.base_time -200),
                 health.current_health + health.current_bonus_health,
                 base_score,
                 bestRank

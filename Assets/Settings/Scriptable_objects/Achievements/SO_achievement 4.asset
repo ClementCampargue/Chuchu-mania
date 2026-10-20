@@ -12,6 +12,28 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8de40c3b1331b374eb85df61112c5e1a, type: 3}
   m_Name: SO_achievement 4
   m_EditorClassIdentifier: 
-  requirement: Regarder les fesses de Litchi 30min sans cligner des yeux
+  achievementId: eat 100 creams
+  achievement_name:
+    m_TableReference:
+      m_TableCollectionName: GUID:b3eec409a99cf0744945d380db858a5e
+    m_TableEntryReference:
+      m_KeyId: 13208326520834
+      m_Key: 
+    m_FallbackState: 0
+    m_WaitForCompletion: 0
+    m_LocalVariables: []
+  requirement:
+    m_TableReference:
+      m_TableCollectionName: GUID:b3eec409a99cf0744945d380db858a5e
+    m_TableEntryReference:
+      m_KeyId: 48718692352
+      m_Key: 
+    m_FallbackState: 0
+    m_WaitForCompletion: 0
+    m_LocalVariables: []
   sticker_reward: {fileID: 11400000, guid: 1dd492e4dcb162748b47945427e6d5c2, type: 2}
-  "r\xE9ussi": 1
+  type: 4
+  objectif: 100
+  references:
+    version: 2
+    RefIds: []

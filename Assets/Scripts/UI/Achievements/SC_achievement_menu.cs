@@ -23,6 +23,8 @@ public class SC_achievement_menu : MonoBehaviour
     {
         instance = this;
     }
+
+
     void Start()
     {
         achievement_count = achievements.Count;
@@ -42,6 +44,7 @@ public class SC_achievement_menu : MonoBehaviour
     {
         if (current_wishes > 0)
         {
+            calculate_pourcentage();
             current_wishes--;
             UpdateWishes();
         }
@@ -53,12 +56,12 @@ public class SC_achievement_menu : MonoBehaviour
 
         foreach (SO_achievement achievement in achievements)
         {
-            if (achievement.réussi)
+            if (SC_SaveManager.instance != null &&
+                SC_SaveManager.instance.IsAchievementUnlocked(achievement))
             {
                 réussis++;
             }
         }
-
         float pourcentageRéussi = (float)réussis / achievements.Count * 100f;
         pourcentage.text = pourcentageRéussi.ToString("000") + "%";
     }

@@ -15,3 +15,5 @@ MonoBehaviour:
   levelId: Boss
   levelname: Boss
   scene_to_load: CS_Moon3
+  spirit: {fileID: 21300000, guid: 9500c4314c78f994187e319c100c0817, type: 3}
+  startUnlocked: 0

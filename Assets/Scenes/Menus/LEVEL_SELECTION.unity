@@ -14476,6 +14476,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 96409b51def85ca40b163678cb6f03b6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  spirits_count: 0
+  world_price: {fileID: 1802040049}
+  current_saved: {fileID: 2036222804}
   record_score: {fileID: 8170882471107078628}
   record_time: {fileID: 2040681760150044133}
   record_rank: 0
@@ -20699,6 +20702,17 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 2813768196200715495, guid: 3ce41f75411c41f448f4f822ac6d67b0, type: 3}
   m_PrefabInstance: {fileID: 437004963827048801}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1802040049 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 4735648650218365287, guid: 3ce41f75411c41f448f4f822ac6d67b0, type: 3}
+  m_PrefabInstance: {fileID: 437004963827048801}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 19017791}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9541d86e2fd84c1d9990edf0852d74ab, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1843479191
 GameObject:
   m_ObjectHideFlags: 0

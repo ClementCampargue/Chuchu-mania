@@ -25,5 +25,4 @@ MonoBehaviour:
   startUnlocked: 0
   defaultSpiritsUnlocked: 
   name_: Hive
-  rank: 0
-  price: 0
+  price: 2

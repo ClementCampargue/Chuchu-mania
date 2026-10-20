@@ -1,8 +1,10 @@
+using Discord;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.SceneManagement;
 
 public class SC_icecream_eat_system : MonoBehaviour
 {
@@ -451,7 +453,11 @@ public class SC_icecream_eat_system : MonoBehaviour
         }
 
         FinishEating();
-
+        if(SceneManager.GetActiveScene().name != "TUTO")
+        {
+            SC_SaveManager.instance
+    .AddAchievementProgress(AchievementType.eat100cream, selectedCreams.Count);
+        }
         selectedCreams.Clear();
 
         forceEatAll = false;

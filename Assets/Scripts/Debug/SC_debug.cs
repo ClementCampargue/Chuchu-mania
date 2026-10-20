@@ -12,6 +12,10 @@ public class SC_debug : MonoBehaviour
 
     void Update()
     {
+        if (Input.GetKeyDown(KeyCode.X))
+        {
+            SC_SaveManager.instance.ClearAllSaves();
+        }
         if (Input.GetKeyDown(KeyCode.T))
         {
             SC_score.Instance.score = 1000;

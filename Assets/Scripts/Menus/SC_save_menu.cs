@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 
 public class SC_save_menu : MonoBehaviour
@@ -7,7 +8,7 @@ public class SC_save_menu : MonoBehaviour
     [Header("Scenes")]
     public string scene;
     public string scene_first_launch;
-
+    public SC_Button button;
     [Header("Save Manager")]
     private SC_SaveManager manager;
 
@@ -33,6 +34,7 @@ public class SC_save_menu : MonoBehaviour
 
     private void Start()
     {
+        UpdateCursorMode();
         update_files();
     }
 
@@ -51,15 +53,6 @@ public class SC_save_menu : MonoBehaviour
 
         if (quit != null)
             quit.action.Enable();
-    }
-
-    private void OnDisable()
-    {
-        if (delete != null)
-            delete.action.Disable();
-
-        if (quit != null)
-            quit.action.Disable();
     }
 
     private void Update()
@@ -291,5 +284,45 @@ public class SC_save_menu : MonoBehaviour
         }
 
         return true;
+    }
+    private void UpdateCursorMode()
+    {
+        if (SC_controller_manager.instance == null)
+            return;
+
+        bool usingController =
+            SC_controller_manager.instance.using_controller;
+
+        if (usingController)
+        {
+            if (SC_scursorManager.instance != null)
+            {
+                SC_scursorManager.instance.disable_cursor();
+            }
+
+            if (EventSystem.current != null &&
+                EventSystem.current.currentSelectedGameObject == null)
+            {
+                SelectDefaultButton();
+            }
+        }
+        else
+        {
+            if (SC_scursorManager.instance != null)
+            {
+                SC_scursorManager.instance.enable_cursor();
+            }
+        }
+    }
+
+    private void SelectDefaultButton()
+    {
+        if (button == null)
+            return;
+
+        if (!button.gameObject.activeInHierarchy)
+            return;
+
+        button.Select();
     }
 }
