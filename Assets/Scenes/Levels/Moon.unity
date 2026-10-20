@@ -2651,6 +2651,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 8300000, guid: 74a907c25c59d7b408a3c99b96c70bb1, type: 3}
     - target: {fileID: 8035928732895759023, guid: fc0a4bc2aae082741b1aa749cf6a68ed, type: 3}
+      propertyPath: level_
+      value: 
+      objectReference: {fileID: 11400000, guid: 9baff0bc5f71a4c45a85755c255a4ad7, type: 2}
+    - target: {fileID: 8035928732895759023, guid: fc0a4bc2aae082741b1aa749cf6a68ed, type: 3}
       propertyPath: next_scene
       value: CS_Moon3
       objectReference: {fileID: 0}

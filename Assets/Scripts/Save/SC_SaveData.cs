@@ -20,6 +20,10 @@ public class SC_SaveData
     public List<SC_StickerProgress> stickers =
         new List<SC_StickerProgress>();
 
+    // Records de chaque niveau
+    public List<SC_LevelRecord> levelRecords =
+        new List<SC_LevelRecord>();
+
     public bool tutorialCompleted = false;
 }
 
@@ -33,7 +37,6 @@ public class SC_WorldProgress
         new List<bool>();
 }
 
-
 [Serializable]
 public class SC_LevelProgress
 {
@@ -41,6 +44,7 @@ public class SC_LevelProgress
     public bool unlocked;
     public bool completed;
 }
+
 [Serializable]
 public class SC_StickerProgress
 {
@@ -48,4 +52,14 @@ public class SC_StickerProgress
     public bool unlocked;
 }
 
+[Serializable]
+public class SC_LevelRecord
+{
+    public string levelId;
 
+    // -1 signifie qu'aucun record n'a encore été enregistré.
+    public int bestTime = -1;
+    public int bestHearts = -1;
+    public int bestScore = -1;
+    public int bestRank = -1;
+}

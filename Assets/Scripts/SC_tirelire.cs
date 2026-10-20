@@ -62,7 +62,10 @@ public class SC_tirelire : MonoBehaviour
 
     private void Start()
     {
-
+        foreach(SO_level level in SC_game_master.instance.world.levels) 
+        {
+            SC_SaveManager.instance.SetLevelUnlocked(level, true);
+        }
         total_money.text = SC_SaveManager.instance.data.money.ToString();
 
         total_score = PlayerPrefs.GetInt("Score");

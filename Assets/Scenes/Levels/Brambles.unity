@@ -1112,6 +1112,10 @@ PrefabInstance:
       propertyPath: music
       value: 
       objectReference: {fileID: 8300000, guid: 7b9b6ba0393e2ab4a96383623da6a9ca, type: 3}
+    - target: {fileID: 8035928732895759023, guid: fc0a4bc2aae082741b1aa749cf6a68ed, type: 3}
+      propertyPath: level_
+      value: 
+      objectReference: {fileID: 11400000, guid: 7edd8887fd8941d48a215d7f3160868e, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects:

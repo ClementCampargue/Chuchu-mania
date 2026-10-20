@@ -1,5 +1,6 @@
 
 using System;
+using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
 
@@ -491,4 +492,96 @@ public class SC_SaveManager : MonoBehaviour
     {
         SetStickerUnlocked(sticker, true);
     }
+    public SC_LevelRecord GetLevelRecord(SO_level level)
+    {
+        if (data == null || level == null)
+            return null;
+
+        if (data.levelRecords == null)
+            data.levelRecords = new List<SC_LevelRecord>();
+
+        foreach (SC_LevelRecord record in data.levelRecords)
+        {
+            if (record.levelId == level.levelId)
+                return record;
+        }
+
+        return null;
+    }
+
+    public void SaveLevelRecord(
+        SO_level level,
+        int elapsedTime,
+        int hearts,
+        int score,
+        int rankIndex)
+    {
+        if (data == null || level == null)
+            return;
+
+        if (string.IsNullOrWhiteSpace(level.levelId))
+        {
+            Debug.LogError(
+                "Impossible de sauvegarder le record : levelId manquant."
+            );
+            return;
+        }
+
+        if (data.levelRecords == null)
+            data.levelRecords = new List<SC_LevelRecord>();
+
+        SC_LevelRecord record = GetLevelRecord(level);
+
+        // Premier résultat enregistré pour ce niveau.
+        if (record == null)
+        {
+            record = new SC_LevelRecord
+            {
+                levelId = level.levelId,
+                bestTime = Mathf.Max(0, elapsedTime),
+                bestHearts = Mathf.Max(0, hearts),
+                bestScore = Mathf.Max(0, score),
+                bestRank = Mathf.Max(0, rankIndex)
+            };
+
+            data.levelRecords.Add(record);
+        }
+        else
+        {
+            // Le temps est mesuré en secondes : plus petit = meilleur.
+            if (elapsedTime >= 0f &&
+                (record.bestTime < 0f ||
+                 elapsedTime < record.bestTime))
+            {
+                record.bestTime = elapsedTime;
+            }
+
+            // Plus de cœurs = meilleur record.
+            if (hearts > record.bestHearts)
+                record.bestHearts = hearts;
+
+            // Plus de points = meilleur record.
+            if (score > record.bestScore)
+                record.bestScore = score;
+
+            // Un index supérieur représente un meilleur rang.
+            if (rankIndex > record.bestRank)
+                record.bestRank = rankIndex;
+        }
+
+        // Le niveau est également marqué comme terminé.
+        SetLevelCompleted(level);
+
+        // Enregistre tous les records dans le slot actif.
+        SaveGame();
+
+        Debug.Log(
+            "Record sauvegardé pour " + level.levelId +
+            " | Temps : " + record.bestTime +
+            " | Cœurs : " + record.bestHearts +
+            " | Score : " + record.bestScore +
+            " | Rang : " + record.bestRank
+        );
+    }
+
 }

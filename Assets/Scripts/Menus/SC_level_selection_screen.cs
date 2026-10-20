@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Diagnostics;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -7,6 +6,11 @@ using UnityEngine.InputSystem;
 
 public class SC_level_selection_screen : MonoBehaviour
 {
+    public TextMeshPro record_score;
+    public TextMeshPro record_time;
+    public int record_rank;
+
+
     public AudioClip default_music;
     public AudioClip unlock_music;
     public AudioClip unlock_music_boss;
@@ -19,7 +23,7 @@ public class SC_level_selection_screen : MonoBehaviour
     public SC_Button button;
     public Animator anim;
     public GameObject price;
-    public List<SC_Button> buttons;
+    public List<SC_level_button> buttons;
 
     public SpriteRenderer header_background;
     public GameObject header_locked;
@@ -28,6 +32,7 @@ public class SC_level_selection_screen : MonoBehaviour
     [Header("Spirits")]
     public List<SpriteRenderer> spirits;
     public List<Sprite> ranks;
+    public List<SpriteRenderer> hearts;
     public List<bool> spirits_unlocked;
 
     [Header("Level Info")]
@@ -50,6 +55,45 @@ public class SC_level_selection_screen : MonoBehaviour
     private SO_world world;
 
     private string scene_toload;
+    public GameObject record_;
+
+
+    public void update_record(int y)
+    {
+     
+        SC_SaveManager saveManager = SC_SaveManager.instance;
+
+        SC_LevelRecord record =
+            saveManager.GetLevelRecord(world.levels[y]);
+     
+        if (record != null)
+        {
+            record_.SetActive(true);
+
+
+            foreach (SpriteRenderer spr in hearts)
+            {
+                spr.enabled = false;
+            }
+            for(int i = 0; i < record.bestHearts; i++)
+            {
+                hearts[i].enabled = true;
+            }
+            record_score.text = record.bestScore.ToString("D6");
+            record_time.text = record.bestTime.ToString("D3");
+        }
+        else
+        {
+            record_.SetActive(false);
+
+            foreach (SpriteRenderer spr in hearts)
+            {
+                spr.enabled = false;
+            }
+        }
+
+    }
+
     private void Awake()
     {
         instance = this;
@@ -63,6 +107,10 @@ public class SC_level_selection_screen : MonoBehaviour
     }
     public void start_game(int i)
     {
+        if (buttons[i].cant_open)
+        {
+            return;
+        }
         scene_toload = world.levels[i].scene_to_load;
         anim.SetTrigger("load");
         this.enabled = false;
@@ -77,9 +125,13 @@ public class SC_level_selection_screen : MonoBehaviour
 
     public void open_planet(SO_world level)
     {
+        SC_SaveManager saveManager = SC_SaveManager.instance;
+
+        record_.SetActive(false);
+
         if (level == null)
             return;
-
+        SC_game_master.instance.world = level;
         world = level;
 
         for (int i = 0; i < buttons.Count; i++)
@@ -98,7 +150,7 @@ public class SC_level_selection_screen : MonoBehaviour
                     ? SC_SaveManager.instance.IsLevelUnlocked(levelData)
                     : levelData.startUnlocked;
 
-            buttons[i].gameObject.SetActive(unlocked_);
+            buttons[i].check_locked(unlocked_);
 
             if (unlocked_)
             {
@@ -107,6 +159,14 @@ public class SC_level_selection_screen : MonoBehaviour
 
                 if (label != null)
                     label.text = levelData.levelname;
+                
+            }
+            else
+            {
+                TextMeshPro label =
+                    buttons[i].GetComponent<TextMeshPro>();
+
+                label.text = "???";
             }
         }
 
@@ -131,7 +191,21 @@ public class SC_level_selection_screen : MonoBehaviour
             locked_menu.SetActive(true);
             new_menu.SetActive(false);
         }
+        for (int i = 0; i < world.levels.Count; i++)
+        {
+            SC_LevelRecord record =
+                saveManager.GetLevelRecord(world.levels[i]);
 
+            if (record != null)
+            {
+                buttons[i].rank.sprite = ranks[record.bestRank];
+            }
+            else
+            {
+                // Sprite par défaut si aucun record
+                buttons[i].rank.sprite = ranks[0];
+            }
+        }
         confirm.Play();
         anim.SetTrigger("open");
         selecting_level = true;

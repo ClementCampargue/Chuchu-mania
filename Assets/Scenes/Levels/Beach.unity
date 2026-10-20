@@ -29068,6 +29068,10 @@ PrefabInstance:
       value: -2.8966668
       objectReference: {fileID: 0}
     - target: {fileID: 8035928732895759023, guid: fc0a4bc2aae082741b1aa749cf6a68ed, type: 3}
+      propertyPath: level_
+      value: 
+      objectReference: {fileID: 11400000, guid: 479a85a772ee91243bda9566330b8635, type: 2}
+    - target: {fileID: 8035928732895759023, guid: fc0a4bc2aae082741b1aa749cf6a68ed, type: 3}
       propertyPath: limits
       value: 5.13
       objectReference: {fileID: 0}

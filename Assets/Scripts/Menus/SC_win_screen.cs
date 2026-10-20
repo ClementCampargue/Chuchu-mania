@@ -71,6 +71,8 @@ public class SC_win_screen : MonoBehaviour
         }
         else
         {
+            SC_SaveManager.instance.SetLevelCompleted(SC_level_master.instance.level_);
+
             anim.enabled = true;
             anim.SetTrigger("show");
 

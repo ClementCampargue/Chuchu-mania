@@ -17,7 +17,7 @@ public class SC_level_master : MonoBehaviour
     public string discordLargeImage = "";
 
     private SC_player player;
-
+    public SO_level level_;
     private void Awake()
     {
         instance = this;

@@ -32073,7 +32073,9 @@ MonoBehaviour:
   shakeFrequency: 0
   shakeScreenDuration: 0
   ps: []
-  audio: []
+  audio:
+  - {fileID: 88935076365070221}
+  - {fileID: 9175608358490200897}
   flash: 1
   flashDuration: 0.14
   stretchAmount: 1.2

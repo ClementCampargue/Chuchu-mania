@@ -40,6 +40,13 @@ public class SC_winscreen_scoring : MonoBehaviour
 
     // Permet d'éviter plusieurs déclenchements du skip
     private bool skipRequested = false;
+    [Header("Level Record")]
+    public SO_level currentLevel;
+
+    // Temps total écoulé en secondes à la fin du niveau.
+    // À renseigner depuis ton système de timer.
+    public float elapsedTime;
+
 
     private void OnEnable()
     {
@@ -73,12 +80,13 @@ public class SC_winscreen_scoring : MonoBehaviour
 
     public void calculate_score()
     {
+        currentLevel = SC_level_master.instance.level_;
         base_score = score.score;
 
         time_bonus = Mathf.Max(0, Mathf.RoundToInt(time.base_time * score_per_time)); 
         time_score.text = time_bonus.ToString();
 
-        health_bonus = score_per_heart * health.current_health;
+        health_bonus = score_per_heart * health.current_health + health.current_bonus_health;
 
         foreach (SpriteRenderer spr in hearts)
         {
@@ -87,7 +95,7 @@ public class SC_winscreen_scoring : MonoBehaviour
 
         for (int i = 0; i < hearts.Count; i++)
         {
-            hearts[i].enabled = i < health.current_health;
+            hearts[i].enabled = i < health.current_health + health.current_bonus_health;
         }
 
         life_score.text = health_bonus.ToString();
@@ -199,6 +207,25 @@ public class SC_winscreen_scoring : MonoBehaviour
         bestRank = Mathf.Clamp(bestRank, 0, ranks.Count - 1);
 
         rank.sprite = ranks[bestRank];
-        PlayerPrefs.SetInt("Score", base_score + PlayerPrefs.GetInt("Score"));
+        PlayerPrefs.SetInt(
+            "Score",
+            base_score + PlayerPrefs.GetInt("Score")
+        );
+        PlayerPrefs.Save();
+
+        // Enregistre les records du niveau dans la sauvegarde active.
+        if (SC_SaveManager.instance != null &&
+            currentLevel != null &&
+            health != null)
+        {
+            SC_SaveManager.instance.SaveLevelRecord(
+                currentLevel,
+                (int)time.base_time,
+                health.current_health + health.current_bonus_health,
+                base_score,
+                bestRank
+            );
+        }
     }
 }
+
