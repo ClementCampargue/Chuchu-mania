@@ -1,0 +1,30 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f54b69ebfb26e2548a8dcb088518d8d2, type: 3}
+  m_Name: SO_moon
+  m_EditorClassIdentifier: 
+  worldId: Moon
+  levels:
+  - {fileID: 11400000, guid: d865280f82c47f547a13a72acb731826, type: 2}
+  - {fileID: 11400000, guid: 9baff0bc5f71a4c45a85755c255a4ad7, type: 2}
+  - {fileID: 11400000, guid: 034cfc4748cceac4a829f90269aa2cf0, type: 2}
+  header_background: {fileID: 21300000, guid: 5dc8285b9c34b7742a28d35f166c98c3, type: 3}
+  planet_sprite: {fileID: 21300000, guid: 6a1142c51231f2d45a5b4ee19163a620, type: 3}
+  spirits:
+  - {fileID: 21300000, guid: 201183dde677bda46897618b80c00ce6, type: 3}
+  - {fileID: 21300000, guid: 53a211742c0d4bb45a4a8a24fef19efe, type: 3}
+  - {fileID: 21300000, guid: 9500c4314c78f994187e319c100c0817, type: 3}
+  startUnlocked: 0
+  defaultSpiritsUnlocked: 
+  name_: Moon
+  rank: 0
+  price: 0

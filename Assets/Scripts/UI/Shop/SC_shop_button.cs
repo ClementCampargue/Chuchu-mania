@@ -35,7 +35,7 @@ public class SC_shop_button : MonoBehaviour
         {
             spr.sprite = sticker.sticker_sprite;
             price.text = sticker.Price.ToString() + "$";
-            if (SC_money_manager.instance.money < sticker.Price)
+            if (SC_SaveManager.instance.data.money < sticker.Price)
             {
                 cant_buy_visual.SetActive(true);
             }
@@ -48,7 +48,7 @@ public class SC_shop_button : MonoBehaviour
             spr.sprite = item.item_sprite;
             price.text = item.Price.ToString() + "$";
 
-            if (SC_money_manager.instance.money < item.Price)
+            if (SC_SaveManager.instance.data.money < item.Price)
             {
                 cant_buy_visual.SetActive(true);
             }
@@ -58,7 +58,7 @@ public class SC_shop_button : MonoBehaviour
         {
             price.text = price_.ToString() + "$";
 
-            if (SC_money_manager.instance.money < 25)
+            if (SC_SaveManager.instance.data.money < 25)
             {
                 cant_buy_visual.SetActive(true);
             }
@@ -103,7 +103,7 @@ public class SC_shop_button : MonoBehaviour
     {
         if (random_sticker)
         {
-            if (SC_money_manager.instance.money >= 25)
+            if (SC_SaveManager.instance.data.money >= 25)
             {
                 meow.Play();
                 shop.Show_gacha();
@@ -124,7 +124,7 @@ public class SC_shop_button : MonoBehaviour
 
             if (sticker != null)
             {
-                if (SC_money_manager.instance.money >= sticker.Price)
+                if (SC_SaveManager.instance.data.money >= sticker.Price)
                 {
                     buy.Play();
                     SC_money_shop.instance.future_price = sticker.Price;
@@ -144,7 +144,7 @@ public class SC_shop_button : MonoBehaviour
             }
             if (item != null)
             {
-                if (SC_money_manager.instance.money >= item.Price)
+                if (SC_SaveManager.instance.data.money >= item.Price)
                 {
                     buy.Play();
                     SC_money_shop.instance.future_price = item.Price;

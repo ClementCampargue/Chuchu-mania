@@ -25,7 +25,7 @@ public class SC_money_shop : MonoBehaviour
 
     private void Start()
     {
-        money = SC_money_manager.instance.money;
+        money = SC_SaveManager.instance.data.money;
         UpdateMoney();
     }
 
@@ -78,7 +78,7 @@ public class SC_money_shop : MonoBehaviour
 
         money -= amount;
         PlayerPrefs.SetInt("Money", money);
-        SC_money_manager.instance.money = money;
+        SC_SaveManager.instance.Spendmoney(amount);
 
         if (moneyAnimation != null)
             StopCoroutine(moneyAnimation);

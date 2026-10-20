@@ -40,6 +40,6 @@ public class SC_title_screen : MonoBehaviour
 
     void OnAnyInput()
     {
-        transi.Capture(scene);
+            transi.Capture(scene);
     }
 }

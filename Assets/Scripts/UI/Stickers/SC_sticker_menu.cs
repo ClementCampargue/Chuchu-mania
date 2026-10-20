@@ -70,6 +70,9 @@ public class SC_sticker_menu : MonoBehaviour
         {
             unlocked = sprite_image.material;
         }
+        quit.action.Enable();
+        quit2.action.Enable();
+        edit.action.Enable();
 
         if (SC_scursorManager.instance != null)
         {

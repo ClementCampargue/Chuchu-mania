@@ -43,6 +43,7 @@ public class SC_Button : MonoBehaviour
         {
             indicator.SetActive(true);
         }
+        Hover();
         PlayAnimation(hover);
     }
 
@@ -53,13 +54,14 @@ public class SC_Button : MonoBehaviour
         indicator.SetActive(false);
 
         }
+        OnUnhover();
         isSelected = false;
         isPressed = false;
         isHovered = false;
     }
     private void OnEnable()
     {
-        if (select_on_enable)
+        if (select_on_enable && SC_controller_manager.instance.using_controller)
         {
             Select();
         }

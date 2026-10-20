@@ -62,12 +62,11 @@ public class SC_tirelire : MonoBehaviour
 
     private void Start()
     {
-        Debug.Log("MONEYY  " + PlayerPrefs.GetInt("Score"));
 
-        total_money.text = SC_money_manager.instance.money.ToString();
+        total_money.text = SC_SaveManager.instance.data.money.ToString();
 
         total_score = PlayerPrefs.GetInt("Score");
-        total_money_ = SC_money_manager.instance.money;
+        total_money_ = SC_SaveManager.instance.data.money;
 
         score_total.text = total_score.ToString("D6");
 
@@ -80,8 +79,7 @@ public class SC_tirelire : MonoBehaviour
         cat_anim.speed = anim_speed_range.x;
         cat_anim.enabled = false;
 
-        SC_money_manager.instance.money = total_money_ + money_won;
-
+        SC_SaveManager.instance.Addmoney(money_won);
         UpdateTexts();
     }
 

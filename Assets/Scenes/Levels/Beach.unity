@@ -29072,6 +29072,10 @@ PrefabInstance:
       value: 5.13
       objectReference: {fileID: 0}
     - target: {fileID: 8035928732895759023, guid: fc0a4bc2aae082741b1aa749cf6a68ed, type: 3}
+      propertyPath: next_scene
+      value: CS_Beach2
+      objectReference: {fileID: 0}
+    - target: {fileID: 8035928732895759023, guid: fc0a4bc2aae082741b1aa749cf6a68ed, type: 3}
       propertyPath: discordState
       value: Beach
       objectReference: {fileID: 0}

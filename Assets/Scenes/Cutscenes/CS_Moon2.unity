@@ -236,8 +236,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 04eb92a3ead3bc74ca49663ad51b9d8b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  next_scene: 
-  next_level: 0
+  next_scene: MOON
   dialogue: {fileID: 974702575}
   dialogue_to_play: {fileID: 11400000, guid: b2bf7775aafa5dc4cb5e016d59e01e58, type: 2}
   anim: {fileID: 255835188}
@@ -914,7 +913,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   gamemaster: {fileID: 5541224540911051492, guid: 894c74b520a88a24e88966d64bc5ea3e, type: 3}
   vector: {x: 0.33333334, y: -1.9333334, z: 0}
-  reload: 0
+  reload_: 1
 --- !u!4 &1596739075
 Transform:
   m_ObjectHideFlags: 0

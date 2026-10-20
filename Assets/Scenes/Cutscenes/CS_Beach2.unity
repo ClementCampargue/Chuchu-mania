@@ -233,8 +233,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 04eb92a3ead3bc74ca49663ad51b9d8b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  next_scene: 
-  next_level: 0
+  next_scene: FISH
   dialogue: {fileID: 974702575}
   dialogue_to_play: {fileID: 11400000, guid: b4b1b3555acb02e48825cd95d6b10a81, type: 2}
   anim: {fileID: 255835188}

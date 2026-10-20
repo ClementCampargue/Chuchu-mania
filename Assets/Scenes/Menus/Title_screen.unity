@@ -5481,8 +5481,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: be37d4f0db623934e8c103f736d61ca6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  transi: {fileID: 0}
-  scene: HUB
+  scene: SAVE_files
 --- !u!1 &829349964
 GameObject:
   m_ObjectHideFlags: 0

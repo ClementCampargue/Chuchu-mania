@@ -142,7 +142,7 @@ public class SC_gachapon : MonoBehaviour
             int newAmount = Mathf.Clamp(amount_to_buy + amount_, 1, 10);
             int newPrice = newAmount * price_for_one;
 
-            if (SC_money_shop.instance.money < newPrice)
+            if (SC_SaveManager.instance.data.money < newPrice)
                 return;
         }
 
@@ -190,7 +190,7 @@ public class SC_gachapon : MonoBehaviour
         // Vérification de l'argent
         int totalPrice = amount_to_buy * price_for_one;
 
-        if (SC_money_shop.instance.money < totalPrice)
+        if (SC_SaveManager.instance.data.money < totalPrice)
             return;
 
         shop.anim.SetTrigger("open");

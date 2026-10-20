@@ -234,8 +234,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 04eb92a3ead3bc74ca49663ad51b9d8b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  next_scene: 
-  next_level: 0
+  next_scene: HUB
   dialogue: {fileID: 974702575}
   dialogue_to_play: {fileID: 11400000, guid: c62bcf850164b8b4e8563ec6c8107c5e, type: 2}
   anim: {fileID: 255835188}
@@ -826,6 +825,10 @@ PrefabInstance:
       propertyPath: music
       value: 
       objectReference: {fileID: 8300000, guid: af48ec72a848a9e4e98a827ffdd98c81, type: 3}
+    - target: {fileID: 8035928732895759023, guid: fc0a4bc2aae082741b1aa749cf6a68ed, type: 3}
+      propertyPath: next_scene
+      value: HUB
+      objectReference: {fileID: 0}
     - target: {fileID: 8035928732895759023, guid: fc0a4bc2aae082741b1aa749cf6a68ed, type: 3}
       propertyPath: overlay_on
       value: 0

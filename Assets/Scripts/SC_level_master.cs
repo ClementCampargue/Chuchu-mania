@@ -2,6 +2,7 @@ using UnityEngine;
 
 public class SC_level_master : MonoBehaviour
 {
+    public string next_scene;
     public AudioClip music;
     public bool overlay_on = true;
     public bool level;
@@ -41,8 +42,6 @@ public class SC_level_master : MonoBehaviour
         if (level)
         {
             player.Revive();
-            player.anim.SetTrigger("Start");
-            player.start.PlayJuice();
             player.gameObject.SetActive(true);
 
             player.rb.linearVelocity = Vector2.zero;
@@ -74,6 +73,8 @@ public class SC_level_master : MonoBehaviour
         player.gameObject.SetActive(true);
 
         player.enabled = true;
+        player.anim.SetTrigger("Start");
+        player.start.PlayJuice();
     }
 
     private void Update()

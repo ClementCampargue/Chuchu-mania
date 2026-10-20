@@ -12,4 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cfffda53faae65f42b2a6c723f138c52, type: 3}
   m_Name: Beach
   m_EditorClassIdentifier: 
+  levelId: Beach
   levelname: Beach
+  scene_to_load: CS_Beach1
+  startUnlocked: 1

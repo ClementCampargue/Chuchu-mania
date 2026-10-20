@@ -48,7 +48,7 @@ MonoBehaviour:
   trs: {fileID: 0}
   spriteRenderer: {fileID: 0}
   flashMaterial: {fileID: 2100000, guid: 778865bbd08486043a01aeb31184e581, type: 2}
-  rumble: 1
+  rumble: 0
   rumbleLow: 0.1
   rumbleHigh: 0.3
   rumbleDuration: 0.1
@@ -391,7 +391,7 @@ MonoBehaviour:
   trs: {fileID: 0}
   spriteRenderer: {fileID: 0}
   flashMaterial: {fileID: 2100000, guid: 778865bbd08486043a01aeb31184e581, type: 2}
-  rumble: 1
+  rumble: 0
   rumbleLow: 0.1
   rumbleHigh: 0.3
   rumbleDuration: 0.1
@@ -965,6 +965,7 @@ MonoBehaviour:
   animator: {fileID: 5517351843465994125}
   ps: {fileID: 0}
   visuals: {fileID: 1491303567603843497}
+  trs: {fileID: 0}
   collision: {fileID: 1491303567603843497}
   stunDetection: {fileID: 1491303567603843497}
   playerLayer:
@@ -987,6 +988,7 @@ MonoBehaviour:
   isKnockedBack: 0
   isStunned: 0
   die_burn: 0
+  script: {fileID: 0}
 --- !u!1 &8523090266757272195
 GameObject:
   m_ObjectHideFlags: 0

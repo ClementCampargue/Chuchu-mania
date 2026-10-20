@@ -13,6 +13,8 @@ public class SC_title_screen_tuto_popup : MonoBehaviour
 
     public void close_popup()
     {
+        SC_SaveManager.instance.data.tutorialCompleted = true;
+        SC_SaveManager.instance.SaveGame();
         SC_screenshot_transition.instance.Capture(levels);
     }
 }

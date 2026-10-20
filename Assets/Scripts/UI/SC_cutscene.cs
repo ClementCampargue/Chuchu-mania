@@ -7,7 +7,6 @@ public class SC_cutscene : MonoBehaviour
 {
     private SC_screenshot_transition transition;
     public string next_scene;
-    public int next_level;
     public DialogueManager dialogue;
 
     public DialogueData dialogue_to_play;
@@ -25,25 +24,6 @@ public class SC_cutscene : MonoBehaviour
         anim.speed = 0;
         dialogue.currentDialogue = dialogue_to_play;
         dialogue.StartDialogue();
-        next_level = PlayerPrefs.GetInt("Level");
-        PlayerPrefs.SetInt("Level", next_level+1);
-        if(next_level == 0)
-        {
-            next_scene = "Beach";
-
-        }
-        else if (next_level == 1)
-        {
-            next_scene = "Ruche";
-        }
-        else if (next_level == 2)
-        {
-            next_scene = "Moon";
-        }
-        else if (next_level == 3)
-        {
-            next_scene = "MoneyScene";
-        }
         Invoke("delay",1);
         transition = SC_screenshot_transition.instance;
     }

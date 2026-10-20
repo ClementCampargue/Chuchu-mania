@@ -710,6 +710,53 @@ Transform:
   m_Children: []
   m_Father: {fileID: 5076468067273632007}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &4238358179198202979
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7634916179374222254}
+  - component: {fileID: 9115229655733135187}
+  m_Layer: 0
+  m_Name: DEBUG_TEST
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7634916179374222254
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4238358179198202979}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -1.2555702, y: -1.5153201, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 5099563054034266557}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &9115229655733135187
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4238358179198202979}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b9a8d900e25c2c1469332f2d7fb72626, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  gamemaster: {fileID: 5541224540911051492, guid: 894c74b520a88a24e88966d64bc5ea3e, type: 3}
+  vector: {x: 0.33333334, y: -1.9333334, z: 0}
+  reload_: 1
 --- !u!1 &4714623435225603245
 GameObject:
   m_ObjectHideFlags: 0
@@ -1102,6 +1149,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 7634916179374222254}
   - {fileID: 1409162263840171399}
   - {fileID: 8452380390855182069}
   - {fileID: 9030366242251519638}
@@ -1120,6 +1168,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 460e7e56ec6260a4fa4a09ace788243e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  next_scene: 
   music: {fileID: 8300000, guid: aa969eeb7f296354b9932bada0039bd7, type: 3}
   overlay_on: 1
   level: 1
@@ -1468,6 +1517,7 @@ MonoBehaviour:
   minDistanceFromPlayer: 2
   delay_respawn: 1
   delayBetweenSpawns: 0.01
+  manual_respawn: 0
 --- !u!1 &7276331212304049791
 GameObject:
   m_ObjectHideFlags: 0

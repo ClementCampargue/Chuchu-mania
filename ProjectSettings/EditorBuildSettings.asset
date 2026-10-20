@@ -9,8 +9,20 @@ EditorBuildSettings:
     path: Assets/Scenes/Menus/Title_screen.unity
     guid: 550bc309f73d3a94f9171b756ad3cee7
   - enabled: 1
+    path: Assets/Scenes/Menus/SAVE_files.unity
+    guid: d8c9dea77b9281c4bb28db55062a1fa2
+  - enabled: 1
     path: Assets/Scenes/Menus/Tuto_ask.unity
     guid: 5c0944160327f7647afb5f80ab373040
+  - enabled: 1
+    path: Assets/Scenes/Menus/MoneyScene.unity
+    guid: e32df890a46001344b5bd88ff4676238
+  - enabled: 1
+    path: Assets/Scenes/Menus/Stickers.unity
+    guid: 17ec1c879f55dcd4f8233087250228fa
+  - enabled: 1
+    path: Assets/Scenes/Menus/LEVEL_SELECTION.unity
+    guid: 7305c06f63c59ce41a06bb6805d7f2a7
   - enabled: 1
     path: Assets/Scenes/TUTO.unity
     guid: 40a7882b8fe35e04dafd92e6c32a3978
@@ -24,38 +36,53 @@ EditorBuildSettings:
     path: Assets/Scenes/Menus/Shop.unity
     guid: d068b002ea635e848a3c98c8411e16be
   - enabled: 1
-    path: Assets/Scenes/Cutscenes/Cutscene.unity
-    guid: 3cc7a31e4a29277469fc24d75b610832
+    path: Assets/Scenes/Levels/BRAMBLES.unity
+    guid: e8ed7105b59267743852ffe1c04db612
   - enabled: 1
-    path: Assets/Scenes/Cutscenes/CS_Intro.unity
-    guid: 615040d6999e6c74c8b9ab41b9e73bef
+    path: Assets/Scenes/Levels/FISH.unity
+    guid: 575cfbf9e999e2c458a2902b1e175111
+  - enabled: 1
+    path: Assets/Scenes/Levels/LEVEL_TEMPLATE.unity
+    guid: 8dd48e296680dbb40885ae3fb2d2ca82
+  - enabled: 1
+    path: Assets/Scenes/Levels/MUSEUM.unity
+    guid: 50533f07192380e438aa2170b098d730
+  - enabled: 1
+    path: Assets/Scenes/Levels/BEACH.unity
+    guid: db35c0ac1a9635043857db9523f4b24a
+  - enabled: 1
+    path: Assets/Scenes/Levels/MOON.unity
+    guid: 1dfcbdc2864702c428ff2031eb0f9bb2
+  - enabled: 1
+    path: Assets/Scenes/Levels/HIVE.unity
+    guid: ef873092ec71d0e4880c1b6d463bc099
+  - enabled: 1
+    path: Assets/Scenes/Cutscenes/CS_Beach1.unity
+    guid: bdfa75674c6391e4ab9fd8fbbdb591d8
+  - enabled: 1
+    path: Assets/Scenes/Cutscenes/CS_Beach2.unity
+    guid: b1a40175af0cd764ca67e5db1e86db6f
   - enabled: 1
     path: Assets/Scenes/Cutscenes/CS_Hive1.unity
     guid: 7e8a3f078b3b88848b0d3b7ce276986b
   - enabled: 1
+    path: Assets/Scenes/Cutscenes/CS_Hive2.unity
+    guid: 48a8e0dbaf352ca4188ea749b6443130
+  - enabled: 1
+    path: Assets/Scenes/Cutscenes/CS_Intro.unity
+    guid: 615040d6999e6c74c8b9ab41b9e73bef
+  - enabled: 1
+    path: Assets/Scenes/Cutscenes/CS_Moon1.unity
+    guid: 6d85be09073b4644c90705ce0c923730
+  - enabled: 1
     path: Assets/Scenes/Cutscenes/CS_Moon2.unity
     guid: cb3e4c214f079c742a41ec9258554a4b
-  - enabled: 1
-    path: Assets/Scenes/Menus/LEVEL_SELECTION.unity
-    guid: 7305c06f63c59ce41a06bb6805d7f2a7
   - enabled: 1
     path: Assets/Scenes/Cutscenes/CS_Moon3.unity
     guid: 2eb3dc62d28aec3489baef43001a53fb
   - enabled: 1
-    path: Assets/Scenes/Menus/Stickers.unity
-    guid: 17ec1c879f55dcd4f8233087250228fa
-  - enabled: 1
-    path: Assets/Scenes/Menus/MoneyScene.unity
-    guid: e32df890a46001344b5bd88ff4676238
-  - enabled: 1
-    path: Assets/Scenes/Levels/Beach.unity
-    guid: db35c0ac1a9635043857db9523f4b24a
-  - enabled: 1
-    path: Assets/Scenes/Levels/Moon.unity
-    guid: 1dfcbdc2864702c428ff2031eb0f9bb2
-  - enabled: 1
-    path: Assets/Scenes/Levels/Ruche.unity
-    guid: ef873092ec71d0e4880c1b6d463bc099
+    path: Assets/Scenes/Cutscenes/Cutscene.unity
+    guid: 3cc7a31e4a29277469fc24d75b610832
   m_configObjects:
     com.unity.addressableassets: {fileID: 11400000, guid: fe00b1b7602f7c445b6dac39cb9bfd06, type: 2}
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}

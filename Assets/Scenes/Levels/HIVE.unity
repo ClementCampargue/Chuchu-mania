@@ -2708,6 +2708,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 8300000, guid: 31f31a7150bec9a498df728928a0a213, type: 3}
     - target: {fileID: 8035928732895759023, guid: fc0a4bc2aae082741b1aa749cf6a68ed, type: 3}
+      propertyPath: next_scene
+      value: CS_Hive2
+      objectReference: {fileID: 0}
+    - target: {fileID: 8035928732895759023, guid: fc0a4bc2aae082741b1aa749cf6a68ed, type: 3}
       propertyPath: discordState
       value: Hive
       objectReference: {fileID: 0}

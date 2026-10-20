@@ -26,10 +26,12 @@ public class SC_sticker_button : MonoBehaviour
 
     private void Start()
     {
+        bool unlocked_ =
+    SC_SaveManager.instance.IsStickerUnlocked(sticker);
         save = SC_StickerSaveSystem.instance;
         menu = SC_sticker_menu.instance;
-        image.material = sticker.unlocked ? unlocked : locked;
-        if(sticker.special_mat != null)
+        image.material = unlocked_ ? unlocked : locked;
+        if(sticker.special_mat != null && unlocked_)
         {
             image.material = sticker.special_mat;
         }
@@ -87,7 +89,9 @@ public class SC_sticker_button : MonoBehaviour
 
     public void CreateSticker()
     {
-        if (!sticker.unlocked)
+        bool unlocked =
+    SC_SaveManager.instance.IsStickerUnlocked(sticker);
+        if (!unlocked)
             return;
         SC_scursorManager.instance.grabing = true;
         juice2.PlayJuice();
@@ -118,7 +122,7 @@ public class SC_sticker_button : MonoBehaviour
 
         img.sprite = sticker.sticker_sprite;
 
-        if (sticker.special_mat != null)
+        if (sticker.special_mat != null  && unlocked)
         {
             img.material = sticker.special_mat;
         }

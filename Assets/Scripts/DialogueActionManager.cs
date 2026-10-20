@@ -69,9 +69,8 @@ public class DialogueActionManager : MonoBehaviour
 
     private void Load_game()
     {
-        if(PlayerPrefs.GetInt("firsttime") == 0)
+        if (!SC_SaveManager.instance.data.tutorialCompleted)
         {
-            PlayerPrefs.SetInt("firsttime", 1);
             SC_screenshot_transition.instance.Capture("Tuto_ask");
         }
         else

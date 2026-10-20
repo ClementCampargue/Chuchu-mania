@@ -277,7 +277,8 @@ public class SC_sticker_popup : MonoBehaviour
         if (sticker == null)
             return;
         new_.SetActive(!sticker.unlocked);
-        sticker.unlocked = true;
+        SC_SaveManager.instance.UnlockSticker(sticker);
+        SC_SaveManager.instance.SaveGame();
         if (spr != null)
         {
             spr.sprite = sticker.sticker_sprite;

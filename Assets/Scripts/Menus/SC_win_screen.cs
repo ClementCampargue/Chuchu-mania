@@ -42,10 +42,14 @@ public class SC_win_screen : MonoBehaviour
         {
             transition.Capture("HUB");
         }
+        else if (SC_level_master.instance.next_scene != string.Empty)
+        {
+            transition.Capture(SC_level_master.instance.next_scene);
+
+        }
         else
         {
-            transition.Capture("Cutscene" + (PlayerPrefs.GetInt("Level") + 1));
-
+            transition.Capture("MoneyScene");
         }
         canact = false;
         once = false;
@@ -60,6 +64,8 @@ public class SC_win_screen : MonoBehaviour
     {
         if(SceneManager.GetActiveScene().name == "TUTO")
         {
+            SC_SaveManager.instance.data.tutorialCompleted = true;
+            SC_SaveManager.instance.SaveGame();
             anim.enabled = true;
             anim.SetTrigger("tuto");
         }

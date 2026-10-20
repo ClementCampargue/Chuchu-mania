@@ -19,7 +19,7 @@ public class SC_debug : MonoBehaviour
         }
         if (Input.GetKeyDown(KeyCode.M))
         {
-            SC_money_manager.instance.money = SC_money_manager.instance.money + 10;
+            SC_SaveManager.instance.Addmoney(100);
         }
 
         if (Input.GetKeyDown(KeyCode.R))
