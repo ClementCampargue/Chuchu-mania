@@ -69,7 +69,15 @@ public class DialogueActionManager : MonoBehaviour
 
     private void Load_game()
     {
-        SC_screenshot_transition.instance.Capture("LEVEL_SELECTION");
+        if(PlayerPrefs.GetInt("firsttime") == 0)
+        {
+            PlayerPrefs.SetInt("firsttime", 1);
+            SC_screenshot_transition.instance.Capture("Tuto_ask");
+        }
+        else
+        {
+            SC_screenshot_transition.instance.Capture("LEVEL_SELECTION");
+        }
         SC_player.instance.rb.constraints = RigidbodyConstraints2D.FreezeRotation;
         SC_player.instance.enabled = true;
         SC_player.instance.canMove = true;

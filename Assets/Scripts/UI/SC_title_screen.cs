@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class SC_title_screen : MonoBehaviour
 {
-    public SC_screenshot_transition transi;
+    private SC_screenshot_transition transi;
     public string scene;
     void Start()
     {
