@@ -234,6 +234,7 @@ public class SC_fish_enemy : MonoBehaviour
     private void SetAngryMode()
     {
         angry.PlayJuice();
+        PlayerPrefs.SetInt("angry_fish",1);
 
         TriggerAnimation("change_state");
         BoolAnimation("angry", true);
@@ -583,6 +584,7 @@ public class SC_fish_enemy : MonoBehaviour
             if (distance <= eatDistance)
             {
                 targetStarbit.Destroy_();
+                PlayerPrefs.SetInt("fish_no_eat", 1);
 
                 caughtStarbit = true;
             }

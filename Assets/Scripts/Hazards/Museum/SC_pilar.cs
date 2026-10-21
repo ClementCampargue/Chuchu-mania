@@ -51,6 +51,8 @@ public class SC_pilar : MonoBehaviour
 
     public void statue_mode()
     {
+        PlayerPrefs.SetInt("museum_no_hiding", 1);
+
         input.action.Enable();
         player.anim.enabled = false;
         statue_mode_ = true;

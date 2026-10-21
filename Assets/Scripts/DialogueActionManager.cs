@@ -35,6 +35,10 @@ public class DialogueActionManager : MonoBehaviour
             case "LOAD_ACHIEVEMENTS":
                 Load_Achievements();
                 break;
+
+            case "CUICUI_ACHIEVEMENT":
+                Load_Achievements();
+                break;
         }
     }
 
@@ -82,7 +86,11 @@ public class DialogueActionManager : MonoBehaviour
         SC_player.instance.canMove = true;
     }
 
+    public void cuicui_full_story()
+    {
+        SC_SaveManager.instance.AddAchievementProgress(AchievementType.cuicui_story, 1);
 
+    }
     private void GiveItem()
     {
         Debug.Log("Objet donné");

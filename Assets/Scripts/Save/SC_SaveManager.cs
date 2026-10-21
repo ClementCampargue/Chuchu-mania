@@ -450,7 +450,7 @@ public class SC_SaveManager : MonoBehaviour
     {
         if (data == null)
             return;
-       AddAchievementProgress(AchievementType.Win100coins, amount);
+       AddAchievementProgress(AchievementType.Win1000coins, amount);
 
         data.money = Mathf.Max(0, data.money + amount);
         SaveGame();

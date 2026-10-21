@@ -25,7 +25,6 @@ public class SC_level_master : MonoBehaviour
 
     private void Start()
     {
-        PlayerPrefs.SetInt("nodamage", 0);
         player = SC_player.instance;
 
         SC_music_manager.instance.update_music(music);
@@ -42,13 +41,19 @@ public class SC_level_master : MonoBehaviour
 
         if (level)
         {
+            PlayerPrefs.SetInt("nodamage", 0);
+            PlayerPrefs.SetInt("angry_fish", 0);
+            PlayerPrefs.SetInt("museum", 0);
+            PlayerPrefs.SetInt("museum_no_hiding", 0);
+            PlayerPrefs.SetInt("fish_no_eat", 0);
+            PlayerPrefs.SetInt("currentlevel", PlayerPrefs.GetInt("currentlevel") + 1);
+
             player.Revive();
             player.gameObject.SetActive(true);
 
             player.rb.linearVelocity = Vector2.zero;
 
             player.transform.position = spawn.position;
-            PlayerPrefs.SetInt("currentlevel", PlayerPrefs.GetInt("currentlevel") + 1);
 
             Invoke("delay", 0.1f);
         }

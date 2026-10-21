@@ -28,11 +28,17 @@ public enum AchievementType
     S_rank,
     No_damage_level,
     Loose_level1,
-    Win100coins,
+    Win1000coins,
     eat100cream,
     burn_enemy,
     A_rank_all_levels,
     moon_level_no_damage,
     level_no_damage,
+    stickers20,
+    museum_not_found,
+    museum_not_hide,
+    fish_not_angry,
+    fish_not_eat,
+    cuicui_story,
     inflate_bee
 }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.SceneManagement;
 
 public class SC_winscreen_scoring : MonoBehaviour
 {
@@ -191,7 +192,26 @@ public class SC_winscreen_scoring : MonoBehaviour
         if (PlayerPrefs.GetInt("nodamage") == 0)
         {
             SC_SaveManager.instance.AddAchievementProgress(AchievementType.No_damage_level, 1);
-
+            if (SceneManager.GetActiveScene().name == "MOON")
+            { 
+                      SC_SaveManager.instance.AddAchievementProgress(AchievementType.moon_level_no_damage, 1);
+            }
+        }
+        if (PlayerPrefs.GetInt("angry_fish") == 0)
+        {
+            SC_SaveManager.instance.AddAchievementProgress(AchievementType.fish_not_angry, 1);
+        }
+        if (PlayerPrefs.GetInt("museum") == 0)
+        {
+            SC_SaveManager.instance.AddAchievementProgress(AchievementType.museum_not_found, 1);
+        }
+        if (PlayerPrefs.GetInt("museum_no_hiding") == 0)
+        {
+            SC_SaveManager.instance.AddAchievementProgress(AchievementType.museum_not_hide, 1);
+        }
+        if (PlayerPrefs.GetInt("fish_no_eat") == 0)
+        {
+            SC_SaveManager.instance.AddAchievementProgress(AchievementType.fish_not_eat, 1);
         }
         if (ranks == null || ranks.Count == 0 ||
             rank_scores == null || rank_scores.Count == 0)

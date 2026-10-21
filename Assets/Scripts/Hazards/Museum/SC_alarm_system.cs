@@ -67,6 +67,7 @@ public class SC_alarm_system : MonoBehaviour
 
         if (alarmActive)
             return;
+        PlayerPrefs.SetInt("museum", 1);
 
         anim.enabled = true;
         robot.start_tracking();

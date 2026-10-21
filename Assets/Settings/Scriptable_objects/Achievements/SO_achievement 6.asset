@@ -32,7 +32,7 @@ MonoBehaviour:
     m_WaitForCompletion: 0
     m_LocalVariables: []
   sticker_reward: {fileID: 11400000, guid: 158d166711475304b9ef29d97635f7d3, type: 2}
-  type: 9
+  type: 12
   objectif: 1
   references:
     version: 2
