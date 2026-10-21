@@ -183,7 +183,7 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 13540277396193320
-    m_Localized: "Ca m'aurait \xE9tonn\xE9e\u2026"
+    m_Localized: "Ca m'aurait \xE9tonn\xE9e..."
     m_Metadata:
       m_Items: []
   - m_Id: 13540277396193321
@@ -258,7 +258,7 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 13540277396193339
-    m_Localized: "Quel manque de discernement\u2026"
+    m_Localized: Quel manque de discernement...
     m_Metadata:
       m_Items: []
   - m_Id: 13540277396193340
