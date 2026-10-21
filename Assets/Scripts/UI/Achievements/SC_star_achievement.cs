@@ -8,7 +8,7 @@ public class SC_star_achievement : MonoBehaviour
     [System.Serializable]
     public class Connection
     {
-        public GameObject objectA;
+       [HideInInspector] public GameObject objectA;
         public GameObject objectB;
     }
 
@@ -37,8 +37,41 @@ public class SC_star_achievement : MonoBehaviour
 
     public ParticleSystem ps;
     public SC_hue_shift_anim hue;
+    private void OnDrawGizmos()
+    {
+        if (connections == null)
+            return;
+
+        foreach (Connection connection in connections)
+        {
+            if (connection.objectB == null)
+                continue;
+
+            // objectA est toujours cette étoile
+            Vector3 posA = transform.position;
+            Vector3 posB = connection.objectB.transform.position;
+
+            // Couleur du lien
+            Gizmos.color = Color.yellow;
+
+            // Dessine le lien entre les deux étoiles
+            Gizmos.DrawLine(posA, posB);
+
+            // Dessine un petit repère à chaque extrémité
+            Gizmos.DrawSphere(posA, 0.08f);
+            Gizmos.DrawSphere(posB, 0.08f);
+        }
+    }
+    private void Awake()
+    {
+        foreach (Connection connection in connections)
+        {
+            connection.objectA = gameObject;
+        }
+    }
     void Start()
     {
+    
         Debug.Log(SC_SaveManager.instance.IsAchievementCollected(achievement));
 
         if (SC_SaveManager.instance.IsAchievementFinished(achievement))
