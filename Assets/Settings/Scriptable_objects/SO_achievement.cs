@@ -28,7 +28,7 @@ public enum AchievementType
     S_rank,
     No_damage_level,
     Loose_level1,
-    Win1000coins,
+    Win100coins,
     eat100cream,
     burn_enemy,
     A_rank_all_levels,

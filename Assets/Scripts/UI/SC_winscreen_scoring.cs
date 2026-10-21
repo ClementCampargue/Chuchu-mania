@@ -188,6 +188,11 @@ public class SC_winscreen_scoring : MonoBehaviour
 
     public void CalculateRank()
     {
+        if (PlayerPrefs.GetInt("nodamage") == 0)
+        {
+            SC_SaveManager.instance.AddAchievementProgress(AchievementType.No_damage_level, 1);
+
+        }
         if (ranks == null || ranks.Count == 0 ||
             rank_scores == null || rank_scores.Count == 0)
             return;
@@ -212,7 +217,10 @@ public class SC_winscreen_scoring : MonoBehaviour
             base_score + PlayerPrefs.GetInt("Score")
         );
         PlayerPrefs.Save();
-
+        if(bestRank == 4)
+        {
+            SC_SaveManager.instance.AddAchievementProgress(AchievementType.S_rank, 1);
+        }
         // Enregistre les records du niveau dans la sauvegarde active.
         if (SC_SaveManager.instance != null &&
             currentLevel != null &&
@@ -226,6 +234,7 @@ public class SC_winscreen_scoring : MonoBehaviour
                 bestRank
             );
         }
+
     }
 }
 

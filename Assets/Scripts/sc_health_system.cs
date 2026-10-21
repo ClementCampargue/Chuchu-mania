@@ -38,6 +38,7 @@ public class sc_health_system : MonoBehaviour
     {
         if (damage <= 0)
             return;
+        PlayerPrefs.SetInt("nodamage", 0);
 
         // Les dégâts retirent d'abord les cœurs bonus
         if (current_bonus_health > 0)

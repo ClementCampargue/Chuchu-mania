@@ -25,6 +25,7 @@ public class SC_level_master : MonoBehaviour
 
     private void Start()
     {
+        PlayerPrefs.SetInt("nodamage", 0);
         player = SC_player.instance;
 
         SC_music_manager.instance.update_music(music);
@@ -47,11 +48,14 @@ public class SC_level_master : MonoBehaviour
             player.rb.linearVelocity = Vector2.zero;
 
             player.transform.position = spawn.position;
+            PlayerPrefs.SetInt("currentlevel", PlayerPrefs.GetInt("currentlevel") + 1);
 
             Invoke("delay", 0.1f);
         }
         else
         {
+            PlayerPrefs.SetInt("currentlevel", 0);
+
             player.gameObject.SetActive(false);
         }
 

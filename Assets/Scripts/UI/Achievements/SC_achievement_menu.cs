@@ -15,6 +15,7 @@ public class SC_achievement_menu : MonoBehaviour
     public TextMeshPro pourcentage;
     public Animator item_box;
     public GameObject question_mark;
+    public GameObject checkmark;
     public Material default_mat;
     public Material locked;
     public List<GameObject> wishes;
@@ -29,7 +30,10 @@ public class SC_achievement_menu : MonoBehaviour
     {
         achievement_count = achievements.Count;
         quit.action.Enable();
+
         calculate_pourcentage();
+        current_wishes = SC_SaveManager.instance.data.wishes;
+        UpdateWishes();
     }
 
     private void UpdateWishes()
@@ -44,6 +48,7 @@ public class SC_achievement_menu : MonoBehaviour
     {
         if (current_wishes > 0)
         {
+            SC_SaveManager.instance.SpendWish(1);
             calculate_pourcentage();
             current_wishes--;
             UpdateWishes();
@@ -74,6 +79,11 @@ public class SC_achievement_menu : MonoBehaviour
             SC_screenshot_transition.instance.Capture("HUB");
         }
         UpdateCursorMode();
+
+        if (Input.GetKeyDown(KeyCode.W))
+        {
+            SC_SaveManager.instance.AddWish(1);
+        }
     }
 
     public void hide_sticker()
@@ -124,8 +134,10 @@ public class SC_achievement_menu : MonoBehaviour
         {
             text.text = achievement.requirement.GetLocalizedString();
         }
+        checkmark.SetActive(SC_SaveManager.instance.IsAchievementFinished(achievement));
 
-        if (!star.debloque)
+
+        if (!SC_SaveManager.instance.IsAchievementCollected(achievement))
         {
             question_mark.SetActive(true);
 

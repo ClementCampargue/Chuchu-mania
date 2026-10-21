@@ -419,6 +419,24 @@ public class SC_SaveManager : MonoBehaviour
         SaveGame();
     }
 
+    public void AddWish(int amount)
+    {
+        if (data == null)
+            return;
+
+        data.wishes = Mathf.Max(0, data.wishes + amount);
+        SaveGame();
+    }
+
+    public void SpendWish(int amount)
+    {
+        if (data == null)
+            return;
+
+        data.wishes = Mathf.Max(0, data.wishes - amount);
+        SaveGame();
+    }
+
     public void Setmoney(int amount)
     {
         if (data == null)
@@ -432,6 +450,7 @@ public class SC_SaveManager : MonoBehaviour
     {
         if (data == null)
             return;
+       AddAchievementProgress(AchievementType.Win100coins, amount);
 
         data.money = Mathf.Max(0, data.money + amount);
         SaveGame();

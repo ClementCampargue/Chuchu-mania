@@ -446,6 +446,8 @@ public class SC_bee_stinger : MonoBehaviour
         // Si l'abeille touche un objet avec le tag "Dard"
         if (collision.CompareTag("Dard") && !isCheeksSequence)
         {
+            SC_SaveManager.instance.AddAchievementProgress(AchievementType.inflate_bee, 1);
+
             StartCoroutine(CheeksSequence());
         }
     }

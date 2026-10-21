@@ -76,7 +76,7 @@ public class SC_enemy_damage : MonoBehaviour
 
         if (playerCollider != null && die_burn && player.burning)
         {
-
+            SC_SaveManager.instance.AddAchievementProgress(AchievementType.burn_enemy,1);
             bool playerOnRight = playerCollider.transform.position.x > trs.position.x;
             Knockback(playerOnRight);
         }

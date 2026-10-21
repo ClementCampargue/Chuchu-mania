@@ -10,6 +10,8 @@ public class SC_SaveData
     public string lastPlayedDate = "";
 
     public int money = 0;
+    public int wishes = 0;
+
 
     public List<SC_WorldProgress> worlds =
         new List<SC_WorldProgress>();

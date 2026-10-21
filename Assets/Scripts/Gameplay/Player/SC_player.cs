@@ -1989,7 +1989,10 @@ public class SC_player : MonoBehaviour
         rb.gravityScale = 0;
 
         isFrozen = true;
-
+        if(PlayerPrefs.GetInt("currentlevel") == 1)
+        {
+            SC_SaveManager.instance.AddAchievementProgress(AchievementType.Loose_level1, 1);
+        }
         anim.SetBool(
             "Die",
             true

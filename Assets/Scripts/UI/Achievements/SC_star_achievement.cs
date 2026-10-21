@@ -34,12 +34,20 @@ public class SC_star_achievement : MonoBehaviour
     public Sprite red_;
     private List<LineRenderer> lines = new List<LineRenderer>();
     public Animator anim;
+
+    public ParticleSystem ps;
+    public SC_hue_shift_anim hue;
     void Start()
     {
         Debug.Log(SC_SaveManager.instance.IsAchievementCollected(achievement));
 
         if (SC_SaveManager.instance.IsAchievementFinished(achievement))
         {
+            if (!SC_SaveManager.instance.IsAchievementCollected(achievement))
+            {
+                ps.Play();
+                hue.enabled = true;
+            }
             debloque = true;
         }
 
@@ -59,7 +67,7 @@ public class SC_star_achievement : MonoBehaviour
     
             SC_achievement_menu.instance.update_display(achievement, this);
         }
-        if (SC_SaveManager.instance.IsAchievementCollected(achievement) || SC_achievement_menu.instance.current_wishes>0)
+        if (!SC_SaveManager.instance.IsAchievementCollected(achievement) && SC_SaveManager.instance.IsAchievementFinished(achievement) || SC_achievement_menu.instance.current_wishes>0)
         {
             anim.SetBool("Unlockable", true);
 
@@ -72,7 +80,7 @@ public class SC_star_achievement : MonoBehaviour
         // Vérifie si l'étoile possède une connexion
         UpdateRedState();
 
-        if (debloque)
+        if (SC_SaveManager.instance.IsAchievementCollected(achievement))
         {
             anim.SetBool("Can_press", false);
             spr.sprite = unlocked_;
@@ -88,7 +96,7 @@ public class SC_star_achievement : MonoBehaviour
 
             spr.sprite = default_;
         }
-
+  
     }
 
     private void UpdateRedState()
@@ -106,6 +114,9 @@ public class SC_star_achievement : MonoBehaviour
     }
     public void show_reward()
     {
+        ps.Stop();
+
+   
         SC_sticker_popup.instance.ShowStickers(
             new SO_Sticker[] { achievement.sticker_reward }
         );
@@ -151,23 +162,17 @@ public class SC_star_achievement : MonoBehaviour
 
     public void unlock()
     {
+        Debug.Log("essayé de débloquer");
         if (récolté)
             return;
-
+        hue.enabled = false;
+        spr.color = Color.white;
         SC_SaveManager save = SC_SaveManager.instance;
-
-        if (save == null || achievement == null)
-            return;
-
         SC_achievement_menu menu = SC_achievement_menu.instance;
 
-        if (menu == null)
-            return;
 
-        // Le succès est-il terminé normalement ?
         bool finished = save.IsAchievementFinished(achievement);
 
-        // Si le succès n'est pas terminé, il faut un joker.
         bool useWish = !finished;
 
         if (useWish && menu.current_wishes <= 0)
@@ -176,7 +181,6 @@ public class SC_star_achievement : MonoBehaviour
             return;
         }
 
-        // Tente de récupérer la récompense.
         bool success = save.CollectAchievementReward(
             achievement,
             useWish

@@ -1,0 +1,39 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8de40c3b1331b374eb85df61112c5e1a, type: 3}
+  m_Name: SO_achievement 6
+  m_EditorClassIdentifier: 
+  achievementId: inflate bee
+  achievement_name:
+    m_TableReference:
+      m_TableCollectionName: GUID:b3eec409a99cf0744945d380db858a5e
+    m_TableEntryReference:
+      m_KeyId: 13208326520834
+      m_Key: 
+    m_FallbackState: 0
+    m_WaitForCompletion: 0
+    m_LocalVariables: []
+  requirement:
+    m_TableReference:
+      m_TableCollectionName: GUID:b3eec409a99cf0744945d380db858a5e
+    m_TableEntryReference:
+      m_KeyId: 48718692352
+      m_Key: 
+    m_FallbackState: 0
+    m_WaitForCompletion: 0
+    m_LocalVariables: []
+  sticker_reward: {fileID: 11400000, guid: 158d166711475304b9ef29d97635f7d3, type: 2}
+  type: 9
+  objectif: 1
+  references:
+    version: 2
+    RefIds: []

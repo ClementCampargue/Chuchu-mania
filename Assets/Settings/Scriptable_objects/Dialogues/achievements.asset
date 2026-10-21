@@ -14,12 +14,39 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   lines:
   - character: {fileID: 11400000, guid: f1b273b5eefe3a6408d92c0f6cb1c256, type: 2}
-    text: Aller aux achievements?
+    text:
+      m_TableReference:
+        m_TableCollectionName: GUID:b3eec409a99cf0744945d380db858a5e
+      m_TableEntryReference:
+        m_KeyId: 13208326520834
+        m_Key: 
+      m_FallbackState: 0
+      m_WaitForCompletion: 0
+      m_LocalVariables: []
     hasChoices: 1
     choices:
-    - choiceText: Oui
+    - choiceText:
+        m_TableReference:
+          m_TableCollectionName: GUID:b3eec409a99cf0744945d380db858a5e
+        m_TableEntryReference:
+          m_KeyId: 13208326520834
+          m_Key: 
+        m_FallbackState: 0
+        m_WaitForCompletion: 0
+        m_LocalVariables: []
       answer: []
       actionID: LOAD_ACHIEVEMENTS
-    - choiceText: Non
+    - choiceText:
+        m_TableReference:
+          m_TableCollectionName: GUID:b3eec409a99cf0744945d380db858a5e
+        m_TableEntryReference:
+          m_KeyId: 13208326520836
+          m_Key: 
+        m_FallbackState: 0
+        m_WaitForCompletion: 0
+        m_LocalVariables: []
       answer: []
       actionID: 
+  references:
+    version: 2
+    RefIds: []

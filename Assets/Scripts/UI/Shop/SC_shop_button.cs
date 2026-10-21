@@ -29,6 +29,7 @@ public class SC_shop_button : MonoBehaviour
     public AudioSource meow;
     public AudioSource buy;
     public AudioSource cantbuy;
+    public bool wish;
     private void OnEnable()
     {
         if (!random_sticker && item == null)
@@ -150,6 +151,10 @@ public class SC_shop_button : MonoBehaviour
                     SC_money_shop.instance.future_price = item.Price;
                     shop.buttons_.SetActive(false);
                     SC_sticker_popup.instance.update_visuals(item);
+                    if (wish)
+                    {
+                        SC_SaveManager.instance.AddWish(1);
+                    }
                 }
                 else
                 {

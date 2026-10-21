@@ -307,6 +307,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 2145114497}
     - target: {fileID: 1875296927510984487, guid: 86843841f7b07b645a699305d16cb2e5, type: 3}
+      propertyPath: wish
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1875296927510984487, guid: 86843841f7b07b645a699305d16cb2e5, type: 3}
       propertyPath: price_
       value: 200
       objectReference: {fileID: 0}
@@ -321,6 +325,10 @@ PrefabInstance:
     - target: {fileID: 1875296927510984487, guid: 86843841f7b07b645a699305d16cb2e5, type: 3}
       propertyPath: sticker
       value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 1875296927510984487, guid: 86843841f7b07b645a699305d16cb2e5, type: 3}
+      propertyPath: random_sticker
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1875296927510984487, guid: 86843841f7b07b645a699305d16cb2e5, type: 3}
       propertyPath: description.m_TableEntryReference.m_KeyId
