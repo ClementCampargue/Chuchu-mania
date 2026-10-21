@@ -1,4 +1,5 @@
 
+using TMPro;
 using UnityEngine;
 
 public class SC_planet_menu : MonoBehaviour
@@ -8,10 +9,14 @@ public class SC_planet_menu : MonoBehaviour
 
     [Header("Visuals")]
     public SpriteRenderer sprite;
+    public SpriteRenderer sprite_planet;
     public Color selected;
     public Color unselected;
     public Color locked;
-
+    public Sprite locked_;
+    public TextMeshPro price;
+    public GameObject price_;
+ 
     private bool IsWorldUnlocked()
     {
         if (world == null)
@@ -43,7 +48,7 @@ public class SC_planet_menu : MonoBehaviour
             SC_level_selection_screen.instance.close_header();
     }
 
-    private void Start()
+    private void OnEnable()
     {
         UpdatePlanetColor();
     }
@@ -56,6 +61,11 @@ public class SC_planet_menu : MonoBehaviour
         sprite.color = IsWorldUnlocked()
             ? locked
             : unselected;
+        sprite_planet.sprite = IsWorldUnlocked()
+            ? world.small_planet_sprite
+            : locked_;
+        price_.SetActive(!IsWorldUnlocked());
+        price.text = world.price.ToString() ;
     }
 
     public void click()

@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.Audio;
 
 public class SC_level_master : MonoBehaviour
 {
@@ -18,6 +19,7 @@ public class SC_level_master : MonoBehaviour
 
     private SC_player player;
     public SO_level level_;
+    public AudioMixer group;
     private void Awake()
     {
         instance = this;
@@ -26,7 +28,7 @@ public class SC_level_master : MonoBehaviour
     private void Start()
     {
         player = SC_player.instance;
-
+        group.SetFloat("LevelVolume", 0f);
         SC_music_manager.instance.update_music(music);
 
         GameObject.Find("Overlay")

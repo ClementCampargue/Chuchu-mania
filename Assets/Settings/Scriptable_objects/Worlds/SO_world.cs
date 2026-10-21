@@ -17,6 +17,7 @@ public class SO_world : ScriptableObject
 
     [Header("Visuels")]
     public Sprite header_background;
+    public Sprite small_planet_sprite;
     public Sprite planet_sprite;
     public List<Sprite> spirits = new List<Sprite>();
 

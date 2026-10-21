@@ -29,6 +29,9 @@ public class SC_NPC : MonoBehaviour
     [Tooltip("Se déclenche lorsque le dernier dialogue est entièrement terminé par le typewriter.")]
     public UnityEvent onDialogueFinished = new UnityEvent();
 
+    public UnityEvent onApproach_npc = new UnityEvent();
+    public UnityEvent onExit_npc = new UnityEvent();
+
     [Header("Dialogue progression")]
     public bool loopLastDialogue = true;
 
@@ -125,6 +128,14 @@ public class SC_NPC : MonoBehaviour
         }
     }
 
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (!collision.CompareTag("Player"))
+            return;
+
+        onApproach_npc?.Invoke();
+
+    }
     private void OnTriggerStay2D(Collider2D collision)
     {
         if (!collision.CompareTag("Player"))
@@ -142,6 +153,7 @@ public class SC_NPC : MonoBehaviour
             return;
 
         playerInRange = false;
+        onExit_npc?.Invoke();
 
         if (interaction_popup != null)
             interaction_popup.SetActive(false);

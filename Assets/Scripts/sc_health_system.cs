@@ -21,6 +21,7 @@ public class sc_health_system : MonoBehaviour
     public AudioSource low_health;
     public AudioSource get_heart;
     public SC_spawn_boucing_items sonic_rings;
+    public SC_balloon_player balloon;
     private void Awake()
     {
         instance = this;
@@ -39,7 +40,7 @@ public class sc_health_system : MonoBehaviour
         if (damage <= 0)
             return;
         PlayerPrefs.SetInt("nodamage", 0);
-
+        SC_icecream_eat_system.instance.CancelEat();
         // Les dégâts retirent d'abord les cœurs bonus
         if (current_bonus_health > 0)
         {
@@ -48,6 +49,7 @@ public class sc_health_system : MonoBehaviour
             current_bonus_health -= bonus_damage;
             damage -= bonus_damage;
         }
+        balloon.Exit();
         sonic_rings.EjectRings(SC_icecream_eat_system.instance.currrent_ice_cream/2);
         // Puis les cœurs de base
         if (damage > 0)

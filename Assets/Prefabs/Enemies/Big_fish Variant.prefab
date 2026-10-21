@@ -225,14 +225,30 @@ PrefabInstance:
       propertyPath: m_Resource
       value: 
       objectReference: {fileID: 8300000, guid: e56f2e4bb1dd86d4c8d89f4ce748f339, type: 3}
+    - target: {fileID: 1997701091274395092, guid: 21b16fed6f152f94ca75d3f4e11ab55e, type: 3}
+      propertyPath: OutputAudioMixerGroup
+      value: 
+      objectReference: {fileID: -5972833017200364601, guid: 9284900b67a66ab4e888b9bb58563f0e, type: 2}
     - target: {fileID: 4286570561266020812, guid: 21b16fed6f152f94ca75d3f4e11ab55e, type: 3}
       propertyPath: big
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 4956165037227375054, guid: 21b16fed6f152f94ca75d3f4e11ab55e, type: 3}
+      propertyPath: OutputAudioMixerGroup
+      value: 
+      objectReference: {fileID: -5972833017200364601, guid: 9284900b67a66ab4e888b9bb58563f0e, type: 2}
     - target: {fileID: 5517351843465994125, guid: 21b16fed6f152f94ca75d3f4e11ab55e, type: 3}
       propertyPath: m_Controller
       value: 
       objectReference: {fileID: 9100000, guid: 3a7ccb18ac0f5af448f243438ac4b148, type: 2}
+    - target: {fileID: 6532653956917244430, guid: 21b16fed6f152f94ca75d3f4e11ab55e, type: 3}
+      propertyPath: OutputAudioMixerGroup
+      value: 
+      objectReference: {fileID: -5972833017200364601, guid: 9284900b67a66ab4e888b9bb58563f0e, type: 2}
+    - target: {fileID: 6908479001602738387, guid: 21b16fed6f152f94ca75d3f4e11ab55e, type: 3}
+      propertyPath: OutputAudioMixerGroup
+      value: 
+      objectReference: {fileID: -5972833017200364601, guid: 9284900b67a66ab4e888b9bb58563f0e, type: 2}
     - target: {fileID: 7947262204105260129, guid: 21b16fed6f152f94ca75d3f4e11ab55e, type: 3}
       propertyPath: m_Name
       value: Big_fish Variant

@@ -17,6 +17,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 0890876a44885fd41aaa6e22e6800733, type: 2}
   - {fileID: 11400000, guid: 7edd8887fd8941d48a215d7f3160868e, type: 2}
   header_background: {fileID: 21300000, guid: 3f2f93eb768180a49b1dff7dd7a38b6e, type: 3}
+  small_planet_sprite: {fileID: 21300000, guid: 2af107b21b4b60d4bb0b9df655bc379c, type: 3}
   planet_sprite: {fileID: 21300000, guid: b1490c4d5fb64d246ade6b49327c8518, type: 3}
   spirits:
   - {fileID: 21300000, guid: 201183dde677bda46897618b80c00ce6, type: 3}

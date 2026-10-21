@@ -263,6 +263,7 @@ MonoBehaviour:
   anim: {fileID: 4051403310912639978}
   confirm: {fileID: -2099379676528639254, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
   audioSource: {fileID: 1153740160636252119}
+  group: {fileID: 24100000, guid: 9284900b67a66ab4e888b9bb58563f0e, type: 2}
 --- !u!114 &7197716085116191642
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -297,6 +298,8 @@ MonoBehaviour:
   anim: {fileID: 4051403310912639978}
   score_animation_duration: 1
   skipAction: {fileID: -2099379676528639254, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
+  currentLevel: {fileID: 0}
+  elapsedTime: 0
 --- !u!1 &878933328346845557
 GameObject:
   m_ObjectHideFlags: 0
@@ -1788,6 +1791,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2e893645860fd154a88d411c92fd8b3b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  select_on_enable: 0
   hover: 
   unhover: 
   press: 
@@ -1806,6 +1810,12 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+  onHover:
+    m_PersistentCalls:
+      m_Calls: []
+  onUnhover:
+    m_PersistentCalls:
+      m_Calls: []
   isSelected: 0
   isHovered: 0
   isPressed: 0

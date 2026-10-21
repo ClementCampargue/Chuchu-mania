@@ -18,6 +18,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 9baff0bc5f71a4c45a85755c255a4ad7, type: 2}
   - {fileID: 11400000, guid: 034cfc4748cceac4a829f90269aa2cf0, type: 2}
   header_background: {fileID: 21300000, guid: 5dc8285b9c34b7742a28d35f166c98c3, type: 3}
+  small_planet_sprite: {fileID: 21300000, guid: 5e4cec9f36c710943b16c99886da9cbf, type: 3}
   planet_sprite: {fileID: 21300000, guid: 6a1142c51231f2d45a5b4ee19163a620, type: 3}
   spirits:
   - {fileID: 21300000, guid: 201183dde677bda46897618b80c00ce6, type: 3}
@@ -26,5 +27,4 @@ MonoBehaviour:
   startUnlocked: 0
   defaultSpiritsUnlocked: 
   name_: Moon
-  rank: 0
-  price: 0
+  price: 16

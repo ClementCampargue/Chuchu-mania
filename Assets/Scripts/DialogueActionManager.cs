@@ -43,7 +43,7 @@ public class DialogueActionManager : MonoBehaviour
     }
 
 
-    private void Load_stickers()
+    public void Load_stickers()
     {
         SC_screenshot_transition.instance.Capture("Stickers");
         SC_player.instance.rb.constraints = RigidbodyConstraints2D.FreezeRotation;
@@ -51,7 +51,7 @@ public class DialogueActionManager : MonoBehaviour
         SC_player.instance.canMove = true;
     }
 
-    private void Load_shop()
+    public void Load_shop()
     {
         SC_screenshot_transition.instance.Capture("Shop");
         SC_player.instance.rb.constraints = RigidbodyConstraints2D.FreezeRotation;
@@ -59,7 +59,7 @@ public class DialogueActionManager : MonoBehaviour
         SC_player.instance.canMove = true;
     }
 
-    private void Load_Achievements()
+    public void Load_Achievements()
     {
         SC_screenshot_transition.instance.Capture("Achievements");
         SC_player.instance.rb.constraints = RigidbodyConstraints2D.FreezeRotation;
@@ -67,11 +67,11 @@ public class DialogueActionManager : MonoBehaviour
         SC_player.instance.canMove = true;
     }
 
-    private void Load_scene()
+    public void Load_scene()
     {
     }
 
-    private void Load_game()
+    public void Load_game()
     {
         if (!SC_SaveManager.instance.data.tutorialCompleted)
         {

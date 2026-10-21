@@ -2259,7 +2259,7 @@ PrefabInstance:
     - target: {fileID: 794362246322748437, guid: fc0a4bc2aae082741b1aa749cf6a68ed, type: 3}
       propertyPath: secondTarget
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 1415538383}
     - target: {fileID: 1107480754419527559, guid: fc0a4bc2aae082741b1aa749cf6a68ed, type: 3}
       propertyPath: m_LocalPosition.x
       value: -5.323333
@@ -2444,6 +2444,11 @@ PrefabInstance:
       addedObject: {fileID: 438942674}
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: fc0a4bc2aae082741b1aa749cf6a68ed, type: 3}
+--- !u!4 &1415538383 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 5034662469751971093, guid: fc0a4bc2aae082741b1aa749cf6a68ed, type: 3}
+  m_PrefabInstance: {fileID: 1415538382}
+  m_PrefabAsset: {fileID: 0}
 --- !u!114 &1459483160 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 4239849883444337517, guid: 861f2e20df3d6b149801340216555e4b, type: 3}

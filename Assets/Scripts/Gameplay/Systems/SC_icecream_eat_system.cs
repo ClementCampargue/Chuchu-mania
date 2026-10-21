@@ -15,11 +15,14 @@ public class SC_icecream_eat_system : MonoBehaviour
     [Header("Eat Settings")]
     public bool progressiveEat = false;
     public float eatSpeed = 0.5f;
-
     public bool isEating = false;
 
     private bool isSelecting = false;
     private bool forceEatAll = false;
+
+    // Annulation de la consommation
+    private bool cancelEatRequested = false;
+    private bool isEatingCoroutineRunning = false;
 
     public List<SC_icecream_fall> selectedCreams =
         new List<SC_icecream_fall>();
@@ -113,21 +116,16 @@ public class SC_icecream_eat_system : MonoBehaviour
         if (eat_input.action.IsPressed() &&
             currrent_ice_cream > 0 &&
             !isPowerUpActive &&
-            player.isGrounded&&
-            sc_health_system.instance.current_health>0 &&
+            player.isGrounded &&
+            sc_health_system.instance.current_health > 0 &&
             !isEating)
         {
             if (!player.canMove)
                 return;
 
-            if (sc_health_system.instance.current_health == 0)
-                return;
-
             if (!isSelecting)
             {
-                StartCoroutine(
-                    SelectionCoroutine()
-                );
+                StartCoroutine(SelectionCoroutine());
             }
         }
 
@@ -136,52 +134,100 @@ public class SC_icecream_eat_system : MonoBehaviour
         // -----------------------------------------------------
 
         if (!eat_input.action.IsPressed() &&
-            isSelecting&&
+            isSelecting &&
             player.isGrounded &&
             sc_health_system.instance.current_health > 0 &&
             !isEating)
         {
-            /*
-             * IMPORTANT :
-             *
-             * On ne fait PLUS :
-             *
-             * player.rb.linearVelocity = Vector2.zero;
-             *
-             * Sinon un tapis roulant / knockback / force
-             * externe est immédiatement supprimé.
-             */
-
             isSelecting = false;
             forceEatAll = true;
 
-            StartCoroutine(
-                EatSelectedCreamsCoroutine()
-            );
+            StartCoroutine(EatSelectedCreamsCoroutine());
         }
 
         CheckPhases();
     }
 
     // =========================================================
+    // CANCEL EAT
+    // =========================================================
+
+// =========================================================
+// CANCEL EAT
+// =========================================================
+
+public void CancelEat()
+    {
+        if (!isEating && !isSelecting)
+            return;
+
+        cancelEatRequested = true;
+        forceEatAll = false;
+        isSelecting = false;
+
+        // Si on annule pendant la sélection, on désélectionne
+        // les crèmes et on les remet en mouvement.
+        if (!isEating)
+        {
+            foreach (SC_icecream_fall cream in selectedCreams)
+            {
+                if (cream == null)
+                    continue;
+
+                cream.Deselect();
+            }
+
+            selectedCreams.Clear();
+
+            multiplier = 0;
+            multiplierText.gameObject.SetActive(false);
+
+            RealignRemainingCreams();
+
+            cancelEatRequested = false;
+        }
+    }
+
+    // =========================================================
+    // REALIGN REMAINING CREAMS
+    // =========================================================
+
+    private void RealignRemainingCreams()
+    {
+        for (int i = 0; i < creams.Count; i++)
+        {
+            SC_icecream_fall cream = creams[i];
+
+            if (cream == null)
+                continue;
+
+            // Réattribuer la position cible selon l'ordre actuel.
+            if (i < creams_points.Count)
+            {
+                cream.currentTargetPosition = creams_points[i];
+            }
+
+            // Autoriser la crème à retomber.
+            cream.hasLanded = false;
+        }
+
+        currrent_ice_cream = creams.Count;
+    }
+    // =========================================================
     // PHASES
     // =========================================================
 
     private void CheckPhases()
     {
-        if (!phase1Triggered &&
-            displayedFill >= 0.33f)
+        if (!phase1Triggered && displayedFill >= 0.33f)
         {
             phase1Triggered = true;
-
             SC_phases.instance.NextPhase();
         }
 
-        if (!phase2Triggered &&
-            displayedFill >= 0.66f)
+        if (!phase2Triggered && displayedFill >= 0.66f)
         {
             phase2Triggered = true;
-
             SC_phases.instance.NextPhase();
         }
     }
@@ -193,46 +239,68 @@ public class SC_icecream_eat_system : MonoBehaviour
     private IEnumerator SelectionCoroutine()
     {
         isSelecting = true;
+        cancelEatRequested = false;
 
         multiplier = 0;
-
         selectedCreams.Clear();
 
         multiplierText.gameObject.SetActive(true);
-
         UpdateMultiplierUI();
 
         int i = creams.Count - 1;
 
         while (i >= 0 &&
-               eat_input.action.IsPressed())
+               eat_input.action.IsPressed() &&
+               !cancelEatRequested)
         {
-            SC_icecream_fall cream =
-                creams[i];
+            SC_icecream_fall cream = creams[i];
+
+            if (cream == null)
+            {
+                i--;
+                continue;
+            }
 
             if (!cream.hasLanded)
             {
-                cream.transform.position =
-                    new Vector3(
-                        cream.transform.position.x,
-                        cream.currentTargetPosition.position.y,
-                        cream.transform.position.z
-                    );
+                cream.transform.position = new Vector3(
+                    cream.transform.position.x,
+                    cream.currentTargetPosition.position.y,
+                    cream.transform.position.z
+                );
 
                 cream.hasLanded = true;
             }
 
             cream.Select();
-
             selectedCreams.Add(cream);
 
             multiplier++;
-
             UpdateMultiplierUI();
 
             yield return new WaitForSeconds(0.08f);
 
             i--;
+        }
+
+        // Si l'annulation est arrivée pendant la sélection,
+        // on termine proprement sans lancer la consommation.
+        if (cancelEatRequested && !isEating)
+        {
+            foreach (SC_icecream_fall cream in selectedCreams)
+            {
+                if (cream != null)
+                    cream.Deselect();
+            }
+
+            selectedCreams.Clear();
+
+            multiplier = 0;
+            multiplierText.gameObject.SetActive(false);
+
+            isSelecting = false;
+            forceEatAll = false;
+            cancelEatRequested = false;
         }
     }
 
@@ -242,10 +310,12 @@ public class SC_icecream_eat_system : MonoBehaviour
 
     public void get_cream(GameObject cream_type)
     {
+        if (player == null)
+            return;
+
         if (Vector3.Distance(
                 player.transform.position,
-                transform.position) <
-            minDistanceForSpawn)
+                transform.position) < minDistanceForSpawn)
         {
             return;
         }
@@ -253,24 +323,17 @@ public class SC_icecream_eat_system : MonoBehaviour
         if (creams.Count >= creams_points.Count)
             return;
 
-        SC_icecream_fall cream =
-            Instantiate(
-                cream_type,
-                creams_points[
-                    creams_points.Count - 1
-                ].position,
-                Quaternion.identity
-            ).GetComponent<SC_icecream_fall>();
+        SC_icecream_fall cream = Instantiate(
+            cream_type,
+            creams_points[creams_points.Count - 1].position,
+            Quaternion.identity
+        ).GetComponent<SC_icecream_fall>();
 
-        cream.currentTargetPosition =
-            creams_points[creams.Count];
-
+        cream.currentTargetPosition = creams_points[creams.Count];
         cream.hasLanded = false;
 
         creams.Add(cream);
-
-        currrent_ice_cream =
-            creams.Count;
+        currrent_ice_cream = creams.Count;
     }
 
     // =========================================================
@@ -279,47 +342,60 @@ public class SC_icecream_eat_system : MonoBehaviour
 
     public void eat_all()
     {
-        selectedCreams =
-            new List<SC_icecream_fall>(creams);
+        if (isEatingCoroutineRunning)
+            return;
 
-        multiplier =
-            selectedCreams.Count;
+        cancelEatRequested = false;
 
+        selectedCreams = new List<SC_icecream_fall>(creams);
+
+        multiplier = selectedCreams.Count;
         forceEatAll = true;
 
-        StartCoroutine(
-            EatSelectedCreamsCoroutine()
-        );
+        StartCoroutine(EatSelectedCreamsCoroutine());
     }
 
     // =========================================================
-    // EAT
+    // EAT SELECTED CREAMS
     // =========================================================
 
     private IEnumerator EatSelectedCreamsCoroutine()
     {
+        if (isEatingCoroutineRunning)
+            yield break;
+
+        isEatingCoroutineRunning = true;
+
+        // Si canfillup est désactivé, on refuse de manger
+        // et on désélectionne les crèmes.
         if (selectedCreams.Count == 10)
         {
             canfillup = true;
         }
+
         if (!canfillup)
         {
             isEating = true;
 
-            for (int i =selectedCreams.Count - 1;i >= 0;i--)
+            for (int i = selectedCreams.Count - 1; i >= 0; i--)
             {
-                SC_icecream_fall cream =
-                selectedCreams[i];
-
-                cream.Deselect();
+                if (selectedCreams[i] != null)
+                    selectedCreams[i].Deselect();
             }
-            yield return new WaitForSeconds(1);
+
+            yield return new WaitForSeconds(1f);
+
             isEating = false;
+            isSelecting = false;
+            forceEatAll = false;
+            cancelEatRequested = false;
+            isEatingCoroutineRunning = false;
+
+            selectedCreams.Clear();
+            multiplierText.gameObject.SetActive(false);
+
             yield break;
-
         }
-     
-
 
         player.moveInput = Vector2.zero;
 
@@ -328,75 +404,71 @@ public class SC_icecream_eat_system : MonoBehaviour
         eaten_cream = 0;
 
         multiplierText.gameObject.SetActive(true);
-
         UpdateMultiplierUI();
 
         isEating = true;
 
         eating_sfx.Play();
-
         player.anim.SetBool("Eat", true);
 
         // -----------------------------------------------------
         // EAT EACH CREAM
         // -----------------------------------------------------
 
-        for (int i =
-            selectedCreams.Count - 1;
-            i >= 0;
-            i--)
+        for (int i = selectedCreams.Count - 1; i >= 0; i--)
         {
+            // Arrêt avant de commencer la prochaine crème.
+            if (cancelEatRequested)
+                break;
+
+            if (player == null)
+                break;
+
             StartCoroutine(ScaleBack());
+
+            SC_icecream_fall cream = selectedCreams[i];
+
+            if (cream == null)
+                continue;
 
             eaten_cream++;
 
-            player.moveInput =
-                Vector2.zero;
-
-            SC_icecream_fall cream =
-                selectedCreams[i];
+            player.moveInput = Vector2.zero;
 
             cream.Deselect();
 
-            SC_combo_system.Instance.AddToCombo(
-                cream.type
-            );
+            SC_combo_system.Instance.AddToCombo(cream.type);
 
+            // La crème est considérée comme mangée à partir d'ici.
             cream.Eat();
-     
+
             creams.Remove(cream);
 
-            currrent_ice_cream--;
+            currrent_ice_cream = creams.Count;
+
+            // -------------------------------------------------
+            // STOMACH FILL
+            // -------------------------------------------------
+
             if (canfillup)
             {
                 float targetFill =
-                    displayedFill +
-                    stomach_fill_per_cream;
-
-                // -------------------------------------------------
-                // PROGRESSIVE
-                // -------------------------------------------------
+                    displayedFill + stomach_fill_per_cream;
 
                 if (progressiveEat)
                 {
-                    while (displayedFill <
-                           targetFill - 0.001f)
+                    while (displayedFill < targetFill - 0.001f)
                     {
-                        if (!eat_input.action.IsPressed() &&
-                            !forceEatAll)
-                        {
-                            FinishEating();
+                        // Annulation pendant le remplissage :
+                        // on conserve le remplissage déjà effectué.
+                        if (cancelEatRequested)
+                            break;
 
-                            yield break;
-                        }
-
-                        displayedFill =
-                            Mathf.MoveTowards(
-                                displayedFill,
-                                targetFill,
-                                eatSpeed *
-                                Time.deltaTime
-                            );
+                        displayedFill = Mathf.MoveTowards(
+                            displayedFill,
+                            targetFill,
+                            eatSpeed * Time.deltaTime
+                        );
 
                         mat.SetFloat(
                             "_Fill_amount",
@@ -404,64 +476,77 @@ public class SC_icecream_eat_system : MonoBehaviour
                         );
 
                         CheckPhases();
-
                         CheckPowerUp();
 
                         yield return null;
                     }
                 }
 
-                // -------------------------------------------------
-                // FILL DIRECT
-                // -------------------------------------------------
+                // Si l'annulation a été demandée pendant le
+                // remplissage progressif, on ne complète pas
+                // artificiellement le remplissage de cette crème.
+                if (!cancelEatRequested)
+                {
+                    displayedFill = targetFill;
 
-                displayedFill =
-                    targetFill;
-
-                mat.SetFloat(
-                    "_Fill_amount",
-                    displayedFill
-                );
+                    mat.SetFloat(
+                        "_Fill_amount",
+                        displayedFill
+                    );
+                }
             }
 
             CheckPhases();
-
             CheckPowerUp();
 
-            yield return new WaitForSeconds(
-                delayBetweenCreams
+            // La crème traitée est terminée.
+            // On s'arrête avant la suivante si nécessaire.
+            if (cancelEatRequested)
+                break;
+
+            yield return new WaitForSeconds(delayBetweenCreams);
+
+            if (cancelEatRequested)
+                break;
+        }
+
+        // -----------------------------------------------------
+        // CLEANUP DES CRÈMES NON MANGÉES
+        // -----------------------------------------------------
+
+        foreach (SC_icecream_fall cream in selectedCreams)
+        {
+            if (cream != null && creams.Contains(cream))
+            {
+                cream.Deselect();
+                cream.transform.localScale = Vector3.one;
+            }
+        }
+
+        RealignRemainingCreams(); currrent_ice_cream = creams.Count;
+
+        // -----------------------------------------------------
+        // FIN DE CONSOMMATION
+        // -----------------------------------------------------
+
+        FinishEating();
+
+        // Enregistrer uniquement la progression réellement mangée.
+        if (eaten_cream > 0 &&
+            SceneManager.GetActiveScene().name != "TUTO")
+        {
+            SC_SaveManager.instance.AddAchievementProgress(
+                AchievementType.eat100cream,
+                eaten_cream
             );
         }
 
-        // -----------------------------------------------------
-        // REALIGN REMAINING CREAMS
-        // -----------------------------------------------------
-
-        foreach (var c in creams)
-        {
-            if (c != null)
-                c.transform.localScale =
-                    Vector3.one;
-        }
-
-        for (int j = 0;
-             j < creams.Count;
-             j++)
-        {
-            creams[j].currentTargetPosition =
-                creams_points[j];
-        }
-
-        FinishEating();
-        if(SceneManager.GetActiveScene().name != "TUTO")
-        {
-            SC_SaveManager.instance
-    .AddAchievementProgress(AchievementType.eat100cream, selectedCreams.Count);
-        }
         selectedCreams.Clear();
 
         forceEatAll = false;
         isSelecting = false;
+        cancelEatRequested = false;
+        isEatingCoroutineRunning = false;
     }
 
     // =========================================================
@@ -470,7 +555,11 @@ public class SC_icecream_eat_system : MonoBehaviour
 
     private void FinishEating()
     {
-        player.anim.SetBool("Eat", false);
+        if (player != null)
+        {
+            player.anim.SetBool("Eat", false);
+            player.moveInput = Vector2.zero;
+        }
 
         multiplierText.gameObject.SetActive(false);
 
@@ -479,8 +568,6 @@ public class SC_icecream_eat_system : MonoBehaviour
         calculate_score();
 
         isEating = false;
-
-        player.moveInput = Vector2.zero;
     }
 
     // =========================================================
@@ -489,8 +576,7 @@ public class SC_icecream_eat_system : MonoBehaviour
 
     private void CheckPowerUp()
     {
-        if (displayedFill >= 1f &&
-            !isPowerUpActive)
+        if (displayedFill >= 1f && !isPowerUpActive)
         {
             ActivatePowerUpInstant();
         }
@@ -509,8 +595,7 @@ public class SC_icecream_eat_system : MonoBehaviour
 
         if (!isPowerUpActive)
         {
-            SC_music_manager.instance
-                .update_music(music);
+            SC_music_manager.instance.update_music(music);
 
             player.powerup();
 
@@ -524,16 +609,14 @@ public class SC_icecream_eat_system : MonoBehaviour
 
     private void UpdateMultiplierUI()
     {
-        multiplierText.text =
-            "x" + multiplier.ToString();
+        multiplierText.text = "x" + multiplier.ToString();
     }
 
     private IEnumerator ScaleBack()
     {
         yield return new WaitForSeconds(0.1f);
 
-        multiplierText.transform.localScale =
-            Vector3.one;
+        multiplierText.transform.localScale = Vector3.one;
     }
 
     // =========================================================
@@ -542,31 +625,34 @@ public class SC_icecream_eat_system : MonoBehaviour
 
     public void take_damage()
     {
+        // Une prise de dégâts interrompt la consommation.
+        CancelEat();
+
         if (creams.Count == 0)
             return;
 
-        int countToAffect =
-            Mathf.Max(
-                1,
-                creams.Count / 2
-            );
+        int countToAffect = Mathf.Max(
+            1,
+            creams.Count / 2
+        );
 
         List<SC_icecream_fall> creamsToAffect =
             creams.GetRange(
-                creams.Count -
-                countToAffect,
+                creams.Count - countToAffect,
                 countToAffect
             );
 
-        foreach (var cream in creamsToAffect)
+        foreach (SC_icecream_fall cream in creamsToAffect)
         {
+            if (cream == null)
+                continue;
+
             cream.BounceAndBlink();
 
             creams.Remove(cream);
         }
 
-        currrent_ice_cream =
-            creams.Count;
+        currrent_ice_cream = creams.Count;
     }
 
     // =========================================================
@@ -575,18 +661,19 @@ public class SC_icecream_eat_system : MonoBehaviour
 
     private void calculate_score()
     {
-        int score =
-            (int)(
-                10 *
-                eaten_cream *
-                eaten_cream
-            );
+        int score = (int)(
+            10 *
+            eaten_cream *
+            eaten_cream
+        );
 
         SC_score.Instance.AddScore(score);
+
         if (eaten_cream == 10)
         {
             sc_health_system.instance.heal();
         }
+
         Debug.Log(
             "Crèmes mangées : " +
             eaten_cream +
@@ -604,8 +691,7 @@ public class SC_icecream_eat_system : MonoBehaviour
     {
         displayedFill += 0.25f;
 
-        displayedFill =
-            Mathf.Clamp01(displayedFill);
+        displayedFill = Mathf.Clamp01(displayedFill);
 
         mat.SetFloat(
             "_Fill_amount",
@@ -645,6 +731,10 @@ public class SC_icecream_eat_system : MonoBehaviour
         isEating = false;
         isSelecting = false;
         forceEatAll = false;
+
+        cancelEatRequested = false;
+        isEatingCoroutineRunning = false;
+
         isPowerUpActive = false;
 
         phase1Triggered = false;
@@ -661,50 +751,93 @@ public class SC_icecream_eat_system : MonoBehaviour
 
         multiplierText.gameObject.SetActive(false);
 
-        multiplierText.transform.localScale =
-            Vector3.one;
+        multiplierText.transform.localScale = Vector3.one;
 
         eating_sfx.Stop();
 
         if (player != null)
+        {
+            player.anim.SetBool("Eat", false);
             player.moveInput = Vector2.zero;
+        }
     }
-// =========================================================
-// SPAWN MAX ICE CREAMS
-// =========================================================
 
-public void SpawnMaxIceCreams(GameObject cream_type)
+    // =========================================================
+    // SPAWN MAX ICE CREAMS
+    // =========================================================
+
+    public void SpawnMaxIceCreams(GameObject cream_type)
     {
-        Debug.Log("spawned;")
-;        if (cream_type == null)
+        Debug.Log("spawned;");
+
+        if (cream_type == null)
             return;
 
         while (creams.Count < creams_points.Count)
         {
             int previousCount = creams.Count;
 
-            SC_icecream_fall cream =
-                Instantiate(
-                    cream_type,
-                    creams_points[
-                        creams_points.Count - 1
-                    ].position,
-                    Quaternion.identity
-                ).GetComponent<SC_icecream_fall>();
+            SC_icecream_fall cream = Instantiate(
+                cream_type,
+                creams_points[creams_points.Count - 1].position,
+                Quaternion.identity
+            ).GetComponent<SC_icecream_fall>();
 
-            cream.currentTargetPosition =
-                creams_points[creams.Count];
+            if (cream == null)
+                break;
 
+            cream.currentTargetPosition = creams_points[creams.Count];
             cream.hasLanded = false;
 
             creams.Add(cream);
 
-            currrent_ice_cream =
-                creams.Count;
+            currrent_ice_cream = creams.Count;
 
-            // Évite une boucle infinie si le spawn est bloqué
             if (creams.Count == previousCount)
                 break;
         }
+    }
+
+public void destroy_all_cream()
+    {
+        // Annuler toute consommation ou sélection en cours.
+        StopAllCoroutines();
+
+        cancelEatRequested = false;
+        isEatingCoroutineRunning = false;
+        isSelecting = false;
+        forceEatAll = false;
+        isEating = false;
+
+        // Arrêter l'animation et le son.
+        if (player != null)
+        {
+            player.anim.SetBool("Eat", false);
+            player.moveInput = Vector2.zero;
+        }
+
+        if (eating_sfx != null)
+            eating_sfx.Stop();
+
+        if (multiplierText != null)
+            multiplierText.gameObject.SetActive(false);
+
+        // Détruire toutes les crèmes restantes.
+        foreach (SC_icecream_fall cream in creams)
+        {
+            if (cream == null)
+                continue;
+
+            // Même comportement visuel que lors d'une consommation.
+            cream.Eat();
+        }
+
+        // Vider les listes et remettre les compteurs à zéro.
+        creams.Clear();
+        selectedCreams.Clear();
+
+        currrent_ice_cream = 0;
+        multiplier = 0;
+        eaten_cream = 0;
     }
 }

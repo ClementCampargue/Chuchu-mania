@@ -15,10 +15,17 @@ public class SC_cage : MonoBehaviour
     public Material player_green;
     private Material default_mat;
 
-    private SpriteRenderer spr;
+    public SpriteRenderer spr;
+    private SpriteRenderer spr_player;
 
     public Animator anim;
     public AudioClip clip;
+    [Header("Frames d'invincibilité")]
+    public float invincibilityDuration = 1f;
+    public float blinkInterval = 0.1f;
+
+    private bool isInvincible = false;
+    private Coroutine invincibilityCoroutine;
 
     [Header("Mouvement")]
     public float startSpeed = 8f;
@@ -51,8 +58,8 @@ public class SC_cage : MonoBehaviour
     {
         system = SC_icecream_eat_system.instance;
 
-        spr = SC_player.instance.spriteRendererPower;
-        default_mat = spr.material;
+        spr_player = SC_player.instance.spriteRendererPower;
+        default_mat = spr_player.material;
 
         win_screen = SC_win_screen.instance;
 
@@ -174,17 +181,22 @@ public class SC_cage : MonoBehaviour
     {
         if (collision.CompareTag("Player") &&
             system.isPowerUpActive &&
-            Health > 0)
+            Health > 0 &&
+            !isInvincible)
         {
             Debug.Log("Cage frappée !");
 
-            // Direction de l'éjection basée sur la position du joueur
             SetDirectionFromPlayer();
+
+            // Active l'invincibilité après le coup
+            if (Health > 1)
+            {
+                invincibilityCoroutine =
+                    StartCoroutine(InvincibilityFrames());
+            }
 
             die();
 
-            // Si la cage a encore des points de vie,
-            // elle repart dans la direction du coup.
             if (Health > 0)
             {
                 StartBouncing();
@@ -259,7 +271,7 @@ public class SC_cage : MonoBehaviour
 
             Time.timeScale = 0.25f;
 
-            spr.material = player_green;
+            spr_player.material = player_green;
 
 
             SC_player.instance.collider.enabled = false;
@@ -286,7 +298,7 @@ public class SC_cage : MonoBehaviour
 
     public void RestorePlayerMat()
     {
-        spr.material = default_mat;
+        spr_player.material = default_mat;
 
         SC_player.instance.gameObject.SetActive(false);
     }
@@ -325,6 +337,26 @@ private void OnDrawGizmosSelected()
             0.1f
         );
         Gizmos.DrawSphere(screenMax, 0.1f);
+    }
+    private System.Collections.IEnumerator InvincibilityFrames()
+    {
+        isInvincible = true;
+
+        float timer = 0f;
+        bool visible = false;
+
+        while (timer < invincibilityDuration)
+        {
+            visible = !visible;
+            spr.enabled = visible;
+
+            yield return new WaitForSeconds(blinkInterval);
+            timer += blinkInterval;
+        }
+
+        spr.enabled = true;
+        isInvincible = false;
+        invincibilityCoroutine = null;
     }
 
 }

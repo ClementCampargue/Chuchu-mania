@@ -14,10 +14,7 @@ public class SC_controller_manager : MonoBehaviour
 
     void Update()
     {
-        for (int i = 0; i < 20; i++)
-        {
-   
-        }
+
         // Si aucun élément n'est sélectionné
         if (EventSystem.current.currentSelectedGameObject == null)
         {

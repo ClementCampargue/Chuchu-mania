@@ -17,6 +17,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 479a85a772ee91243bda9566330b8635, type: 2}
   - {fileID: 11400000, guid: 91b9e5a5a945f4641a356d54f8841fd5, type: 2}
   header_background: {fileID: 21300000, guid: 7b90b7b419e38594fb6fd2c52a05c5d2, type: 3}
+  small_planet_sprite: {fileID: 21300000, guid: 138efc7beaccdc040b250cbd45cdc308, type: 3}
   planet_sprite: {fileID: 21300000, guid: 6c2a1ec47f19c5f448ef88f686b874db, type: 3}
   spirits: []
   startUnlocked: 0

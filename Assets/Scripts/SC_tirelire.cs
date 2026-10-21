@@ -38,8 +38,11 @@ public class SC_tirelire : MonoBehaviour
     public Color star_color_max;
 
     [Header("Tongue")]
-    [Tooltip("Déplacement maximal sur X")]
+    [Tooltip("Déplacement maximal de la langue sur Y")]
     public float tongue_max_abs = 0.5f;
+
+    [Tooltip("Montant nécessaire pour atteindre le déplacement maximal")]
+    public float money_for_max_tongue = 100f;
 
     [Header("Animation")]
     public Vector2 anim_speed_range = new Vector2(1f, 2f);
@@ -62,10 +65,11 @@ public class SC_tirelire : MonoBehaviour
 
     private void Start()
     {
-        foreach(SO_level level in SC_game_master.instance.world.levels) 
+        foreach (SO_level level in SC_game_master.instance.world.levels)
         {
             SC_SaveManager.instance.SetLevelUnlocked(level, true);
         }
+
         total_money.text = SC_SaveManager.instance.data.money.ToString();
 
         total_score = PlayerPrefs.GetInt("Score");
@@ -75,7 +79,9 @@ public class SC_tirelire : MonoBehaviour
 
         tongueBasePos = tongue.localPosition;
 
-        money_won = (int)(total_score / score_for_one_coin);
+        money_won = score_for_one_coin > 0
+            ? total_score / score_for_one_coin
+            : 0;
 
         starOriginalColor = star.color;
 
@@ -83,6 +89,7 @@ public class SC_tirelire : MonoBehaviour
         cat_anim.enabled = false;
 
         SC_SaveManager.instance.Addmoney(money_won);
+
         UpdateTexts();
     }
 
@@ -104,7 +111,6 @@ public class SC_tirelire : MonoBehaviour
 
         counting = true;
 
-        // Choisit une vitesse aléatoire dans la range
         increase_speed = Random.Range(
             increase_speed_min,
             increase_speed_max
@@ -123,17 +129,21 @@ public class SC_tirelire : MonoBehaviour
 
     public void end_count()
     {
-        cat_anim.speed = 1;
+        cat_anim.speed = 1f;
         cat_anim.SetTrigger("Jump");
         screen_anim.SetTrigger("End");
         stars.Stop();
     }
 
-private IEnumerator CountRoutine()
+    private IEnumerator CountRoutine()
     {
-        int initialScore = money_won;
+        int initialMoney = money_won;
 
-        // On s'assure que les particules sont arrêtées au début
+        // La langue descend selon le montant total gagné.
+        float tongueAmount = money_for_max_tongue > 0f
+            ? Mathf.Clamp01((float)initialMoney / money_for_max_tongue)
+            : 1f;
+
         stars.Stop();
         stars.Clear();
 
@@ -156,10 +166,10 @@ private IEnumerator CountRoutine()
             money_won -= amount;
             total_money_ += amount;
 
-            // Particules pendant l'incrémentation
+            // Émission des particules selon l'argent transféré.
             particleCounter += amount;
 
-            while (particleCounter >= score_per_star)
+            while (particleCounter >= score_per_star && score_per_star > 0)
             {
                 particleCounter -= score_per_star;
 
@@ -171,24 +181,29 @@ private IEnumerator CountRoutine()
                 }
             }
 
-            float progress = 1f - ((float)money_won / initialScore);
+            // Progression du comptage.
+            float progress = 1f - ((float)money_won / initialMoney);
 
+            // La couleur de l'étoile évolue progressivement.
             star.color = Color.Lerp(
                 starOriginalColor,
                 star_color_max,
                 progress
             );
 
+            // La langue descend en fonction de l'argent gagné
+            // ET de la progression du comptage.
             Vector3 pos = tongueBasePos;
 
             pos.y = Mathf.Lerp(
                 tongueBasePos.y,
-                tongueBasePos.y + tongue_max_abs,
+                tongueBasePos.y + tongue_max_abs * tongueAmount,
                 progress
             );
 
             tongue.localPosition = pos;
 
+            // La vitesse de l'animation évolue progressivement.
             cat_anim.speed = Mathf.Lerp(
                 anim_speed_range.x,
                 anim_speed_range.y,
@@ -200,14 +215,14 @@ private IEnumerator CountRoutine()
             yield return null;
         }
 
-        // Fin du comptage : arrêt immédiat des particules
+        // Fin du comptage.
         stars.Stop();
         stars.Clear();
 
         star.color = star_color_max;
 
         Vector3 finalPos = tongueBasePos;
-        finalPos.y = tongueBasePos.y + tongue_max_abs;
+        finalPos.y = tongueBasePos.y + tongue_max_abs * tongueAmount;
 
         tongue.localPosition = finalPos;
 
@@ -216,6 +231,7 @@ private IEnumerator CountRoutine()
         UpdateTexts();
 
         end_count();
+
         counting = false;
     }
 

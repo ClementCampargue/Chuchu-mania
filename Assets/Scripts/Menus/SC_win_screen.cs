@@ -2,6 +2,7 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Audio;
 using UnityEngine.InputSystem;
+using UnityEngine.Rendering;
 using UnityEngine.SceneManagement;
 
 public class SC_win_screen : MonoBehaviour
@@ -14,6 +15,8 @@ public class SC_win_screen : MonoBehaviour
     private bool once;
     private bool canact;
     public AudioSource audioSource;
+
+    public AudioMixer group;
     private void Awake()
     {
         instance = this;
@@ -62,7 +65,8 @@ public class SC_win_screen : MonoBehaviour
 
     public void Start_screen()
     {
-        if(SceneManager.GetActiveScene().name == "TUTO")
+        group.SetFloat("LevelVolume", -1000f);
+        if (SceneManager.GetActiveScene().name == "TUTO")
         {
             SC_SaveManager.instance.data.tutorialCompleted = true;
             SC_SaveManager.instance.SaveGame();

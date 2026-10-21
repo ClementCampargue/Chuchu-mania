@@ -10,9 +10,8 @@ public class SC_balloon_player : MonoBehaviour
 
     [Tooltip("GameObject visuel du ballon")]
     public GameObject balloonVisual;
-
-    [Tooltip("Point utilisé pour détecter le sol et les dégâts")]
-    public Transform balloonCheck;
+    [Header("Screen Wrap")]
+    private Vector2 limit;
 
     [Header("Balloon Movement")]
     public float riseSpeed = 4f;
@@ -24,7 +23,10 @@ public class SC_balloon_player : MonoBehaviour
     [Header("Deflate")]
     [Tooltip("Délai après avoir touché le sol avant de redevenir normal")]
     public float deflateDelay = 0.5f;
-
+    [Header("Ceiling Detection")]
+    public Transform ceilingCheck;
+    public float ceilingCheckDistance = 0.15f;
+    public LayerMask ceilingLayer;
     private bool isActive;
     private bool isDeflating;
     private bool canRise;
@@ -41,10 +43,94 @@ public class SC_balloon_player : MonoBehaviour
     public static SC_balloon_player instance;
 
     public Animator anim;
+    public Transform ghost;
 
     // =========================================================
     // AWAKE
     // =========================================================
+
+    private void LateUpdate()
+    {
+        if (!isActive || player == null)
+            return;
+        limit = SC_level_master.instance.limits;
+
+        // Récupère les limites du niveau
+        limit = SC_level_master.instance.limits;
+
+        float x = player.transform.position.x;
+
+        // Affichage du ghost près des bords
+        if (ghost != null)
+        {
+            if (x > limit.y - 0.2f)
+            {
+                ghost.gameObject.SetActive(true);
+                ghost.localScale = player.transform.localScale;
+
+                float distance = limit.y - x;
+                float ghostX = limit.x - distance;
+
+                ghost.position = new Vector3(
+                    ghostX,
+                    player.transform.position.y,
+                    player.transform.position.z
+                );
+            }
+            else if (x < limit.x + 0.2f)
+            {
+                ghost.gameObject.SetActive(true);
+                ghost.localScale = player.transform.localScale;
+
+                float distance = x - limit.x;
+                float ghostX = limit.y + distance;
+
+                ghost.position = new Vector3(
+                    ghostX,
+                    player.transform.position.y,
+                    player.transform.position.z
+                );
+            }
+            else
+            {
+                ghost.gameObject.SetActive(false);
+            }
+        }
+
+        // Passage d'un bord à l'autre
+        if (x > limit.y)
+        {
+            player.transform.position = new Vector3(
+                limit.x,
+                player.transform.position.y,
+                player.transform.position.z
+            );
+
+            if (rb.linearVelocity.x > 0f)
+            {
+                rb.linearVelocity = new Vector2(
+                    -Mathf.Abs(rb.linearVelocity.x),
+                    rb.linearVelocity.y
+                );
+            }
+        }
+        else if (x < limit.x)
+        {
+            player.transform.position = new Vector3(
+                limit.y,
+                player.transform.position.y,
+                player.transform.position.z
+            );
+
+            if (rb.linearVelocity.x < 0f)
+            {
+                rb.linearVelocity = new Vector2(
+                    Mathf.Abs(rb.linearVelocity.x),
+                    rb.linearVelocity.y
+                );
+            }
+        }
+    }
 
     private void Awake()
     {
@@ -86,6 +172,7 @@ public class SC_balloon_player : MonoBehaviour
 
         if (isDeflating)
             return;
+        ghost.gameObject.SetActive(true);
 
         isActive = true;
         canRise = false;
@@ -154,6 +241,11 @@ public class SC_balloon_player : MonoBehaviour
 
     private void Update()
     {
+        if (Input.GetKeyDown(KeyCode.I))
+        {
+            Activate();
+        }
+
         if (player.eat_system.isPowerUpActive)
             return;
         if (!isActive)
@@ -176,7 +268,7 @@ public class SC_balloon_player : MonoBehaviour
             rb.linearVelocity = Vector2.zero;
             return;
         }
-
+        CheckCeiling();
         HandleMovement();
     }
 
@@ -241,33 +333,27 @@ public class SC_balloon_player : MonoBehaviour
     // COLLISIONS
     // =========================================================
 
-    private void OnTriggerEnter2D(Collider2D collision)
+    private void CheckCeiling()
     {
-        if (player.eat_system.isPowerUpActive)
+        if (ceilingCheck == null)
             return;
-        if (!isActive)
-            return;
+        Debug.DrawRay(
+    ceilingCheck.position,
+    Vector2.up * ceilingCheckDistance,
+    Color.red
+);
+        RaycastHit2D hit = Physics2D.Raycast(
+            ceilingCheck.position,
+            Vector2.up,
+            ceilingCheckDistance,
+            ceilingLayer
+        );
 
-        // =====================================================
-        // DAMAGE
-        // =====================================================
-
-        if (collision.CompareTag("Damage"))
-        {
-            BalloonTakeDamage();
-            return;
-        }
-
-        // =====================================================
-        // GROUND
-        // =====================================================
-
-        if (collision.CompareTag("Ground"))
+        if (hit.collider != null)
         {
             StartDeflate();
         }
     }
-
     // =========================================================
     // DAMAGE
     // =========================================================
@@ -302,6 +388,7 @@ public class SC_balloon_player : MonoBehaviour
         if (isDeflating)
             return;
 
+        ghost.gameObject.SetActive(false);
         isDeflating = true;
         canRise = false;
 
@@ -353,6 +440,7 @@ public class SC_balloon_player : MonoBehaviour
         if (!isActive)
             return;
 
+        ghost.gameObject.SetActive(false);
         isActive = false;
         canRise = false;
         isDeflating = false;

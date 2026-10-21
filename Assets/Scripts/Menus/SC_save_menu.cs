@@ -111,11 +111,10 @@ public class SC_save_menu : MonoBehaviour
             return;
         }
 
-        if (PlayerPrefs.GetInt("first_launch", 0) == 0)
+        if (SC_SaveManager.instance.data.firtlaunch)
         {
-            PlayerPrefs.SetInt("first_launch", 1);
-            PlayerPrefs.Save();
-
+            SC_SaveManager.instance.data.firtlaunch = false;
+            SC_SaveManager.instance.SaveGame();
             SC_screenshot_transition.instance.Capture(scene_first_launch);
         }
         else
@@ -266,7 +265,16 @@ public class SC_save_menu : MonoBehaviour
             return;
         }
 
-        SC_screenshot_transition.instance.Capture("HUB");
+        if (SC_SaveManager.instance.data.firtlaunch)
+        {
+            SC_SaveManager.instance.data.firtlaunch = false;
+            SC_SaveManager.instance.SaveGame();
+            SC_screenshot_transition.instance.Capture(scene_first_launch);
+        }
+        else
+        {
+            SC_screenshot_transition.instance.Capture(scene);
+        }
     }
 
     // Vérifie que le gestionnaire existe.

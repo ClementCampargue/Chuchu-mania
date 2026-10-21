@@ -1,3 +1,4 @@
+
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -6,6 +7,10 @@ public class SC_star_spawner_level_selection : MonoBehaviour
 {
     [Header("Objets à faire apparaître")]
     public List<GameObject> spritePrefabs = new List<GameObject>();
+
+    [Header("Quantité à spawn")]
+    [Min(0)]
+    public int spawnAmount = 5;
 
     [Header("Points de destination")]
     public Transform[] points;
@@ -32,9 +37,6 @@ public class SC_star_spawner_level_selection : MonoBehaviour
     private readonly List<GameObject> spawnedSprites = new();
     private readonly List<Coroutine> runningCoroutines = new();
 
-
-
-
     public void SpawnSprites()
     {
         if (spritePrefabs == null || spritePrefabs.Count == 0 ||
@@ -43,7 +45,7 @@ public class SC_star_spawner_level_selection : MonoBehaviour
             Debug.LogWarning("Prefabs, points ou Aim manquant !");
             return;
         }
-
+        spawnAmount = SC_level_selection_screen.instance.world.price;
         // Arrête les anciennes animations.
         foreach (Coroutine coroutine in runningCoroutines)
         {
@@ -62,6 +64,9 @@ public class SC_star_spawner_level_selection : MonoBehaviour
 
         spawnedSprites.Clear();
 
+        if (spawnAmount <= 0)
+            return;
+
         // Récupère les points valides en conservant leur ordre.
         List<Transform> validPoints = new List<Transform>();
 
@@ -77,11 +82,7 @@ public class SC_star_spawner_level_selection : MonoBehaviour
             return;
         }
 
-        // Prépare les sprites et leurs destinations.
-        List<GameObject> newSprites = new List<GameObject>();
-        List<Transform> targets = new List<Transform>();
-
-        // Compte les prefabs valides.
+        // Récupère les prefabs valides.
         List<GameObject> validPrefabs = new List<GameObject>();
 
         foreach (GameObject prefab in spritePrefabs)
@@ -90,34 +91,45 @@ public class SC_star_spawner_level_selection : MonoBehaviour
                 validPrefabs.Add(prefab);
         }
 
-        int objectCount = validPrefabs.Count;
+        if (validPrefabs.Count == 0)
+        {
+            Debug.LogWarning("Aucun prefab valide !");
+            return;
+        }
+
         int pointCount = validPoints.Count;
 
-        if (objectCount == 0)
-            return;
+        List<GameObject> newSprites = new List<GameObject>();
+        List<Transform> targets = new List<Transform>();
 
-        // Répartition régulière sur toute la liste des points.
-        for (int i = 0; i < objectCount; i++)
+        // Crée exactement spawnAmount sprites.
+        // Crée exactement spawnAmount sprites,
+        // répartis régulièrement sur les points disponibles.
+        for (int i = 0; i < spawnAmount; i++)
         {
             int pointIndex;
 
-            if (objectCount == 1)
+            if (spawnAmount == 1)
             {
-                // Un seul objet : position centrale.
+                // Un seul objet : point central.
                 pointIndex = (pointCount - 1) / 2;
             }
             else
             {
-                // Répartit les objets du premier au dernier point.
-                pointIndex = Mathf.RoundToInt(
-                    i * (pointCount - 1f) / (objectCount - 1f)
+                // Répartition régulière avec un pas basé sur le nombre
+                // de sprites, et non sur le dernier point.
+                pointIndex = Mathf.FloorToInt(
+                    i * (float)pointCount / spawnAmount
                 );
             }
 
             Transform target = validPoints[pointIndex];
 
+            // Réutilise les prefabs en alternance si nécessaire.
+            GameObject prefab = validPrefabs[i % validPrefabs.Count];
+
             GameObject sprite = Instantiate(
-                validPrefabs[i],
+                prefab,
                 target.position,
                 Quaternion.identity
             );
@@ -126,7 +138,6 @@ public class SC_star_spawner_level_selection : MonoBehaviour
             targets.Add(target);
             spawnedSprites.Add(sprite);
         }
-
         // Lance les animations une fois tous les objets créés.
         for (int i = 0; i < newSprites.Count; i++)
         {

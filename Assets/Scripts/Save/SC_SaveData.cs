@@ -28,6 +28,7 @@ public class SC_SaveData
     public List<SC_AchievementProgress> achievements =
         new List<SC_AchievementProgress>();
 
+    public bool firtlaunch = true;
     public bool tutorialCompleted = false;
 }
 

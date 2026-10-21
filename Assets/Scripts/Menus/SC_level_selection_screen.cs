@@ -56,7 +56,7 @@ public class SC_level_selection_screen : MonoBehaviour
     public AudioSource cancel;
     public bool boss;
 
-    private SO_world world;
+    public SO_world world;
 
     private string scene_toload;
     public GameObject record_;

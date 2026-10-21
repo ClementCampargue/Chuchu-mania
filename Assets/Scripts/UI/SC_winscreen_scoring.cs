@@ -137,7 +137,7 @@ public class SC_winscreen_scoring : MonoBehaviour
         while (elapsedTime < score_animation_duration)
         {
 
-            elapsedTime += Time.deltaTime;
+            elapsedTime += Time.unscaledDeltaTime;
 
             // Progression de 0 à 1 pendant la durée définie
             float progress = Mathf.Clamp01(
