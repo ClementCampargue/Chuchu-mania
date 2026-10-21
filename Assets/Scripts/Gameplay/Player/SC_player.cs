@@ -307,16 +307,20 @@ public class SC_player : MonoBehaviour
                 coyoteTimeCounter = 0f;
         }
 
-        // LANDING
-        // Réinitialiser l'ancien saut avant de traiter le buffer.
+        bool landingFromAbove =
+            rb.gravityScale > 0f && rb.linearVelocity.y <= 0f;
+
+        bool landingFromBelow =
+            rb.gravityScale < 0f && rb.linearVelocity.y >= 0f;
+
         if (!previousGrounded &&
             isGrounded &&
             !isClimbing &&
-            rb.gravityScale != 0f)
+            !isDroppingThrough &&
+            (landingFromAbove || landingFromBelow))
         {
             HandleLanding();
         }
-
         // JUMP BUFFER
         if (jumpBufferCounter > 0f)
         {
@@ -470,14 +474,13 @@ public class SC_player : MonoBehaviour
     // DROP THROUGH PLATFORM
     // =========================================================
 
-    private void StartDropThrough()
-    {
-        if (dropThroughCoroutine != null)
-            StopCoroutine(dropThroughCoroutine);
+private void StartDropThrough()
+{
+    if (dropThroughCoroutine != null)
+        StopCoroutine(dropThroughCoroutine);
 
-        dropThroughCoroutine = StartCoroutine(DropThroughPlatforms());
-    }
-
+    dropThroughCoroutine = StartCoroutine(DropThroughPlatforms());
+}
     private IEnumerator DropThroughPlatforms()
     {
         if (isDroppingThrough)
@@ -761,6 +764,7 @@ public class SC_player : MonoBehaviour
     {
         jumpHeld = false;
         isJumping = false;
+        jumpTimeCounter = 0f;
     }
 
     // =========================================================
