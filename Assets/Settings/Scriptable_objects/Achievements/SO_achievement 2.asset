@@ -15,23 +15,23 @@ MonoBehaviour:
   achievementId: Loose level 1
   achievement_name:
     m_TableReference:
-      m_TableCollectionName: GUID:b3eec409a99cf0744945d380db858a5e
+      m_TableCollectionName: GUID:976456d53a24ec242b5bf82b25f149e2
     m_TableEntryReference:
-      m_KeyId: 13208326520834
+      m_KeyId: 2220729212616707
       m_Key: 
     m_FallbackState: 0
     m_WaitForCompletion: 0
     m_LocalVariables: []
   requirement:
     m_TableReference:
-      m_TableCollectionName: GUID:b3eec409a99cf0744945d380db858a5e
+      m_TableCollectionName: GUID:976456d53a24ec242b5bf82b25f149e2
     m_TableEntryReference:
-      m_KeyId: 48718692352
+      m_KeyId: 2220729212616708
       m_Key: 
     m_FallbackState: 0
     m_WaitForCompletion: 0
     m_LocalVariables: []
-  sticker_reward: {fileID: 11400000, guid: 4766159b40db4c249847412aaa1af890, type: 2}
+  sticker_reward: {fileID: 11400000, guid: 68b3af5d84d78d14c936652a763c4bc5, type: 2}
   type: 2
   objectif: 1
   references:

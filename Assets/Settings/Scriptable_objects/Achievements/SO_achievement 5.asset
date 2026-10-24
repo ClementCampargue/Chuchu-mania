@@ -15,23 +15,23 @@ MonoBehaviour:
   achievementId: burn enemy
   achievement_name:
     m_TableReference:
-      m_TableCollectionName: GUID:b3eec409a99cf0744945d380db858a5e
+      m_TableCollectionName: GUID:976456d53a24ec242b5bf82b25f149e2
     m_TableEntryReference:
-      m_KeyId: 13208326520834
+      m_KeyId: 2220729212616713
       m_Key: 
     m_FallbackState: 0
     m_WaitForCompletion: 0
     m_LocalVariables: []
   requirement:
     m_TableReference:
-      m_TableCollectionName: GUID:b3eec409a99cf0744945d380db858a5e
+      m_TableCollectionName: GUID:976456d53a24ec242b5bf82b25f149e2
     m_TableEntryReference:
-      m_KeyId: 48718692352
+      m_KeyId: 2220729212616714
       m_Key: 
     m_FallbackState: 0
     m_WaitForCompletion: 0
     m_LocalVariables: []
-  sticker_reward: {fileID: 11400000, guid: 158d166711475304b9ef29d97635f7d3, type: 2}
+  sticker_reward: {fileID: 11400000, guid: a9381b33a69a3784093ea78759e37549, type: 2}
   type: 5
   objectif: 1
   references:

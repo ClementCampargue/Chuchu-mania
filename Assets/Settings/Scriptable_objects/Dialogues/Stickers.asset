@@ -27,9 +27,9 @@ MonoBehaviour:
     choices:
     - choiceText:
         m_TableReference:
-          m_TableCollectionName: GUID:b3eec409a99cf0744945d380db858a5e
+          m_TableCollectionName: GUID:71d64c1e148486e4887f3f66640476cd
         m_TableEntryReference:
-          m_KeyId: 13208326520834
+          m_KeyId: 23792445972299776
           m_Key: 
         m_FallbackState: 0
         m_WaitForCompletion: 0
@@ -38,9 +38,9 @@ MonoBehaviour:
       actionID: LOAD_STICKERS
     - choiceText:
         m_TableReference:
-          m_TableCollectionName: GUID:b3eec409a99cf0744945d380db858a5e
+          m_TableCollectionName: GUID:71d64c1e148486e4887f3f66640476cd
         m_TableEntryReference:
-          m_KeyId: 13208326520836
+          m_KeyId: 23792458932699136
           m_Key: 
         m_FallbackState: 0
         m_WaitForCompletion: 0

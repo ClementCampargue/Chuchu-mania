@@ -41,7 +41,7 @@ MonoBehaviour:
     m_FallbackState: 0
     m_WaitForCompletion: 0
     m_LocalVariables: []
-  artist: Edwin Vorng
+  artist: 
   rarity: 2
   Price: 0
   unlocked: 0

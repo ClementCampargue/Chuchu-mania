@@ -17,7 +17,91 @@ MonoBehaviour:
   m_SharedData: {fileID: 11400000, guid: 976456d53a24ec242b5bf82b25f149e2, type: 2}
   m_Metadata:
     m_Items: []
-  m_TableData: []
+  m_TableData:
+  - m_Id: 2220729179062272
+    m_Localized: Gold medal
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2220729212616704
+    m_Localized: Get a S rank
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2220729212616706
+    m_Localized: Complete a level without taking any damage
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2220729212616708
+    m_Localized: Get a game over in level 1
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2220729212616709
+    m_Localized: Capitalisme
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2220729212616710
+    m_Localized: Win 1000 coins in total
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2220729212616711
+    m_Localized: Food coma
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2220729212616712
+    m_Localized: Eat 100 ice cream scoops
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2220729212616714
+    m_Localized: Beat an enemy when Chuchu gets her butt burned
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2220729212616715
+    m_Localized: Karma
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2220729212616716
+    m_Localized: Inflate a bee in level BRAMBLES
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2220729212616718
+    m_Localized: Get 20 different stickers
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2220729212616719
+    m_Localized: Colonel, I'm done here
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2220729212616720
+    m_Localized: Complete level MUSEUM without being spotted
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2220729212616722
+    m_Localized: Complete level FISH without annoying a single fish
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2220729212616723
+    m_Localized: Survivor
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2220729212616724
+    m_Localized: Complete level MOON without taking any damage
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2220729212616728
+    m_Localized: Complete level MUSEUM without hiding
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2220729212616730
+    m_Localized: Get at least an A rank on every level
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2220729212616731
+    m_Localized: Worse than death?
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2220729212616732
+    m_Localized: Listne to Cuicui's whole story
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds: []

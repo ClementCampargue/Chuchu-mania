@@ -17,7 +17,128 @@ MonoBehaviour:
   m_SharedData: {fileID: 11400000, guid: 976456d53a24ec242b5bf82b25f149e2, type: 2}
   m_Metadata:
     m_Items: []
-  m_TableData: []
+  m_TableData:
+  - m_Id: 2220729179062272
+    m_Localized: "M\xE9daille d'or"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2220729212616704
+    m_Localized: Obtenir un rang S dans un niveau
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2220729212616705
+    m_Localized: Intouchable
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2220729212616706
+    m_Localized: "Terminer un niveau sans subir de d\xE9g\xE2ts"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2220729212616707
+    m_Localized: C'est pas facile...
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2220729212616708
+    m_Localized: Avoir un game over au niveau 1
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2220729212616709
+    m_Localized: Capitalisme
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2220729212616710
+    m_Localized: "Gagner en tout 1000 pi\xE8ces"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2220729212616711
+    m_Localized: J'ai beaucoup trop faim
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2220729212616712
+    m_Localized: Manger en tout 100 boules de glace
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2220729212616713
+    m_Localized: "Dommages collat\xE9raux"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2220729212616714
+    m_Localized: "D\xE9gommer un ennemi quand Chuchu se crame les fesses"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2220729212616715
+    m_Localized: Karma
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2220729212616716
+    m_Localized: Faire gonfler une abeille dans le niveau RONCES
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2220729212616717
+    m_Localized: Collectionite
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2220729212616718
+    m_Localized: Obtenir 20 stickers uniques
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2220729212616719
+    m_Localized: "C'est juste une bo\xEEte"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2220729212616720
+    m_Localized: "Finir le niveau MUSEE sans se faire rep\xE9rer"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2220729212616721
+    m_Localized: Diplomatie
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2220729212616722
+    m_Localized: "Terminer le niveau POISSON sans \xE9nerver un seul poisson"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2220729212616723
+    m_Localized: Survivante
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2220729212616724
+    m_Localized: "Finir le niveau LUNE sans prendre un seul d\xE9g\xE2t"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2220729212616725
+    m_Localized: "Ego\xEFsme"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2220729212616726
+    m_Localized: Terminer le niveau POISSON sans qu'un seul ait pu manger de star
+      bit
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2220729212616727
+    m_Localized: Sans peur
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2220729212616728
+    m_Localized: Finir le niveau MUSEE sans se cacher
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2220729212616729
+    m_Localized: 'Point faible: Trop forte'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2220729212616730
+    m_Localized: "Obtenir au moins le rang A \xE0 tous les niveaux"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2220729212616731
+    m_Localized: Le tunnel
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2220729212616732
+    m_Localized: "Ecouter l'enti\xE9ret\xE9 de l'histoire de Cuicui"
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds: []
