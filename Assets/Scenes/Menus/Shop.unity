@@ -7101,6 +7101,15 @@ MonoBehaviour:
     m_FallbackState: 0
     m_WaitForCompletion: 0
     m_LocalVariables: []
+  thank_you_button:
+    m_TableReference:
+      m_TableCollectionName: GUID:b3eec409a99cf0744945d380db858a5e
+    m_TableEntryReference:
+      m_KeyId: 48718692352
+      m_Key: 
+    m_FallbackState: 0
+    m_WaitForCompletion: 0
+    m_LocalVariables: []
   random_lines:
   - m_TableReference:
       m_TableCollectionName: GUID:71d64c1e148486e4887f3f66640476cd

@@ -147,7 +147,7 @@ public class SC_shop_button : MonoBehaviour
                     description = shop.cant_buy_;
                 }
             }
-            if (item != null)
+            else if (item != null)
             {
                 if (SC_SaveManager.instance.data.money >= item.Price)
                 {
@@ -169,6 +169,10 @@ public class SC_shop_button : MonoBehaviour
                     anim.SetTrigger("cant_buy");
                     description = shop.cant_buy_;
                 }
+            }
+            else
+            {
+                SC_shop_manager.instance.Talk_Thx();
             }
 
 

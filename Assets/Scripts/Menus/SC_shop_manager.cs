@@ -10,6 +10,7 @@ public class SC_shop_manager : MonoBehaviour
     public LocalizedString default_dialogue;
     public LocalizedString cant_buy_;
     public LocalizedString thanks;
+    public LocalizedString thank_you_button;
     public List<LocalizedString> random_lines;
     public List<SC_Button> buttons;
     public SO_sticker_list stickers;
@@ -151,6 +152,25 @@ public class SC_shop_manager : MonoBehaviour
 
         buttons_.SetActive(false);
         typewriter.TriggerText(thanks.GetLocalizedString());
+
+    }
+
+    public void Talk_Thx()
+    {
+        SC_Button currentButton = menu.GetCurrentButton();
+
+        if (currentButton != null)
+            currentButton.UnSelect();
+
+        cantalk = false;
+        canquit = false;
+        talking = true;
+
+        anim.ResetTrigger("Show_menu");
+        anim.SetTrigger("talk");
+
+        buttons_.SetActive(false);
+        typewriter.TriggerText(thank_you_button.GetLocalizedString());
 
     }
 
