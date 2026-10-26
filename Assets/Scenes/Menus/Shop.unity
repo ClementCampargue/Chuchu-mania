@@ -2798,7 +2798,11 @@ PrefabInstance:
     - target: {fileID: 1875296927510984487, guid: 86843841f7b07b645a699305d16cb2e5, type: 3}
       propertyPath: sticker
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 11400000, guid: acc4b1e5c2077e34388ede9bcd42f1b9, type: 2}
+    - target: {fileID: 1875296927510984487, guid: 86843841f7b07b645a699305d16cb2e5, type: 3}
+      propertyPath: stickers
+      value: 
+      objectReference: {fileID: 11400000, guid: 095e909b84e827a4eac34ae6800cd8b0, type: 2}
     - target: {fileID: 1875296927510984487, guid: 86843841f7b07b645a699305d16cb2e5, type: 3}
       propertyPath: description.m_TableEntryReference.m_KeyId
       value: 31908265747300352
@@ -7321,7 +7325,11 @@ PrefabInstance:
     - target: {fileID: 1875296927510984487, guid: 86843841f7b07b645a699305d16cb2e5, type: 3}
       propertyPath: sticker
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 11400000, guid: 7b2c6ed068d55bf45bbd858f7651256b, type: 2}
+    - target: {fileID: 1875296927510984487, guid: 86843841f7b07b645a699305d16cb2e5, type: 3}
+      propertyPath: stickers
+      value: 
+      objectReference: {fileID: 11400000, guid: 095e909b84e827a4eac34ae6800cd8b0, type: 2}
     - target: {fileID: 1875296927510984487, guid: 86843841f7b07b645a699305d16cb2e5, type: 3}
       propertyPath: description.m_TableEntryReference.m_KeyId
       value: 31908265747300352

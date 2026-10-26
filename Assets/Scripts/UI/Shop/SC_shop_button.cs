@@ -11,6 +11,7 @@ public class SC_shop_button : MonoBehaviour
     public SpriteRenderer spr;
 
     public SO_Sticker sticker;
+    public SO_sticker_list stickers;
     public SO_shop_item1 item;
 
     public InputActionReference selectAction;
@@ -71,10 +72,13 @@ public class SC_shop_button : MonoBehaviour
 
     }
 
-    private void Start()
+    private void Awake()
     {
         description_ = description;
-
+        if(stickers != null)
+        {
+            sticker = stickers.stickers[Random.Range(0, stickers.stickers.Count)];
+        }
     }
 
     private void Update()
