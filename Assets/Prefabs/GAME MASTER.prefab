@@ -585,6 +585,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   using_controller: 0
+  keyboardAsController: 0
 --- !u!1 &2783061036401213091
 GameObject:
   m_ObjectHideFlags: 0
@@ -1958,7 +1959,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6011331018052213524}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ac48eae3152b4fd448191646a408add0, type: 3}
   m_Name: 

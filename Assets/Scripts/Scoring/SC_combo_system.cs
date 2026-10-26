@@ -47,11 +47,11 @@ public class SC_combo_system : MonoBehaviour
 
     public void AddToCombo(IceCreamType type)
     {
-        currentCombo.Add(type);
+        //   currentCombo.Add(type);
 
         if (currentCombo.Count >= 3)
         {
-            CheckCombos();
+            //   CheckCombos();
         }
     }
 
@@ -89,15 +89,15 @@ public class SC_combo_system : MonoBehaviour
 
     void ShowComboText(string comboMessage)
     {
-        if (text == null) return;
+        //      if (text == null) return;
 
-        text.text = comboMessage;
-        text.gameObject.SetActive(true);
-        text.transform.localScale = Vector3.zero;
-        text.color = new Color(originalColor.r, originalColor.g, originalColor.b, 1f); // reset alpha
+        //    text.text = comboMessage;
+        //      text.gameObject.SetActive(true);
+        //     text.transform.localScale = Vector3.zero;
+        //     text.color = new Color(originalColor.r, originalColor.g, originalColor.b, 1f); // reset alpha
 
-        StopAllCoroutines(); // stop les animations précédentes
-        StartCoroutine(AnimateComboText());
+        //     StopAllCoroutines(); // stop les animations précédentes
+        //     StartCoroutine(AnimateComboText());
     }
 
     private IEnumerator AnimateComboText()
@@ -206,13 +206,13 @@ public class SC_combo_system : MonoBehaviour
 
     void ApplyBonus(float multiplier)
     {
-        float totalMultiplier = multiplier * nextComboBonusMultiplier;
+        //        float totalMultiplier = multiplier * nextComboBonusMultiplier;
 
-        int bonus = Mathf.RoundToInt(100 * totalMultiplier);
-        SC_score.Instance.AddScore(bonus);
+        //   int bonus = Mathf.RoundToInt(100 * totalMultiplier);
+        //    SC_score.Instance.AddScore(bonus);
 
-        currentCombo.Clear();
-        nextComboBonusMultiplier = 1f;
+        //       currentCombo.Clear();
+        //        nextComboBonusMultiplier = 1f;
     }
 
     public float ConsumeNextComboBonus()
