@@ -432,6 +432,19 @@ public class SC_player : MonoBehaviour
                     land.PlayJuice();
             }
         }
+        if ((IsAnimationPlaying("jump_idle") ||
+             IsAnimationPlaying("Jump")) &&
+            isGrounded &&
+            wasGrounded &&
+            Mathf.Abs(rb.linearVelocity.y) ==0)
+        {
+            anim.SetTrigger("Land");
+            moveSpeed = base_speed;
+            burning = false;
+
+            if (land != null)
+                land.PlayJuice();
+        }
 
         wasGrounded = isGrounded;
         wasGroundedBeforeCheck = isGrounded;

@@ -58,6 +58,7 @@ public class SC_sticker_menu : MonoBehaviour
     }
     private void Start()
     {
+        SC_controller_manager.instance.keyboardAsController = true;
         if (SC_scursorManager.instance != null)
         {
             SC_scursorManager.instance.gameObject.SetActive(false);
@@ -169,6 +170,8 @@ public class SC_sticker_menu : MonoBehaviour
         if (quit != null &&
             quit.action.WasPerformedThisFrame())
         {
+            SC_controller_manager.instance.keyboardAsController = false;
+
             if (SC_scursorManager.instance == null ||
                 !SC_scursorManager.instance.grabing)
             {
@@ -258,6 +261,8 @@ public class SC_sticker_menu : MonoBehaviour
 
         button.Select();
     }
+
+
 
 
     // =========================================================
@@ -352,10 +357,10 @@ public class SC_sticker_menu : MonoBehaviour
         // -----------------------------------------------------
         // STICKER DEBLOQUE
         // -----------------------------------------------------
+        button = but;
 
         if (sticker.unlocked)
         {
-            button = but;
 
             if (sticker_name != null)
             {

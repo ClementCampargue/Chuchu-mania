@@ -271,7 +271,16 @@ public class SC_scursorManager : MonoBehaviour
 
     public void disable_cursor()
     {
+        RecenterCursor();
         cursor_enabled = false;
     }
+    public void RecenterCursor()
+    {
+        cursorPosition = new Vector2(
+            Screen.width / 2f,
+            Screen.height / 2f
+        );
 
+        UpdateCursor();
+    }
 }

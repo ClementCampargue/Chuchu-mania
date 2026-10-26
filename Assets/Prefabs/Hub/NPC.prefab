@@ -97,8 +97,8 @@ GameObject:
   m_Component:
   - component: {fileID: 8329452444788449673}
   - component: {fileID: 7522439848945351290}
-  - component: {fileID: 640935987328102698}
   - component: {fileID: 1144582369965934250}
+  - component: {fileID: 7242917126934405384}
   m_Layer: 0
   m_Name: NPC
   m_TagString: Untagged
@@ -137,11 +137,48 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   dialogues:
   - {fileID: 11400000, guid: c96953d908a48074399c283244bbc96e, type: 2}
+  dialogueEvents: []
+  onDialogueFinished:
+    m_PersistentCalls:
+      m_Calls: []
+  onApproach_npc:
+    m_PersistentCalls:
+      m_Calls: []
+  onExit_npc:
+    m_PersistentCalls:
+      m_Calls: []
   loopLastDialogue: 1
   interaction_popup: {fileID: 5782342065406189963}
   interactAction: {fileID: -1680190386980627800, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
---- !u!58 &640935987328102698
-CircleCollider2D:
+  disable_player_on_start: 1
+  enable_player_on_end: 1
+  player_look_at_npc: 1
+  hide_dialogue_box_end: 1
+  player_onground_required: 1
+--- !u!95 &1144582369965934250
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1995157033798224578}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 0}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
+--- !u!61 &7242917126934405384
+BoxCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -175,29 +212,17 @@ CircleCollider2D:
   m_CompositeOperation: 0
   m_CompositeOrder: 0
   m_Offset: {x: 0, y: 0}
-  m_Radius: 0.98
---- !u!95 &1144582369965934250
-Animator:
-  serializedVersion: 7
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1995157033798224578}
-  m_Enabled: 1
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 0}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_StabilizeFeet: 0
-  m_AnimatePhysics: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorStateOnDisable: 0
-  m_WriteDefaultValuesOnDisable: 0
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0, y: 0}
+    oldSize: {x: 0, y: 0}
+    newSize: {x: 0, y: 0}
+    adaptiveTilingThreshold: 0
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  m_Size: {x: 1, y: 1}
+  m_EdgeRadius: 0
 --- !u!1 &5782342065406189963
 GameObject:
   m_ObjectHideFlags: 0

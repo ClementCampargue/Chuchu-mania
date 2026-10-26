@@ -32025,7 +32025,7 @@ MonoBehaviour:
   lowHealthMaterial: {fileID: 2100000, guid: dab62154501204d48b91a6f1cc99c506, type: 2}
   lowHealthBlinkRate: 0.2
   groundCheckBottom: {fileID: 354890283841259207}
-  groundCheckRadius: 0.1
+  groundCheckRadius: 0.04
   groundLayer:
     serializedVersion: 2
     m_Bits: 8
@@ -32223,7 +32223,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   player: {fileID: 1939792554238048137}
   balloonVisual: {fileID: 1787378971906217586}
-  balloonCheck: {fileID: 0}
   riseSpeed: 1.5
   horizontalSpeed: 2
   riseDelay: 0.5
@@ -32236,6 +32235,7 @@ MonoBehaviour:
   move: {fileID: -1680190386980627800, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
   moveInput: {x: 0, y: 0}
   anim: {fileID: 4191675913962948792}
+  ghost: {fileID: 0}
 --- !u!1 &8178604890168123396
 GameObject:
   m_ObjectHideFlags: 0

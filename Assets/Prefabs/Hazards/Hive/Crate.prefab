@@ -183,6 +183,7 @@ MonoBehaviour:
   juice: {fileID: 6554379316432179084}
   juice2: {fileID: 3145624170214345597}
   parent: {fileID: 5276971100253268518}
+  max_height: -9.27
 --- !u!210 &4477959318639650350
 SortingGroup:
   m_ObjectHideFlags: 0

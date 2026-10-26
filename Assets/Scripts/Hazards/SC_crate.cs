@@ -17,6 +17,7 @@ public class SC_crate : MonoBehaviour
     public SC_juiciness juice;
     public SC_juiciness juice2;
     public SC_crate_parent parent;
+    public float max_height;
     private void FixedUpdate()
     {
         added_velocity_ = Vector2.Lerp(added_velocity_, added_velocity, 0.2f);
@@ -37,7 +38,12 @@ public class SC_crate : MonoBehaviour
     }
     private void Update()
     {
-        if(SC_cage.instance.Health == 0)
+        if (transform.position.y <= max_height)
+        {
+            juice.PlayJuice();
+            die();
+        }
+        if (SC_cage.instance.Health == 0)
         {
             Destroy(juice);
             Destroy(land_juice);
@@ -107,12 +113,7 @@ public class SC_crate : MonoBehaviour
             }
 
         }
-        if (collision.CompareTag("Lava"))
-        {
-            juice.PlayJuice();
-            die();
 
-        }
     }
 
     public void die()
@@ -125,6 +126,29 @@ public class SC_crate : MonoBehaviour
     public void _destroy()
     {
         Destroy(gameObject);
+
+    }
+    private void OnDrawGizmos()
+    {
+        // max_height est une hauteur ABSOLUE dans le World Space
+        float maxHeight = max_height;
+
+        // Ligne représentant la hauteur maximale
+        Gizmos.color = Color.red;
+
+        Vector3 start = new Vector3(
+            transform.position.x - 0.5f,
+            maxHeight,
+            transform.position.z
+        );
+
+        Vector3 end = new Vector3(
+            transform.position.x + 0.5f,
+            maxHeight,
+            transform.position.z
+        );
+
+        Gizmos.DrawLine(start, end);
 
     }
 }

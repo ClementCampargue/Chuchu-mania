@@ -55,7 +55,7 @@ public class SC_NPC : MonoBehaviour
     public bool player_look_at_npc = true;
     public bool hide_dialogue_box_end = true;
     public bool player_onground_required = true;
-
+    public bool talks = true;
     private void Awake()
     {
         if (player == null)
@@ -161,6 +161,7 @@ public class SC_NPC : MonoBehaviour
 
     public void StartTalking()
     {
+      
         if (dialogueActive)
             return;
 
@@ -210,8 +211,15 @@ public class SC_NPC : MonoBehaviour
             player.rb.linearVelocity = Vector2.zero;
             player.anim.Play("Idle");
         }
-
+        if (!talks)
+        {
+            TriggerDialogueEvents(0,true);
+        }
+        else
+        {
         dialogue.StartDialogue();
+
+        }
     }
 
     // =========================================================

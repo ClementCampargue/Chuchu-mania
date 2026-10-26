@@ -246,10 +246,7 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 1049678611521369945, guid: 3ce41f75411c41f448f4f822ac6d67b0, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 0}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 3ce41f75411c41f448f4f822ac6d67b0, type: 3}
 --- !u!224 &261997561 stripped
 RectTransform:
@@ -650,10 +647,7 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 7162493650667248326, guid: f3c7b956bb8e2ae47a33403dbf3195bc, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 0}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f3c7b956bb8e2ae47a33403dbf3195bc, type: 3}
 --- !u!224 &1091257661 stripped
 RectTransform:
@@ -902,7 +896,7 @@ PrefabInstance:
     - target: {fileID: 8035928732895759023, guid: fc0a4bc2aae082741b1aa749cf6a68ed, type: 3}
       propertyPath: music
       value: 
-      objectReference: {fileID: 8300000, guid: a1fbd93f6f82cf0429715d4ece47eafb, type: 3}
+      objectReference: {fileID: 0}
     - target: {fileID: 8035928732895759023, guid: fc0a4bc2aae082741b1aa749cf6a68ed, type: 3}
       propertyPath: overlay_on
       value: 0
@@ -1167,10 +1161,7 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 7162493650667248326, guid: f3c7b956bb8e2ae47a33403dbf3195bc, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 0}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f3c7b956bb8e2ae47a33403dbf3195bc, type: 3}
 --- !u!224 &2066357641 stripped
 RectTransform:

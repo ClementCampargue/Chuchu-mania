@@ -887,6 +887,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 21300000, guid: 12c514c71143fea4fa52eceaf6e00403, type: 3}
     - target: {fileID: 7522439848945351290, guid: 372718715dc6bb44ba7496d66291f69f, type: 3}
+      propertyPath: talks
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7522439848945351290, guid: 372718715dc6bb44ba7496d66291f69f, type: 3}
       propertyPath: dialogues
       value: 
       objectReference: {fileID: 11400000, guid: bafea32e28734954cab7f13bfa8209e4, type: 2}
@@ -1354,6 +1358,10 @@ PrefabInstance:
       propertyPath: m_Sprite
       value: 
       objectReference: {fileID: 21300000, guid: de2a509f8b81fb0419c579947eb37f3f, type: 3}
+    - target: {fileID: 7522439848945351290, guid: 372718715dc6bb44ba7496d66291f69f, type: 3}
+      propertyPath: talks
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7522439848945351290, guid: 372718715dc6bb44ba7496d66291f69f, type: 3}
       propertyPath: dialogues
       value: 
@@ -2258,6 +2266,26 @@ PrefabInstance:
       propertyPath: m_Sprite
       value: 
       objectReference: {fileID: 21300000, guid: ba00d97cb8f0a2e4f9d0b53fbd270e10, type: 3}
+    - target: {fileID: 7242917126934405384, guid: 372718715dc6bb44ba7496d66291f69f, type: 3}
+      propertyPath: m_Size.x
+      value: 2.060351
+      objectReference: {fileID: 0}
+    - target: {fileID: 7242917126934405384, guid: 372718715dc6bb44ba7496d66291f69f, type: 3}
+      propertyPath: m_Size.y
+      value: 1.6411424
+      objectReference: {fileID: 0}
+    - target: {fileID: 7242917126934405384, guid: 372718715dc6bb44ba7496d66291f69f, type: 3}
+      propertyPath: m_Offset.x
+      value: 0.024659395
+      objectReference: {fileID: 0}
+    - target: {fileID: 7242917126934405384, guid: 372718715dc6bb44ba7496d66291f69f, type: 3}
+      propertyPath: m_Offset.y
+      value: -0.32057118
+      objectReference: {fileID: 0}
+    - target: {fileID: 7522439848945351290, guid: 372718715dc6bb44ba7496d66291f69f, type: 3}
+      propertyPath: talks
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7522439848945351290, guid: 372718715dc6bb44ba7496d66291f69f, type: 3}
       propertyPath: dialogues
       value: 
@@ -4190,6 +4218,10 @@ PrefabInstance:
       propertyPath: m_Sprite
       value: 
       objectReference: {fileID: 21300000, guid: 1e010c48ae2bde0499ad7aff91d9874c, type: 3}
+    - target: {fileID: 7522439848945351290, guid: 372718715dc6bb44ba7496d66291f69f, type: 3}
+      propertyPath: talks
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7522439848945351290, guid: 372718715dc6bb44ba7496d66291f69f, type: 3}
       propertyPath: dialogues
       value: 

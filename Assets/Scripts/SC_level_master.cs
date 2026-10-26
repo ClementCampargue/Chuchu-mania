@@ -29,7 +29,14 @@ public class SC_level_master : MonoBehaviour
     {
         player = SC_player.instance;
         group.SetFloat("LevelVolume", 0f);
-        SC_music_manager.instance.update_music(music);
+        if(music != null)
+        {
+            SC_music_manager.instance.update_music(music);
+        }
+        else
+        {
+            SC_music_manager.instance.pause_music();
+        }
 
         GameObject.Find("Overlay")
             .transform.GetChild(0)

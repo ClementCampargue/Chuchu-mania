@@ -38,11 +38,18 @@ public class SC_shop_manager : MonoBehaviour
     }
     void Start()
     {
-        choose_stickers();
+       // choose_stickers();
         quit.action.Enable();
         talk.action.Enable();
         submit.action.Enable();
         submit2.action.Enable();
+        Invoke("delayy", 0.5f);
+    }
+
+    void delayy()
+    {
+        show_text_start();
+
     }
     void choose_stickers()
     {

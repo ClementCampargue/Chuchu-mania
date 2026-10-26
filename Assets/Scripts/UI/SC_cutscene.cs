@@ -21,6 +21,8 @@ public class SC_cutscene : MonoBehaviour
     }
     void Start()
     {
+        if (SC_scursorManager.instance != null)
+            SC_scursorManager.instance.disable_cursor();
         anim.speed = 0;
         dialogue.currentDialogue = dialogue_to_play;
         dialogue.StartDialogue();

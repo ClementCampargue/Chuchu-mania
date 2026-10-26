@@ -15,5 +15,5 @@ MonoBehaviour:
   levelId: Moon
   levelname: Moon
   scene_to_load: CS_Moon2
-  spirit: {fileID: 21300000, guid: 53a211742c0d4bb45a4a8a24fef19efe, type: 3}
+  spirit: {fileID: 21300000, guid: 201183dde677bda46897618b80c00ce6, type: 3}
   startUnlocked: 0
