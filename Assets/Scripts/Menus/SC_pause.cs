@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Audio;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
 
@@ -39,6 +40,7 @@ public class SC_pause : MonoBehaviour
     private float inputTimer = 0f;
 
     private SC_screenshot_transition transition;
+    public AudioMixer group;
 
     public AudioSource cancel;
     private void OnEnable()
@@ -223,6 +225,7 @@ public class SC_pause : MonoBehaviour
     private void OpenPause()
     {
         isPaused = true;
+        group.SetFloat("LevelVolume", -1000f);
 
         buttons.GetComponent<SC_menu_navigation>().ResetFirstSelected();
 
@@ -268,6 +271,8 @@ public class SC_pause : MonoBehaviour
 
     public void Close()
     {
+        group.SetFloat("LevelVolume", 0f);
+
         isPaused = false;
         tuto = false;
         settings = false;
