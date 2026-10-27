@@ -6,6 +6,8 @@ using UnityEngine.Localization;
 
 public class SC_first_launch : MonoBehaviour
 {
+
+    public bool reset_controls;
     public InputActionReference actionReference;
 
     private InputActionRebindingExtensions.RebindingOperation rebindOperation;
@@ -52,7 +54,10 @@ public class SC_first_launch : MonoBehaviour
 
     void OnEnable()
     {
-        ResetAllBindings();
+        if (reset_controls)
+        {
+            ResetAllBindings();
+        }
         if (PlayerPrefs.GetFloat("firstlaunchever") == 0)
         {
 

@@ -1,4 +1,5 @@
 
+using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using TMPro;
@@ -8,6 +9,13 @@ public class KeyboardInputSprite : MonoBehaviour
 {
     [Header("Input")]
     [SerializeField] private InputActionReference inputAction;
+
+    [Header("Composite 2D Vector")]
+    [SerializeField] private bool useCompositePart;
+    [SerializeField] private string compositePartName = "up";
+
+    [Tooltip("-1 recherche automatiquement le composite.")]
+    [SerializeField] private int compositeParentBindingIndex = -1;
 
     [Header("Fallback")]
     [SerializeField] private Sprite defaultSprite;
@@ -64,6 +72,49 @@ public class KeyboardInputSprite : MonoBehaviour
     {
         var action = inputAction.action;
 
+        if (useCompositePart)
+        {
+            for (int parent = 0; parent < action.bindings.Count; parent++)
+            {
+                var parentBinding = action.bindings[parent];
+
+                if (!parentBinding.isComposite)
+                    continue;
+
+                if (compositeParentBindingIndex >= 0 &&
+                    parent != compositeParentBindingIndex)
+                {
+                    continue;
+                }
+
+                for (int i = parent + 1; i < action.bindings.Count; i++)
+                {
+                    var binding = action.bindings[i];
+
+                    if (binding.isComposite)
+                        break;
+
+                    if (!binding.isPartOfComposite)
+                        continue;
+
+                    if (!string.Equals(
+                        binding.name,
+                        compositePartName,
+                        StringComparison.OrdinalIgnoreCase))
+                    {
+                        continue;
+                    }
+
+                    string path = binding.effectivePath;
+
+                    if (IsKeyboardPath(path))
+                        return path;
+                }
+            }
+
+            return null;
+        }
+
         foreach (var binding in action.bindings)
         {
             if (binding.isComposite || binding.isPartOfComposite)
@@ -71,14 +122,20 @@ public class KeyboardInputSprite : MonoBehaviour
 
             string path = binding.effectivePath;
 
-            if (string.IsNullOrEmpty(path))
-                continue;
-
-            if (path.ToLowerInvariant().StartsWith("<keyboard>/"))
+            if (IsKeyboardPath(path))
                 return path;
         }
 
         return null;
+    }
+
+    private bool IsKeyboardPath(string path)
+    {
+        return !string.IsNullOrEmpty(path) &&
+               path.StartsWith(
+                   "<Keyboard>/",
+                   StringComparison.OrdinalIgnoreCase
+               );
     }
 
     private void UpdateFromPath(string path)
@@ -90,7 +147,6 @@ public class KeyboardInputSprite : MonoBehaviour
 
         if (specialSprite != null)
         {
-            // Touche spéciale : sprite visible, texte masqué.
             spriteRenderer.sprite = specialSprite;
 
             if (textMesh != null)
@@ -99,8 +155,11 @@ public class KeyboardInputSprite : MonoBehaviour
             return;
         }
 
-        // Touche classique : texte visible, sprite masqué.
-        spriteRenderer.sprite = master.default_sprite;
+        Sprite regularSprite = master != null
+            ? master.default_sprite
+            : defaultSprite;
+
+        spriteRenderer.sprite = regularSprite;
 
         if (textMesh != null)
             textMesh.text = GetDisplayName(keyName);
@@ -169,6 +228,18 @@ public class KeyboardInputSprite : MonoBehaviour
             case "delete":
                 return "DEL";
 
+            case "uparrow":
+                return "UP";
+
+            case "downarrow":
+                return "DOWN";
+
+            case "leftarrow":
+                return "LEFT";
+
+            case "rightarrow":
+                return "RIGHT";
+
             default:
                 return keyName.ToUpperInvariant();
         }
@@ -177,9 +248,13 @@ public class KeyboardInputSprite : MonoBehaviour
     private void SetFallback()
     {
         if (spriteRenderer != null)
-            spriteRenderer.sprite = defaultSprite;
+        {
+            spriteRenderer.sprite = master != null
+                ? master.default_sprite
+                : defaultSprite;
+        }
 
         if (textMesh != null)
-            textMesh.text = defaultSprite == null ? defaultText : "";
+            textMesh.text = defaultText;
     }
 }

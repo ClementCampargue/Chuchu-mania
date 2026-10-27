@@ -220,77 +220,6 @@ SortingGroup:
   m_SortingLayer: 1
   m_SortingOrder: 11
   m_SortAtRoot: 0
---- !u!1 &2730339308498605794
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 7084127637676586317}
-  - component: {fileID: 2212786964842663031}
-  m_Layer: 0
-  m_Name: SC_input_display_master
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &7084127637676586317
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2730339308498605794}
-  serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 3.8186, y: 2.22347, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 4468265687971568507}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &2212786964842663031
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2730339308498605794}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d2ac5293f175d514daa2ac1938771e4e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  A: {fileID: 21300000, guid: 9402a10b6e63227488368681548bc601, type: 3}
-  B: {fileID: 21300000, guid: 69eaa4eb16ff91a4fba1e58317669aec, type: 3}
-  X: {fileID: 21300000, guid: 707596986897b61488aa6039e43b20ca, type: 3}
-  Y: {fileID: 21300000, guid: 9d7430f7811fe9a45a9b75fff9dc36a4, type: 3}
-  pad_up: {fileID: 21300000, guid: 8e158db1281ab5843951add069beafc6, type: 3}
-  pad_down: {fileID: 21300000, guid: db68a5e3776e67842be446a3920010fd, type: 3}
-  pad_right: {fileID: 21300000, guid: fde903ef795650a488552ed015caba1d, type: 3}
-  pad_left: {fileID: 21300000, guid: 939f4b3fab5cda14baa96d9a2b745081, type: 3}
-  bump_right: {fileID: 21300000, guid: ed6cad9bc971c0346b6d7769b99855e9, type: 3}
-  bump_left: {fileID: 21300000, guid: c39aec988424ecc4991ef51e01703208, type: 3}
-  trigger_right: {fileID: 0}
-  trigger_left: {fileID: 0}
-  select: {fileID: 0}
-  start: {fileID: 21300000, guid: 4e689f6e18c1b784b9c5b8cbd86cb5ec, type: 3}
-  mouse_right: {fileID: 0}
-  mouse_left: {fileID: 0}
-  mouse_middle: {fileID: 0}
-  default_sprite: {fileID: 21300000, guid: a03079b4b018fde4585d3d9b01d95668, type: 3}
-  space_bar: {fileID: 21300000, guid: c963415a6a0ef4d40a645a8ac49c8783, type: 3}
-  ctrl: {fileID: 0}
-  maj: {fileID: 0}
-  tab: {fileID: 0}
-  escape: {fileID: 21300000, guid: e2bde3c93ce15c541a844e8f3aae299e, type: 3}
-  arrow_up: {fileID: 21300000, guid: 121f55cd7c3115245979f2e0c027cc70, type: 3}
-  arrow_down: {fileID: 21300000, guid: 2c02eaba13951d64ba9342be1cca12f3, type: 3}
-  arrow_right: {fileID: 21300000, guid: 7fcd81f73b1a1854ea7ff48dbc87b598, type: 3}
-  arrow_left: {fileID: 21300000, guid: 37f0073836edf304a9a09f25e63f5e70, type: 3}
 --- !u!1 &2972728394984613069
 GameObject:
   m_ObjectHideFlags: 0
@@ -819,7 +748,6 @@ Transform:
   - {fileID: 8805334888420227306}
   - {fileID: 2885573100000555889}
   - {fileID: 960722305017773196}
-  - {fileID: 7084127637676586317}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &3317219025985241988
@@ -835,9 +763,21 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1221229790601295531}
     - target: {fileID: 2015984609754554693, guid: 74557cb1bc476fe4ba696a3cdbe01734, type: 3}
+      propertyPath: actionReference
+      value: 
+      objectReference: {fileID: -1680190386980627800, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
+    - target: {fileID: 2015984609754554693, guid: 74557cb1bc476fe4ba696a3cdbe01734, type: 3}
       propertyPath: listeningOverlay
       value: 
       objectReference: {fileID: 1221229790601295531}
+    - target: {fileID: 2015984609754554693, guid: 74557cb1bc476fe4ba696a3cdbe01734, type: 3}
+      propertyPath: useCompositePart
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2015984609754554693, guid: 74557cb1bc476fe4ba696a3cdbe01734, type: 3}
+      propertyPath: compositePartName
+      value: right
+      objectReference: {fileID: 0}
     - target: {fileID: 2015984609754554693, guid: 74557cb1bc476fe4ba696a3cdbe01734, type: 3}
       propertyPath: buttons.Array.size
       value: 8
@@ -877,6 +817,18 @@ PrefabInstance:
     - target: {fileID: 2168646152252500023, guid: 74557cb1bc476fe4ba696a3cdbe01734, type: 3}
       propertyPath: m_Name
       value: Right
+      objectReference: {fileID: 0}
+    - target: {fileID: 2648954211741214820, guid: 74557cb1bc476fe4ba696a3cdbe01734, type: 3}
+      propertyPath: inputAction
+      value: 
+      objectReference: {fileID: -1680190386980627800, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
+    - target: {fileID: 2648954211741214820, guid: 74557cb1bc476fe4ba696a3cdbe01734, type: 3}
+      propertyPath: useCompositePart
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2648954211741214820, guid: 74557cb1bc476fe4ba696a3cdbe01734, type: 3}
+      propertyPath: compositePartName
+      value: right
       objectReference: {fileID: 0}
     - target: {fileID: 2748188068762653202, guid: 74557cb1bc476fe4ba696a3cdbe01734, type: 3}
       propertyPath: navigation
@@ -963,9 +915,21 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5232664446981066463, guid: 74557cb1bc476fe4ba696a3cdbe01734, type: 3}
+      propertyPath: inputAction
+      value: 
+      objectReference: {fileID: -1680190386980627800, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
+    - target: {fileID: 5232664446981066463, guid: 74557cb1bc476fe4ba696a3cdbe01734, type: 3}
       propertyPath: defaultSprite
       value: 
       objectReference: {fileID: 21300000, guid: a03079b4b018fde4585d3d9b01d95668, type: 3}
+    - target: {fileID: 5232664446981066463, guid: 74557cb1bc476fe4ba696a3cdbe01734, type: 3}
+      propertyPath: useCompositePart
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5232664446981066463, guid: 74557cb1bc476fe4ba696a3cdbe01734, type: 3}
+      propertyPath: compositePartName
+      value: right
+      objectReference: {fileID: 0}
     - target: {fileID: 6251152341359298005, guid: 74557cb1bc476fe4ba696a3cdbe01734, type: 3}
       propertyPath: m_Sprite
       value: 
@@ -1004,9 +968,21 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1221229790601295531}
     - target: {fileID: 2015984609754554693, guid: 74557cb1bc476fe4ba696a3cdbe01734, type: 3}
+      propertyPath: actionReference
+      value: 
+      objectReference: {fileID: -1680190386980627800, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
+    - target: {fileID: 2015984609754554693, guid: 74557cb1bc476fe4ba696a3cdbe01734, type: 3}
       propertyPath: listeningOverlay
       value: 
       objectReference: {fileID: 1221229790601295531}
+    - target: {fileID: 2015984609754554693, guid: 74557cb1bc476fe4ba696a3cdbe01734, type: 3}
+      propertyPath: useCompositePart
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2015984609754554693, guid: 74557cb1bc476fe4ba696a3cdbe01734, type: 3}
+      propertyPath: compositePartName
+      value: down
+      objectReference: {fileID: 0}
     - target: {fileID: 2015984609754554693, guid: 74557cb1bc476fe4ba696a3cdbe01734, type: 3}
       propertyPath: buttons.Array.size
       value: 8
@@ -1046,6 +1022,18 @@ PrefabInstance:
     - target: {fileID: 2168646152252500023, guid: 74557cb1bc476fe4ba696a3cdbe01734, type: 3}
       propertyPath: m_Name
       value: Down
+      objectReference: {fileID: 0}
+    - target: {fileID: 2648954211741214820, guid: 74557cb1bc476fe4ba696a3cdbe01734, type: 3}
+      propertyPath: inputAction
+      value: 
+      objectReference: {fileID: -1680190386980627800, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
+    - target: {fileID: 2648954211741214820, guid: 74557cb1bc476fe4ba696a3cdbe01734, type: 3}
+      propertyPath: useCompositePart
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2648954211741214820, guid: 74557cb1bc476fe4ba696a3cdbe01734, type: 3}
+      propertyPath: compositePartName
+      value: down
       objectReference: {fileID: 0}
     - target: {fileID: 2748188068762653202, guid: 74557cb1bc476fe4ba696a3cdbe01734, type: 3}
       propertyPath: navigation
@@ -1132,9 +1120,21 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5232664446981066463, guid: 74557cb1bc476fe4ba696a3cdbe01734, type: 3}
+      propertyPath: inputAction
+      value: 
+      objectReference: {fileID: -1680190386980627800, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
+    - target: {fileID: 5232664446981066463, guid: 74557cb1bc476fe4ba696a3cdbe01734, type: 3}
       propertyPath: defaultSprite
       value: 
       objectReference: {fileID: 21300000, guid: a03079b4b018fde4585d3d9b01d95668, type: 3}
+    - target: {fileID: 5232664446981066463, guid: 74557cb1bc476fe4ba696a3cdbe01734, type: 3}
+      propertyPath: useCompositePart
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5232664446981066463, guid: 74557cb1bc476fe4ba696a3cdbe01734, type: 3}
+      propertyPath: compositePartName
+      value: down
+      objectReference: {fileID: 0}
     - target: {fileID: 6251152341359298005, guid: 74557cb1bc476fe4ba696a3cdbe01734, type: 3}
       propertyPath: m_Sprite
       value: 
@@ -1173,9 +1173,21 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1221229790601295531}
     - target: {fileID: 2015984609754554693, guid: 74557cb1bc476fe4ba696a3cdbe01734, type: 3}
+      propertyPath: actionReference
+      value: 
+      objectReference: {fileID: -1680190386980627800, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
+    - target: {fileID: 2015984609754554693, guid: 74557cb1bc476fe4ba696a3cdbe01734, type: 3}
       propertyPath: listeningOverlay
       value: 
       objectReference: {fileID: 1221229790601295531}
+    - target: {fileID: 2015984609754554693, guid: 74557cb1bc476fe4ba696a3cdbe01734, type: 3}
+      propertyPath: useCompositePart
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2015984609754554693, guid: 74557cb1bc476fe4ba696a3cdbe01734, type: 3}
+      propertyPath: compositePartName
+      value: left
+      objectReference: {fileID: 0}
     - target: {fileID: 2015984609754554693, guid: 74557cb1bc476fe4ba696a3cdbe01734, type: 3}
       propertyPath: buttons.Array.size
       value: 8
@@ -1215,6 +1227,18 @@ PrefabInstance:
     - target: {fileID: 2168646152252500023, guid: 74557cb1bc476fe4ba696a3cdbe01734, type: 3}
       propertyPath: m_Name
       value: Left
+      objectReference: {fileID: 0}
+    - target: {fileID: 2648954211741214820, guid: 74557cb1bc476fe4ba696a3cdbe01734, type: 3}
+      propertyPath: inputAction
+      value: 
+      objectReference: {fileID: -1680190386980627800, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
+    - target: {fileID: 2648954211741214820, guid: 74557cb1bc476fe4ba696a3cdbe01734, type: 3}
+      propertyPath: useCompositePart
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2648954211741214820, guid: 74557cb1bc476fe4ba696a3cdbe01734, type: 3}
+      propertyPath: compositePartName
+      value: left
       objectReference: {fileID: 0}
     - target: {fileID: 2748188068762653202, guid: 74557cb1bc476fe4ba696a3cdbe01734, type: 3}
       propertyPath: navigation
@@ -1301,9 +1325,21 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5232664446981066463, guid: 74557cb1bc476fe4ba696a3cdbe01734, type: 3}
+      propertyPath: inputAction
+      value: 
+      objectReference: {fileID: -1680190386980627800, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
+    - target: {fileID: 5232664446981066463, guid: 74557cb1bc476fe4ba696a3cdbe01734, type: 3}
       propertyPath: defaultSprite
       value: 
       objectReference: {fileID: 21300000, guid: a03079b4b018fde4585d3d9b01d95668, type: 3}
+    - target: {fileID: 5232664446981066463, guid: 74557cb1bc476fe4ba696a3cdbe01734, type: 3}
+      propertyPath: useCompositePart
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5232664446981066463, guid: 74557cb1bc476fe4ba696a3cdbe01734, type: 3}
+      propertyPath: compositePartName
+      value: left
+      objectReference: {fileID: 0}
     - target: {fileID: 6251152341359298005, guid: 74557cb1bc476fe4ba696a3cdbe01734, type: 3}
       propertyPath: m_Sprite
       value: 
@@ -2207,9 +2243,21 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1221229790601295531}
     - target: {fileID: 2015984609754554693, guid: 74557cb1bc476fe4ba696a3cdbe01734, type: 3}
+      propertyPath: actionReference
+      value: 
+      objectReference: {fileID: -1680190386980627800, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
+    - target: {fileID: 2015984609754554693, guid: 74557cb1bc476fe4ba696a3cdbe01734, type: 3}
       propertyPath: listeningOverlay
       value: 
       objectReference: {fileID: 1221229790601295531}
+    - target: {fileID: 2015984609754554693, guid: 74557cb1bc476fe4ba696a3cdbe01734, type: 3}
+      propertyPath: useCompositePart
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2015984609754554693, guid: 74557cb1bc476fe4ba696a3cdbe01734, type: 3}
+      propertyPath: compositePartName
+      value: up
+      objectReference: {fileID: 0}
     - target: {fileID: 2015984609754554693, guid: 74557cb1bc476fe4ba696a3cdbe01734, type: 3}
       propertyPath: buttons.Array.size
       value: 8
@@ -2249,6 +2297,14 @@ PrefabInstance:
     - target: {fileID: 2168646152252500023, guid: 74557cb1bc476fe4ba696a3cdbe01734, type: 3}
       propertyPath: m_Name
       value: Up
+      objectReference: {fileID: 0}
+    - target: {fileID: 2648954211741214820, guid: 74557cb1bc476fe4ba696a3cdbe01734, type: 3}
+      propertyPath: inputAction
+      value: 
+      objectReference: {fileID: -1680190386980627800, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
+    - target: {fileID: 2648954211741214820, guid: 74557cb1bc476fe4ba696a3cdbe01734, type: 3}
+      propertyPath: useCompositePart
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2748188068762653202, guid: 74557cb1bc476fe4ba696a3cdbe01734, type: 3}
       propertyPath: navigation
@@ -2346,6 +2402,10 @@ PrefabInstance:
       propertyPath: defaultSprite
       value: 
       objectReference: {fileID: 21300000, guid: a03079b4b018fde4585d3d9b01d95668, type: 3}
+    - target: {fileID: 5232664446981066463, guid: 74557cb1bc476fe4ba696a3cdbe01734, type: 3}
+      propertyPath: useCompositePart
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6251152341359298005, guid: 74557cb1bc476fe4ba696a3cdbe01734, type: 3}
       propertyPath: m_Sprite
       value: 

@@ -1,12 +1,11 @@
+
 using UnityEngine;
 
 public class SC_input_display_master : MonoBehaviour
-{public static SC_input_display_master instance;
-
-
+{
+    public static SC_input_display_master instance;
 
     [Header("Controller")]
-
     public Sprite A;
     public Sprite B;
     public Sprite X;
@@ -26,23 +25,12 @@ public class SC_input_display_master : MonoBehaviour
     public Sprite select;
     public Sprite start;
 
-
-
-
-
     [Header("Mouse")]
-
     public Sprite mouse_right;
     public Sprite mouse_left;
     public Sprite mouse_middle;
 
-
-
-
-
-
     [Header("Keyboard")]
-
     public Sprite default_sprite;
     public Sprite space_bar;
     public Sprite ctrl;
@@ -57,17 +45,20 @@ public class SC_input_display_master : MonoBehaviour
 
     private void Awake()
     {
+        if (instance != null && instance != this)
+        {
+            Debug.LogWarning(
+                "Plusieurs SC_input_display_master détectés."
+            );
+            return;
+        }
+
         instance = this;
     }
 
-    void Start()
+    private void OnDestroy()
     {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
+        if (instance == this)
+            instance = null;
     }
 }
