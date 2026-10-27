@@ -1,11 +1,15 @@
 
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.InputSystem.Controls;
 
 public class SC_input_assign : MonoBehaviour
 {
     [Header("Input")]
+    public InputActionReference reset_to_default_action;
+    public bool canreset;
     public InputActionReference actionReference;
 
     private int bindingIndex;
@@ -24,6 +28,8 @@ public class SC_input_assign : MonoBehaviour
 
     private bool actionWasEnabled;
     private bool rebindInProgress;
+    public KeyboardInputSprite prompt_;
+    public GamepadInputSprite prompt;
 
     void Awake()
     {
@@ -31,14 +37,76 @@ public class SC_input_assign : MonoBehaviour
         {
             inputAsset = actionReference.action.actionMap.asset;
         }
+        LoadBindings();
+
     }
 
-    void Start()
+    public void canreset_()
     {
-        LoadBindings();
+        canreset = true;
     }
+
+    public void cantreset_()
+    {
+        canreset = false;
+    }
+    private void Update()
+    {
+        if (reset_to_default_action.action.WasPressedThisFrame() && canreset)
+        {
+            ResetToDefault();
+            prompt.UpdateSprite();
+            prompt_.UpdateDisplay();
+        }
+    }
+    void OnEnable()
+    {
+
+    }
+
+    private bool waitingForOpeningInputRelease;
 
     public void StartRebind()
+    {
+        // Empêche le bouton/la touche qui ouvre l'écran de rebinding
+        // d'être capturé(e) comme nouvelle commande.
+        if (rebindInProgress || waitingForOpeningInputRelease)
+            return;
+
+        waitingForOpeningInputRelease = true;
+        StartCoroutine(WaitForOpeningInputRelease());
+    }
+
+    private IEnumerator WaitForOpeningInputRelease()
+    {
+        // Attend que tous les boutons physiques soient relâchés.
+        // Cela couvre notamment la touche ou le bouton de manette
+        // utilisé pour ouvrir le menu de configuration.
+        while (AnyButtonIsPressed())
+            yield return null;
+
+        // Laisse passer une frame supplémentaire avant d'écouter.
+        yield return null;
+
+        waitingForOpeningInputRelease = false;
+        StartRebindInternal();
+    }
+
+    private bool AnyButtonIsPressed()
+    {
+        foreach (var device in InputSystem.devices)
+        {
+            foreach (var control in device.allControls)
+            {
+                if (control is ButtonControl button && button.isPressed)
+                    return true;
+            }
+        }
+
+        return false;
+    }
+
+    private void StartRebindInternal()
     {
         if (rebindInProgress)
             return;
@@ -82,6 +150,7 @@ public class SC_input_assign : MonoBehaviour
 
         if (!string.IsNullOrEmpty(path))
         {
+
             bool isGamepadPath =
                 path.Contains("<Gamepad>") ||
                 path.Contains("<XInputController>");
@@ -91,12 +160,15 @@ public class SC_input_assign : MonoBehaviour
             if ((gamepadBinding && isKeyboardPath) ||
                 (!gamepadBinding && isGamepadPath))
             {
+                Debug.Log("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
+
                 Debug.LogWarning(
                     "Le binding sélectionné ne correspond pas au périphérique choisi."
                 );
                 return;
             }
         }
+
 
         // Désactive les boutons de l'interface pendant l'écoute.
         if (buttons != null)
@@ -132,8 +204,6 @@ public class SC_input_assign : MonoBehaviour
         }
 
         rebindOperation = rebind
-            // Échap annule le rebinding.
-            .WithCancelingThrough("<Keyboard>/escape")
 
             // Ignore le déplacement de la souris.
             .WithControlsExcluding("<Mouse>/position")
@@ -232,7 +302,6 @@ public class SC_input_assign : MonoBehaviour
             rebindOperation.Dispose();
             rebindOperation = null;
         }
-
         rebindInProgress = false;
 
         // Restaure l'état initial de l'action.
@@ -260,6 +329,8 @@ public class SC_input_assign : MonoBehaviour
         {
             SaveBindings();
             UpdateBindingDisplay();
+            prompt.UpdateSprite();
+            prompt_.UpdateDisplay();
         }
     }
 
@@ -306,15 +377,36 @@ public class SC_input_assign : MonoBehaviour
     }
 
     // À connecter au bouton Reset All du menu des paramètres.
+
     public void ResetAllBindings()
     {
         if (inputAsset == null)
+        {
+            Debug.LogError("InputActionAsset introuvable.");
             return;
+        }
 
+        // Supprime tous les overrides de l'asset en mémoire.
         inputAsset.RemoveAllBindingOverrides();
 
+        // Supprime les anciennes sauvegardes de rebinding.
         PlayerPrefs.DeleteKey(SaveKey);
         PlayerPrefs.Save();
+
+        // Affiche les bindings réellement restaurés.
+        foreach (var map in inputAsset.actionMaps)
+        {
+            foreach (var action in map.actions)
+            {
+                for (int i = 0; i < action.bindings.Count; i++)
+                {
+                    Debug.Log(
+                        $"{action.actionMap.name}/{action.name} " +
+                        $"[{i}] = {action.bindings[i].effectivePath}"
+                    );
+                }
+            }
+        }
 
         UpdateBindingDisplay();
     }
@@ -344,6 +436,7 @@ public class SC_input_assign : MonoBehaviour
         }
 
         rebindInProgress = false;
+        waitingForOpeningInputRelease = false;
 
         if (listeningOverlay != null)
             listeningOverlay.SetActive(false);

@@ -1,7 +1,10 @@
 using UnityEngine;
 
 public class SC_input_display_master : MonoBehaviour
-{
+{public static SC_input_display_master instance;
+
+
+
     [Header("Controller")]
 
     public Sprite A;
@@ -40,17 +43,22 @@ public class SC_input_display_master : MonoBehaviour
 
     [Header("Keyboard")]
 
+    public Sprite default_sprite;
     public Sprite space_bar;
     public Sprite ctrl;
     public Sprite maj;
     public Sprite tab;
+    public Sprite escape;
 
     public Sprite arrow_up;
     public Sprite arrow_down;
     public Sprite arrow_right;
     public Sprite arrow_left;
 
-
+    private void Awake()
+    {
+        instance = this;
+    }
 
     void Start()
     {

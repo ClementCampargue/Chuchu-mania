@@ -281,10 +281,12 @@ MonoBehaviour:
   mouse_right: {fileID: 0}
   mouse_left: {fileID: 0}
   mouse_middle: {fileID: 0}
+  default_sprite: {fileID: 21300000, guid: a03079b4b018fde4585d3d9b01d95668, type: 3}
   space_bar: {fileID: 21300000, guid: c963415a6a0ef4d40a645a8ac49c8783, type: 3}
   ctrl: {fileID: 0}
   maj: {fileID: 0}
   tab: {fileID: 0}
+  escape: {fileID: 21300000, guid: e2bde3c93ce15c541a844e8f3aae299e, type: 3}
   arrow_up: {fileID: 21300000, guid: 121f55cd7c3115245979f2e0c027cc70, type: 3}
   arrow_down: {fileID: 21300000, guid: 2c02eaba13951d64ba9342be1cca12f3, type: 3}
   arrow_right: {fileID: 21300000, guid: 7fcd81f73b1a1854ea7ff48dbc87b598, type: 3}
@@ -808,7 +810,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6488909739509447440}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -835,7 +837,7 @@ PrefabInstance:
     - target: {fileID: 2015984609754554693, guid: 74557cb1bc476fe4ba696a3cdbe01734, type: 3}
       propertyPath: listeningOverlay
       value: 
-      objectReference: {fileID: 4654672579280314182}
+      objectReference: {fileID: 1221229790601295531}
     - target: {fileID: 2015984609754554693, guid: 74557cb1bc476fe4ba696a3cdbe01734, type: 3}
       propertyPath: buttons.Array.size
       value: 8
@@ -960,6 +962,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5232664446981066463, guid: 74557cb1bc476fe4ba696a3cdbe01734, type: 3}
+      propertyPath: defaultSprite
+      value: 
+      objectReference: {fileID: 21300000, guid: a03079b4b018fde4585d3d9b01d95668, type: 3}
+    - target: {fileID: 6251152341359298005, guid: 74557cb1bc476fe4ba696a3cdbe01734, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: a03079b4b018fde4585d3d9b01d95668, type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -996,7 +1006,7 @@ PrefabInstance:
     - target: {fileID: 2015984609754554693, guid: 74557cb1bc476fe4ba696a3cdbe01734, type: 3}
       propertyPath: listeningOverlay
       value: 
-      objectReference: {fileID: 4654672579280314182}
+      objectReference: {fileID: 1221229790601295531}
     - target: {fileID: 2015984609754554693, guid: 74557cb1bc476fe4ba696a3cdbe01734, type: 3}
       propertyPath: buttons.Array.size
       value: 8
@@ -1121,6 +1131,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5232664446981066463, guid: 74557cb1bc476fe4ba696a3cdbe01734, type: 3}
+      propertyPath: defaultSprite
+      value: 
+      objectReference: {fileID: 21300000, guid: a03079b4b018fde4585d3d9b01d95668, type: 3}
+    - target: {fileID: 6251152341359298005, guid: 74557cb1bc476fe4ba696a3cdbe01734, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: a03079b4b018fde4585d3d9b01d95668, type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -1157,7 +1175,7 @@ PrefabInstance:
     - target: {fileID: 2015984609754554693, guid: 74557cb1bc476fe4ba696a3cdbe01734, type: 3}
       propertyPath: listeningOverlay
       value: 
-      objectReference: {fileID: 4654672579280314182}
+      objectReference: {fileID: 1221229790601295531}
     - target: {fileID: 2015984609754554693, guid: 74557cb1bc476fe4ba696a3cdbe01734, type: 3}
       propertyPath: buttons.Array.size
       value: 8
@@ -1282,6 +1300,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5232664446981066463, guid: 74557cb1bc476fe4ba696a3cdbe01734, type: 3}
+      propertyPath: defaultSprite
+      value: 
+      objectReference: {fileID: 21300000, guid: a03079b4b018fde4585d3d9b01d95668, type: 3}
+    - target: {fileID: 6251152341359298005, guid: 74557cb1bc476fe4ba696a3cdbe01734, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: a03079b4b018fde4585d3d9b01d95668, type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -1322,7 +1348,7 @@ PrefabInstance:
     - target: {fileID: 2015984609754554693, guid: 74557cb1bc476fe4ba696a3cdbe01734, type: 3}
       propertyPath: listeningOverlay
       value: 
-      objectReference: {fileID: 4654672579280314182}
+      objectReference: {fileID: 1221229790601295531}
     - target: {fileID: 2015984609754554693, guid: 74557cb1bc476fe4ba696a3cdbe01734, type: 3}
       propertyPath: buttons.Array.size
       value: 8
@@ -1363,10 +1389,18 @@ PrefabInstance:
       propertyPath: m_Name
       value: Pause
       objectReference: {fileID: 0}
+    - target: {fileID: 2648954211741214820, guid: 74557cb1bc476fe4ba696a3cdbe01734, type: 3}
+      propertyPath: inputAction
+      value: 
+      objectReference: {fileID: -8230713884396670134, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
     - target: {fileID: 2748188068762653202, guid: 74557cb1bc476fe4ba696a3cdbe01734, type: 3}
       propertyPath: navigation
       value: 
       objectReference: {fileID: 9055457056763407647}
+    - target: {fileID: 2748188068762653202, guid: 74557cb1bc476fe4ba696a3cdbe01734, type: 3}
+      propertyPath: select_on_enable
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 3690582142971484014, guid: 74557cb1bc476fe4ba696a3cdbe01734, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -1447,6 +1481,22 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3841386897986673977, guid: 74557cb1bc476fe4ba696a3cdbe01734, type: 3}
+      propertyPath: defaultSprite
+      value: 
+      objectReference: {fileID: 21300000, guid: e2bde3c93ce15c541a844e8f3aae299e, type: 3}
+    - target: {fileID: 5232664446981066463, guid: 74557cb1bc476fe4ba696a3cdbe01734, type: 3}
+      propertyPath: inputAction
+      value: 
+      objectReference: {fileID: -8230713884396670134, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
+    - target: {fileID: 6083448717689572229, guid: 74557cb1bc476fe4ba696a3cdbe01734, type: 3}
+      propertyPath: m_StringReference.m_TableEntryReference.m_KeyId
+      value: 8061730816
+      objectReference: {fileID: 0}
+    - target: {fileID: 6251152341359298005, guid: 74557cb1bc476fe4ba696a3cdbe01734, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: e2bde3c93ce15c541a844e8f3aae299e, type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -1653,7 +1703,7 @@ PrefabInstance:
     - target: {fileID: 2015984609754554693, guid: 74557cb1bc476fe4ba696a3cdbe01734, type: 3}
       propertyPath: listeningOverlay
       value: 
-      objectReference: {fileID: 4654672579280314182}
+      objectReference: {fileID: 1221229790601295531}
     - target: {fileID: 2015984609754554693, guid: 74557cb1bc476fe4ba696a3cdbe01734, type: 3}
       propertyPath: buttons.Array.size
       value: 8
@@ -1694,6 +1744,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: Eat
       objectReference: {fileID: 0}
+    - target: {fileID: 2648954211741214820, guid: 74557cb1bc476fe4ba696a3cdbe01734, type: 3}
+      propertyPath: inputAction
+      value: 
+      objectReference: {fileID: -7868807682114652187, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
+    - target: {fileID: 2648954211741214820, guid: 74557cb1bc476fe4ba696a3cdbe01734, type: 3}
+      propertyPath: defaultSprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 707596986897b61488aa6039e43b20ca, type: 3}
     - target: {fileID: 2748188068762653202, guid: 74557cb1bc476fe4ba696a3cdbe01734, type: 3}
       propertyPath: navigation
       value: 
@@ -1778,6 +1836,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5232664446981066463, guid: 74557cb1bc476fe4ba696a3cdbe01734, type: 3}
+      propertyPath: inputAction
+      value: 
+      objectReference: {fileID: -7868807682114652187, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -1818,7 +1880,7 @@ PrefabInstance:
     - target: {fileID: 2015984609754554693, guid: 74557cb1bc476fe4ba696a3cdbe01734, type: 3}
       propertyPath: listeningOverlay
       value: 
-      objectReference: {fileID: 4654672579280314182}
+      objectReference: {fileID: 1221229790601295531}
     - target: {fileID: 2015984609754554693, guid: 74557cb1bc476fe4ba696a3cdbe01734, type: 3}
       propertyPath: buttons.Array.size
       value: 8
@@ -2147,7 +2209,7 @@ PrefabInstance:
     - target: {fileID: 2015984609754554693, guid: 74557cb1bc476fe4ba696a3cdbe01734, type: 3}
       propertyPath: listeningOverlay
       value: 
-      objectReference: {fileID: 4654672579280314182}
+      objectReference: {fileID: 1221229790601295531}
     - target: {fileID: 2015984609754554693, guid: 74557cb1bc476fe4ba696a3cdbe01734, type: 3}
       propertyPath: buttons.Array.size
       value: 8
@@ -2192,6 +2254,10 @@ PrefabInstance:
       propertyPath: navigation
       value: 
       objectReference: {fileID: 9055457056763407647}
+    - target: {fileID: 2748188068762653202, guid: 74557cb1bc476fe4ba696a3cdbe01734, type: 3}
+      propertyPath: select_on_enable
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 3690582142971484014, guid: 74557cb1bc476fe4ba696a3cdbe01734, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -2272,6 +2338,18 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5232664446981066463, guid: 74557cb1bc476fe4ba696a3cdbe01734, type: 3}
+      propertyPath: inputAction
+      value: 
+      objectReference: {fileID: -1680190386980627800, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
+    - target: {fileID: 5232664446981066463, guid: 74557cb1bc476fe4ba696a3cdbe01734, type: 3}
+      propertyPath: defaultSprite
+      value: 
+      objectReference: {fileID: 21300000, guid: a03079b4b018fde4585d3d9b01d95668, type: 3}
+    - target: {fileID: 6251152341359298005, guid: 74557cb1bc476fe4ba696a3cdbe01734, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: a03079b4b018fde4585d3d9b01d95668, type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -2312,7 +2390,7 @@ PrefabInstance:
     - target: {fileID: 2015984609754554693, guid: 74557cb1bc476fe4ba696a3cdbe01734, type: 3}
       propertyPath: listeningOverlay
       value: 
-      objectReference: {fileID: 4654672579280314182}
+      objectReference: {fileID: 1221229790601295531}
     - target: {fileID: 2015984609754554693, guid: 74557cb1bc476fe4ba696a3cdbe01734, type: 3}
       propertyPath: buttons.Array.size
       value: 8
@@ -2353,6 +2431,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: Cancel
       objectReference: {fileID: 0}
+    - target: {fileID: 2648954211741214820, guid: 74557cb1bc476fe4ba696a3cdbe01734, type: 3}
+      propertyPath: inputAction
+      value: 
+      objectReference: {fileID: 7727032971491509709, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
+    - target: {fileID: 2648954211741214820, guid: 74557cb1bc476fe4ba696a3cdbe01734, type: 3}
+      propertyPath: defaultSprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 69eaa4eb16ff91a4fba1e58317669aec, type: 3}
     - target: {fileID: 2748188068762653202, guid: 74557cb1bc476fe4ba696a3cdbe01734, type: 3}
       propertyPath: navigation
       value: 
@@ -2437,6 +2523,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5232664446981066463, guid: 74557cb1bc476fe4ba696a3cdbe01734, type: 3}
+      propertyPath: inputAction
+      value: 
+      objectReference: {fileID: 7727032971491509709, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
