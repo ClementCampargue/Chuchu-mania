@@ -32,15 +32,15 @@ public class SC_Tuto_master : MonoBehaviour
     public GameObject enemy;
     public GameObject spawner;
     public GameObject wall;
-    public AudioSource music;
     void Start()
     {
+        tuto_zic.LoadAudioData();
+
         eat = SC_icecream_eat_system.instance;
         SC_player.instance.canMove = false;
         Invoke("delay", 1);
         SC_icecream_eat_system.instance.caneat = false;
         SC_icecream_eat_system.instance.canfillup = false;
-        SC_music_manager.instance.pause_music();
     }
     void delay()
     {
@@ -97,8 +97,8 @@ public class SC_Tuto_master : MonoBehaviour
 
     public void start_level()
     {
-        music.Stop();
-        SC_music_manager.instance.resume_music();
+        SC_music_manager.instance.update_music(tuto_zic);
+        //SC_music_manager.instance.resume_music();
         spawning.manual_respawn = false;
         spawner.SetActive(true);
         wall.SetActive(false);

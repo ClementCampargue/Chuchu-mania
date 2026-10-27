@@ -38,7 +38,7 @@ public class SC_level_master : MonoBehaviour
             SC_music_manager.instance.pause_music();
         }
 
-        GameObject.Find("Overlay")
+        GameObject.Find("HUD")
             .transform.GetChild(0)
             .gameObject.SetActive(overlay_on);
 

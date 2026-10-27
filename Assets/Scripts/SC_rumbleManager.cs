@@ -9,6 +9,7 @@ public class SC_rumbleManager : MonoBehaviour
     private Coroutine rumbleRoutine;
 
     private float currentPriority = 0f;
+    public bool rumble_enabled;
     private void Awake()
     {
         if (instance != null)
@@ -23,6 +24,8 @@ public class SC_rumbleManager : MonoBehaviour
     }
     public void PlayRumble(float low, float high, float duration, float priority = 1f)
     {
+        if (!rumble_enabled)
+            return;
         if (!SC_controller_manager.instance.using_controller)
             return;
 

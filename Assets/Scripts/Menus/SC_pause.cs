@@ -28,7 +28,7 @@ public class SC_pause : MonoBehaviour
     [Header("Réglages")]
     [SerializeField] private float inputCooldown = 0.2f;
 
-    private bool isPaused = false;
+    public bool isPaused = false;
     private bool tuto = false;
     private bool settings = false;
     private bool areyousure_ = false;

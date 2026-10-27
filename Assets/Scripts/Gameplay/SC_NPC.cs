@@ -46,7 +46,13 @@ public class SC_NPC : MonoBehaviour
     private DialogueManager dialogue;
     private SC_player player;
     private bool playerInRange;
+    [Header("NPC Flip")]
+    public bool flip_towards_player = true;
+    public bool flip_only_in_range = true;
 
+    public bool starts_facing_left = false;
+
+    private Vector3 initialScale;
     public static bool dialogueActive = false;
 
     [Header("Player Settings")]
@@ -60,6 +66,8 @@ public class SC_NPC : MonoBehaviour
     {
         if (player == null)
             player = SC_player.instance;
+
+        initialScale = transform.localScale;
     }
 
     private void OnEnable()
@@ -127,6 +135,31 @@ public class SC_NPC : MonoBehaviour
             );
         }
     }
+    private void FlipTowardsPlayer()
+    {
+        if (!flip_towards_player || player == null)
+            return;
+
+        if (flip_only_in_range && !playerInRange)
+            return;
+
+        bool playerIsRight =
+            player.transform.position.x > transform.position.x;
+
+        // Détermine si le sprite doit être inversé
+        // en fonction de son orientation initiale.
+        bool shouldFlip = starts_facing_left
+            ? playerIsRight
+            : !playerIsRight;
+
+        Vector3 scale = transform.localScale;
+
+        scale.x = shouldFlip
+            ? -Mathf.Abs(initialScale.x)
+            : Mathf.Abs(initialScale.x);
+
+        transform.localScale = scale;
+    }
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
@@ -190,6 +223,7 @@ public class SC_NPC : MonoBehaviour
             Debug.LogError("Aucun DialogueManager trouvé !", this);
             return;
         }
+        FlipTowardsPlayer();
 
         // Configure le dialogue avant de démarrer le typewriter.
         dialogue.currentDialogue =

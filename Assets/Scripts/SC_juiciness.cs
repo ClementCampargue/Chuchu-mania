@@ -18,9 +18,13 @@ public class SC_juiciness : MonoBehaviour
     public float rumbleDuration = 0f;
 
     [Header("Screen Shake")]
+    public Transform cameraTransform;
     public float shakeAmplitude = 0f;
-    public float shakeFrequency = 0f;
-    public float shakeScreenDuration = 0f;
+    public float shakeFrequency = 25f;
+    public float shakeScreenDuration = 0.15f;
+
+    private Vector3 cameraOriginalPosition;
+    private Coroutine screenShakeCoroutine;
 
     [Header("Particles")]
     public List<ParticleSystem> ps = new();
@@ -60,7 +64,7 @@ public class SC_juiciness : MonoBehaviour
     private bool isScaling;
     private bool isShaking;
     private bool isFlashing;
-
+    public bool play_onawake;
     private void Awake()
     {
         ResetState();
@@ -70,7 +74,11 @@ public class SC_juiciness : MonoBehaviour
     {
         if (trs == null)
             trs = transform;
+        if (cameraTransform == null && Camera.main != null)
+            cameraTransform = GameObject.Find("Main Camera (1)").transform;
 
+        if (cameraTransform != null)
+            cameraOriginalPosition = cameraTransform.localPosition;
         originalScale = trs.localScale;
 
         if (flash)
@@ -81,11 +89,16 @@ public class SC_juiciness : MonoBehaviour
             if (spriteRenderer != null)
                 defaultMaterial = spriteRenderer.material;
         }
+    
     }
 
     private void OnEnable()
     {
         ResetState();
+        if (play_onawake)
+        {
+            PlayJuice();
+        }
     }
 
     private void ResetState()
@@ -138,7 +151,17 @@ public class SC_juiciness : MonoBehaviour
                 rumbleDuration
             );
         }
+        // =====================================================
+        // SCREEN SHAKE
+        // =====================================================
 
+        if (shakeScreenDuration > 0f && shakeAmplitude > 0f)
+        {
+            if (screenShakeCoroutine != null)
+                StopCoroutine(screenShakeCoroutine);
+
+            screenShakeCoroutine = StartCoroutine(ScreenShake());
+        }
         // =====================================================
         // SQUASH & STRETCH
         // =====================================================
@@ -195,7 +218,49 @@ public class SC_juiciness : MonoBehaviour
     // =========================================================
     // SQUASH & STRETCH
     // =========================================================
+    // =========================================================
+    // SCREEN SHAKE
+    // =========================================================
 
+    private IEnumerator ScreenShake()
+    {
+        if (cameraTransform == null)
+            yield break;
+        if (PlayerPrefs.GetFloat("Tremblement") == 1)
+            yield break;
+
+        Vector3 startPosition = cameraTransform.localPosition;
+        float elapsed = 0f;
+
+        while (elapsed < shakeScreenDuration)
+        {
+            elapsed += Time.unscaledDeltaTime;
+
+            float progress = Mathf.Clamp01(
+                elapsed / shakeScreenDuration
+            );
+
+            // Réduction progressive de l'intensité
+            float intensity = shakeAmplitude * (1f - progress);
+
+            // Mouvement aléatoire contrôlé par la fréquence
+            float offsetX = Mathf.Sin(
+                elapsed * shakeFrequency * Mathf.PI * 2f
+            ) * intensity;
+
+            float offsetY = Mathf.Cos(
+                elapsed * shakeFrequency * Mathf.PI * 2f
+            ) * intensity;
+
+            cameraTransform.localPosition = startPosition +
+                new Vector3(offsetX, offsetY, 0f);
+
+            yield return null;
+        }
+
+        cameraTransform.localPosition = startPosition;
+        screenShakeCoroutine = null;
+    }
     private IEnumerator SquashAndStretch()
     {
         isScaling = true;

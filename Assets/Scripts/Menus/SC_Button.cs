@@ -228,10 +228,8 @@ public class SC_Button : MonoBehaviour
 
     public void OnUnhover()
     {
-        if (!isPressed)
-        {
-            onUnhover?.Invoke();
-        }
+        onUnhover?.Invoke();
+
     }
 
 
@@ -239,6 +237,7 @@ public class SC_Button : MonoBehaviour
     {
         if (anim == null || string.IsNullOrEmpty(trigger))
             return;
+        anim.enabled = true;
         anim.ResetTrigger("Hover");
         anim.ResetTrigger("Unhover");
 
