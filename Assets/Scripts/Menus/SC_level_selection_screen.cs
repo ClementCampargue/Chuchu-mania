@@ -421,11 +421,8 @@ if (spirits == null || level == null)
                 SC_scursorManager.instance.disable_cursor();
             }
 
-            if (EventSystem.current != null &&
-                EventSystem.current.currentSelectedGameObject == null)
-            {
-                SelectDefaultButton();
-            }
+
+
         }
         else
         {
@@ -436,14 +433,5 @@ if (spirits == null || level == null)
         }
     }
 
-    private void SelectDefaultButton()
-    {
-        if (button == null)
-            return;
 
-        if (!button.gameObject.activeInHierarchy)
-            return;
-
-        button.Select();
-    }
 }

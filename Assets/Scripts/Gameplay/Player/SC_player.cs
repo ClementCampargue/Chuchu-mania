@@ -1384,7 +1384,9 @@ private void StartDropThrough()
         if (!isClimbing)
             return;
 
-        Invoke("delay_climb", 0.5f);
+        CancelInvoke(nameof(delay_climb));
+
+        climb_delay = true;
 
         grillage = null;
         canClimb = false;

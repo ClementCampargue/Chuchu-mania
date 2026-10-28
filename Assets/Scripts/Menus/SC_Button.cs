@@ -31,6 +31,13 @@ public class SC_Button : MonoBehaviour
     {
         anim = GetComponent<Animator>();
     }
+    private void Start()
+    {
+        if (select_on_enable)
+        {
+            Select();
+        }
+    }
 
 
     public void Select()

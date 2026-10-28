@@ -426,6 +426,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   tuto: TUTO
   levels: LEVEL_SELECTION
+  button: {fileID: 2066357642}
 --- !u!95 &750281570
 Animator:
   serializedVersion: 7

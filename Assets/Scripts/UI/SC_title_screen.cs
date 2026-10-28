@@ -16,6 +16,11 @@ public class SC_title_screen : MonoBehaviour
     void Update()
     {
         // Clavier + boutons de manette
+        if (Input.GetKeyDown(KeyCode.C))
+        {
+            PlayerPrefs.DeleteAll();
+        }
+        
         if (Input.anyKeyDown)
         {
             OnAnyInput();

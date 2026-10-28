@@ -22,6 +22,7 @@ public class SC_save_menu : MonoBehaviour
     public GameObject delete_prompt;
 
     public List<GameObject> files_on;
+    public bool canact;
     private void Awake()
     {
         Debug.Log(Application.persistentDataPath);
@@ -36,8 +37,12 @@ public class SC_save_menu : MonoBehaviour
     {
         UpdateCursorMode();
         update_files();
+        Invoke("delay", 1);
     }
-
+    void delay()
+    {
+        canact = true;
+    }
     void update_files()
     {
         for(int i = 0; i < files_on.Count; i++)
@@ -56,7 +61,7 @@ public class SC_save_menu : MonoBehaviour
     }
 
     private void Update()
-    {
+    {if (!canact) return;
         delete_prompt.SetActive(manager.SlotExists(manager.activeSlot));
         if (menu_opened)
         {

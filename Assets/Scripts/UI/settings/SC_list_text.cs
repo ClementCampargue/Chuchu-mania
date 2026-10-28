@@ -103,6 +103,8 @@ public class SC_list_text : MonoBehaviour
 
     private void Update()
     {
+        moveAction.action.Enable();
+
         if (!CanReadInput())
         {
             ResetInput();
@@ -185,7 +187,7 @@ public class SC_list_text : MonoBehaviour
             return;
 
         // Empêche tout index hors limites.
-        index = ((index % count) + count) % count;
+        //  index = ((index % count) + count) % count;
 
         if (textMode == TextMode.String)
         {

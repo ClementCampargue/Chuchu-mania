@@ -57,7 +57,7 @@ public class SC_arrow_settings : MonoBehaviour
     {
         if (optionList == null)
             return;
-
+        button.Press();
         int direction = next ? 1 : -1;
         optionList.juice.PlayJuice();
 

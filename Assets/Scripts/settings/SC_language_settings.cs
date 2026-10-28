@@ -4,10 +4,15 @@ using UnityEngine.Localization;
 using UnityEngine.Localization.Settings;
 
 public class SC_language_settings : MonoBehaviour
-{
+{public static SC_language_settings instance;
     public List<Locale> locales;
     public SC_pause pause;
 
+
+    private void Awake()
+    {
+        instance = this;
+    }
     private void Start()
     {
         Update_settings();

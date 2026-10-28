@@ -470,7 +470,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   button: {fileID: 7805468491656663224}
   optionList: {fileID: 2749663424949095031}
-  next: 1
+  next: 0
 --- !u!58 &4619965782180803159
 CircleCollider2D:
   m_ObjectHideFlags: 0
