@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 8565008585368629104}
   - component: {fileID: 645652151006371052}
   - component: {fileID: 5234503149408332995}
+  - component: {fileID: 3325536291974015981}
   m_Layer: 0
   m_Name: Jauge_Off
   m_TagString: Untagged
@@ -76,9 +77,9 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingLayerID: 777298749
+  m_SortingLayer: 2
+  m_SortingOrder: 3489
   m_Sprite: {fileID: 21300000, guid: b71729449aa5b0e49816a1c5936e07e7, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -105,6 +106,79 @@ MonoBehaviour:
   event_:
     m_PersistentCalls:
       m_Calls: []
+  audio: {fileID: 3325536291974015981}
+  audios:
+  - {fileID: 8300000, guid: 0cbf61f651d1ab944aea224c80af1c1e, type: 3}
+  - {fileID: 8300000, guid: f5e64f77edb5e3840a7348c92f0e19c8, type: 3}
+  - {fileID: 8300000, guid: 0bf9fc88b550cf842860682e8cfa481e, type: 3}
+  - {fileID: 8300000, guid: b95f9d757c38baa4ebf2ffe4740c24af, type: 3}
+  - {fileID: 8300000, guid: 1eef528141432214b8091eafc46ae1c8, type: 3}
+  - {fileID: 8300000, guid: 08f4611e50aaee7499d2806e35bac95c, type: 3}
+  - {fileID: 8300000, guid: e81c058c1d7c4b4409653f35076a8a58, type: 3}
+  - {fileID: 8300000, guid: 52ad44eba8a95da4f8e7077f5e87dd71, type: 3}
+  - {fileID: 8300000, guid: 8244d4ca9ba2ae340b02cc6f10421bb0, type: 3}
+  - {fileID: 8300000, guid: 7db5d05940b270242937f2a1766f3ae4, type: 3}
+  - {fileID: 8300000, guid: 0d575948dc0db844988866bbad3cd0bc, type: 3}
+  - {fileID: 8300000, guid: 5e10fed274958114b9e69dc851e7c767, type: 3}
+  - {fileID: 8300000, guid: 224a2a77aa88baf4db378f6f0fda8816, type: 3}
+  - {fileID: 8300000, guid: ae82e4e11de163c4da4a4832e9446565, type: 3}
+  - {fileID: 8300000, guid: 4448627db33ddd247be14018196d927d, type: 3}
+  - {fileID: 8300000, guid: b61f222624c014f4a9ce49647f652804, type: 3}
+  - {fileID: 8300000, guid: bb16f66195f802547a76cf9cb27e1d18, type: 3}
+  - {fileID: 8300000, guid: 1a17c360ee0ad0d41992f4d5782965c3, type: 3}
+  - {fileID: 8300000, guid: 7f7a4257406eba54f8719bb8ec261ee8, type: 3}
+  - {fileID: 8300000, guid: f358ee0bb8ead8149b44dbae51e9f3a2, type: 3}
+  - {fileID: 8300000, guid: 37e910171a2837343a1e62bcbe3c484d, type: 3}
+  - {fileID: 8300000, guid: 088aa11f37099a540a5baf7bd0f77f45, type: 3}
+  - {fileID: 8300000, guid: 1d3aa8b5d85aef74491d9a84e5bad59e, type: 3}
+  - {fileID: 8300000, guid: fb72af45a0789fe4d909f5493620cc18, type: 3}
+  - {fileID: 8300000, guid: d72e6abeeca0d124c8cfdd247cede63b, type: 3}
+  - {fileID: 8300000, guid: 5b5130142c2157345a78c39932a4d7ec, type: 3}
+  - {fileID: 8300000, guid: df1e98ee161f7e644908a6f8078fb9e2, type: 3}
+  - {fileID: 8300000, guid: e56f2e4bb1dd86d4c8d89f4ce748f339, type: 3}
+  - {fileID: 8300000, guid: c7d22691360a0e342a5ec6e5698bc656, type: 3}
+  - {fileID: 8300000, guid: 25c4575c6550baf419f4ff86ae11a5c8, type: 3}
+  - {fileID: 8300000, guid: 0ec4767702581e44d85bb1a589dd3bd4, type: 3}
+  - {fileID: 8300000, guid: a3e7093afaf23b848bf2a55e9c4fbe92, type: 3}
+  - {fileID: 8300000, guid: 02558dc549e52c546b5049adfd307dad, type: 3}
+  - {fileID: 8300000, guid: bde5feea0b0cf844ab9992cba22df0e3, type: 3}
+  - {fileID: 8300000, guid: 4d93a8cba2ed6fc448d017f292db15c1, type: 3}
+  - {fileID: 8300000, guid: a31dab6c1ce0afc41a92883905d92dd1, type: 3}
+  - {fileID: 8300000, guid: 4c6325e37bdb38b48a53978172aa5118, type: 3}
+  - {fileID: 8300000, guid: ea4ba02bd6e311f4c90c9947a55af0d1, type: 3}
+  - {fileID: 8300000, guid: b6241e844af273341b99b890b28b5d2b, type: 3}
+  - {fileID: 8300000, guid: a9fcb296aa8a0d4469962209d14af40e, type: 3}
+  - {fileID: 8300000, guid: cf39af57eb279864fac66dd50be845f2, type: 3}
+  - {fileID: 8300000, guid: 37eb45ad6e7821f4c9f3d751636631ce, type: 3}
+  - {fileID: 8300000, guid: 3f4ddfda0d3877149be74da2db30af01, type: 3}
+  - {fileID: 8300000, guid: 66ff0f6e49237f348bef10c0f980c76e, type: 3}
+  - {fileID: 8300000, guid: d2a3aca30b26838499900d13212f429a, type: 3}
+  - {fileID: 8300000, guid: 0d8f2c91d741a7b47ba645bdcf9a3c15, type: 3}
+  - {fileID: 8300000, guid: 962557900d7437046b9c7dcb4e7cb603, type: 3}
+  - {fileID: 8300000, guid: 6a5c586339ad49c4e9ca223c615a7aed, type: 3}
+  - {fileID: 8300000, guid: 48cac394e06438a4eb37c924381dff58, type: 3}
+  - {fileID: 8300000, guid: 76eb7c54a2e7bac4e97ff3c374c7489e, type: 3}
+  - {fileID: 8300000, guid: 5d700d48e9f3a224da25941ddf8a51ae, type: 3}
+  - {fileID: 8300000, guid: 922b13e39eee2694fb8217fa69409d5d, type: 3}
+  - {fileID: 8300000, guid: d179af534aa98db4baa8996c6bdeacc4, type: 3}
+  - {fileID: 8300000, guid: 98eb2eea41321c646982d8816c32dda9, type: 3}
+  - {fileID: 8300000, guid: a92a28f2ee09e4d428b6c1f54b7033a0, type: 3}
+  - {fileID: 8300000, guid: ae9728c2b3e42a04c92119a49b3026ac, type: 3}
+  - {fileID: 8300000, guid: 360a0adcc08d16c41abe3176d1a9e161, type: 3}
+  - {fileID: 8300000, guid: a1dc93ea60201094894017afd2650dd4, type: 3}
+  - {fileID: 8300000, guid: a94c39102cc4ead46bfc9377a60f4b7a, type: 3}
+  - {fileID: 8300000, guid: f4fd2344d2daa8b479fb7ec532a651d3, type: 3}
+  - {fileID: 8300000, guid: 1ed8a55b7d0b0274ebf7dc147a470e76, type: 3}
+  - {fileID: 8300000, guid: cfc0dc77d856a6f489bb60b481a604e5, type: 3}
+  - {fileID: 8300000, guid: 5cf16eca5d765c84382479aabb5b55e7, type: 3}
+  - {fileID: 8300000, guid: dd0234ecc1cecbf45b750c6823d2b405, type: 3}
+  - {fileID: 8300000, guid: 14271a7425ea0e94a937ac8005c7e923, type: 3}
+  - {fileID: 8300000, guid: 3920c8151dd9b8747a3cd48d7cbe8441, type: 3}
+  - {fileID: 8300000, guid: f636d1ae36d85d84da2b64149123bc85, type: 3}
+  - {fileID: 8300000, guid: 1fd94da693345d14baf890028fa1b2d0, type: 3}
+  - {fileID: 8300000, guid: 91552640ae94a4240a5d9b3459ec5114, type: 3}
+  play_random_audio: 0
+  juice: {fileID: 8300000, guid: b95f9d757c38baa4ebf2ffe4740c24af, type: 3}
   moveAction: {fileID: -1680190386980627800, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
   cursor: {fileID: 6898595095263498261}
   pointMin: {fileID: 7274913092036401818}
@@ -175,6 +249,103 @@ BoxCollider2D:
   m_AutoTiling: 0
   m_Size: {x: 4.4769063, y: 0.47}
   m_EdgeRadius: 0
+--- !u!82 &3325536291974015981
+AudioSource:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 43961147859119203}
+  m_Enabled: 0
+  serializedVersion: 4
+  OutputAudioMixerGroup: {fileID: 6889803976911236575, guid: 9284900b67a66ab4e888b9bb58563f0e, type: 2}
+  m_audioClip: {fileID: 0}
+  m_Resource: {fileID: 8300000, guid: 0cbf61f651d1ab944aea224c80af1c1e, type: 3}
+  m_PlayOnAwake: 0
+  m_Volume: 1
+  m_Pitch: 1
+  Loop: 0
+  Mute: 0
+  Spatialize: 0
+  SpatializePostEffects: 0
+  Priority: 128
+  DopplerLevel: 1
+  MinDistance: 1
+  MaxDistance: 500
+  Pan2D: 0
+  rolloffMode: 0
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  reverbZoneMixCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
 --- !u!1 &2544745346002551559
 GameObject:
   m_ObjectHideFlags: 0
@@ -187,14 +358,14 @@ GameObject:
   - component: {fileID: 4902760736150388436}
   - component: {fileID: 3564104362941718871}
   - component: {fileID: 7467162702220788367}
-  - component: {fileID: 4404488466320166442}
+  - component: {fileID: 4619965782180803159}
   m_Layer: 0
   m_Name: Square
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &8382677336855467326
 RectTransform:
   m_ObjectHideFlags: 0
@@ -255,8 +426,8 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
+  m_SortingLayerID: 777298749
+  m_SortingLayer: 2
   m_SortingOrder: 897
   m_Sprite: {fileID: 21300000, guid: 038989e190a9cb14ca510482dc257b59, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -300,8 +471,8 @@ MonoBehaviour:
   button: {fileID: 7805468491656663224}
   optionList: {fileID: 2749663424949095031}
   next: 1
---- !u!61 &4404488466320166442
-BoxCollider2D:
+--- !u!58 &4619965782180803159
+CircleCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -335,17 +506,7 @@ BoxCollider2D:
   m_CompositeOperation: 0
   m_CompositeOrder: 0
   m_Offset: {x: 0, y: 0}
-  m_SpriteTilingProperty:
-    border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 0.13333334, y: 0.26666668}
-    newSize: {x: 1, y: 1}
-    adaptiveTilingThreshold: 0.5
-    drawMode: 0
-    adaptiveTiling: 0
-  m_AutoTiling: 0
-  m_Size: {x: 0.9, y: 0.75}
-  m_EdgeRadius: 0
+  m_Radius: 0.46
 --- !u!1 &3605113643491440998
 GameObject:
   m_ObjectHideFlags: 0
@@ -501,14 +662,14 @@ GameObject:
   - component: {fileID: 930664364828365535}
   - component: {fileID: 1083525769537819193}
   - component: {fileID: 8508526384321610013}
-  - component: {fileID: 6435036951077006814}
+  - component: {fileID: 8104941302666484580}
   m_Layer: 0
   m_Name: Square (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &3273541500156096641
 RectTransform:
   m_ObjectHideFlags: 0
@@ -569,8 +730,8 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
+  m_SortingLayerID: 777298749
+  m_SortingLayer: 2
   m_SortingOrder: 897
   m_Sprite: {fileID: 21300000, guid: 038989e190a9cb14ca510482dc257b59, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -614,8 +775,8 @@ MonoBehaviour:
   button: {fileID: 7805468491656663224}
   optionList: {fileID: 2749663424949095031}
   next: 1
---- !u!61 &6435036951077006814
-BoxCollider2D:
+--- !u!58 &8104941302666484580
+CircleCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -649,17 +810,7 @@ BoxCollider2D:
   m_CompositeOperation: 0
   m_CompositeOrder: 0
   m_Offset: {x: 0, y: 0}
-  m_SpriteTilingProperty:
-    border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 0.13333334, y: 0.26666668}
-    newSize: {x: 1, y: 1}
-    adaptiveTilingThreshold: 0.5
-    drawMode: 0
-    adaptiveTiling: 0
-  m_AutoTiling: 0
-  m_Size: {x: 0.9, y: 0.75}
-  m_EdgeRadius: 0
+  m_Radius: 0.46
 --- !u!1 &4541404096193775450
 GameObject:
   m_ObjectHideFlags: 0
@@ -1097,7 +1248,7 @@ MonoBehaviour:
   indicator: {fileID: 3605113643491440998}
   accept_input: 1
   juice: {fileID: 3954748705410926226}
-  juice2: {fileID: 5316010772175096358}
+  juice2: {fileID: 0}
   clickable: 1
   navigation: {fileID: 0}
 --- !u!23 &1070630327919324280
@@ -1515,6 +1666,7 @@ MonoBehaviour:
   initialDelay: 0.3
   can_move: 0
   button: {fileID: 7805468491656663224}
+  juice: {fileID: 5316010772175096358}
   references:
     version: 2
     RefIds: []
@@ -1730,9 +1882,9 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
-  m_SortingOrder: 7
+  m_SortingLayerID: 777298749
+  m_SortingLayer: 2
+  m_SortingOrder: 3605
   m_Sprite: {fileID: -1026060873, guid: f73d46000c203754e94e1b094057f58d, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0

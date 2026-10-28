@@ -230,6 +230,44 @@ public class SC_pause : MonoBehaviour
         {
             Hide_sure_quit();
         }
+        else
+        {
+            if (!canUsePauseInput)
+                return;
+
+            if (SC_player.instance == null)
+                return;
+
+            if (!SC_player.instance.gameObject.activeInHierarchy)
+                return;
+
+            if (SceneManager.GetActiveScene().name == "Stickers")
+                return;
+
+            if (!isPaused)
+            {
+                if (!SC_player.instance.canMove)
+                    return;
+
+                if (!SC_player.instance.enabled)
+                    return;
+
+                StartInputCooldown();
+                UpdateObjectState();
+                OpenPause();
+            }
+            else
+            {
+                if (HasOpenSubmenu())
+                    return;
+
+                if (!canclose)
+                    return;
+
+                StartInputCooldown();
+                Close();
+            }
+        }
 
     }
 

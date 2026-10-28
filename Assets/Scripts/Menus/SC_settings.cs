@@ -7,6 +7,7 @@ using UnityEngine.U2D;
 
 public class SC_settings : MonoBehaviour
 {
+    public SC_juiciness change_page_;
     public Animator anim;
     public List<GameObject> audio;
     public List< GameObject> display;
@@ -55,6 +56,7 @@ public class SC_settings : MonoBehaviour
         UpdateCursorMode();
         if (previous.action.WasPressedThisFrame() && caninput)
         {
+            change_page_.PlayJuice();
             if (page > 0)
             {
                 page--;
@@ -67,6 +69,8 @@ public class SC_settings : MonoBehaviour
         }
         if (next.action.WasPressedThisFrame() && caninput)
         {
+            change_page_.PlayJuice();
+
             if (page < 3)
             {
                 page++;
