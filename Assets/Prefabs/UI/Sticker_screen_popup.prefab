@@ -2468,9 +2468,9 @@ MonoBehaviour:
   title: {fileID: 9212094493891568563}
   sticker_obtenu:
     m_TableReference:
-      m_TableCollectionName: GUID:71d64c1e148486e4887f3f66640476cd
+      m_TableCollectionName: GUID:bc4cce3e681d4e64fb50cce77bd9edfa
     m_TableEntryReference:
-      m_KeyId: 31821014006775808
+      m_KeyId: 157615407123
       m_Key: 
     m_FallbackState: 0
     m_WaitForCompletion: 0
@@ -2486,27 +2486,27 @@ MonoBehaviour:
     m_LocalVariables: []
   common:
     m_TableReference:
-      m_TableCollectionName: GUID:71d64c1e148486e4887f3f66640476cd
+      m_TableCollectionName: GUID:bc4cce3e681d4e64fb50cce77bd9edfa
     m_TableEntryReference:
-      m_KeyId: 31826797490618368
+      m_KeyId: 157615407124
       m_Key: 
     m_FallbackState: 0
     m_WaitForCompletion: 0
     m_LocalVariables: []
   rare:
     m_TableReference:
-      m_TableCollectionName: GUID:71d64c1e148486e4887f3f66640476cd
+      m_TableCollectionName: GUID:bc4cce3e681d4e64fb50cce77bd9edfa
     m_TableEntryReference:
-      m_KeyId: 31826833351917568
+      m_KeyId: 157615407125
       m_Key: 
     m_FallbackState: 0
     m_WaitForCompletion: 0
     m_LocalVariables: []
   epic:
     m_TableReference:
-      m_TableCollectionName: GUID:71d64c1e148486e4887f3f66640476cd
+      m_TableCollectionName: GUID:bc4cce3e681d4e64fb50cce77bd9edfa
     m_TableEntryReference:
-      m_KeyId: 31826851370647552
+      m_KeyId: 157615407126
       m_Key: 
     m_FallbackState: 0
     m_WaitForCompletion: 0
