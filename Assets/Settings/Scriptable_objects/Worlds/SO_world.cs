@@ -1,6 +1,7 @@
 
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Localization;
 
 [CreateAssetMenu(
     fileName = "SO_world",
@@ -27,6 +28,6 @@ public class SO_world : ScriptableObject
     public List<bool> defaultSpiritsUnlocked =
         new List<bool>();
 
-    public string name_;
+    public LocalizedString name_;
     public int price;
 }

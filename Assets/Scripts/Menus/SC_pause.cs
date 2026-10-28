@@ -1,3 +1,4 @@
+
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Audio;
@@ -28,35 +29,36 @@ public class SC_pause : MonoBehaviour
     [Header("Réglages")]
     [SerializeField] private float inputCooldown = 0.2f;
 
+    public bool canclose = true;
     public bool isPaused = false;
+
     private bool tuto = false;
     private bool settings = false;
     private bool areyousure_ = false;
     private bool areyousure_retry = false;
     private bool areyousure_quit = false;
 
-    // Empêche plusieurs inputs d'être traités trop rapidement
     private bool canUsePauseInput = true;
     private float inputTimer = 0f;
 
     private SC_screenshot_transition transition;
-    public AudioMixer group;
 
+    public AudioMixer group;
     public AudioSource cancel;
+
     private void OnEnable()
     {
+        if (pauseAction != null)
+        {
+            pauseAction.action.performed += TogglePause;
+            pauseAction.action.Enable();
+        }
+
         if (backAction != null)
         {
             backAction.action.Enable();
         }
-
-        if (pauseAction != null)
-        {
-            pauseAction.action.Enable();
-            pauseAction.action.performed += TogglePause;
-        }
     }
-
 
     private void OnDisable()
     {
@@ -72,17 +74,21 @@ public class SC_pause : MonoBehaviour
         }
     }
 
-
     private void Start()
     {
         transition = SC_screenshot_transition.instance;
 
         isPaused = false;
+        canclose = true;
+
         tuto = false;
         settings = false;
         areyousure_ = false;
         areyousure_retry = false;
         areyousure_quit = false;
+
+        canUsePauseInput = true;
+        inputTimer = 0f;
 
         Time.timeScale = 1f;
 
@@ -91,6 +97,9 @@ public class SC_pause : MonoBehaviour
 
         if (tuto_window != null)
             tuto_window.SetActive(false);
+
+        if (settings_ != null)
+            settings_.SetActive(false);
 
         if (areyousure != null)
             areyousure.SetActive(false);
@@ -105,57 +114,25 @@ public class SC_pause : MonoBehaviour
             buttons.SetActive(true);
     }
 
-
     private void Update()
     {
-        // Gestion du cooldown de l'input
         if (!canUsePauseInput)
         {
             inputTimer -= Time.unscaledDeltaTime;
 
             if (inputTimer <= 0f)
-            {
                 canUsePauseInput = true;
-            }
         }
 
-        if (!isPaused)
+        if (!isPaused || !canUsePauseInput)
             return;
 
-        // Empêche le bouton "Retour" de fermer le menu
-        // immédiatement après son ouverture.
-        if (!canUsePauseInput)
-            return;
-
-        if (backAction != null && backAction.action.WasPerformedThisFrame())
+        if (backAction != null &&
+            backAction.action.WasPressedThisFrame())
         {
-            if (tuto)
-            {
-                Hide_tutorial();
-            }
-            else if (settings)
-            {
-                Hide_settings();
-            }
-            else if (areyousure_)
-            {
-                Hide_sure();
-            }
-            else if (areyousure_retry)
-            {
-                Hide_sure_retry();
-            }
-            else if (areyousure_quit)
-            {
-                Hide_sure_quit();
-            }
-            else
-            {
-                Close();
-            }
+            HandleCancel();
         }
     }
-
 
     private void StartInputCooldown()
     {
@@ -163,100 +140,132 @@ public class SC_pause : MonoBehaviour
         inputTimer = inputCooldown;
     }
 
-
     private void UpdateObjectState()
     {
-        if (objectToDisable == null)
-            return;
-
         string currentScene = SceneManager.GetActiveScene().name;
 
         bool shouldDisable =
             scenesToDisableObject.Contains(currentScene);
 
-        objectToDisable.SetActive(!shouldDisable);
-        objectToDisable2.SetActive(!shouldDisable);
+        if (objectToDisable != null)
+            objectToDisable.SetActive(!shouldDisable);
+
+        if (objectToDisable2 != null)
+            objectToDisable2.SetActive(!shouldDisable);
 
         if (objectToEnable != null)
-        {
             objectToEnable.SetActive(shouldDisable);
-        }
     }
-
 
     private void TogglePause(InputAction.CallbackContext context)
     {
-        // Évite les doubles appels
         if (!canUsePauseInput)
             return;
+
+        if (SC_player.instance == null)
+            return;
+
         if (!SC_player.instance.gameObject.activeInHierarchy)
             return;
 
-        // Si le joueur ne peut pas bouger, on ne permet pas
-        // d'ouvrir le menu.
-        if (!isPaused && SC_player.instance != null)
+        if (SceneManager.GetActiveScene().name == "Stickers")
+            return;
+
+        if (!isPaused)
         {
             if (!SC_player.instance.canMove)
                 return;
 
             if (!SC_player.instance.enabled)
                 return;
-        }
 
-        // Pas de pause dans cette scène
-        if (SceneManager.GetActiveScene().name == "Stickers")
-            return;
-
-        StartInputCooldown();
-
-        UpdateObjectState();
-
-        if (!isPaused)
-        {
+            StartInputCooldown();
+            UpdateObjectState();
             OpenPause();
         }
         else
         {
+            if (HasOpenSubmenu())
+                return;
+
+            if (!canclose)
+                return;
+
+            StartInputCooldown();
             Close();
         }
     }
 
+    private bool HasOpenSubmenu()
+    {
+        return tuto ||
+               settings ||
+               areyousure_ ||
+               areyousure_retry ||
+               areyousure_quit;
+    }
+
+    private void HandleCancel()
+    {
+        if (!isPaused)
+            return;
+
+        if (tuto)
+        {
+            Hide_tutorial();
+        }
+        else if (settings)
+        {
+            Hide_settings();
+        }
+        else if (areyousure_)
+        {
+            Hide_sure();
+        }
+        else if (areyousure_retry)
+        {
+            Hide_sure_retry();
+        }
+        else if (areyousure_quit)
+        {
+            Hide_sure_quit();
+        }
+
+    }
 
     private void OpenPause()
     {
         isPaused = true;
-        group.SetFloat("LevelVolume", -1000f);
+        canclose = true;
 
-        buttons.GetComponent<SC_menu_navigation>().ResetFirstSelected();
+        if (group != null)
+            group.SetFloat("LevelVolume", -1000f);
 
-        tuto = false;
-        settings = false;
-
-        if (tuto_window != null)
-            tuto_window.SetActive(false);
-
-        if (settings_ != null)
-            settings_.SetActive(false);
+        CloseAllSubmenus();
 
         if (buttons != null)
+        {
             buttons.SetActive(true);
+
+            SC_menu_navigation navigation =
+                buttons.GetComponent<SC_menu_navigation>();
+
+            if (navigation != null)
+                navigation.ResetFirstSelected();
+        }
 
         if (pauseMenu != null)
             pauseMenu.SetActive(true);
 
-        // Musique
         if (SC_music_manager.instance != null)
             SC_music_manager.instance.pause_music();
 
-        // Curseur
         if (SC_scursorManager.instance != null)
             SC_scursorManager.instance.enable_cursor();
 
-        // Pause via le Time Manager
         if (SC_time_manager.instance != null)
             SC_time_manager.instance.Pause();
 
-        // Désactive le joueur
         if (SC_player.instance != null)
         {
             SC_player.instance.enabled = false;
@@ -271,35 +280,29 @@ public class SC_pause : MonoBehaviour
 
     public void Close()
     {
-        group.SetFloat("LevelVolume", 0f);
+        if (!isPaused || HasOpenSubmenu() || !canclose)
+            return;
 
-        isPaused = false;
-        tuto = false;
-        settings = false;
-        Hide_sure();
-        Hide_sure_retry();
-        Hide_sure_quit();
         if (pauseMenu != null)
             pauseMenu.SetActive(false);
 
-        if (tuto_window != null)
-            tuto_window.SetActive(false);
+        CloseAllSubmenus();
 
-        if (settings_ != null)
-            settings_.SetActive(false);
+        isPaused = false;
+        canclose = true;
 
         if (buttons != null)
             buttons.SetActive(true);
 
-        // Musique
+        if (group != null)
+            group.SetFloat("LevelVolume", 0f);
+
         if (SC_music_manager.instance != null)
             SC_music_manager.instance.resume_music();
 
-        // Curseur
         if (SC_scursorManager.instance != null)
             SC_scursorManager.instance.disable_cursor();
 
-        // Reprise via le Time Manager
         if (SC_time_manager.instance != null)
             SC_time_manager.instance.Resume();
 
@@ -320,14 +323,10 @@ public class SC_pause : MonoBehaviour
     public void Retry()
     {
         if (SC_music_manager.instance != null)
-        {
             SC_music_manager.instance.resume_music();
-        }
 
         if (SC_scursorManager.instance != null)
-        {
             SC_scursorManager.instance.disable_cursor();
-        }
 
         if (pauseMenu != null)
             pauseMenu.SetActive(false);
@@ -336,17 +335,19 @@ public class SC_pause : MonoBehaviour
             areyousureretry.SetActive(false);
 
         isPaused = false;
-        tuto = false;
-        settings = false;
+        canclose = true;
+
+        CloseAllSubmenus();
 
         if (SC_time_manager.instance != null)
             SC_time_manager.instance.Resume();
+
         if (SC_player.instance != null)
         {
             SC_player.instance.canMove = true;
             SC_player.instance.enabled = false;
 
-            if (SC_player.instance.anim  != null)
+            if (SC_player.instance.anim != null)
             {
                 SC_player.instance.anim.updateMode =
                     AnimatorUpdateMode.UnscaledTime;
@@ -354,147 +355,30 @@ public class SC_pause : MonoBehaviour
         }
 
         Scene currentScene = SceneManager.GetActiveScene();
-
         SceneManager.LoadScene(currentScene.buildIndex);
     }
 
-
-
-
     public void Show_settings()
     {
+        CloseAllSubmenus();
+
         settings = true;
-        tuto = false;
-        areyousure_retry = false;
-        areyousure_ = false;
-        areyousure_quit = false;
+        canclose = false;
 
         if (settings_ != null)
             settings_.SetActive(true);
 
         if (buttons != null)
             buttons.SetActive(false);
-
     }
-
-
-    public void Quit_game()
-    {
-        Application.Quit();
-    }
-
-    public void Show_tutorial()
-    {
-        tuto = true;
-        settings = false;
-        areyousure_ = false;
-        areyousure_retry = false;
-        areyousure_quit = false;
-
-        if (tuto_window != null)
-            tuto_window.SetActive(true);
-
-        if (buttons != null)
-            buttons.SetActive(false);
-    }
-    public void Hide_tutorial()
-    {
-        cancel.Play();
-        tuto = false;
-
-        if (tuto_window != null)
-            tuto_window.SetActive(false);
-
-        if (buttons != null)
-            buttons.SetActive(true);
-    }
-
-
-    public void Show_sure()
-    {
-        areyousure_ = true;
-        settings = false;
-        tuto = false;
-        areyousure_quit = false;
-        areyousure_retry = false;
-
-        if (areyousure != null)
-            areyousure.SetActive(true);
-
-        if (buttons != null)
-            buttons.SetActive(false);
-    }
-    public void Hide_sure()
-    {
-        cancel.Play();
-        areyousure_ = false;
-
-        if (areyousure != null)
-            areyousure.SetActive(false);
-
-        if (buttons != null)
-            buttons.SetActive(true);
-    }
-
-
-    public void Show_sure_retry()
-    {
-        areyousure_retry = true;
-        settings = false;
-        areyousure_ = false;
-        tuto = false;
-        areyousure_quit = false;
-
-        if (areyousureretry != null)
-            areyousureretry.SetActive(true);
-
-        if (buttons != null)
-            buttons.SetActive(false);
-    }
-    public void Hide_sure_retry()
-    {
-        cancel.Play();
-        areyousure_retry = false;
-
-        if (areyousureretry != null)
-            areyousureretry.SetActive(false);
-
-        if (buttons != null)
-            buttons.SetActive(true);
-    }
-
-
-
-    public void Show_sure_quit()
-    {
-        areyousure_quit = true;
-        settings = false;
-        areyousure_ = false;
-        tuto = false;
-        areyousure_retry = false;
-
-        if (areyousurequit != null)
-            areyousurequit.SetActive(true);
-
-        if (buttons != null)
-            buttons.SetActive(false);
-    }
-    public void Hide_sure_quit()
-    {
-        cancel.Play();
-        areyousure_quit = false;
-
-        if (areyousurequit != null)
-            areyousurequit.SetActive(false);
-
-        if (buttons != null)
-            buttons.SetActive(true);
-    }
-
 
     public void Hide_settings()
     {
-        cancel.Play();
+        if (!settings)
+            return;
+
+        PlayCancel();
+
         settings = false;
 
         if (settings_ != null)
@@ -502,8 +386,172 @@ public class SC_pause : MonoBehaviour
 
         if (buttons != null)
             buttons.SetActive(true);
+
+        canclose = true;
     }
 
+    public void Show_tutorial()
+    {
+        CloseAllSubmenus();
+
+        tuto = true;
+        canclose = false;
+
+        if (tuto_window != null)
+            tuto_window.SetActive(true);
+
+        if (buttons != null)
+            buttons.SetActive(false);
+    }
+
+    public void Hide_tutorial()
+    {
+        if (!tuto)
+            return;
+
+        PlayCancel();
+
+        tuto = false;
+
+        if (tuto_window != null)
+            tuto_window.SetActive(false);
+
+        if (buttons != null)
+            buttons.SetActive(true);
+
+        canclose = true;
+    }
+
+    public void Show_sure()
+    {
+        CloseAllSubmenus();
+
+        areyousure_ = true;
+        canclose = false;
+
+        if (areyousure != null)
+            areyousure.SetActive(true);
+
+        if (buttons != null)
+            buttons.SetActive(false);
+    }
+
+    public void Hide_sure()
+    {
+        if (!areyousure_)
+            return;
+
+        PlayCancel();
+
+        areyousure_ = false;
+
+        if (areyousure != null)
+            areyousure.SetActive(false);
+
+        if (buttons != null)
+            buttons.SetActive(true);
+
+        canclose = true;
+    }
+
+    public void Show_sure_retry()
+    {
+        CloseAllSubmenus();
+
+        areyousure_retry = true;
+        canclose = false;
+
+        if (areyousureretry != null)
+            areyousureretry.SetActive(true);
+
+        if (buttons != null)
+            buttons.SetActive(false);
+    }
+
+    public void Hide_sure_retry()
+    {
+        if (!areyousure_retry)
+            return;
+
+        PlayCancel();
+
+        areyousure_retry = false;
+
+        if (areyousureretry != null)
+            areyousureretry.SetActive(false);
+
+        if (buttons != null)
+            buttons.SetActive(true);
+
+        canclose = true;
+    }
+
+    public void Show_sure_quit()
+    {
+        CloseAllSubmenus();
+
+        areyousure_quit = true;
+        canclose = false;
+
+        if (areyousurequit != null)
+            areyousurequit.SetActive(true);
+
+        if (buttons != null)
+            buttons.SetActive(false);
+    }
+
+    public void Hide_sure_quit()
+    {
+        if (!areyousure_quit)
+            return;
+
+        PlayCancel();
+
+        areyousure_quit = false;
+
+        if (areyousurequit != null)
+            areyousurequit.SetActive(false);
+
+        if (buttons != null)
+            buttons.SetActive(true);
+
+        canclose = true;
+    }
+
+    private void CloseAllSubmenus()
+    {
+        tuto = false;
+        settings = false;
+        areyousure_ = false;
+        areyousure_retry = false;
+        areyousure_quit = false;
+
+        if (tuto_window != null)
+            tuto_window.SetActive(false);
+
+        if (settings_ != null)
+            settings_.SetActive(false);
+
+        if (areyousure != null)
+            areyousure.SetActive(false);
+
+        if (areyousureretry != null)
+            areyousureretry.SetActive(false);
+
+        if (areyousurequit != null)
+            areyousurequit.SetActive(false);
+    }
+
+    private void PlayCancel()
+    {
+        if (cancel != null)
+            cancel.Play();
+    }
+
+    public void Quit_game()
+    {
+        Application.Quit();
+    }
 
     public void Give_up()
     {
@@ -511,24 +559,22 @@ public class SC_pause : MonoBehaviour
             areyousure.SetActive(false);
 
         if (SC_music_manager.instance != null)
-        {
             SC_music_manager.instance.resume_music();
-        }
 
         if (SC_scursorManager.instance != null)
-        {
             SC_scursorManager.instance.disable_cursor();
-        }
 
         if (pauseMenu != null)
             pauseMenu.SetActive(false);
 
         isPaused = false;
-        tuto = false;
-        settings = false;
+        canclose = true;
+
+        CloseAllSubmenus();
 
         if (SC_time_manager.instance != null)
             SC_time_manager.instance.Resume();
+
         if (SC_player.instance != null)
         {
             SC_player.instance.enabled = true;
@@ -543,13 +589,9 @@ public class SC_pause : MonoBehaviour
         if (transition != null)
         {
             if (PlayerPrefs.GetInt("Score") == 0)
-            {
                 transition.Capture("HUB");
-            }
             else
-            {
                 transition.Capture("MoneyScene");
-            }
         }
     }
 }

@@ -1,5 +1,6 @@
 
 using UnityEngine;
+using UnityEngine.Localization;
 
 [CreateAssetMenu(
     fileName = "SO_level",
@@ -11,7 +12,7 @@ public class SO_level : ScriptableObject
     public string levelId;
 
     [Header("Level Info")]
-    public string levelname;
+    public LocalizedString levelname;
     public string scene_to_load;
 
     public Sprite spirit;

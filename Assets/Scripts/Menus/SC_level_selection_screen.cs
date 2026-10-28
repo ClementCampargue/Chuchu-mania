@@ -170,7 +170,7 @@ public class SC_level_selection_screen : MonoBehaviour
                     buttons[i].GetComponent<TextMeshPro>();
 
                 if (label != null)
-                    label.text = levelData.levelname;
+                    label.text = levelData.levelname.GetLocalizedString();
                 
             }
             else
@@ -332,7 +332,7 @@ public class SC_level_selection_screen : MonoBehaviour
 
         // Nom du monde
         if (name_ != null)
-            name_.text = level.name_;
+            name_.text = level.name_.GetLocalizedString();
 
         // Rang du monde
         // Rang du monde

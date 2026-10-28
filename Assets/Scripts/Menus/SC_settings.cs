@@ -40,10 +40,13 @@ public class SC_settings : MonoBehaviour
     {
         instance = this;
     }
-    void Start()
-    {
-        checkpage();
 
+    private void OnEnable()
+    {
+
+            nextpage = "game";
+            anim.SetTrigger("open");
+        caninput = false;
     }
 
     // Update is called once per frame

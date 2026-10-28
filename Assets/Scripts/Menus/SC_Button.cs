@@ -230,7 +230,7 @@ public class SC_Button : MonoBehaviour
     }
 
 
-    private void PlayAnimation(string trigger)
+    public void PlayAnimation(string trigger)
     {
         if (anim == null || string.IsNullOrEmpty(trigger))
             return;

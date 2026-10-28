@@ -765,6 +765,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: sortie
       objectReference: {fileID: 0}
+    - target: {fileID: 6082544983177734813, guid: 81c47e3fa2ef3d64eb54300b8ec77da8, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7937503704203228380, guid: 81c47e3fa2ef3d64eb54300b8ec77da8, type: 3}
       propertyPath: m_IsActive
       value: 1

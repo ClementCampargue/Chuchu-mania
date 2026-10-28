@@ -11,6 +11,8 @@ GameObject:
   - component: {fileID: 9210462489236763925}
   - component: {fileID: 6416172777128132819}
   - component: {fileID: 8565008585368629104}
+  - component: {fileID: 645652151006371052}
+  - component: {fileID: 5234503149408332995}
   m_Layer: 0
   m_Name: Jauge_Off
   m_TagString: Untagged
@@ -113,6 +115,66 @@ MonoBehaviour:
   speed: 1
   can_move: 0
   button: {fileID: 7805468491656663224}
+--- !u!114 &645652151006371052
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 43961147859119203}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7a7a64a2413aba54b9221b52594ae61c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  button: {fileID: 7805468491656663224}
+  slider: {fileID: 8565008585368629104}
+--- !u!61 &5234503149408332995
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 43961147859119203}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_CompositeOperation: 0
+  m_CompositeOrder: 0
+  m_Offset: {x: -0.010453463, y: 0.015679926}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0.5, y: 0.5}
+    oldSize: {x: 3.9333334, y: 0.2}
+    newSize: {x: 3.9333334, y: 0.2}
+    adaptiveTilingThreshold: 0.5
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  m_Size: {x: 4.4769063, y: 0.47}
+  m_EdgeRadius: 0
 --- !u!1 &2544745346002551559
 GameObject:
   m_ObjectHideFlags: 0
@@ -124,6 +186,8 @@ GameObject:
   - component: {fileID: 8382677336855467326}
   - component: {fileID: 4902760736150388436}
   - component: {fileID: 3564104362941718871}
+  - component: {fileID: 7467162702220788367}
+  - component: {fileID: 4404488466320166442}
   m_Layer: 0
   m_Name: Square
   m_TagString: Untagged
@@ -193,7 +257,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 897
   m_Sprite: {fileID: 21300000, guid: 038989e190a9cb14ca510482dc257b59, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -221,6 +285,67 @@ MonoBehaviour:
   sprite: {fileID: 8382677336855467326}
   distance: 0.49
   right: 0
+--- !u!114 &7467162702220788367
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2544745346002551559}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a0748f6408c4f0349a4a3c03c3058439, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  button: {fileID: 7805468491656663224}
+  optionList: {fileID: 2749663424949095031}
+  next: 1
+--- !u!61 &4404488466320166442
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2544745346002551559}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_CompositeOperation: 0
+  m_CompositeOrder: 0
+  m_Offset: {x: 0, y: 0}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0.5, y: 0.5}
+    oldSize: {x: 0.13333334, y: 0.26666668}
+    newSize: {x: 1, y: 1}
+    adaptiveTilingThreshold: 0.5
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  m_Size: {x: 0.9, y: 0.75}
+  m_EdgeRadius: 0
 --- !u!1 &3605113643491440998
 GameObject:
   m_ObjectHideFlags: 0
@@ -375,6 +500,8 @@ GameObject:
   - component: {fileID: 3273541500156096641}
   - component: {fileID: 930664364828365535}
   - component: {fileID: 1083525769537819193}
+  - component: {fileID: 8508526384321610013}
+  - component: {fileID: 6435036951077006814}
   m_Layer: 0
   m_Name: Square (1)
   m_TagString: Untagged
@@ -444,7 +571,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 897
   m_Sprite: {fileID: 21300000, guid: 038989e190a9cb14ca510482dc257b59, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 1
@@ -472,6 +599,67 @@ MonoBehaviour:
   sprite: {fileID: 3273541500156096641}
   distance: 0.49
   right: 1
+--- !u!114 &8508526384321610013
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4536826785977101353}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a0748f6408c4f0349a4a3c03c3058439, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  button: {fileID: 7805468491656663224}
+  optionList: {fileID: 2749663424949095031}
+  next: 1
+--- !u!61 &6435036951077006814
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4536826785977101353}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_CompositeOperation: 0
+  m_CompositeOrder: 0
+  m_Offset: {x: 0, y: 0}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0.5, y: 0.5}
+    oldSize: {x: 0.13333334, y: 0.26666668}
+    newSize: {x: 1, y: 1}
+    adaptiveTilingThreshold: 0.5
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  m_Size: {x: 0.9, y: 0.75}
+  m_EdgeRadius: 0
 --- !u!1 &4541404096193775450
 GameObject:
   m_ObjectHideFlags: 0
@@ -812,7 +1000,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 1.9197257, y: 1.2784108}
-  m_SizeDelta: {x: 20, y: 0}
+  m_SizeDelta: {x: 20, y: 0.72}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &8215916967448373549
 MonoBehaviour:
@@ -1041,7 +1229,7 @@ MonoBehaviour:
   m_VertexBufferAutoSizeReduction: 0
   m_useMaxVisibleDescender: 1
   m_pageToDisplay: 1
-  m_margin: {x: 7.4476986, y: 0, z: 7.3135643, w: 0}
+  m_margin: {x: 7.4476986, y: 0, z: 5.2550335, w: 0}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
   _SortingLayer: 0
@@ -1106,7 +1294,7 @@ BoxCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: 0.61500597, y: -0.033032298}
+  m_Offset: {x: 1.0781568, y: -0.05046308}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0, y: 0}
@@ -1116,7 +1304,7 @@ BoxCollider2D:
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Size: {x: 6.461685, y: 0.60748124}
+  m_Size: {x: 7.733115, y: 0.55}
   m_EdgeRadius: 0
 --- !u!114 &2170134826950248751
 MonoBehaviour:
