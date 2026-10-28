@@ -31,7 +31,7 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 23519313922
-    m_Localized: "R\xE9nitialiser les valeurs par d\xE9faut"
+    m_Localized: "Remettre par d\xE9faut"
     m_Metadata:
       m_Items: []
   - m_Id: 23519313923
@@ -79,35 +79,35 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 23519313934
-    m_Localized: V-Sync
+    m_Localized: "Plein fen\xEAtr\xE9"
     m_Metadata:
       m_Items: []
   - m_Id: 23519313935
-    m_Localized: Limite de FPS
+    m_Localized: V-Sync
     m_Metadata:
       m_Items: []
   - m_Id: 23519313936
-    m_Localized: Bordures
+    m_Localized: Limite de FPS
     m_Metadata:
       m_Items: []
   - m_Id: 23519313937
-    m_Localized: Audio
+    m_Localized: Bordures
     m_Metadata:
       m_Items: []
   - m_Id: 23519313938
-    m_Localized: "G\xE9n\xE9ral"
+    m_Localized: Audio
     m_Metadata:
       m_Items: []
   - m_Id: 23519313939
-    m_Localized: Musique
+    m_Localized: "G\xE9n\xE9ral"
     m_Metadata:
       m_Items: []
   - m_Id: 23519313940
-    m_Localized: Bruitages
+    m_Localized: Musique
     m_Metadata:
       m_Items: []
   - m_Id: 23519313941
-    m_Localized: Sortie Audio
+    m_Localized: Bruitages
     m_Metadata:
       m_Items: []
   - m_Id: 23519313942
@@ -131,11 +131,11 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 23519313947
-    m_Localized: Sauter/Confirmer
+    m_Localized: Sauter
     m_Metadata:
       m_Items: []
   - m_Id: 23519313948
-    m_Localized: Manger/Action
+    m_Localized: Manger
     m_Metadata:
       m_Items: []
   - m_Id: 23519313949

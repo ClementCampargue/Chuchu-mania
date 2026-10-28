@@ -139,6 +139,22 @@ MonoBehaviour:
     m_Localized: "Ecouter l'enti\xE9ret\xE9 de l'histoire de Cuicui"
     m_Metadata:
       m_Items: []
+  - m_Id: 4425475973464064
+    m_Localized: Constellations
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4425476002824192
+    m_Localized: Faire un souhait
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4425476002824193
+    m_Localized: "D\xE9penser un souhait pour d\xE9bloquer la r\xE9compense?"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4425476002824194
+    m_Localized: Vue d'ensemble
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds: []

@@ -407,6 +407,14 @@ PrefabInstance:
       propertyPath: m_Sprite
       value: 
       objectReference: {fileID: 21300000, guid: 7ecd4bd07ed936546b18fb8e22a3139a, type: 3}
+    - target: {fileID: 7242917126934405384, guid: 372718715dc6bb44ba7496d66291f69f, type: 3}
+      propertyPath: m_Size.x
+      value: 1.4178265
+      objectReference: {fileID: 0}
+    - target: {fileID: 7242917126934405384, guid: 372718715dc6bb44ba7496d66291f69f, type: 3}
+      propertyPath: m_Offset.x
+      value: -0.0134782195
+      objectReference: {fileID: 0}
     - target: {fileID: 7522439848945351290, guid: 372718715dc6bb44ba7496d66291f69f, type: 3}
       propertyPath: dialogues
       value: 
@@ -1574,6 +1582,22 @@ PrefabInstance:
       propertyPath: m_Sprite
       value: 
       objectReference: {fileID: 2399455883617765781, guid: 60a1e244dc536f048ad0b540acdae955, type: 3}
+    - target: {fileID: 7242917126934405384, guid: 372718715dc6bb44ba7496d66291f69f, type: 3}
+      propertyPath: m_Size.x
+      value: 1.5230494
+      objectReference: {fileID: 0}
+    - target: {fileID: 7242917126934405384, guid: 372718715dc6bb44ba7496d66291f69f, type: 3}
+      propertyPath: m_Size.y
+      value: 1.1380639
+      objectReference: {fileID: 0}
+    - target: {fileID: 7242917126934405384, guid: 372718715dc6bb44ba7496d66291f69f, type: 3}
+      propertyPath: m_Offset.x
+      value: -0.01725769
+      objectReference: {fileID: 0}
+    - target: {fileID: 7242917126934405384, guid: 372718715dc6bb44ba7496d66291f69f, type: 3}
+      propertyPath: m_Offset.y
+      value: -0.069031954
+      objectReference: {fileID: 0}
     - target: {fileID: 7522439848945351290, guid: 372718715dc6bb44ba7496d66291f69f, type: 3}
       propertyPath: dialogues
       value: 
@@ -1655,6 +1679,22 @@ PrefabInstance:
       propertyPath: m_Sprite
       value: 
       objectReference: {fileID: 21300000, guid: c6811fa31c8cf4f4aa1a57c39e6bff12, type: 3}
+    - target: {fileID: 7242917126934405384, guid: 372718715dc6bb44ba7496d66291f69f, type: 3}
+      propertyPath: m_Size.x
+      value: 1.4867849
+      objectReference: {fileID: 0}
+    - target: {fileID: 7242917126934405384, guid: 372718715dc6bb44ba7496d66291f69f, type: 3}
+      propertyPath: m_Size.y
+      value: 1.1385465
+      objectReference: {fileID: 0}
+    - target: {fileID: 7242917126934405384, guid: 372718715dc6bb44ba7496d66291f69f, type: 3}
+      propertyPath: m_Offset.x
+      value: -0.03744507
+      objectReference: {fileID: 0}
+    - target: {fileID: 7242917126934405384, guid: 372718715dc6bb44ba7496d66291f69f, type: 3}
+      propertyPath: m_Offset.y
+      value: -0.06927323
+      objectReference: {fileID: 0}
     - target: {fileID: 7522439848945351290, guid: 372718715dc6bb44ba7496d66291f69f, type: 3}
       propertyPath: dialogues
       value: 
@@ -2177,6 +2217,22 @@ PrefabInstance:
       propertyPath: m_Sprite
       value: 
       objectReference: {fileID: 21300000, guid: 6a521562db1a82b4fbfb73ad2f8a03a2, type: 3}
+    - target: {fileID: 7242917126934405384, guid: 372718715dc6bb44ba7496d66291f69f, type: 3}
+      propertyPath: m_Size.x
+      value: 1.3257718
+      objectReference: {fileID: 0}
+    - target: {fileID: 7242917126934405384, guid: 372718715dc6bb44ba7496d66291f69f, type: 3}
+      propertyPath: m_Size.y
+      value: 1.1685024
+      objectReference: {fileID: 0}
+    - target: {fileID: 7242917126934405384, guid: 372718715dc6bb44ba7496d66291f69f, type: 3}
+      propertyPath: m_Offset.x
+      value: 0.02433896
+      objectReference: {fileID: 0}
+    - target: {fileID: 7242917126934405384, guid: 372718715dc6bb44ba7496d66291f69f, type: 3}
+      propertyPath: m_Offset.y
+      value: -0.084251225
+      objectReference: {fileID: 0}
     - target: {fileID: 7522439848945351290, guid: 372718715dc6bb44ba7496d66291f69f, type: 3}
       propertyPath: dialogues
       value: 
@@ -2882,6 +2938,22 @@ PrefabInstance:
       propertyPath: m_Name
       value: PNJ (2)
       objectReference: {fileID: 0}
+    - target: {fileID: 7242917126934405384, guid: 372718715dc6bb44ba7496d66291f69f, type: 3}
+      propertyPath: m_Size.x
+      value: 1.5424994
+      objectReference: {fileID: 0}
+    - target: {fileID: 7242917126934405384, guid: 372718715dc6bb44ba7496d66291f69f, type: 3}
+      propertyPath: m_Size.y
+      value: 1.1789396
+      objectReference: {fileID: 0}
+    - target: {fileID: 7242917126934405384, guid: 372718715dc6bb44ba7496d66291f69f, type: 3}
+      propertyPath: m_Offset.x
+      value: -0.015621722
+      objectReference: {fileID: 0}
+    - target: {fileID: 7242917126934405384, guid: 372718715dc6bb44ba7496d66291f69f, type: 3}
+      propertyPath: m_Offset.y
+      value: -0.08946979
+      objectReference: {fileID: 0}
     - target: {fileID: 7522439848945351290, guid: 372718715dc6bb44ba7496d66291f69f, type: 3}
       propertyPath: dialogues
       value: 
@@ -3206,6 +3278,14 @@ PrefabInstance:
       propertyPath: m_Sprite
       value: 
       objectReference: {fileID: 21300000, guid: 56cf46db044980f45b8b1f2929a4bbb0, type: 3}
+    - target: {fileID: 7242917126934405384, guid: 372718715dc6bb44ba7496d66291f69f, type: 3}
+      propertyPath: m_Size.x
+      value: 1.725018
+      objectReference: {fileID: 0}
+    - target: {fileID: 7242917126934405384, guid: 372718715dc6bb44ba7496d66291f69f, type: 3}
+      propertyPath: m_Offset.x
+      value: -0.05800128
+      objectReference: {fileID: 0}
     - target: {fileID: 7522439848945351290, guid: 372718715dc6bb44ba7496d66291f69f, type: 3}
       propertyPath: dialogues
       value: 
@@ -3335,6 +3415,22 @@ PrefabInstance:
       propertyPath: m_Sprite
       value: 
       objectReference: {fileID: 21300000, guid: 51f46055cf7a8d849b42121211c17676, type: 3}
+    - target: {fileID: 7242917126934405384, guid: 372718715dc6bb44ba7496d66291f69f, type: 3}
+      propertyPath: m_Size.x
+      value: 1.3832622
+      objectReference: {fileID: 0}
+    - target: {fileID: 7242917126934405384, guid: 372718715dc6bb44ba7496d66291f69f, type: 3}
+      propertyPath: m_Size.y
+      value: 0.79741836
+      objectReference: {fileID: 0}
+    - target: {fileID: 7242917126934405384, guid: 372718715dc6bb44ba7496d66291f69f, type: 3}
+      propertyPath: m_Offset.x
+      value: 0.010950327
+      objectReference: {fileID: 0}
+    - target: {fileID: 7242917126934405384, guid: 372718715dc6bb44ba7496d66291f69f, type: 3}
+      propertyPath: m_Offset.y
+      value: -0.2764963
+      objectReference: {fileID: 0}
     - target: {fileID: 7522439848945351290, guid: 372718715dc6bb44ba7496d66291f69f, type: 3}
       propertyPath: dialogues
       value: 

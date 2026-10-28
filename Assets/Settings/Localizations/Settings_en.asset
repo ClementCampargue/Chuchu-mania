@@ -75,35 +75,35 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 23519313934
-    m_Localized: V-Sync
+    m_Localized: Full window
     m_Metadata:
       m_Items: []
   - m_Id: 23519313935
-    m_Localized: FPS limit
+    m_Localized: V-Sync
     m_Metadata:
       m_Items: []
   - m_Id: 23519313936
-    m_Localized: Overlay
+    m_Localized: FPS limit
     m_Metadata:
       m_Items: []
   - m_Id: 23519313937
-    m_Localized: Sound
+    m_Localized: Overlay
     m_Metadata:
       m_Items: []
   - m_Id: 23519313938
-    m_Localized: Master
+    m_Localized: Sound
     m_Metadata:
       m_Items: []
   - m_Id: 23519313939
-    m_Localized: Music
+    m_Localized: Master
     m_Metadata:
       m_Items: []
   - m_Id: 23519313940
-    m_Localized: SFX
+    m_Localized: Music
     m_Metadata:
       m_Items: []
   - m_Id: 23519313941
-    m_Localized: Sorting
+    m_Localized: SFX
     m_Metadata:
       m_Items: []
   - m_Id: 23519313942
@@ -127,11 +127,11 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 23519313947
-    m_Localized: Jump/
+    m_Localized: Jump
     m_Metadata:
       m_Items: []
   - m_Id: 23519313948
-    m_Localized: Eat/Action
+    m_Localized: Eat
     m_Metadata:
       m_Items: []
   - m_Id: 23519313949
