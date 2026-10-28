@@ -90,12 +90,6 @@ AnimatorStateTransition:
   - m_ConditionMode: 1
     m_ConditionEvent: Press
     m_EventTreshold: 0
-  - m_ConditionMode: 1
-    m_ConditionEvent: Can_press
-    m_EventTreshold: 0
-  - m_ConditionMode: 1
-    m_ConditionEvent: Unlockable
-    m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: 9014018096929900938}
   m_Solo: 0

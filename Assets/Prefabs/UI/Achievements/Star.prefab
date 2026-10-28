@@ -5428,7 +5428,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 4601312581709383970}
         m_TargetAssemblyTypeName: SC_star_achievement, Assembly-CSharp
-        m_MethodName: unlock_
+        m_MethodName: unlock
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

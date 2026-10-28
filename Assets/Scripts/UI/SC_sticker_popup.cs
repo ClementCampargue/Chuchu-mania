@@ -440,7 +440,10 @@ public class SC_sticker_popup : MonoBehaviour
 
             if (SC_achievement_menu.instance != null)
             {
+                SC_achievement_menu.instance.caninteract = true;
                 SC_achievement_menu.instance.show_sticker();
+                SC_achievement_menu.instance.check_constellation();
+
             }
         }
 
