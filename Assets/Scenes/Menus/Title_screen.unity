@@ -15526,19 +15526,19 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4735648650218365287, guid: 3ce41f75411c41f448f4f822ac6d67b0, type: 3}
       propertyPath: m_fontColor.b
-      value: 0.21176472
+      value: 0.38431376
       objectReference: {fileID: 0}
     - target: {fileID: 4735648650218365287, guid: 3ce41f75411c41f448f4f822ac6d67b0, type: 3}
       propertyPath: m_fontColor.g
-      value: 0.14117648
+      value: 0.25490198
       objectReference: {fileID: 0}
     - target: {fileID: 4735648650218365287, guid: 3ce41f75411c41f448f4f822ac6d67b0, type: 3}
       propertyPath: m_fontColor.r
-      value: 0
+      value: 0.882353
       objectReference: {fileID: 0}
     - target: {fileID: 4735648650218365287, guid: 3ce41f75411c41f448f4f822ac6d67b0, type: 3}
       propertyPath: m_fontColor32.rgba
-      value: 4281738240
+      value: 4284629473
       objectReference: {fileID: 0}
     - target: {fileID: 4735648650218365287, guid: 3ce41f75411c41f448f4f822ac6d67b0, type: 3}
       propertyPath: m_HorizontalAlignment
@@ -21286,28 +21286,16 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 2891007832530417124, guid: 5820ff4bb78ea784ba062b0b38964118, type: 3}
       insertIndex: -1
       addedObject: {fileID: 0}
-    - targetCorrespondingSourceObject: {fileID: 3344848469041061717, guid: 5820ff4bb78ea784ba062b0b38964118, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 0}
-    - targetCorrespondingSourceObject: {fileID: 8700435988644185626, guid: 5820ff4bb78ea784ba062b0b38964118, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 0}
-    - targetCorrespondingSourceObject: {fileID: 3386284639969475111, guid: 5820ff4bb78ea784ba062b0b38964118, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 0}
-    - targetCorrespondingSourceObject: {fileID: 8659048153043379048, guid: 5820ff4bb78ea784ba062b0b38964118, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 0}
-    - targetCorrespondingSourceObject: {fileID: 3463748666777643955, guid: 5820ff4bb78ea784ba062b0b38964118, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 0}
-    - targetCorrespondingSourceObject: {fileID: 7405277424727454460, guid: 5820ff4bb78ea784ba062b0b38964118, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 0}
     - targetCorrespondingSourceObject: {fileID: 4799880882384769410, guid: 5820ff4bb78ea784ba062b0b38964118, type: 3}
       insertIndex: -1
       addedObject: {fileID: 0}
     - targetCorrespondingSourceObject: {fileID: 1461976227129673933, guid: 5820ff4bb78ea784ba062b0b38964118, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 0}
+    - targetCorrespondingSourceObject: {fileID: 3344848469041061717, guid: 5820ff4bb78ea784ba062b0b38964118, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 0}
+    - targetCorrespondingSourceObject: {fileID: 8700435988644185626, guid: 5820ff4bb78ea784ba062b0b38964118, type: 3}
       insertIndex: -1
       addedObject: {fileID: 0}
     - targetCorrespondingSourceObject: {fileID: 5078529988295440005, guid: 5820ff4bb78ea784ba062b0b38964118, type: 3}
@@ -21316,10 +21304,22 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 1202445188914376650, guid: 5820ff4bb78ea784ba062b0b38964118, type: 3}
       insertIndex: -1
       addedObject: {fileID: 0}
+    - targetCorrespondingSourceObject: {fileID: 3386284639969475111, guid: 5820ff4bb78ea784ba062b0b38964118, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 0}
+    - targetCorrespondingSourceObject: {fileID: 8659048153043379048, guid: 5820ff4bb78ea784ba062b0b38964118, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 0}
     - targetCorrespondingSourceObject: {fileID: 7284232056953042478, guid: 5820ff4bb78ea784ba062b0b38964118, type: 3}
       insertIndex: -1
       addedObject: {fileID: 0}
     - targetCorrespondingSourceObject: {fileID: 3730013950497533793, guid: 5820ff4bb78ea784ba062b0b38964118, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 0}
+    - targetCorrespondingSourceObject: {fileID: 3463748666777643955, guid: 5820ff4bb78ea784ba062b0b38964118, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 0}
+    - targetCorrespondingSourceObject: {fileID: 7405277424727454460, guid: 5820ff4bb78ea784ba062b0b38964118, type: 3}
       insertIndex: -1
       addedObject: {fileID: 0}
     - targetCorrespondingSourceObject: {fileID: 3254924344249882180, guid: 5820ff4bb78ea784ba062b0b38964118, type: 3}
@@ -21372,16 +21372,16 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7162493650578701219}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 56eb0353ae6e5124bb35b17aff880f16, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_StringReference:
     m_TableReference:
-      m_TableCollectionName: GUID:71d64c1e148486e4887f3f66640476cd
+      m_TableCollectionName: GUID:bc4cce3e681d4e64fb50cce77bd9edfa
     m_TableEntryReference:
-      m_KeyId: 20956653621100544
+      m_KeyId: 157615407104
       m_Key: 
     m_FallbackState: 0
     m_WaitForCompletion: 0
@@ -21467,7 +21467,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -0.24379337, y: -2.68}
+  m_AnchoredPosition: {x: -0.3437934, y: -2.68}
   m_SizeDelta: {x: 20, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &7162493650578701219
@@ -21498,7 +21498,7 @@ Animator:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7162493650578701219}
-  m_Enabled: 1
+  m_Enabled: 0
   m_Avatar: {fileID: 0}
   m_Controller: {fileID: 9100000, guid: ea6492b2a953d0e4aa6df6c3738c0a9a, type: 2}
   m_CullingMode: 0
@@ -21596,8 +21596,8 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4292476670
-  m_fontColor: {r: 0.9960785, g: 0.9960785, b: 0.85098046, a: 1}
+    rgba: 4281738240
+  m_fontColor: {r: 0, g: 0.14117648, b: 0.21176472, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:

@@ -15,8 +15,20 @@ MonoBehaviour:
   m_GroupName: Localization-String-Tables-Italian (it)
   m_GUID: 7845e64584d7b234ba10e3197d3dd266
   m_SerializeEntries:
+  - m_GUID: 1322722c7911e4648ad1c7354954976c
+    m_Address: Settings_it
+    m_ReadOnly: 1
+    m_SerializedLabels:
+    - Locale-it
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 4b6d2ba6ca2b08d46a4edc1dd4163f7c
     m_Address: Stickers_it
+    m_ReadOnly: 1
+    m_SerializedLabels:
+    - Locale-it
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 862a4e6b7d37c1e4e9c7632dc82b39a8
+    m_Address: General_it
     m_ReadOnly: 1
     m_SerializedLabels:
     - Locale-it
@@ -46,12 +58,30 @@ MonoBehaviour:
     m_SerializedLabels:
     - Locale-it
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: c0b64c8098c013745a8c80ff6ce26136
+    m_Address: Galaxy_it
+    m_ReadOnly: 1
+    m_SerializedLabels:
+    - Locale-it
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: c87b306d2d912c04c852e1fab48b2494
+    m_Address: HUD_it
+    m_ReadOnly: 1
+    m_SerializedLabels:
+    - Locale-it
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: cb8e60250df8dee43ae4c8944ff286c8
     m_Address: UI_it
     m_ReadOnly: 1
     m_SerializedLabels:
     - Locale-it
     - Preload
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: d550c2eacc0628944b367331abfd1cc0
+    m_Address: Shop_it
+    m_ReadOnly: 1
+    m_SerializedLabels:
+    - Locale-it
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: e0ed6f1dd755bad438a810304d22eff7
     m_Address: Tutoriel_it

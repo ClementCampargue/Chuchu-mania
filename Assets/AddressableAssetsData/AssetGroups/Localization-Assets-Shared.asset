@@ -20,8 +20,23 @@ MonoBehaviour:
     m_ReadOnly: 1
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 1e717d2d8766cef439598bd0974a3072
+    m_Address: Assets/Settings/Localizations/HUD Shared Data.asset
+    m_ReadOnly: 1
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 412705977d76ab5469cf818415b5928f
+    m_Address: Assets/Settings/Localizations/Settings Shared Data.asset
+    m_ReadOnly: 1
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 6d1405209915e0e42a30b70f3369f33c
     m_Address: Assets/Settings/Localizations/Tutoriel Shared Data.asset
+    m_ReadOnly: 1
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 6d3a16d1ddbf8974faf506af4f6bf59f
+    m_Address: Assets/Settings/Localizations/Galaxy Shared Data.asset
     m_ReadOnly: 1
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
@@ -42,6 +57,16 @@ MonoBehaviour:
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: b3eec409a99cf0744945d380db858a5e
     m_Address: Assets/Settings/Localizations/Cutscene1 Shared Data.asset
+    m_ReadOnly: 1
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: bc4cce3e681d4e64fb50cce77bd9edfa
+    m_Address: Assets/Settings/Localizations/General Shared Data.asset
+    m_ReadOnly: 1
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: bd1c074ee1187054682a51424306ff77
+    m_Address: Assets/Settings/Localizations/Shop Shared Data.asset
     m_ReadOnly: 1
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0

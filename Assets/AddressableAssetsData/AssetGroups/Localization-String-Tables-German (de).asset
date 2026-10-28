@@ -15,8 +15,20 @@ MonoBehaviour:
   m_GroupName: Localization-String-Tables-German (de)
   m_GUID: e23e968921a10dc4985c6c623a9a7266
   m_SerializeEntries:
+  - m_GUID: 4e1f36e3d41cf8847a42b936a33c60ee
+    m_Address: Settings_de
+    m_ReadOnly: 1
+    m_SerializedLabels:
+    - Locale-de
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 6888a4d430d57b740af50da9dd245d7f
     m_Address: Cutscenes_de
+    m_ReadOnly: 1
+    m_SerializedLabels:
+    - Locale-de
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 68fc71b022d2b83409b2d17e4b37ce07
+    m_Address: Galaxy_de
     m_ReadOnly: 1
     m_SerializedLabels:
     - Locale-de
@@ -35,6 +47,18 @@ MonoBehaviour:
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 8096f78daf3ec5740b1003c15d811400
     m_Address: Noms_de
+    m_ReadOnly: 1
+    m_SerializedLabels:
+    - Locale-de
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 84f7a2ce38ad3a4478c1e2303bae84f7
+    m_Address: Shop_de
+    m_ReadOnly: 1
+    m_SerializedLabels:
+    - Locale-de
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: a87f8d40897890f47a8c736797fc195c
+    m_Address: General_de
     m_ReadOnly: 1
     m_SerializedLabels:
     - Locale-de
@@ -58,6 +82,12 @@ MonoBehaviour:
     m_SerializedLabels:
     - Locale-de
     - Preload
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: fb27843dca4084a4fa96a733126e8a97
+    m_Address: HUD_de
+    m_ReadOnly: 1
+    m_SerializedLabels:
+    - Locale-de
     FlaggedDuringContentUpdateRestriction: 0
   m_ReadOnly: 1
   m_Settings: {fileID: 11400000, guid: 81a29239053a8aa46bf9eb55d08dc7e3, type: 2}

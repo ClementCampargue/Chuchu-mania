@@ -27,8 +27,32 @@ MonoBehaviour:
     m_SerializedLabels:
     - Locale-fr
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 4e59c2c1f363a094e82cf66665b67196
+    m_Address: General_fr
+    m_ReadOnly: 1
+    m_SerializedLabels:
+    - Locale-fr
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 5a6591434a9edf04785afe26af8cde02
+    m_Address: Shop_fr
+    m_ReadOnly: 1
+    m_SerializedLabels:
+    - Locale-fr
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 5e937d66b139ef04c959c32289fb8d46
     m_Address: Cutscenes_fr
+    m_ReadOnly: 1
+    m_SerializedLabels:
+    - Locale-fr
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: a46bf328fec8dbf47a2fe276623bb5e2
+    m_Address: Galaxy_fr
+    m_ReadOnly: 1
+    m_SerializedLabels:
+    - Locale-fr
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: b68a8309c8605f8489216d787edbffa5
+    m_Address: Settings_fr
     m_ReadOnly: 1
     m_SerializedLabels:
     - Locale-fr
@@ -58,6 +82,12 @@ MonoBehaviour:
     m_SerializedLabels:
     - Locale-fr
     - Preload
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: e824590d5431e6f4099f7b7499a6130f
+    m_Address: HUD_fr
+    m_ReadOnly: 1
+    m_SerializedLabels:
+    - Locale-fr
     FlaggedDuringContentUpdateRestriction: 0
   m_ReadOnly: 1
   m_Settings: {fileID: 11400000, guid: 81a29239053a8aa46bf9eb55d08dc7e3, type: 2}

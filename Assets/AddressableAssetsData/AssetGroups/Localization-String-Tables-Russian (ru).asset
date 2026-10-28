@@ -15,6 +15,12 @@ MonoBehaviour:
   m_GroupName: Localization-String-Tables-Russian (ru)
   m_GUID: 5f65b22f7fd8b204c90e035ded9c94ad
   m_SerializeEntries:
+  - m_GUID: 010f86759d0ca094080bc99bb08ce489
+    m_Address: Settings_ru
+    m_ReadOnly: 1
+    m_SerializedLabels:
+    - Locale-ru
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 0ac50cccd172ff54790858554fad7208
     m_Address: Noms_ru
     m_ReadOnly: 1
@@ -27,12 +33,36 @@ MonoBehaviour:
     m_SerializedLabels:
     - Locale-ru
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 20669e4be44b7d74ea8afcd37fd19741
+    m_Address: General_ru
+    m_ReadOnly: 1
+    m_SerializedLabels:
+    - Locale-ru
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 268c1fa846288dd468b7c9a97d136ffb
+    m_Address: HUD_ru
+    m_ReadOnly: 1
+    m_SerializedLabels:
+    - Locale-ru
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 4ca5f256d3227654aae4012b0dde7f6f
+    m_Address: Galaxy_ru
+    m_ReadOnly: 1
+    m_SerializedLabels:
+    - Locale-ru
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 541c5d1727647194e8fd701443340ace
     m_Address: UI_ru
     m_ReadOnly: 1
     m_SerializedLabels:
     - Locale-ru
     - Preload
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: ac55e5a906ae43945a7982b8479eff3a
+    m_Address: Shop_ru
+    m_ReadOnly: 1
+    m_SerializedLabels:
+    - Locale-ru
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: ad40a66b96bd495478ed10c58155cb38
     m_Address: Dialogues_ru

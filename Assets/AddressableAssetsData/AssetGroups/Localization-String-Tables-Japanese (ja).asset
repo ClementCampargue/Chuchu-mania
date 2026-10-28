@@ -41,8 +41,26 @@ MonoBehaviour:
     - Locale-ja
     - Preload
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 73a0d138d78e67040ba72cedb5e05cc1
+    m_Address: HUD_ja
+    m_ReadOnly: 1
+    m_SerializedLabels:
+    - Locale-ja
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 8673d2db87ae59d40addd4dac7895bd2
     m_Address: Stickers_ja
+    m_ReadOnly: 1
+    m_SerializedLabels:
+    - Locale-ja
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 87ce98c8587ae464e8dba7abf2af7ed3
+    m_Address: Settings_ja
+    m_ReadOnly: 1
+    m_SerializedLabels:
+    - Locale-ja
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 97fa70b7449c548419846e15bbd64ff3
+    m_Address: Galaxy_ja
     m_ReadOnly: 1
     m_SerializedLabels:
     - Locale-ja
@@ -55,6 +73,18 @@ MonoBehaviour:
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: c538d0a5d1c8a3d4f91d82e23ccf3bc8
     m_Address: Tutoriel_ja
+    m_ReadOnly: 1
+    m_SerializedLabels:
+    - Locale-ja
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: cb0ce8b5f46da574281cad6899bc1b66
+    m_Address: Shop_ja
+    m_ReadOnly: 1
+    m_SerializedLabels:
+    - Locale-ja
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: fc40a13ba3ac20e4cb0f8a20d19b291c
+    m_Address: General_ja
     m_ReadOnly: 1
     m_SerializedLabels:
     - Locale-ja

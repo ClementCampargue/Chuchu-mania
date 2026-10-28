@@ -47,6 +47,12 @@ MonoBehaviour:
     m_SerializedLabels:
     - Locale-es
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 838748746eeba7642a9cab491323d3ea
+    m_Address: Galaxy_es
+    m_ReadOnly: 1
+    m_SerializedLabels:
+    - Locale-es
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: acf639e7311755e4786184ba06dcd312
     m_Address: Stickers_es
     m_ReadOnly: 1
@@ -55,6 +61,30 @@ MonoBehaviour:
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: ad9aecd4f16448541af2316e5d94092d
     m_Address: Cutscenes_es
+    m_ReadOnly: 1
+    m_SerializedLabels:
+    - Locale-es
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: b8eb567c507bfee4fb514499e6b3b2ce
+    m_Address: HUD_es
+    m_ReadOnly: 1
+    m_SerializedLabels:
+    - Locale-es
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: c6010cb51423e034b962b02f1abd4840
+    m_Address: General_es
+    m_ReadOnly: 1
+    m_SerializedLabels:
+    - Locale-es
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: c6e957dea7d50264082382afda939415
+    m_Address: Settings_es
+    m_ReadOnly: 1
+    m_SerializedLabels:
+    - Locale-es
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: e5ca171d5ad0c374e9105644506f9836
+    m_Address: Shop_es
     m_ReadOnly: 1
     m_SerializedLabels:
     - Locale-es

@@ -1,0 +1,111 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e9620f8c34305754d8cc9a7e49e852d9, type: 3}
+  m_Name: General_en
+  m_EditorClassIdentifier: 
+  m_LocaleId:
+    m_Code: en
+  m_SharedData: {fileID: 11400000, guid: bc4cce3e681d4e64fb50cce77bd9edfa, type: 2}
+  m_Metadata:
+    m_Items: []
+  m_TableData:
+  - m_Id: 157615407104
+    m_Localized: Press a button to start
+    m_Metadata:
+      m_Items: []
+  - m_Id: 157615407105
+    m_Localized: Pause
+    m_Metadata:
+      m_Items: []
+  - m_Id: 157615407106
+    m_Localized: Continue
+    m_Metadata:
+      m_Items: []
+  - m_Id: 157615407107
+    m_Localized: Try again
+    m_Metadata:
+      m_Items: []
+  - m_Id: 157615407108
+    m_Localized: Options
+    m_Metadata:
+      m_Items: []
+  - m_Id: 157615407109
+    m_Localized: Game recap
+    m_Metadata:
+      m_Items: []
+  - m_Id: 157615407110
+    m_Localized: Go home
+    m_Metadata:
+      m_Items: []
+  - m_Id: 157615407111
+    m_Localized: Quit game
+    m_Metadata:
+      m_Items: []
+  - m_Id: 157615407114
+    m_Localized: Quit game?
+    m_Metadata:
+      m_Items: []
+  - m_Id: 157615407115
+    m_Localized: File select
+    m_Metadata:
+      m_Items: []
+  - m_Id: 157615407117
+    m_Localized: Delete
+    m_Metadata:
+      m_Items: []
+  - m_Id: 157615407118
+    m_Localized: Delete this file?
+    m_Metadata:
+      m_Items: []
+  - m_Id: 157615407119
+    m_Localized: Is it your first time playing CHUCHU MANIA?
+    m_Metadata:
+      m_Items: []
+  - m_Id: 157615407120
+    m_Localized: Teach me how to play!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 157615407121
+    m_Localized: Pass
+    m_Metadata:
+      m_Items: []
+  - m_Id: 157615407122
+    m_Localized: New!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 157615407123
+    m_Localized: Get Sticker!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 157615407124
+    m_Localized: Common
+    m_Metadata:
+      m_Items: []
+  - m_Id: 157615407125
+    m_Localized: Rare
+    m_Metadata:
+      m_Items: []
+  - m_Id: 157615407126
+    m_Localized: Stellar
+    m_Metadata:
+      m_Items: []
+  - m_Id: 157615407127
+    m_Localized: Get Display!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 157615407128
+    m_Localized: Get Wish!
+    m_Metadata:
+      m_Items: []
+  references:
+    version: 2
+    RefIds: []
