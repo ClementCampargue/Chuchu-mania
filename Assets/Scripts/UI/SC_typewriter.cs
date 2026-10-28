@@ -986,4 +986,55 @@ public class SC_typewriter : MonoBehaviour
         if (textMeshPro != null)
             textMeshPro.text = string.Empty;
     }
+    public void TriggerTextInstant(string text)
+    {
+        if (dialogueManager == null)
+            dialogueManager = DialogueManager.instance;
+
+        if (wait_input_logo != null)
+            wait_input_logo.SetActive(false);
+
+        if (textMeshPro == null)
+            return;
+        fullText = text;
+        textMeshPro.enabled = true;
+
+        textVersion++;
+
+        if (typeCoroutine != null)
+        {
+            StopCoroutine(typeCoroutine);
+            typeCoroutine = null;
+        }
+
+        StopAllPopCoroutines();
+        audioSource.Stop();
+
+        isTyping = false;
+        finished = true;
+
+        endEventInvoked = false;
+
+        fullText = text;
+
+        ParseTags();
+
+        // Révèle immédiatement tous les caractères.
+        RevealAllCharacters();
+
+        // Événement de début de ligne.
+        if (dialogueManager != null &&
+            dialogueManager.npc != null)
+        {
+            dialogueManager.npc.TriggerDialogueEvents(
+                dialogueManager.currentLineIndex,
+                true
+            );
+        }
+
+        // Événement de fin de ligne.
+        InvokeEndEventOnce();
+        audioSource.Stop();
+    }
+
 }

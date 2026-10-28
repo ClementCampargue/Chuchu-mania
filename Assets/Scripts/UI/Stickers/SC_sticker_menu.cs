@@ -35,7 +35,7 @@ public class SC_sticker_menu : MonoBehaviour
 
     [Header("Default Button")]
     public Button button;
-
+    public GameObject infos;
 
     // =========================================================
     // UNITY
@@ -350,6 +350,8 @@ public class SC_sticker_menu : MonoBehaviour
 
     public void update_infos(SO_Sticker sticker, Button but)
     {
+        infos.SetActive(true);
+
         if (sticker == null)
             return;
 
@@ -396,6 +398,7 @@ public class SC_sticker_menu : MonoBehaviour
 
         else
         {
+            infos.SetActive(false);
             if (sticker_name != null)
             {
                 sticker_name.text = "???";

@@ -45,14 +45,8 @@ public class SC_shop_manager : MonoBehaviour
         talk.action.Enable();
         submit.action.Enable();
         submit2.action.Enable();
-        Invoke("delayy", 0.5f);
     }
 
-    void delayy()
-    {
-        show_text_start();
-
-    }
     void choose_stickers()
     {
         int index1 = Random.Range(0, stickers.stickers.Count);
@@ -78,24 +72,24 @@ public class SC_shop_manager : MonoBehaviour
         if (typewriter.finished && talking)
         {
             typewriter.SetWaitInputVisible(true);
-            if (submit.action.WasPerformedThisFrame() || submit2.action.WasPerformedThisFrame())
+            if (submit.action.WasPerformedThisFrame() || submit2.action.WasCompletedThisFrame())
             {
                 show_menu();
             }
         }
-        if (!typewriter.finished && talking && submit.action.WasPerformedThisFrame())
+        else if (!typewriter.finished && talking && submit.action.WasCompletedThisFrame())
         {
             typewriter.FinishText();
             typewriter.SetWaitInputVisible(true);
         }
-        
-        if (!typewriter.finished && talking && submit2.action.WasPerformedThisFrame())
+        else
+        if (!typewriter.finished && talking && submit2.action.WasCompletedThisFrame())
         {
             typewriter.FinishText();
             typewriter.SetWaitInputVisible(true);
         }
 
-        if (quit.action.WasPerformedThisFrame() && canquit)
+        else if (quit.action.WasCompletedThisFrame() && canquit)
         {
             SC_screenshot_transition.instance.Capture("HUB");
         }
@@ -107,13 +101,14 @@ public class SC_shop_manager : MonoBehaviour
     }
     public void show_text(string text)
     {if (talking) return;
-        typewriter.TriggerText(text);
+        typewriter.TriggerTextInstant(text);
 
     }
 
   
     public void show_menu()
     {
+        typewriter.clear_text();
         canquit = true;
         cantalk = true;
         typewriter.SetWaitInputVisible(false);

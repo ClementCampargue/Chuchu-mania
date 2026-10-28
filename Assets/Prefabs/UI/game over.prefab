@@ -609,7 +609,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &2387613632014926382
 Transform:
   m_ObjectHideFlags: 0
@@ -1111,7 +1111,7 @@ GameObject:
   - component: {fileID: 5545671301695350102}
   - component: {fileID: 5035901642332590931}
   m_Layer: 0
-  m_Name: Loose_screen
+  m_Name: game over
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
