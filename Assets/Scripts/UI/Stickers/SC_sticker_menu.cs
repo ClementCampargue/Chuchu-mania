@@ -1,3 +1,4 @@
+
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
@@ -8,7 +9,11 @@ using UnityEngine.UI;
 public class SC_sticker_menu : MonoBehaviour
 {
     public static SC_sticker_menu instance;
+
     private SC_sticker_UI currentDraggingSticker;
+    private Material unlocked;
+    private SC_SaveManager saveManager;
+
     [Header("UI")]
     public Animator anim;
 
@@ -30,7 +35,6 @@ public class SC_sticker_menu : MonoBehaviour
     public InputActionReference edit;
 
     [Header("Materials")]
-    private Material unlocked;
     public Material not_unlocked;
 
     [Header("Default Button")]
@@ -44,6 +48,7 @@ public class SC_sticker_menu : MonoBehaviour
     private void Awake()
     {
         instance = this;
+        saveManager = SC_SaveManager.instance;
     }
 
     public void SetDraggingSticker(SC_sticker_UI sticker)
@@ -56,9 +61,12 @@ public class SC_sticker_menu : MonoBehaviour
         if (currentDraggingSticker == sticker)
             currentDraggingSticker = null;
     }
+
     private void Start()
     {
-        SC_controller_manager.instance.keyboardAsController = true;
+        if (SC_controller_manager.instance != null)
+            SC_controller_manager.instance.keyboardAsController = true;
+
         if (SC_scursorManager.instance != null)
         {
             SC_scursorManager.instance.gameObject.SetActive(false);
@@ -68,67 +76,77 @@ public class SC_sticker_menu : MonoBehaviour
         Invoke(nameof(DelayCursor), 0.25f);
 
         if (sprite_image != null)
-        {
             unlocked = sprite_image.material;
-        }
-        quit.action.Enable();
-        quit2.action.Enable();
-        edit.action.Enable();
+
+        EnableAction(quit);
+        EnableAction(quit2);
+        EnableAction(edit);
 
         if (SC_scursorManager.instance != null)
-        {
             SC_scursorManager.instance.gameObject.SetActive(true);
-        }
     }
 
+    private void EnableAction(InputActionReference actionReference)
+    {
+        if (actionReference != null && actionReference.action != null)
+            actionReference.action.Enable();
+    }
+
+    private void DisableAction(InputActionReference actionReference)
+    {
+        if (actionReference != null && actionReference.action != null)
+            actionReference.action.Disable();
+    }
 
     private void DelayCursor()
     {
         if (SC_scursorManager.instance != null)
-        {
             SC_scursorManager.instance.gameObject.SetActive(true);
-        }
     }
-
 
     private void OnEnable()
     {
-        if (edit != null)
-        {
-            edit.action.Enable();
-        }
-
-        if (quit != null)
-        {
-            quit.action.Enable();
-        }
+        EnableAction(edit);
+        EnableAction(quit);
+        EnableAction(quit2);
     }
-
 
     private void OnDisable()
     {
-
-
         if (SC_scursorManager.instance != null)
-        {
             SC_scursorManager.instance.gameObject.SetActive(false);
-        }
-    }
 
+        DisableAction(edit);
+        DisableAction(quit);
+        DisableAction(quit2);
+    }
 
     private void OnDestroy()
     {
         if (SC_scursorManager.instance != null)
-        {
             SC_scursorManager.instance.gameObject.SetActive(false);
-        }
 
         if (instance == this)
-        {
             instance = null;
-        }
     }
 
+    // =========================================================
+    // SAVE MANAGER
+    // =========================================================
+
+    private bool IsStickerUnlocked(SO_Sticker sticker)
+    {
+        if (sticker == null)
+            return false;
+
+        if (saveManager == null)
+            saveManager = SC_SaveManager.instance;
+
+        if (saveManager == null)
+            return false;
+
+        return saveManager.IsStickerUnlocked(sticker);
+    }
 
     // =========================================================
     // UPDATE
@@ -143,76 +161,49 @@ public class SC_sticker_menu : MonoBehaviour
                 SC_StickerSaveSystem.instance.stickerCount.ToString("D2");
         }
 
-
-        // =====================================================
-        // EDIT
-        // =====================================================
-
-        if (!editing &&
-            edit != null &&
+        if (edit != null && edit.action != null &&
             edit.action.WasPressedThisFrame())
         {
-            StartEditMode();
+            if (!editing)
+                StartEditMode();
+            else
+                QuitEditMode();
         }
 
-        else if (editing &&
-            edit != null &&
-            edit.action.WasPressedThisFrame())
-        {
-            quit_edit_mode();
-        }
-
-
-        // =====================================================
-        // QUIT
-        // =====================================================
-
-        if (quit != null &&
+        if (quit != null && quit.action != null &&
             quit.action.WasPerformedThisFrame())
         {
-            SC_controller_manager.instance.keyboardAsController = false;
+            if (SC_controller_manager.instance != null)
+                SC_controller_manager.instance.keyboardAsController = false;
 
             if (SC_scursorManager.instance == null ||
                 !SC_scursorManager.instance.grabing)
             {
                 if (SC_screenshot_transition.instance != null)
-                {
                     SC_screenshot_transition.instance.Capture("HUB");
-                }
             }
         }
-        if (quit2 != null &&
+
+        if (quit2 != null && quit2.action != null &&
             quit2.action.WasPerformedThisFrame() && !editing)
         {
             if (SC_scursorManager.instance == null ||
                 !SC_scursorManager.instance.grabing)
             {
                 if (SC_screenshot_transition.instance != null)
-                {
                     SC_screenshot_transition.instance.Capture("HUB");
-                }
             }
         }
-
-
-        // =====================================================
-        // CURSEUR / MANETTE
-        // =====================================================
 
         if (!editing)
         {
             UpdateCursorMode();
         }
-        else
+        else if (SC_scursorManager.instance != null)
         {
-            // En mode édition, la souris reste active.
-            if (SC_scursorManager.instance != null)
-            {
-                SC_scursorManager.instance.enable_cursor();
-            }
+            SC_scursorManager.instance.enable_cursor();
         }
     }
-
 
     // =========================================================
     // CURSOR MODE
@@ -226,14 +217,10 @@ public class SC_sticker_menu : MonoBehaviour
         bool usingController =
             SC_controller_manager.instance.using_controller;
 
-
         if (usingController)
         {
             if (SC_scursorManager.instance != null)
-            {
                 SC_scursorManager.instance.disable_cursor();
-            }
-
 
             if (EventSystem.current != null &&
                 EventSystem.current.currentSelectedGameObject == null)
@@ -244,12 +231,9 @@ public class SC_sticker_menu : MonoBehaviour
         else
         {
             if (SC_scursorManager.instance != null)
-            {
                 SC_scursorManager.instance.enable_cursor();
-            }
         }
     }
-
 
     private void SelectDefaultButton()
     {
@@ -262,9 +246,6 @@ public class SC_sticker_menu : MonoBehaviour
         button.Select();
     }
 
-
-
-
     // =========================================================
     // EDIT MODE
     // =========================================================
@@ -273,63 +254,37 @@ public class SC_sticker_menu : MonoBehaviour
     {
         editing = true;
 
-        /*
-         * On retire la sélection EventSystem.
-         * Le mode édition est contrôlé par la souris.
-         */
         if (EventSystem.current != null)
-        {
             EventSystem.current.SetSelectedGameObject(null);
-        }
 
         if (SC_scursorManager.instance != null)
-        {
             SC_scursorManager.instance.enable_cursor();
-        }
 
         if (anim != null)
-        {
             anim.SetTrigger("On");
-        }
     }
-
 
     public void start_edit_mode()
     {
         StartEditMode();
     }
 
-
     public void QuitEditMode()
     {
-        // -----------------------------------------------------
-        // SI UN STICKER EST ENCORE TENU
-        // -----------------------------------------------------
-
         if (currentDraggingSticker != null)
         {
             SC_sticker_UI sticker = currentDraggingSticker;
-
             currentDraggingSticker = null;
-
             sticker.DeleteIfDragging();
         }
 
-
         editing = false;
 
-
         if (anim != null)
-        {
             anim.SetTrigger("Off");
-        }
-
 
         if (SC_scursorManager.instance != null)
-        {
             SC_scursorManager.instance.disable_cursor();
-        }
-
 
         if (SC_controller_manager.instance != null &&
             SC_controller_manager.instance.using_controller)
@@ -343,66 +298,64 @@ public class SC_sticker_menu : MonoBehaviour
         QuitEditMode();
     }
 
-
     // =========================================================
     // STICKER INFO
     // =========================================================
 
     public void update_infos(SO_Sticker sticker, Button but)
     {
-        infos.SetActive(true);
-
         if (sticker == null)
             return;
 
-
-        // -----------------------------------------------------
-        // STICKER DEBLOQUE
-        // -----------------------------------------------------
         button = but;
 
-        if (sticker.unlocked)
+        bool isUnlocked = IsStickerUnlocked(sticker);
+
+        // Image et informations communes.
+        if (sprite_image != null)
+            sprite_image.sprite = sticker.sticker_sprite;
+
+        if (artist != null)
+            artist.text = sticker.artist;
+
+        UpdateStars(sticker.rarity);
+
+        if (isUnlocked)
         {
+            infos.SetActive(true);
+
+
+            // ---------------------------------------------
+            // STICKER DEBLOQUE
+            // ---------------------------------------------
 
             if (sticker_name != null)
-            {
                 sticker_name.text =
                     sticker.sticker_name.GetLocalizedString();
-            }
 
             if (sticker_description != null)
-            {
                 sticker_description.text =
                     sticker.description.GetLocalizedString();
-            }
 
             if (sprite_image != null)
             {
-                if (sticker.special_mat != null)
-                {
-                    sprite_image.material =
-                        sticker.special_mat;
-                }
-                else
-                {
-                    sprite_image.material =
-                        unlocked;
-                }
+                sprite_image.material =
+                    sticker.special_mat != null
+                        ? sticker.special_mat
+                        : unlocked;
             }
         }
-
-
-        // -----------------------------------------------------
-        // STICKER VERROUILLE
-        // -----------------------------------------------------
-
         else
         {
             infos.SetActive(false);
+
+
+            // ---------------------------------------------
+            // STICKER VERROUILLE
+            // ---------------------------------------------
+
             if (sticker_name != null)
-            {
                 sticker_name.text = "???";
-            }
 
             if (sticker_description != null)
             {
@@ -411,31 +364,9 @@ public class SC_sticker_menu : MonoBehaviour
             }
 
             if (sprite_image != null)
-            {
-                sprite_image.material =
-                    not_unlocked;
-            }
+                sprite_image.material = not_unlocked;
         }
-
-
-        // -----------------------------------------------------
-        // INFOS COMMUNES
-        // -----------------------------------------------------
-
-        if (artist != null)
-        {
-            artist.text = sticker.artist;
-        }
-
-        if (sprite_image != null)
-        {
-            sprite_image.sprite =
-                sticker.sticker_sprite;
-        }
-
-        UpdateStars(sticker.rarity);
     }
-
 
     // =========================================================
     // STARS
@@ -449,23 +380,15 @@ public class SC_sticker_menu : MonoBehaviour
         foreach (GameObject star in stars)
         {
             if (star != null)
-            {
                 star.SetActive(false);
-            }
         }
 
-        rarity = Mathf.Clamp(
-            rarity,
-            0,
-            stars.Count
-        );
+        rarity = Mathf.Clamp(rarity, 0, stars.Count);
 
         for (int i = 0; i < rarity; i++)
         {
             if (stars[i] != null)
-            {
                 stars[i].SetActive(true);
-            }
         }
     }
 }

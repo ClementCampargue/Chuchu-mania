@@ -64,6 +64,11 @@ public class SC_shop_manager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        quit.action.Enable();
+        talk.action.Enable();
+        submit.action.Enable();
+        submit2.action.Enable();
+
 
         if (cantalk && talk.action.WasPressedThisFrame())
         {

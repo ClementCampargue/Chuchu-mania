@@ -274,10 +274,12 @@ public class SC_save_menu : MonoBehaviour
         {
             SC_SaveManager.instance.data.firtlaunch = false;
             SC_SaveManager.instance.SaveGame();
+            SC_scursorManager.instance.disable_cursor();
             SC_screenshot_transition.instance.Capture(scene_first_launch);
         }
         else
         {
+            SC_scursorManager.instance.disable_cursor();
             SC_screenshot_transition.instance.Capture(scene);
         }
     }

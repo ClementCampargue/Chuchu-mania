@@ -1,3 +1,4 @@
+
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -12,6 +13,7 @@ public class SC_gachapon : MonoBehaviour
     public InputActionReference submit;
     public InputActionReference move;
     public InputActionReference quit;
+
     public bool opened;
 
     public TextMeshPro price;
@@ -40,12 +42,7 @@ public class SC_gachapon : MonoBehaviour
 
     public bool canbuy = true;
 
-    // ============================================================
-    // PITY SYSTEM
-    // ============================================================
-
     [Header("Pity System")]
-
     [Tooltip("Nombre total de capsules ouvertes. Sauvegardé avec PlayerPrefs.")]
     public int capsulesOpened = 0;
 
@@ -60,35 +57,40 @@ public class SC_gachapon : MonoBehaviour
 
     private const string CAPSULES_OPENED_KEY = "Gachapon_CapsulesOpened";
 
-    // Les récompenses tirées sont conservées ici pour éviter de les reroll
     private SO_Sticker[] currentRewards;
 
-    // ============================================================
-    // UPDATE
-    // ============================================================
     public AudioSource cancel;
     public AudioSource buy_;
 
-    void Start()
+    private SC_SaveManager SaveManager => SC_SaveManager.instance;
+
+    private void Start()
     {
         LoadPity();
+        UpdateAmountVisuals();
     }
 
-    void Update()
+    private void Update()
     {
         if (!opened)
             return;
 
-        if (submit.action.WasPressedThisFrame())
+        if (submit != null &&
+            submit.action != null &&
+            submit.action.WasPressedThisFrame())
         {
             buy();
         }
 
-        if (quit.action.WasPerformedThisFrame())
+        if (quit != null &&
+            quit.action != null &&
+            quit.action.WasPerformedThisFrame())
         {
-            cancel.Play();
+            if (cancel != null)
+                cancel.Play();
+
             opened = false;
-            Invoke("close_gacha", 0.05f);
+            Invoke(nameof(close_gacha), 0.05f);
         }
 
         HandleMove();
@@ -98,8 +100,11 @@ public class SC_gachapon : MonoBehaviour
     // NAVIGATION
     // ============================================================
 
-    void HandleMove()
+    private void HandleMove()
     {
+        if (move == null || move.action == null)
+            return;
+
         Vector2 input = move.action.ReadValue<Vector2>();
 
         if (Mathf.Abs(input.x) < 0.5f)
@@ -114,11 +119,7 @@ public class SC_gachapon : MonoBehaviour
             isMoving = true;
             moveTimer = firstRepeatDelay;
 
-            if (input.x > 0)
-                update_amount(1);
-            else if (input.x < 0)
-                update_amount(-1);
-
+            update_amount(input.x > 0 ? 1 : -1);
             return;
         }
 
@@ -127,30 +128,32 @@ public class SC_gachapon : MonoBehaviour
         if (moveTimer <= 0f)
         {
             moveTimer = repeatDelay;
-
-            if (input.x > 0)
-                update_amount(1);
-            else if (input.x < 0)
-                update_amount(-1);
+            update_amount(input.x > 0 ? 1 : -1);
         }
     }
 
     public void update_amount(int amount_)
     {
-        if (amount_ > 0)
-        {
-            int newAmount = Mathf.Clamp(amount_to_buy + amount_, 1, 10);
-            int newPrice = newAmount * price_for_one;
+        if (SaveManager == null || SaveManager.data == null)
+            return;
 
-            if (SC_SaveManager.instance.data.money < newPrice)
-                return;
-        }
+        int newAmount = Mathf.Clamp(amount_to_buy + amount_, 1, 10);
+        int newPrice = newAmount * price_for_one;
 
-        amount_to_buy += amount_;
-        amount_to_buy = Mathf.Clamp(amount_to_buy, 1, 10);
+        if (newPrice > SaveManager.data.money)
+            return;
 
-        amount.text = amount_to_buy.ToString();
-        price.text = (amount_to_buy * price_for_one).ToString() + "$";
+        amount_to_buy = newAmount;
+        UpdateAmountVisuals();
+    }
+
+    private void UpdateAmountVisuals()
+    {
+        if (amount != null)
+            amount.text = amount_to_buy.ToString();
+
+        if (price != null)
+            price.text = (amount_to_buy * price_for_one) + "$";
     }
 
     // ============================================================
@@ -159,23 +162,36 @@ public class SC_gachapon : MonoBehaviour
 
     public void open_gacha()
     {
-        canbuy = true;
+        if (SaveManager == null || SaveManager.data == null)
+        {
+            Debug.LogWarning("Gachapon : SaveManager ou les données de sauvegarde sont indisponibles.");
+            return;
+        }
 
-        Invoke("delay_open", 0.1f);
-        shop.canquit = false;
+        canbuy = true;
+        opened = false;
+
+        CancelInvoke(nameof(delay_open));
+        CancelInvoke(nameof(close_gacha));
 
         amount_to_buy = 1;
-        update_amount(0);
+        UpdateAmountVisuals();
+
+        if (shop != null)
+            shop.canquit = false;
+
+        Invoke(nameof(delay_open), 0.1f);
     }
 
-    void delay_open()
+    private void delay_open()
     {
         opened = true;
     }
 
     public void close_gacha()
     {
-        shop.show_menu();
+        if (shop != null)
+            shop.show_menu();
     }
 
     // ============================================================
@@ -187,43 +203,88 @@ public class SC_gachapon : MonoBehaviour
         if (!canbuy)
             return;
 
-        // Vérification de l'argent
+        if (SaveManager == null || SaveManager.data == null)
+        {
+            Debug.LogWarning("Gachapon : impossible d'acheter sans données de sauvegarde.");
+            return;
+        }
+
+        if (stickers == null ||
+            stickers.stickers == null ||
+            stickers.stickers.Count == 0)
+        {
+            Debug.LogWarning("Gachapon : aucun sticker disponible.");
+            return;
+        }
+
         int totalPrice = amount_to_buy * price_for_one;
 
-        if (SC_SaveManager.instance.data.money < totalPrice)
+        if (totalPrice < 0 || SaveManager.data.money < totalPrice)
             return;
 
-        shop.anim.SetTrigger("open");
-        buy_.Play();
+        // Tirer toutes les récompenses avant de confirmer l'achat.
+        // Si aucune récompense valide n'est disponible, rien n'est dépensé.
+        SO_Sticker[] rewards = GetRandomStickers(amount_to_buy);
+
+        if (rewards == null || rewards.Length != amount_to_buy)
+        {
+            Debug.LogWarning("Gachapon : impossible de générer les récompenses.");
+            return;
+        }
+
+        foreach (SO_Sticker reward in rewards)
+        {
+            if (reward == null)
+            {
+                Debug.LogWarning("Gachapon : une récompense est invalide. Achat annulé.");
+                return;
+            }
+        }
+
+        currentRewards = rewards;
+
+        if (shop != null && shop.anim != null)
+            shop.anim.SetTrigger("open");
+
+        if (buy_ != null)
+            buy_.Play();
+
         opened = false;
         canbuy = false;
 
-        // IMPORTANT :
-        // On tire les récompenses UNE SEULE FOIS.
-        currentRewards = GetRandomStickers(amount_to_buy);
-
-        // On compte les capsules ouvertes
         capsulesOpened += amount_to_buy;
         SavePity();
 
-        // Paiement
-        SC_money_shop.instance.future_price = totalPrice;
+        // Le système monétaire existant traite le paiement.
+        if (SC_money_shop.instance != null)
+            SC_money_shop.instance.future_price = totalPrice;
+        else
+            Debug.LogWarning("Gachapon : SC_money_shop.instance est null.");
 
-        Invoke("spawn_capsules", 1f);
-        Invoke("show_screen", 2f);
+        CancelInvoke(nameof(spawn_capsules));
+        CancelInvoke(nameof(show_screen));
+
+        Invoke(nameof(spawn_capsules), 1f);
+        Invoke(nameof(show_screen), 2f);
     }
 
     // ============================================================
     // RANDOM STICKERS + PITY
     // ============================================================
 
-    private SO_Sticker[] GetRandomStickers(int amount)
+    private SO_Sticker[] GetRandomStickers(int quantity)
     {
-        SO_Sticker[] rewards = new SO_Sticker[amount];
+        if (quantity <= 0)
+            return null;
 
-        for (int i = 0; i < amount; i++)
+        SO_Sticker[] rewards = new SO_Sticker[quantity];
+
+        for (int i = 0; i < quantity; i++)
         {
             rewards[i] = GetRandomStickerWithPity();
+
+            if (rewards[i] == null)
+                return null;
         }
 
         return rewards;
@@ -231,6 +292,12 @@ public class SC_gachapon : MonoBehaviour
 
     private SO_Sticker GetRandomStickerWithPity()
     {
+        if (SaveManager == null || SaveManager.data == null)
+        {
+            Debug.LogWarning("Gachapon : SaveManager indisponible pour vérifier les stickers débloqués.");
+            return null;
+        }
+
         if (stickers == null ||
             stickers.stickers == null ||
             stickers.stickers.Count == 0)
@@ -239,85 +306,63 @@ public class SC_gachapon : MonoBehaviour
             return null;
         }
 
-        float pityMultiplier = GetPityMultiplier();
-
-        // --------------------------------------------------------
-        // Calcul du poids total
-        // --------------------------------------------------------
-
-        float totalWeight = 0f;
+        List<SO_Sticker> validStickers = new List<SO_Sticker>();
 
         foreach (SO_Sticker sticker in stickers.stickers)
         {
-            if (sticker == null)
-                continue;
+            if (sticker != null)
+                validStickers.Add(sticker);
+        }
 
-            float weight = GetStickerWeight(sticker, pityMultiplier);
-            totalWeight += weight;
+        if (validStickers.Count == 0)
+        {
+            Debug.LogWarning("Gachapon : la liste ne contient aucun sticker valide.");
+            return null;
+        }
+
+        float pityMultiplier = GetPityMultiplier();
+        float totalWeight = 0f;
+
+        foreach (SO_Sticker sticker in validStickers)
+        {
+            totalWeight += GetStickerWeight(sticker, pityMultiplier);
         }
 
         if (totalWeight <= 0f)
-            return stickers.stickers[Random.Range(0, stickers.stickers.Count)];
-
-        // --------------------------------------------------------
-        // Tirage pondéré
-        // --------------------------------------------------------
+            return validStickers[Random.Range(0, validStickers.Count)];
 
         float randomValue = Random.Range(0f, totalWeight);
 
-        foreach (SO_Sticker sticker in stickers.stickers)
+        foreach (SO_Sticker sticker in validStickers)
         {
-            if (sticker == null)
-                continue;
-
-            float weight = GetStickerWeight(sticker, pityMultiplier);
-
-            randomValue -= weight;
+            randomValue -= GetStickerWeight(sticker, pityMultiplier);
 
             if (randomValue <= 0f)
                 return sticker;
         }
 
-        // Sécurité
-        return stickers.stickers[stickers.stickers.Count - 1];
+        return validStickers[validStickers.Count - 1];
     }
 
     private float GetStickerWeight(SO_Sticker sticker, float pityMultiplier)
     {
-        // Sticker déjà débloqué
-        if (sticker.unlocked)
-        {
-            return keepUnlockedWeightAtOne ? 1f : 0.5f;
-        }
+        if (sticker == null || SaveManager == null)
+            return 0f;
 
-        // Sticker non débloqué :
-        // son poids augmente avec le pity.
-        return pityMultiplier;
+        // L'état de déblocage provient exclusivement de SC_SaveManager.
+        bool isUnlocked = SaveManager.IsStickerUnlocked(sticker);
+
+        if (isUnlocked)
+            return keepUnlockedWeightAtOne ? 1f : 0.5f;
+
+        return Mathf.Max(0f, pityMultiplier);
     }
 
     private float GetPityMultiplier()
     {
-        /*
-         * Exemple avec pityPerCapsule = 0.05 :
-         *
-         * 0 capsule  -> x1
-         * 10 capsules -> x1.5
-         * 20 capsules -> x2
-         * 50 capsules -> x3.5
-         * 100 capsules -> x6
-         *
-         * Le maximum est limité par maxPityMultiplier.
-         */
-
         float multiplier = 1f + (capsulesOpened * pityPerCapsule);
 
-        multiplier = Mathf.Clamp(
-            multiplier,
-            1f,
-            maxPityMultiplier
-        );
-
-        return multiplier;
+        return Mathf.Clamp(multiplier, 1f, maxPityMultiplier);
     }
 
     // ============================================================
@@ -326,23 +371,18 @@ public class SC_gachapon : MonoBehaviour
 
     private void LoadPity()
     {
-        capsulesOpened = PlayerPrefs.GetInt(
-            CAPSULES_OPENED_KEY,
-            0
+        capsulesOpened = Mathf.Max(
+            0,
+            PlayerPrefs.GetInt(CAPSULES_OPENED_KEY, 0)
         );
     }
 
     private void SavePity()
     {
-        PlayerPrefs.SetInt(
-            CAPSULES_OPENED_KEY,
-            capsulesOpened
-        );
-
+        PlayerPrefs.SetInt(CAPSULES_OPENED_KEY, capsulesOpened);
         PlayerPrefs.Save();
     }
 
-    // Utile pour tester le système dans l'inspecteur
     [ContextMenu("Reset Pity")]
     public void ResetPity()
     {
@@ -365,45 +405,74 @@ public class SC_gachapon : MonoBehaviour
 
     public void show_screen()
     {
-        // On utilise les récompenses déjà tirées dans buy().
-        // Cela évite de tirer de nouveaux stickers.
-        if (currentRewards == null)
+        if (currentRewards == null || currentRewards.Length == 0)
         {
-            Debug.LogWarning("Aucune récompense trouvée.");
+            Debug.LogWarning("Gachapon : aucune récompense à afficher.");
+            canbuy = true;
+            return;
+        }
+
+        if (SC_sticker_popup.instance == null)
+        {
+            Debug.LogWarning("Gachapon : SC_sticker_popup.instance est null.");
+            canbuy = true;
             return;
         }
 
         SC_sticker_popup.instance.ShowStickers(currentRewards);
     }
 
-    IEnumerator SpawnCapsules()
+    private IEnumerator SpawnCapsules()
     {
+        if (points == null || points.Count == 0)
+        {
+            Debug.LogWarning("Gachapon : aucun point de destination configuré.");
+            yield break;
+        }
+
+        if (capsule == null)
+        {
+            Debug.LogWarning("Gachapon : le prefab de capsule n'est pas assigné.");
+            yield break;
+        }
+
         int quantity = Mathf.Min(amount_to_buy, points.Count);
 
         for (int i = 0; i < quantity; i++)
         {
+            if (points[i] == null)
+                continue;
+
             GameObject newCapsule = Instantiate(
                 capsule,
                 transform.position,
                 transform.rotation
             );
 
-            Transform target = points[i];
-
             yield return StartCoroutine(
-                MoveCapsule(newCapsule.transform, target)
+                MoveCapsule(newCapsule.transform, points[i])
             );
 
-            yield return new WaitForSeconds(spawnDelay);
+            if (spawnDelay > 0f)
+                yield return new WaitForSeconds(spawnDelay);
         }
 
         canbuy = true;
     }
 
-    IEnumerator MoveCapsule(Transform capsuleTransform, Transform target)
+    private IEnumerator MoveCapsule(Transform capsuleTransform, Transform target)
     {
+        if (capsuleTransform == null || target == null)
+            yield break;
+
         Vector3 startPosition = capsuleTransform.position;
         Vector3 targetPosition = target.position;
+
+        if (capsuleMoveDuration <= 0f)
+        {
+            capsuleTransform.position = targetPosition;
+            yield break;
+        }
 
         float timer = 0f;
 
@@ -411,8 +480,7 @@ public class SC_gachapon : MonoBehaviour
         {
             timer += Time.deltaTime;
 
-            float t = timer / capsuleMoveDuration;
-
+            float t = Mathf.Clamp01(timer / capsuleMoveDuration);
             t = Mathf.SmoothStep(0f, 1f, t);
 
             capsuleTransform.position = Vector3.Lerp(

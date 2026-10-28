@@ -9,14 +9,13 @@ public class SC_sticker_button : MonoBehaviour
 
     public SO_Sticker sticker;
     public Material locked;
-    public Material unlocked;
     public Button button;
     public GameObject Sticker_prefab;
 
     public InputActionReference selectAction; // <-- Ajoute ça dans l'inspecteur
 
     private bool selected;
-
+    private SC_SaveManager saveManager;
     private SC_StickerSaveSystem save;
     private SC_sticker_menu menu;
     public Animator anim;
@@ -30,25 +29,39 @@ public class SC_sticker_button : MonoBehaviour
     SC_SaveManager.instance.IsStickerUnlocked(sticker);
         save = SC_StickerSaveSystem.instance;
         menu = SC_sticker_menu.instance;
-        image.material = unlocked_ ? unlocked : locked;
-        if(sticker.special_mat != null && unlocked_)
-        {
-            image.material = sticker.special_mat;
-        }
         image.sprite = sticker.sticker_sprite;
-        unlocked = image.material;
+        if (IsUnlocked())
+        {
+            if (sticker.special_mat != null)
+            {
+                image.material = sticker.special_mat;
+            }
+            else
+            {
+
+            }
+        }
+        else
+        {
+            image.material = locked;
+        }
+
+        image.sprite = sticker.sticker_sprite;
     }
 
+    public bool IsUnlocked()
+    {
+        if (saveManager == null)
+            saveManager = SC_SaveManager.instance;
 
+        if (saveManager == null)
+            return false;
+
+        return saveManager.IsStickerUnlocked(sticker);
+    }
     private void OnEnable()
     {
         selectAction.action.Enable();
-
-        image.sprite = sticker.sticker_sprite;
-        unlocked = image.material;
-
-        image.material = sticker.unlocked ? unlocked : locked;
-
     }
 
 

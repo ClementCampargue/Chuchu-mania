@@ -1,3 +1,4 @@
+
 using System.Collections;
 using TMPro;
 using UnityEngine;
@@ -16,6 +17,7 @@ public class SC_sticker_popup : MonoBehaviour
     public TextMeshPro title;
     public LocalizedString sticker_obtenu;
     public LocalizedString item_obtenu;
+
     [Header("Localization")]
     public LocalizedString common;
     public LocalizedString rare;
@@ -33,24 +35,23 @@ public class SC_sticker_popup : MonoBehaviour
     public GameObject new_;
     public GameObject rarity_;
 
+    [Header("Audio")]
     public AudioSource source;
     public AudioClip common_sfx;
     public AudioClip rare_sfx;
-    // --------------------------------------------------
-    // QUEUES
-    // --------------------------------------------------
 
     private SO_Sticker[] stickerQueue;
     private SO_shop_item1[] itemQueue;
 
     private int currentIndex = 0;
 
-    // true = stickers
-    // false = items
+    // true = stickers ; false = items
     private bool showingStickers = true;
 
     private bool isShowingSequence = false;
     private bool isClosing = false;
+
+    private SC_SaveManager saveManager;
 
     // --------------------------------------------------
     // UNITY
@@ -59,7 +60,7 @@ public class SC_sticker_popup : MonoBehaviour
     private void Awake()
     {
         instance = this;
-
+        saveManager = SC_SaveManager.instance;
         gameObject.SetActive(false);
     }
 
@@ -69,35 +70,28 @@ public class SC_sticker_popup : MonoBehaviour
         isClosing = false;
 
         CancelInvoke();
-
         Invoke(nameof(AllowQuit), 0.5f);
 
         if (anim != null)
         {
-            if (anim.enabled)
-            {
-                anim.ResetTrigger("hide");
-                anim.ResetTrigger("get");
-                anim.SetTrigger("show");
-            }
-            else
-            {
-                anim.enabled = true;
-                anim.ResetTrigger("hide");
-                anim.ResetTrigger("get");
-                anim.SetTrigger("show");
-            }
+            anim.enabled = true;
+            anim.ResetTrigger("hide");
+            anim.ResetTrigger("get");
+            anim.SetTrigger("show");
         }
 
-        // Si le popup est ouvert depuis le Shop,
-        // on bloque la fermeture du menu.
         if (SceneManager.GetActiveScene().name == "Shop")
         {
             if (SC_shop_manager.instance != null)
             {
-                SC_shop_manager.instance.anim.ResetTrigger("Show_menu");
-                SC_shop_manager.instance.anim.SetTrigger("talk");
-                SC_shop_manager.instance.typewriter.clear_text();
+                if (SC_shop_manager.instance.anim != null)
+                {
+                    SC_shop_manager.instance.anim.ResetTrigger("Show_menu");
+                    SC_shop_manager.instance.anim.SetTrigger("talk");
+                }
+
+                if (SC_shop_manager.instance.typewriter != null)
+                    SC_shop_manager.instance.typewriter.clear_text();
 
                 SC_shop_manager.instance.canquit = false;
             }
@@ -120,21 +114,21 @@ public class SC_sticker_popup : MonoBehaviour
             submit2.action.WasPressedThisFrame();
 
         if ((pressedSubmit || pressedSubmit2) && can_quit)
-        {
             ShowNext();
-        }
     }
-
-    // --------------------------------------------------
-    // INPUT DELAY
-    // --------------------------------------------------
 
     private void AllowQuit()
     {
         if (!isClosing)
-        {
             can_quit = true;
-        }
+    }
+
+    private SC_SaveManager GetSaveManager()
+    {
+        if (saveManager == null)
+            saveManager = SC_SaveManager.instance;
+
+        return saveManager;
     }
 
     // --------------------------------------------------
@@ -145,13 +139,15 @@ public class SC_sticker_popup : MonoBehaviour
     {
         if (sticker == null)
             return;
-        title.text = sticker_obtenu.GetLocalizedString();
 
-        stickerQueue = new SO_Sticker[1];
-        stickerQueue[0] = sticker;
-        rarity_.SetActive(true);
+        if (title != null)
+            title.text = sticker_obtenu.GetLocalizedString();
 
+        stickerQueue = new SO_Sticker[] { sticker };
         itemQueue = null;
+
+        if (rarity_ != null)
+            rarity_.SetActive(true);
 
         currentIndex = 0;
         showingStickers = true;
@@ -160,7 +156,6 @@ public class SC_sticker_popup : MonoBehaviour
         can_quit = false;
 
         gameObject.SetActive(true);
-
         DisplayCurrent();
     }
 
@@ -172,22 +167,26 @@ public class SC_sticker_popup : MonoBehaviour
     {
         if (item == null)
             return;
-        title.text = item_obtenu.GetLocalizedString();
-        itemQueue = new SO_shop_item1[1];
-        itemQueue[0] = item;
-        new_.SetActive(false);
-        rarity_.SetActive(false);
+
+        if (title != null)
+            title.text = item_obtenu.GetLocalizedString();
+
+        itemQueue = new SO_shop_item1[] { item };
         stickerQueue = null;
 
-        currentIndex = 0;
+        if (new_ != null)
+            new_.SetActive(false);
 
+        if (rarity_ != null)
+            rarity_.SetActive(false);
+
+        currentIndex = 0;
         showingStickers = false;
         isShowingSequence = true;
         isClosing = false;
         can_quit = false;
 
         gameObject.SetActive(true);
-
         DisplayCurrent();
     }
 
@@ -203,15 +202,19 @@ public class SC_sticker_popup : MonoBehaviour
         stickerQueue = stickersToShow;
         itemQueue = null;
 
-        currentIndex = 0;
+        if (title != null)
+            title.text = sticker_obtenu.GetLocalizedString();
 
+        if (rarity_ != null)
+            rarity_.SetActive(true);
+
+        currentIndex = 0;
         showingStickers = true;
         isShowingSequence = true;
         isClosing = false;
         can_quit = false;
 
         gameObject.SetActive(true);
-
         DisplayCurrent();
     }
 
@@ -227,15 +230,22 @@ public class SC_sticker_popup : MonoBehaviour
         itemQueue = itemsToShow;
         stickerQueue = null;
 
-        currentIndex = 0;
+        if (title != null)
+            title.text = item_obtenu.GetLocalizedString();
 
+        if (new_ != null)
+            new_.SetActive(false);
+
+        if (rarity_ != null)
+            rarity_.SetActive(false);
+
+        currentIndex = 0;
         showingStickers = false;
         isShowingSequence = true;
         isClosing = false;
         can_quit = false;
 
         gameObject.SetActive(true);
-
         DisplayCurrent();
     }
 
@@ -247,20 +257,18 @@ public class SC_sticker_popup : MonoBehaviour
     {
         if (showingStickers)
         {
-            if (stickerQueue == null)
-                return;
-
-            if (currentIndex < 0 || currentIndex >= stickerQueue.Length)
+            if (stickerQueue == null ||
+                currentIndex < 0 ||
+                currentIndex >= stickerQueue.Length)
                 return;
 
             DisplaySticker(stickerQueue[currentIndex]);
         }
         else
         {
-            if (itemQueue == null)
-                return;
-
-            if (currentIndex < 0 || currentIndex >= itemQueue.Length)
+            if (itemQueue == null ||
+                currentIndex < 0 ||
+                currentIndex >= itemQueue.Length)
                 return;
 
             DisplayItem(itemQueue[currentIndex]);
@@ -273,22 +281,54 @@ public class SC_sticker_popup : MonoBehaviour
 
     private void DisplaySticker(SO_Sticker sticker)
     {
-        SC_music_manager.instance.pause_music();
         if (sticker == null)
             return;
-        new_.SetActive(!sticker.unlocked);
-        SC_SaveManager.instance.AddAchievementProgress(AchievementType.stickers20, 1);
-        SC_SaveManager.instance.UnlockSticker(sticker);
-        SC_SaveManager.instance.SaveGame();
-        if (spr != null)
+
+        SC_SaveManager manager = GetSaveManager();
+
+        if (manager == null)
         {
-            spr.sprite = sticker.sticker_sprite;
+            Debug.LogError(
+                "SC_SaveManager introuvable : impossible d'attribuer le sticker."
+            );
+            return;
         }
 
-        if (name_ != null)
+        if (manager.data == null)
         {
-            name_.text = sticker.sticker_name.GetLocalizedString();
+            Debug.LogError(
+                "Aucune sauvegarde active : impossible d'attribuer le sticker."
+            );
+            return;
         }
+
+        if (SC_music_manager.instance != null)
+            SC_music_manager.instance.pause_music();
+
+        // Vérifie l'état AVANT le déblocage.
+        bool wasUnlocked = manager.IsStickerUnlocked(sticker);
+
+        // Indique si le sticker vient d'être obtenu.
+        if (new_ != null)
+            new_.SetActive(!wasUnlocked);
+
+        // Débloque exclusivement via le SaveManager.
+        if (!wasUnlocked)
+        {
+            manager.UnlockSticker(sticker);
+
+            manager.AddAchievementProgress(
+                AchievementType.stickers20,
+                1
+            );
+        }
+
+        // Le SaveManager est désormais l'unique source de vérité.
+        if (spr != null)
+            spr.sprite = sticker.sticker_sprite;
+
+        if (name_ != null)
+            name_.text = sticker.sticker_name.GetLocalizedString();
 
         if (rarity != null)
         {
@@ -296,17 +336,17 @@ public class SC_sticker_popup : MonoBehaviour
             {
                 case 0:
                     rarity.text = common.GetLocalizedString();
-                    source.PlayOneShot(common_sfx);
+                    PlayRaritySound(common_sfx);
                     break;
 
                 case 1:
                     rarity.text = rare.GetLocalizedString();
-                    source.PlayOneShot(rare_sfx);
+                    PlayRaritySound(rare_sfx);
                     break;
 
                 case 2:
                     rarity.text = epic.GetLocalizedString();
-                    source.PlayOneShot(rare_sfx);
+                    PlayRaritySound(rare_sfx);
                     break;
 
                 default:
@@ -314,6 +354,12 @@ public class SC_sticker_popup : MonoBehaviour
                     break;
             }
         }
+    }
+
+    private void PlayRaritySound(AudioClip clip)
+    {
+        if (source != null && clip != null)
+            source.PlayOneShot(clip);
     }
 
     // --------------------------------------------------
@@ -326,20 +372,16 @@ public class SC_sticker_popup : MonoBehaviour
             return;
 
         if (spr != null)
-        {
             spr.sprite = item.item_sprite;
-        }
 
         if (name_ != null)
-        {
             name_.text = item.item_name.GetLocalizedString();
-        }
 
-        // Un item n'a pas de rareté.
         if (rarity != null)
-        {
             rarity.text = "";
-        }
+
+        if (new_ != null)
+            new_.SetActive(false);
     }
 
     // --------------------------------------------------
@@ -352,27 +394,20 @@ public class SC_sticker_popup : MonoBehaviour
             return;
 
         can_quit = false;
-
         currentIndex++;
 
-        bool hasNext = false;
+        bool hasNext;
 
         if (showingStickers)
         {
-            hasNext =
-                stickerQueue != null &&
-                currentIndex < stickerQueue.Length;
+            hasNext = stickerQueue != null &&
+                      currentIndex < stickerQueue.Length;
         }
         else
         {
-            hasNext =
-                itemQueue != null &&
-                currentIndex < itemQueue.Length;
+            hasNext = itemQueue != null &&
+                      currentIndex < itemQueue.Length;
         }
-
-        // ----------------------------------------------
-        // IL RESTE UNE RÉCOMPENSE
-        // ----------------------------------------------
 
         if (hasNext)
         {
@@ -386,25 +421,16 @@ public class SC_sticker_popup : MonoBehaviour
 
             Invoke(nameof(AllowNext), 0.5f);
         }
-        // ----------------------------------------------
-        // PLUS RIEN
-        // ----------------------------------------------
         else
         {
             Close();
         }
     }
 
-    // --------------------------------------------------
-    // ALLOW NEXT
-    // --------------------------------------------------
-
     private void AllowNext()
     {
         if (!isClosing)
-        {
             can_quit = true;
-        }
     }
 
     // --------------------------------------------------
@@ -422,35 +448,21 @@ public class SC_sticker_popup : MonoBehaviour
 
         CancelInvoke();
 
-        // ----------------------------------------------
-        // SHOP
-        // ----------------------------------------------
-
-
-        // ----------------------------------------------
-        // ACHIEVEMENTS
-        // ----------------------------------------------
-
         if (SceneManager.GetActiveScene().name == "Achievements")
         {
             if (SC_ConstellationNavigation.instance != null)
-            {
                 SC_ConstellationNavigation.instance.enabled = true;
-            }
 
             if (SC_achievement_menu.instance != null)
             {
                 SC_achievement_menu.instance.caninteract = true;
                 SC_achievement_menu.instance.show_sticker();
                 SC_achievement_menu.instance.check_constellation();
-
             }
         }
 
-        // ----------------------------------------------
-        // ANIMATION
-        // ----------------------------------------------
-        SC_music_manager.instance.resume_music();
+        if (SC_music_manager.instance != null)
+            SC_music_manager.instance.resume_music();
 
         if (anim != null)
         {
@@ -469,11 +481,17 @@ public class SC_sticker_popup : MonoBehaviour
     private IEnumerator DisableAfterHide()
     {
         yield return new WaitForSeconds(0.5f);
+
         if (SceneManager.GetActiveScene().name == "Shop")
         {
             if (SC_shop_manager.instance != null)
             {
-                SC_money_shop.instance.Buy(SC_money_shop.instance.future_price);
+                if (SC_money_shop.instance != null)
+                {
+                    SC_money_shop.instance.Buy(
+                        SC_money_shop.instance.future_price
+                    );
+                }
 
                 SC_shop_manager.instance.Talk_();
             }
@@ -482,8 +500,6 @@ public class SC_sticker_popup : MonoBehaviour
         gameObject.SetActive(false);
 
         isClosing = false;
-
-        // Nettoyage
         stickerQueue = null;
         itemQueue = null;
         currentIndex = 0;

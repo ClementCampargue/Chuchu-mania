@@ -505,53 +505,81 @@ public class SC_SaveManager : MonoBehaviour
         data.levels.Add(newProgress);
         SaveGame();
     }
-    // Vérifie si un sticker est débloqué.
+
+    // Vérifie exclusivement l'état enregistré du sticker.
     public bool IsStickerUnlocked(SO_Sticker sticker)
     {
         if (sticker == null)
             return false;
 
+        if (string.IsNullOrWhiteSpace(sticker.stickerId))
+        {
+            Debug.LogError(
+                "stickerId manquant : " + sticker.name
+            );
+            return false;
+        }
+
+        // Sans sauvegarde active, aucun sticker n'est débloqué.
         if (data == null)
-            return sticker.unlocked;
+            return false;
 
         if (data.stickers == null)
-            data.stickers = new System.Collections.Generic
-                .List<SC_StickerProgress>();
+            return false;
 
         foreach (SC_StickerProgress progress in data.stickers)
         {
+            if (progress == null)
+                continue;
+
             if (progress.stickerId == sticker.stickerId)
                 return progress.unlocked;
         }
 
-        // Valeur par défaut définie dans le ScriptableObject.
-        return sticker.unlocked;
+        // Sticker absent de la sauvegarde = verrouillé.
+        return false;
     }
 
-
-    // Débloque ou verrouille un sticker et sauvegarde le résultat.
+    // Définit l'état du sticker dans la sauvegarde active.
     public void SetStickerUnlocked(
-        SO_Sticker sticker, bool unlocked)
+        SO_Sticker sticker,
+        bool unlocked)
     {
-        if (data == null || sticker == null)
+        if (data == null)
+        {
+            Debug.LogWarning(
+                "Impossible de modifier un sticker : " +
+                "aucune sauvegarde active."
+            );
+            return;
+        }
+
+        if (sticker == null)
             return;
 
         if (string.IsNullOrWhiteSpace(sticker.stickerId))
         {
             Debug.LogError(
-                "Le sticker n'a pas de stickerId : " + sticker.name
+                "stickerId manquant : " + sticker.name
             );
             return;
         }
 
         if (data.stickers == null)
-            data.stickers = new System.Collections.Generic
-                .List<SC_StickerProgress>();
+        {
+            data.stickers = new List<SC_StickerProgress>();
+        }
 
         foreach (SC_StickerProgress progress in data.stickers)
         {
+            if (progress == null)
+                continue;
+
             if (progress.stickerId == sticker.stickerId)
             {
+                if (progress.unlocked == unlocked)
+                    return;
+
                 progress.unlocked = unlocked;
                 SaveGame();
                 return;
@@ -567,12 +595,18 @@ public class SC_SaveManager : MonoBehaviour
         SaveGame();
     }
 
-
     // Débloque un sticker.
     public void UnlockSticker(SO_Sticker sticker)
     {
         SetStickerUnlocked(sticker, true);
     }
+
+    // Verrouille un sticker.
+    public void LockSticker(SO_Sticker sticker)
+    {
+        SetStickerUnlocked(sticker, false);
+    }
+
     public SC_LevelRecord GetLevelRecord(SO_level level)
     {
         if (data == null || level == null)
