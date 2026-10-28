@@ -178,6 +178,8 @@ public class SC_achievement_menu : MonoBehaviour
 
     private void Update()
     {
+        move.action.Enable();
+
         if (quit != null && quit.action.WasPerformedThisFrame())
         {
             if (caninteract)

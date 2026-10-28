@@ -20362,6 +20362,7 @@ MonoBehaviour:
   rumbleLow: 11
   rumbleHigh: 12.7
   rumbleDuration: 0.09
+  cameraTransform: {fileID: 0}
   shakeAmplitude: 0
   shakeFrequency: 0
   shakeScreenDuration: 0
@@ -20427,6 +20428,7 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+  play_onawake: 0
 --- !u!1 &2827262419154043791
 GameObject:
   m_ObjectHideFlags: 0
@@ -20576,6 +20578,7 @@ MonoBehaviour:
   rumbleLow: 11
   rumbleHigh: 12.7
   rumbleDuration: 0.09
+  cameraTransform: {fileID: 0}
   shakeAmplitude: 0
   shakeFrequency: 0
   shakeScreenDuration: 0
@@ -20641,6 +20644,7 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+  play_onawake: 0
 --- !u!1 &2999516754998416807
 GameObject:
   m_ObjectHideFlags: 0
@@ -30637,6 +30641,7 @@ MonoBehaviour:
   rumbleLow: 0
   rumbleHigh: 0
   rumbleDuration: 0.05
+  cameraTransform: {fileID: 0}
   shakeAmplitude: 0
   shakeFrequency: 0
   shakeScreenDuration: 0
@@ -30702,6 +30707,7 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+  play_onawake: 0
 --- !u!1 &5615087785673446552
 GameObject:
   m_ObjectHideFlags: 0
@@ -30854,6 +30860,7 @@ MonoBehaviour:
   rumbleLow: 0.42
   rumbleHigh: 0.69
   rumbleDuration: 0.24
+  cameraTransform: {fileID: 0}
   shakeAmplitude: 0
   shakeFrequency: 0
   shakeScreenDuration: 0
@@ -30923,6 +30930,7 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+  play_onawake: 0
 --- !u!1 &5980079298447700130
 GameObject:
   m_ObjectHideFlags: 0
@@ -31073,6 +31081,7 @@ MonoBehaviour:
   rumbleLow: 0.42
   rumbleHigh: 0.69
   rumbleDuration: 0.24
+  cameraTransform: {fileID: 0}
   shakeAmplitude: 0
   shakeFrequency: 0
   shakeScreenDuration: 0
@@ -31139,6 +31148,7 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+  play_onawake: 0
 --- !u!1 &6288534000082463059
 GameObject:
   m_ObjectHideFlags: 0
@@ -31288,6 +31298,7 @@ MonoBehaviour:
   rumbleLow: 0.42
   rumbleHigh: 0.69
   rumbleDuration: 0.24
+  cameraTransform: {fileID: 0}
   shakeAmplitude: 0
   shakeFrequency: 0
   shakeScreenDuration: 0
@@ -31353,6 +31364,7 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+  play_onawake: 0
 --- !u!1 &6969701834542550493
 GameObject:
   m_ObjectHideFlags: 0
@@ -31665,6 +31677,7 @@ MonoBehaviour:
   rumbleLow: 0.42
   rumbleHigh: 0.69
   rumbleDuration: 0.24
+  cameraTransform: {fileID: 0}
   shakeAmplitude: 0
   shakeFrequency: 0
   shakeScreenDuration: 0
@@ -31732,6 +31745,7 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+  play_onawake: 0
 --- !u!1 &7654787513838696133
 GameObject:
   m_ObjectHideFlags: 0
@@ -32029,6 +32043,11 @@ MonoBehaviour:
   groundLayer:
     serializedVersion: 2
     m_Bits: 8
+  groundCheckWidthMultiplier: 1
+  groundCheckHeight: 0.06
+  groundCheckYOffset: 0
+  groundRaycastDistance: 0.1
+  groundRaycastSideInset: 0.05
   fallAnimName: Fall
   playLandSoundAfterFall: 1
   damageCheck: {fileID: 6943184205650817634}
@@ -32100,6 +32119,7 @@ MonoBehaviour:
   rumbleLow: 0.1
   rumbleHigh: 0.3
   rumbleDuration: 0.1
+  cameraTransform: {fileID: 0}
   shakeAmplitude: 0
   shakeFrequency: 0
   shakeScreenDuration: 0
@@ -32166,6 +32186,7 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+  play_onawake: 0
 --- !u!210 &2725807796225816800
 SortingGroup:
   m_ObjectHideFlags: 0
@@ -32385,6 +32406,7 @@ MonoBehaviour:
   rumbleLow: 0.42
   rumbleHigh: 0.69
   rumbleDuration: 0.24
+  cameraTransform: {fileID: 0}
   shakeAmplitude: 0
   shakeFrequency: 0
   shakeScreenDuration: 0
@@ -32451,6 +32473,7 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+  play_onawake: 0
 --- !u!1 &8339194584055732450
 GameObject:
   m_ObjectHideFlags: 0

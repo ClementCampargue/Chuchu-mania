@@ -11,10 +11,11 @@ public class SC_player : MonoBehaviour
     private Coroutine lowHealthCoroutine;
     private Coroutine hitCoroutine;
     private Coroutine dropThroughCoroutine;
+    private Coroutine knockbackInvincibilityCoroutine;
 
     public bool climb_delay = true;
 
-    [Header("Power_up_stats")]
+    [Header("Power Up Stats")]
     public float PowermoveSpeed = 5f;
     public float BasePowermoveSpeed = 5f;
     public float PowerJump = 5f;
@@ -30,7 +31,6 @@ public class SC_player : MonoBehaviour
     [Header("Knockback Invincibility")]
     public float knockbackInvincibilityTime = 0.1f;
     private bool isKnockbackInvincible;
-    private Coroutine knockbackInvincibilityCoroutine;
 
     [Header("Coyote Time")]
     public float coyoteTime = 0.1f;
@@ -82,6 +82,19 @@ public class SC_player : MonoBehaviour
     public float groundCheckRadius = 0.2f;
     public LayerMask groundLayer;
 
+    [Header("Ground Detection Fix")]
+    [Range(0.1f, 1f)]
+    public float groundCheckWidthMultiplier = 0.9f;
+
+    public float groundCheckHeight = 0.12f;
+    public float groundCheckYOffset = 0.03f;
+
+    [Tooltip("Distance of the additional ground raycasts.")]
+    public float groundRaycastDistance = 0.15f;
+
+    [Range(0f, 0.5f)]
+    public float groundRaycastSideInset = 0.05f;
+
     [Header("Fall")]
     public string fallAnimName = "Fall";
     public bool playLandSoundAfterFall = true;
@@ -89,7 +102,7 @@ public class SC_player : MonoBehaviour
     private bool wasGroundedBeforeCheck;
     private bool isFalling;
     private bool fallWasTriggeredByJump;
-    private bool landPending;
+    private bool landingHandled;
 
     [Header("Damage Detection")]
     public Transform damageCheck;
@@ -198,6 +211,9 @@ public class SC_player : MonoBehaviour
             Jump.action.performed -= OnJumpStarted;
             Jump.action.canceled -= OnJumpReleased;
         }
+
+        if (Move != null)
+            Move.action.Disable();
     }
 
     // =========================================================
@@ -210,8 +226,11 @@ public class SC_player : MonoBehaviour
         climb_delay = true;
         health = sc_health_system.instance;
 
-        normal.SetActive(true);
-        transformed.SetActive(false);
+        if (normal != null)
+            normal.SetActive(true);
+
+        if (transformed != null)
+            transformed.SetActive(false);
 
         base_gravity = rb.gravityScale;
 
@@ -219,8 +238,10 @@ public class SC_player : MonoBehaviour
         fallWasTriggeredByJump = false;
         wasGrounded = false;
         wasGroundedBeforeCheck = false;
+        landingHandled = false;
 
-        spriteRenderer.material = normalMaterial;
+        if (spriteRenderer != null && normalMaterial != null)
+            spriteRenderer.material = normalMaterial;
     }
 
     // =========================================================
@@ -229,7 +250,8 @@ public class SC_player : MonoBehaviour
 
     private void Update()
     {
-        limit = SC_level_master.instance.limits;
+        if (SC_level_master.instance != null)
+            limit = SC_level_master.instance.limits;
 
         CheckStun();
         HandleLowHealthBlink();
@@ -237,9 +259,7 @@ public class SC_player : MonoBehaviour
         if (climbReattachTimer > 0f)
         {
             climbReattachTimer -= Time.deltaTime;
-
-            if (climbReattachTimer < 0f)
-                climbReattachTimer = 0f;
+            climbReattachTimer = Mathf.Max(0f, climbReattachTimer);
         }
 
         if (isStunned)
@@ -252,9 +272,11 @@ public class SC_player : MonoBehaviour
         if (!isFrozen &&
             canMove &&
             !eat_system.isEating &&
-            Time.timeScale != 0)
+            Time.timeScale != 0f)
         {
-            Vector2 input = Move.action.ReadValue<Vector2>();
+            Vector2 input = Move != null
+                ? Move.action.ReadValue<Vector2>()
+                : Vector2.zero;
 
             moveInput = new Vector2(
                 Mathf.Abs(input.x) > 0.2f ? Mathf.Sign(input.x) : 0f,
@@ -285,14 +307,20 @@ public class SC_player : MonoBehaviour
         }
 
         // GROUND CHECK
-        // Important : vérifier le sol AVANT de traiter le buffer.
         bool previousGrounded = wasGroundedBeforeCheck;
 
-        isGrounded = Physics2D.OverlapCircle(
-            groundCheckBottom.position,
-            groundCheckRadius,
-            groundLayer
-        );
+        bool detectedGround = CheckGroundReliable();
+
+        // Ne pas détecter un atterrissage pendant une montée.
+        bool movingTowardGround =
+            (rb.gravityScale >= 0f && rb.linearVelocity.y <= 0.05f) ||
+            (rb.gravityScale < 0f && rb.linearVelocity.y >= -0.05f);
+
+        isGrounded =
+            detectedGround &&
+            !isClimbing &&
+            !isDroppingThrough &&
+            movingTowardGround;
 
         // COYOTE TIME
         if (isGrounded)
@@ -301,37 +329,36 @@ public class SC_player : MonoBehaviour
         }
         else
         {
-            coyoteTimeCounter -= Time.deltaTime;
-
-            if (coyoteTimeCounter < 0f)
-                coyoteTimeCounter = 0f;
+            coyoteTimeCounter = Mathf.Max(
+                0f,
+                coyoteTimeCounter - Time.deltaTime
+            );
         }
 
-        bool landingFromAbove =
-            rb.gravityScale > 0f && rb.linearVelocity.y <= 0f;
-
-        bool landingFromBelow =
-            rb.gravityScale < 0f && rb.linearVelocity.y >= 0f;
-
-        if (!previousGrounded &&
-            isGrounded &&
-            !isClimbing &&
-            !isDroppingThrough &&
-            (landingFromAbove || landingFromBelow))
+        // LANDING
+        // Une seule exécution par contact avec le sol.
+        if (isGrounded && !previousGrounded && !landingHandled)
         {
             HandleLanding();
+            landingHandled = true;
         }
+
+        // Réarmer lorsque le joueur quitte le sol.
+        if (!isGrounded)
+        {
+            landingHandled = false;
+        }
+
         // JUMP BUFFER
         if (jumpBufferCounter > 0f)
         {
-            jumpBufferCounter -= Time.deltaTime;
-
-            if (jumpBufferCounter < 0f)
-                jumpBufferCounter = 0f;
+            jumpBufferCounter = Mathf.Max(
+                0f,
+                jumpBufferCounter - Time.deltaTime
+            );
         }
 
-        // Si une demande de saut est en attente, on la déclenche
-        // dès que le personnage touche réellement le sol.
+        // SAUT EN ATTENTE
         if (jumpBufferCounter > 0f &&
             isGrounded &&
             !isClimbing &&
@@ -345,26 +372,30 @@ public class SC_player : MonoBehaviour
             previousGrounded &&
             !isJumping &&
             !isClimbing &&
-            rb.linearVelocity.y < 0f)
+            !isDroppingThrough &&
+            ((rb.gravityScale >= 0f && rb.linearVelocity.y < 0f) ||
+             (rb.gravityScale < 0f && rb.linearVelocity.y > 0f)))
         {
             StartFallAnimation();
         }
 
-        // ANIMATIONS
+        // ANIMATIONS AU SOL ET SUR LES GRILLES
         if (isClimbing)
         {
             StopFallAnimation();
 
             if (moveInput.sqrMagnitude > 0.01f)
             {
-                if (!grid.isPlaying)
+                if (grid != null && !grid.isPlaying)
                     grid.Play();
 
                 anim.SetBool("Run", true);
             }
             else
             {
-                grid.Stop();
+                if (grid != null)
+                    grid.Stop();
+
                 anim.SetBool("Run", false);
             }
         }
@@ -374,90 +405,40 @@ public class SC_player : MonoBehaviour
 
             if (Mathf.Abs(moveInput.x) > 0.1f)
             {
-                if (!run.isPlaying)
+                if (run != null && !run.isPlaying)
                     run.Play();
 
                 anim.SetBool("Run", true);
             }
             else
             {
-                run.Stop();
+                if (run != null)
+                    run.Stop();
+
                 anim.SetBool("Run", false);
             }
         }
         else
         {
-            run.Stop();
+            if (run != null)
+                run.Stop();
+
             anim.SetBool("Run", false);
 
-            if (!isJumping &&
-                !isClimbing &&
-                rb.linearVelocity.y < 0f &&
-                rb.gravityScale > 0f)
-            {
-                StartFallAnimation();
-            }
+            bool movingAgainstGravity =
+                (rb.gravityScale >= 0f && rb.linearVelocity.y < 0f) ||
+                (rb.gravityScale < 0f && rb.linearVelocity.y > 0f);
 
             if (!isJumping &&
                 !isClimbing &&
-                rb.linearVelocity.y > 0f &&
-                rb.gravityScale < 0f)
+                !isDroppingThrough &&
+                movingAgainstGravity)
             {
                 StartFallAnimation();
             }
         }
 
-        // Fallback pour les animations de saut existantes.
-        if ((IsAnimationPlaying("jump_idle") ||
-             IsAnimationPlaying("Jump")) &&
-            isGrounded)
-        {
-            if (rb.gravityScale > 0f && rb.linearVelocity.y < 0.5f)
-            {
-                anim.SetTrigger("Land");
-                moveSpeed = base_speed;
-                burning = false;
-
-                if (land != null)
-                    land.PlayJuice();
-            }
-            else if (rb.gravityScale < 0f && rb.linearVelocity.y > -0.5f)
-            {
-                anim.SetTrigger("Land");
-                moveSpeed = base_speed;
-                burning = false;
-
-                if (land != null)
-                    land.PlayJuice();
-            }
-        }
-        if ((IsAnimationPlaying("jump_idle") ||
-             IsAnimationPlaying("Jump")) &&
-            isGrounded &&
-            wasGrounded &&
-            Mathf.Abs(rb.linearVelocity.y) ==0)
-        {
-            anim.SetTrigger("Land");
-            moveSpeed = base_speed;
-            burning = false;
-
-            if (land != null)
-                land.PlayJuice();
-        }
-
-        wasGrounded = isGrounded;
-        wasGroundedBeforeCheck = isGrounded;
-
-        // FACING
-        float yScale = transform.localScale.y;
-
-        if (moveInput.x > 0)
-            transform.localScale = new Vector3(1, yScale, 1);
-        else if (moveInput.x < 0)
-            transform.localScale = new Vector3(-1, yScale, 1);
-
-        // VARIABLE JUMP
-        // La hauteur dépend du maintien du bouton.
+        // SAUT VARIABLE
         if (isJumping && jumpHeld)
         {
             if (jumpTimeCounter > 0f)
@@ -480,27 +461,146 @@ public class SC_player : MonoBehaviour
                 isJumping = false;
             }
         }
+
+        // DIRECTION DU PERSONNAGE
+        float yScale = transform.localScale.y;
+
+        if (moveInput.x > 0f)
+            transform.localScale = new Vector3(1f, yScale, 1f);
+        else if (moveInput.x < 0f)
+            transform.localScale = new Vector3(-1f, yScale, 1f);
+
+        wasGrounded = isGrounded;
+        wasGroundedBeforeCheck = isGrounded;
+    }
+
+    // =========================================================
+    // RELIABLE GROUND DETECTION
+    // =========================================================
+
+    private bool CheckGroundReliable()
+    {
+        if (groundCheckBottom == null)
+            return false;
+
+        float width = groundCheckRadius * 2f;
+        float bottomY = groundCheckBottom.position.y;
+        float centerX = groundCheckBottom.position.x;
+
+        if (collider != null)
+        {
+            Bounds bounds = collider.bounds;
+
+            width = bounds.size.x * groundCheckWidthMultiplier;
+            centerX = bounds.center.x;
+
+            // Supporte également la gravité inversée.
+            bottomY = rb.gravityScale >= 0f
+                ? bounds.min.y
+                : bounds.max.y;
+        }
+
+        width = Mathf.Max(width, 0.05f);
+
+        float direction = rb.gravityScale >= 0f ? -1f : 1f;
+
+        Vector2 boxCenter = new Vector2(
+            centerX,
+            bottomY + direction * groundCheckYOffset
+        );
+
+        Vector2 boxSize = new Vector2(
+            width,
+            Mathf.Max(groundCheckHeight, 0.02f)
+        );
+
+        // Première vérification : zone couvrant les pieds.
+        Collider2D ground = Physics2D.OverlapBox(
+            boxCenter,
+            boxSize,
+            0f,
+            groundLayer
+        );
+
+        if (ground != null && ground != collider)
+            return true;
+
+        // Deuxième vérification : raycasts répartis sous
+        // le collider, notamment près des deux extrémités.
+        float halfWidth = width * 0.5f;
+        float inset = Mathf.Min(
+            groundRaycastSideInset,
+            halfWidth * 0.5f
+        );
+
+        float leftX = centerX - halfWidth + inset;
+        float rightX = centerX + halfWidth - inset;
+
+        float rayDistance = Mathf.Max(
+            groundRaycastDistance,
+            groundCheckYOffset + groundCheckHeight
+        );
+
+        Vector2 originCenter = new Vector2(centerX, bottomY);
+        Vector2 originLeft = new Vector2(leftX, bottomY);
+        Vector2 originRight = new Vector2(rightX, bottomY);
+
+        Vector2 rayDirection = rb.gravityScale >= 0f
+            ? Vector2.down
+            : Vector2.up;
+
+        if (HasGroundRay(originCenter, rayDirection, rayDistance))
+            return true;
+
+        if (HasGroundRay(originLeft, rayDirection, rayDistance))
+            return true;
+
+        if (HasGroundRay(originRight, rayDirection, rayDistance))
+            return true;
+
+        return false;
+    }
+
+    private bool HasGroundRay(
+        Vector2 origin,
+        Vector2 direction,
+        float distance)
+    {
+        RaycastHit2D rayHit = Physics2D.Raycast(
+            origin,
+            direction,
+            distance,
+            groundLayer
+        );
+
+        return rayHit.collider != null &&
+               rayHit.collider != collider;
     }
 
     // =========================================================
     // DROP THROUGH PLATFORM
     // =========================================================
 
-private void StartDropThrough()
-{
-    if (dropThroughCoroutine != null)
-        StopCoroutine(dropThroughCoroutine);
+    private void StartDropThrough()
+    {
+        if (dropThroughCoroutine != null)
+            StopCoroutine(dropThroughCoroutine);
 
-    dropThroughCoroutine = StartCoroutine(DropThroughPlatforms());
-}
+        dropThroughCoroutine = StartCoroutine(DropThroughPlatforms());
+    }
+
     private IEnumerator DropThroughPlatforms()
     {
         if (isDroppingThrough)
             yield break;
 
         isDroppingThrough = true;
+        isGrounded = false;
+        wasGroundedBeforeCheck = false;
+        landingHandled = false;
 
-        Collider2D[] playerColliders = GetComponentsInChildren<Collider2D>();
+        Collider2D[] playerColliders =
+            GetComponentsInChildren<Collider2D>();
 
         Collider2D[] platforms = Physics2D.OverlapCircleAll(
             transform.position,
@@ -514,14 +614,20 @@ private void StartDropThrough()
             {
                 if (playerCollider != null && platform != null)
                 {
-                    Physics2D.IgnoreCollision(playerCollider, platform, true);
+                    Physics2D.IgnoreCollision(
+                        playerCollider,
+                        platform,
+                        true
+                    );
                 }
             }
         }
 
+        float direction = rb.gravityScale >= 0f ? -1f : 1f;
+
         rb.linearVelocity = new Vector2(
             rb.linearVelocity.x,
-            -dropThroughVelocity
+            direction * Mathf.Abs(dropThroughVelocity)
         );
 
         yield return new WaitForSeconds(dropThroughTime);
@@ -532,7 +638,11 @@ private void StartDropThrough()
             {
                 if (playerCollider != null && platform != null)
                 {
-                    Physics2D.IgnoreCollision(playerCollider, platform, false);
+                    Physics2D.IgnoreCollision(
+                        playerCollider,
+                        platform,
+                        false
+                    );
                 }
             }
         }
@@ -547,7 +657,7 @@ private void StartDropThrough()
 
     private void FixedUpdate()
     {
-        if (Time.timeScale == 0)
+        if (Time.timeScale == 0f)
             return;
 
         if (isClimbing)
@@ -558,7 +668,9 @@ private void StartDropThrough()
                 return;
             }
 
-            Vector2 climbInput = Move.action.ReadValue<Vector2>();
+            Vector2 climbInput = Move != null
+                ? Move.action.ReadValue<Vector2>()
+                : Vector2.zero;
 
             if (climbInput.magnitude < 0.1f)
                 climbInput = Vector2.zero;
@@ -667,7 +779,7 @@ private void StartDropThrough()
 
     public void TryJump()
     {
-        if (Time.timeScale == 0)
+        if (Time.timeScale == 0f)
             return;
 
         if (!canJump || isStunned || isFrozen || !canMove)
@@ -676,7 +788,7 @@ private void StartDropThrough()
         if (eat_system.isEating)
             return;
 
-        // SAUT DEPUIS LA GRILLE
+        // SAUT DEPUIS UNE GRILLE
         if (isClimbing)
         {
             if (grillage == null)
@@ -689,30 +801,16 @@ private void StartDropThrough()
             else
             {
                 StopClimbingJump();
-
-                StopFallAnimation();
-
-                jumpTimeCounter = maxJumpTime;
-                isJumping = jumpHeld;
-
-                float jumpPower = eat_system.isPowerUpActive
-                    ? PowerJump
-                    : jumpForce;
-
-                rb.linearVelocity = new Vector2(
-                    rb.linearVelocity.x,
-                    jumpPower
-                );
-
-                anim.SetTrigger("Jump");
-
-                if (jump != null)
-                    jump.PlayJuice();
-
-                jumpBufferCounter = 0f;
-                coyoteTimeCounter = 0f;
+                PerformJump();
             }
 
+            return;
+        }
+
+        // SAUT AERIEN EN MODE INVINCIBLE
+        if (isInvincible)
+        {
+            PerformJump();
             return;
         }
 
@@ -727,36 +825,56 @@ private void StartDropThrough()
             if (!canPerformJump)
                 return;
 
-            StopFallAnimation();
-
-            // Initialiser la durée uniquement au démarrage effectif.
-            jumpTimeCounter = maxJumpTime;
-            isJumping = jumpHeld;
-
-            float jumpPower = eat_system.isPowerUpActive
-                ? PowerJump
-                : jumpForce;
-
-            float direction = rb.gravityScale >= 0f ? 1f : -1f;
-
-            rb.linearVelocity = new Vector2(
-                rb.linearVelocity.x,
-                jumpPower * direction
-            );
-
-            anim.SetTrigger("Jump");
-
-            if (jump != null)
-                jump.PlayJuice();
-
-            jumpBufferCounter = 0f;
-            coyoteTimeCounter = 0f;
+            PerformJump();
         }
+    }
+
+    private void PerformJump()
+    {
+        StopFallAnimation();
+
+        jumpTimeCounter = maxJumpTime;
+        isJumping = jumpHeld;
+
+        float jumpPower = eat_system.isPowerUpActive
+            ? PowerJump
+            : jumpForce;
+
+        float direction = rb.gravityScale >= 0f ? 1f : -1f;
+
+        rb.linearVelocity = new Vector2(
+            rb.linearVelocity.x,
+            jumpPower * direction
+        );
+
+        // Réarmer le prochain atterrissage.
+        landingHandled = false;
+
+        anim.ResetTrigger("Fall");
+        anim.ResetTrigger("Land");
+        anim.SetBool("Run", false);
+        anim.SetTrigger("Jump");
+
+        if (run != null)
+            run.Stop();
+
+        if (grid != null)
+            grid.Stop();
+
+        if (jump != null)
+            jump.PlayJuice();
+
+        jumpBufferCounter = 0f;
+        coyoteTimeCounter = 0f;
+
+        isGrounded = false;
+        wasGroundedBeforeCheck = false;
+        wasGrounded = false;
     }
 
     private void OnJumpStarted(InputAction.CallbackContext context)
     {
-        if (Time.timeScale == 0)
+        if (Time.timeScale == 0f)
             return;
 
         if (!canJump || isStunned || isFrozen ||
@@ -766,8 +884,12 @@ private void StartDropThrough()
         jumpHeld = true;
         jumpBufferCounter = jumpBufferTime;
 
-        // Déclenche immédiatement si le saut est autorisé.
-        // Sinon, le buffer attend l'atterrissage.
+        if (isInvincible)
+        {
+            TryJump();
+            return;
+        }
+
         if (isGrounded || coyoteTimeCounter > 0f || isClimbing)
             TryJump();
     }
@@ -791,8 +913,11 @@ private void StartDropThrough()
         isFalling = true;
         fallWasTriggeredByJump = isJumping;
 
-        run.Stop();
-        grid.Stop();
+        if (run != null)
+            run.Stop();
+
+        if (grid != null)
+            grid.Stop();
 
         anim.SetBool("Run", false);
         anim.ResetTrigger("Land");
@@ -801,19 +926,18 @@ private void StartDropThrough()
 
     private void StopFallAnimation()
     {
-        if (!isFalling)
-            return;
-
         isFalling = false;
         fallWasTriggeredByJump = false;
+
+        anim.ResetTrigger("Fall");
     }
 
     private void HandleLanding()
     {
-        // Ne pas effacer jumpBufferCounter ici :
-        // le buffer doit pouvoir déclencher le saut à l'atterrissage.
         isJumping = false;
+        jumpHeld = false;
         jumpTimeCounter = 0f;
+        jumpBufferCounter = 0f;
 
         isFalling = false;
         fallWasTriggeredByJump = false;
@@ -825,27 +949,27 @@ private void StartDropThrough()
         anim.ResetTrigger("Fall");
         anim.SetBool("Run", false);
 
-        run.Stop();
-        grid.Stop();
+        if (run != null)
+            run.Stop();
 
-        bool validLanding =
-            (rb.gravityScale > 0f && rb.linearVelocity.y < 0.5f) ||
-            (rb.gravityScale < 0f && rb.linearVelocity.y > -0.5f);
+        if (grid != null)
+            grid.Stop();
 
-        if (validLanding)
-        {
-            anim.SetTrigger("Land");
-            moveSpeed = base_speed;
-            burning = false;
+        moveSpeed = base_speed;
+        burning = false;
 
-            if (land != null)
-                land.PlayJuice();
-        }
+        anim.ResetTrigger("Land");
+        anim.SetTrigger("Land");
+
+        if (playLandSoundAfterFall && land != null)
+            land.PlayJuice();
     }
 
     public bool IsAnimationPlaying(string animationName)
     {
-        AnimatorStateInfo stateInfo = anim.GetCurrentAnimatorStateInfo(0);
+        AnimatorStateInfo stateInfo =
+            anim.GetCurrentAnimatorStateInfo(0);
+
         return stateInfo.IsName(animationName);
     }
 
@@ -924,7 +1048,8 @@ private void StartDropThrough()
                 lowHealthCoroutine = null;
             }
 
-            spriteRenderer.material = normalMaterial;
+            if (spriteRenderer != null && normalMaterial != null)
+                spriteRenderer.material = normalMaterial;
         }
     }
 
@@ -932,18 +1057,23 @@ private void StartDropThrough()
     {
         bool toggle = false;
 
-        while (health.current_health == 1)
+        while (health != null && health.current_health == 1)
         {
-            spriteRenderer.material = toggle
-                ? normalMaterial
-                : lowHealthMaterial;
+            if (spriteRenderer != null)
+            {
+                spriteRenderer.material = toggle
+                    ? normalMaterial
+                    : lowHealthMaterial;
+            }
 
             toggle = !toggle;
 
             yield return new WaitForSeconds(lowHealthBlinkRate);
         }
 
-        spriteRenderer.material = normalMaterial;
+        if (spriteRenderer != null && normalMaterial != null)
+            spriteRenderer.material = normalMaterial;
+
         lowHealthCoroutine = null;
     }
 
@@ -951,7 +1081,10 @@ private void StartDropThrough()
     // DAMAGE
     // =========================================================
 
-    public void TakeDamage(int damage, Vector2 ejection_power, Vector3 sourcePosition)
+    public void TakeDamage(
+        int damage,
+        Vector2 ejection_power,
+        Vector3 sourcePosition)
     {
         SC_icecream_eat_system.instance.CancelEat();
 
@@ -964,7 +1097,7 @@ private void StartDropThrough()
         if (isFrozen || eat_system.isPowerUpActive)
             return;
 
-        Invoke("delay_hit", hitFreezeTime);
+        Invoke(nameof(delay_hit), hitFreezeTime);
 
         anim.SetBool("Stun", false);
         anim.SetBool("Hit", true);
@@ -974,7 +1107,8 @@ private void StartDropThrough()
 
         if (damage == 0)
         {
-            bounce_sfx.PlayJuice();
+            if (bounce_sfx != null)
+                bounce_sfx.PlayJuice();
 
             if (knockbackInvincibilityCoroutine != null)
                 StopCoroutine(knockbackInvincibilityCoroutine);
@@ -993,7 +1127,9 @@ private void StartDropThrough()
         {
             health.take_damage(damage);
             eat_system.take_damage();
-            damage_sfx.PlayJuice();
+
+            if (damage_sfx != null)
+                damage_sfx.PlayJuice();
 
             if (health.current_health > 0)
             {
@@ -1024,9 +1160,12 @@ private void StartDropThrough()
     // BOUNCE / KNOCKBACK INVINCIBILITY
     // =========================================================
 
-    private IEnumerator BounceWithKnockback(Vector3 sourcePosition, Vector2 power)
+    private IEnumerator BounceWithKnockback(
+        Vector3 sourcePosition,
+        Vector2 power)
     {
-        Vector2 direction = (transform.position - sourcePosition).normalized;
+        Vector2 direction =
+            (transform.position - sourcePosition).normalized;
 
         knockbackVelocity = new Vector2(
             direction.x * hitKnockback.x * power.x,
@@ -1050,7 +1189,9 @@ private void StartDropThrough()
     // HIT FREEZE
     // =========================================================
 
-    private IEnumerator HitFreezeWithKnockback(Vector3 sourcePosition, Vector2 power)
+    private IEnumerator HitFreezeWithKnockback(
+        Vector3 sourcePosition,
+        Vector2 power)
     {
         isFrozen = true;
         canTakeDamage = false;
@@ -1063,7 +1204,8 @@ private void StartDropThrough()
         rb.bodyType = RigidbodyType2D.Dynamic;
         isFrozen = false;
 
-        Vector2 direction = (transform.position - sourcePosition).normalized;
+        Vector2 direction =
+            (transform.position - sourcePosition).normalized;
 
         knockbackVelocity = new Vector2(
             direction.x * hitKnockback.x * power.x,
@@ -1074,13 +1216,18 @@ private void StartDropThrough()
 
         if (!isInvincible)
             canTakeDamage = true;
+
+        hitCoroutine = null;
     }
 
     // =========================================================
     // LAVA
     // =========================================================
 
-    public void LavaHit(Vector2 launchVelocity, float controlMultiplier, float controlTime)
+    public void LavaHit(
+        Vector2 launchVelocity,
+        float controlMultiplier,
+        float controlTime)
     {
         burning = true;
 
@@ -1090,10 +1237,12 @@ private void StartDropThrough()
         rb.bodyType = RigidbodyType2D.Dynamic;
         rb.linearVelocity = launchVelocity;
 
-        StartCoroutine(LavaControlLock(controlMultiplier, controlTime));
+        StartCoroutine(
+            LavaControlLock(controlMultiplier, controlTime)
+        );
 
         anim.SetBool("Hit", true);
-        Invoke("delay", 0.15f);
+        Invoke(nameof(delay), 0.15f);
 
         if (isInvincible || !canTakeDamage)
             return;
@@ -1124,7 +1273,8 @@ private void StartDropThrough()
             Die();
         }
 
-        damage_lava_sfx.PlayJuice();
+        if (damage_lava_sfx != null)
+            damage_lava_sfx.PlayJuice();
     }
 
     private IEnumerator LavaControlLock(float multiplier, float time)
@@ -1154,7 +1304,7 @@ private void StartDropThrough()
     public void TriggerInvincibility(float duration)
     {
         StartInvincibility(duration);
-        Invoke("delay_safe", duration + 0.1f);
+        Invoke(nameof(delay_safe), duration + 0.1f);
     }
 
     public void StartInvincibility(float duration)
@@ -1162,9 +1312,10 @@ private void StartDropThrough()
         if (invincibilityCoroutine != null)
             StopCoroutine(invincibilityCoroutine);
 
-        invincibilityCoroutine = StartCoroutine(InvincibilityRoutine(duration));
+        invincibilityCoroutine =
+            StartCoroutine(InvincibilityRoutine(duration));
 
-        Invoke("delay", 0.15f);
+        Invoke(nameof(delay), 0.15f);
     }
 
     private void delay()
@@ -1183,13 +1334,17 @@ private void StartDropThrough()
         while (elapsed < duration)
         {
             visible = !visible;
-            spriteRenderer.enabled = visible;
+
+            if (spriteRenderer != null)
+                spriteRenderer.enabled = visible;
 
             yield return new WaitForSecondsRealtime(0.1f);
             elapsed += 0.1f;
         }
 
-        spriteRenderer.enabled = true;
+        if (spriteRenderer != null)
+            spriteRenderer.enabled = true;
+
         isInvincible = false;
         canTakeDamage = true;
 
@@ -1198,7 +1353,8 @@ private void StartDropThrough()
 
     private void delay_safe()
     {
-        spriteRenderer.enabled = true;
+        if (spriteRenderer != null)
+            spriteRenderer.enabled = true;
     }
 
     // =========================================================
@@ -1232,7 +1388,10 @@ private void StartDropThrough()
         anim.ResetTrigger("Punch");
         anim.SetBool("Eat", false);
 
-        transformation.PlayJuice();
+        isInvincible = true;
+
+        if (transformation != null)
+            transformation.PlayJuice();
 
         normal.SetActive(false);
         transformed.SetActive(true);
@@ -1307,7 +1466,8 @@ private void StartDropThrough()
         if (input.y < climbAttachUpThreshold)
             return;
 
-        if (Mathf.Abs(input.x) > input.y * climbAttachDiagonalLimit)
+        if (Mathf.Abs(input.x) >
+            input.y * climbAttachDiagonalLimit)
             return;
 
         StartClimbing();
@@ -1327,6 +1487,7 @@ private void StartDropThrough()
 
         StopFallAnimation();
         isClimbing = true;
+        landingHandled = false;
 
         if (grillage.isLadder)
         {
@@ -1365,7 +1526,7 @@ private void StartDropThrough()
 
         collision.isTrigger = false;
 
-        Invoke("delay_climb", 0.5f);
+        Invoke(nameof(delay_climb), 0.5f);
         climb_delay = false;
 
         isClimbing = false;
@@ -1375,8 +1536,12 @@ private void StartDropThrough()
         canClimb = false;
         rb.linearVelocity = Vector2.zero;
 
-        grid.Stop();
+        if (grid != null)
+            grid.Stop();
+
         anim.SetBool("Climb", false);
+        landingHandled = false;
+        wasGroundedBeforeCheck = false;
     }
 
     private void StopClimbingJump()
@@ -1398,8 +1563,13 @@ private void StartDropThrough()
         rb.gravityScale = base_gravity;
         rb.linearVelocity = Vector2.zero;
 
-        grid.Stop();
+        if (grid != null)
+            grid.Stop();
+
         anim.SetBool("Climb", false);
+
+        landingHandled = false;
+        wasGroundedBeforeCheck = false;
     }
 
     private void delay_climb()
@@ -1419,7 +1589,7 @@ private void StartDropThrough()
 
         float direction = target.position.x - transform.position.x;
 
-        if (direction > 0)
+        if (direction > 0f)
         {
             transform.localScale = new Vector3(
                 Mathf.Abs(transform.localScale.x),
@@ -1427,7 +1597,7 @@ private void StartDropThrough()
                 transform.localScale.z
             );
         }
-        else if (direction < 0)
+        else if (direction < 0f)
         {
             transform.localScale = new Vector3(
                 -Mathf.Abs(transform.localScale.x),
@@ -1477,7 +1647,9 @@ private void StartDropThrough()
         SC_music_manager.instance.stop_music();
 
         collider.enabled = false;
-        die.PlayJuice();
+
+        if (die != null)
+            die.PlayJuice();
 
         knockbackVelocity = Vector2.zero;
         externalVelocity = Vector2.zero;
@@ -1501,11 +1673,19 @@ private void StartDropThrough()
 
         StopAllCoroutines();
 
+        invincibilityCoroutine = null;
+        lowHealthCoroutine = null;
+        hitCoroutine = null;
+        dropThroughCoroutine = null;
+
+        CancelInvoke();
+
         isFrozen = false;
         isStunned = false;
         isInvincible = false;
         burning = false;
         canTakeDamage = true;
+        canMove = true;
 
         moveSpeed = base_speed;
         PowermoveSpeed = BasePowermoveSpeed;
@@ -1516,7 +1696,6 @@ private void StartDropThrough()
 
         climbReattachTimer = 0f;
         isDroppingThrough = false;
-        dropThroughCoroutine = null;
 
         externalVelocity = Vector2.zero;
         knockbackVelocity = Vector2.zero;
@@ -1535,6 +1714,8 @@ private void StartDropThrough()
         fallWasTriggeredByJump = false;
         wasGrounded = false;
         wasGroundedBeforeCheck = false;
+        isGrounded = false;
+        landingHandled = false;
 
         if (health != null)
             health.revive();
@@ -1552,6 +1733,12 @@ private void StartDropThrough()
         anim.SetBool("Die", false);
         anim.SetBool("Climb", false);
         anim.SetBool("Hit", false);
+        anim.SetBool("Stun", false);
+        anim.SetBool("Run", false);
+
+        anim.ResetTrigger("Jump");
+        anim.ResetTrigger("Fall");
+        anim.ResetTrigger("Land");
 
         anim.SetTrigger("Start");
 
@@ -1569,6 +1756,78 @@ private void StartDropThrough()
             Gizmos.color = Color.red;
             Gizmos.DrawWireSphere(damageCheck.position, damageRadius);
         }
+
+        if (groundCheckBottom != null)
+        {
+            Gizmos.color = Color.green;
+
+            float width = groundCheckRadius * 2f;
+            float bottomY = groundCheckBottom.position.y;
+            float centerX = groundCheckBottom.position.x;
+
+            if (collider != null)
+            {
+                Bounds bounds = collider.bounds;
+
+                width = bounds.size.x * groundCheckWidthMultiplier;
+                centerX = bounds.center.x;
+
+                bottomY = rb != null && rb.gravityScale < 0f
+                    ? bounds.max.y
+                    : bounds.min.y;
+            }
+
+            float direction = rb != null && rb.gravityScale < 0f
+                ? 1f
+                : -1f;
+
+            Vector3 center = new Vector3(
+                centerX,
+                bottomY + direction * groundCheckYOffset,
+                groundCheckBottom.position.z
+            );
+
+            Gizmos.DrawWireCube(
+                center,
+                new Vector3(
+                    width,
+                    groundCheckHeight,
+                    0.01f
+                )
+            );
+
+            float halfWidth = width * 0.5f;
+            float inset = Mathf.Min(
+                groundRaycastSideInset,
+                halfWidth * 0.5f
+            );
+
+            Vector3 leftOrigin = new Vector3(
+                centerX - halfWidth + inset,
+                bottomY,
+                groundCheckBottom.position.z
+            );
+
+            Vector3 rightOrigin = new Vector3(
+                centerX + halfWidth - inset,
+                bottomY,
+                groundCheckBottom.position.z
+            );
+
+            Vector3 rayDirection = direction > 0f
+                ? Vector3.up
+                : Vector3.down;
+
+            Gizmos.DrawLine(
+                leftOrigin,
+                leftOrigin + rayDirection * groundRaycastDistance
+            );
+
+            Gizmos.DrawLine(
+                rightOrigin,
+                rightOrigin + rayDirection * groundRaycastDistance
+            );
+        }
     }
 
     // =========================================================
@@ -1577,6 +1836,9 @@ private void StartDropThrough()
 
     private void LateUpdate()
     {
+        if (ghost == null)
+            return;
+
         float x = transform.position.x;
 
         if (x > limit.y - 0.2f)
