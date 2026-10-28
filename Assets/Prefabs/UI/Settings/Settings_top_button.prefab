@@ -138,7 +138,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   select_on_enable: 0
   hover: hover
-  unhover: 
+  unhover: unhover
   press: 
   onClick:
     m_PersistentCalls:

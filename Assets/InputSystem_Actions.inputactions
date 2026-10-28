@@ -78,15 +78,6 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "R_trigger",
-                    "type": "Button",
-                    "id": "02de01c6-e5df-4beb-8c55-d83bea34b130",
-                    "expectedControlType": "",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
-                },
-                {
                     "name": "R_bump",
                     "type": "Button",
                     "id": "2f40e7f9-7a7b-4400-84cf-257aef19ff23",
@@ -96,18 +87,27 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "L_trigger",
+                    "name": "L_bump",
                     "type": "Button",
-                    "id": "b67fb90d-428a-4644-bd30-1171b82b28c3",
+                    "id": "d27d2739-2993-4551-b00a-cdd94befb8cc",
                     "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
                 },
                 {
-                    "name": "L_bump",
+                    "name": "R_trigger",
                     "type": "Button",
-                    "id": "d27d2739-2993-4551-b00a-cdd94befb8cc",
+                    "id": "02de01c6-e5df-4beb-8c55-d83bea34b130",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "L_trigger",
+                    "type": "Button",
+                    "id": "b67fb90d-428a-4644-bd30-1171b82b28c3",
                     "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
@@ -467,6 +467,17 @@
                 },
                 {
                     "name": "",
+                    "id": "77a48440-df32-4635-b38d-3193c86d61d2",
+                    "path": "<Keyboard>/e",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "R_bump",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
                     "id": "8d54cd28-debe-488a-86e6-dce42b4c34c4",
                     "path": "<Gamepad>/rightShoulder",
                     "interactions": "",
@@ -484,6 +495,17 @@
                     "processors": "",
                     "groups": "",
                     "action": "L_trigger",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "31acda1d-c6eb-4586-b5fc-2d0a27d692b9",
+                    "path": "<Keyboard>/q",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "L_bump",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },

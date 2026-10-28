@@ -89,27 +89,32 @@ public class SC_input_assign : MonoBehaviour
 
     public void StartRebind()
     {
+        SC_settings.instance.dont_accept_input();
         pendingPartName = null;
         BeginWaitingForRelease();
     }
 
     public void StartRebindUp()
     {
+        SC_settings.instance.dont_accept_input();
         StartRebindDirection("up");
     }
 
     public void StartRebindDown()
     {
+        SC_settings.instance.dont_accept_input();
         StartRebindDirection("down");
     }
 
     public void StartRebindLeft()
     {
+        SC_settings.instance.dont_accept_input();
         StartRebindDirection("left");
     }
 
     public void StartRebindRight()
     {
+        SC_settings.instance.dont_accept_input();
         StartRebindDirection("right");
     }
 
@@ -442,6 +447,8 @@ public class SC_input_assign : MonoBehaviour
 
     private void FinishRebind(bool completed)
     {
+        SC_settings.instance.accept_input();
+
         if (rebindOperation != null)
         {
             rebindOperation.Dispose();

@@ -35,6 +35,11 @@ public class SC_settings : MonoBehaviour
     public InputActionReference next;
 
     private bool caninput = true;
+    public static SC_settings instance;
+    private void Awake()
+    {
+        instance = this;
+    }
     void Start()
     {
         checkpage();
@@ -126,12 +131,21 @@ public class SC_settings : MonoBehaviour
         caninput = true;
 
     }
+
+    public void dont_accept_input()
+    {
+        caninput = false;
+
+    }
     public void change_page(string page)
     {
 
-
-        nextpage = page;
-        anim.SetTrigger("change");
+        if ( page != nextpage)
+        {
+            nextpage = page;
+            anim.SetTrigger("change");
+        }
+        caninput = false; 
     }
 
     public void upfaate_visuals()

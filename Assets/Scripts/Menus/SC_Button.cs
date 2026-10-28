@@ -49,15 +49,16 @@ public class SC_Button : MonoBehaviour
 
     private void OnDisable()
     {
-        if (indicator != null)
-        {
-        indicator.SetActive(false);
-
-        }
-        OnUnhover();
-        isSelected = false;
-        isPressed = false;
-        isHovered = false;
+        //     if (indicator != null)
+        //     {
+        //     indicator.SetActive(false);
+        // 
+        //     }
+        //     PlayAnimation(unhover);
+        //     OnUnhover();
+        //     isSelected = false;
+        //    isPressed = false;
+        //    isHovered = false;
     }
     private void OnEnable()
     {
@@ -198,11 +199,7 @@ public class SC_Button : MonoBehaviour
         if (isPressed)
             return;
         isPressed = true;
-        if (indicator != null)
-        {
-        indicator.SetActive(false);
 
-        }
         if (juice2 != null)
         {
             juice2.PlayJuice();
