@@ -78,9 +78,6 @@ public class SC_NPC : MonoBehaviour
 
     private void OnDisable()
     {
-        if (interactAction != null)
-            interactAction.action.Disable();
-
         dialogueActive = false;
 
         if (interaction_popup != null)

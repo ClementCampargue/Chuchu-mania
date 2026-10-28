@@ -410,8 +410,7 @@ public class SC_player : MonoBehaviour
         // Fallback pour les animations de saut existantes.
         if ((IsAnimationPlaying("jump_idle") ||
              IsAnimationPlaying("Jump")) &&
-            isGrounded &&
-            Mathf.Abs(rb.linearVelocity.y) < 0.01f)
+            isGrounded)
         {
             if (rb.gravityScale > 0f && rb.linearVelocity.y < 0.5f)
             {

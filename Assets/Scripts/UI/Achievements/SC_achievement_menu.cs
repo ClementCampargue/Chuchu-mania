@@ -6,6 +6,7 @@ using UnityEngine.InputSystem;
 public class SC_achievement_menu : MonoBehaviour
 {
 
+    public InputActionReference move;
     public InputActionReference quit;
     public static SC_achievement_menu instance;
     public List<SO_achievement> achievements;
@@ -28,6 +29,9 @@ public class SC_achievement_menu : MonoBehaviour
 
     void Start()
     {
+        if (move != null)
+            move.action.Enable();
+
         achievement_count = achievements.Count;
         quit.action.Enable();
 
