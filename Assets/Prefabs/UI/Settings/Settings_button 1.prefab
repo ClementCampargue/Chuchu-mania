@@ -967,6 +967,7 @@ GameObject:
   - component: {fileID: 4769909401020418682}
   - component: {fileID: 3807753818518875703}
   - component: {fileID: 2170134826950248751}
+  - component: {fileID: 7427037715895425}
   m_Layer: 0
   m_Name: Settings_button 1
   m_TagString: Untagged
@@ -1304,7 +1305,7 @@ BoxCollider2D:
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Size: {x: 7.733115, y: 0.55}
+  m_Size: {x: 7.733115, y: 0.94}
   m_EdgeRadius: 0
 --- !u!114 &2170134826950248751
 MonoBehaviour:
@@ -1346,6 +1347,18 @@ MonoBehaviour:
   references:
     version: 2
     RefIds: []
+--- !u!210 &7427037715895425
+SortingGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6082544983177734813}
+  m_Enabled: 1
+  m_SortingLayerID: 458446795
+  m_SortingLayer: 1
+  m_SortingOrder: 3603
+  m_SortAtRoot: 0
 --- !u!1 &7703443230137552565
 GameObject:
   m_ObjectHideFlags: 0
