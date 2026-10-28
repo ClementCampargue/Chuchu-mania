@@ -46,6 +46,7 @@ public class SC_achievement_menu : MonoBehaviour
 
     private void Start()
     {
+        SC_scursorManager.instance.enable_cursor();
         if (move != null)
         {
             move.action.Enable();

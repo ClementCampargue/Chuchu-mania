@@ -575,6 +575,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fe63008edd9a46f4486573a2965c97e5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  moveaction: {fileID: -1680190386980627800, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
   pauseAction: {fileID: -8230713884396670134, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
   backAction: {fileID: 7727032971491509709, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
   pauseMenu: {fileID: 7158487531639679988}
@@ -2490,6 +2491,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1087063859948012584}
     - target: {fileID: 6583515353590309091, guid: f3c7b956bb8e2ae47a33403dbf3195bc, type: 3}
+      propertyPath: navigation
+      value: 
+      objectReference: {fileID: 6890741603307523585}
+    - target: {fileID: 6583515353590309091, guid: f3c7b956bb8e2ae47a33403dbf3195bc, type: 3}
       propertyPath: onClick.m_PersistentCalls.m_Calls.Array.size
       value: 1
       objectReference: {fileID: 0}
@@ -2961,6 +2966,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1087063859948012584}
     - target: {fileID: 6583515353590309091, guid: f3c7b956bb8e2ae47a33403dbf3195bc, type: 3}
+      propertyPath: navigation
+      value: 
+      objectReference: {fileID: 6890741603307523585}
+    - target: {fileID: 6583515353590309091, guid: f3c7b956bb8e2ae47a33403dbf3195bc, type: 3}
       propertyPath: onClick.m_PersistentCalls.m_Calls.Array.size
       value: 1
       objectReference: {fileID: 0}
@@ -3125,6 +3134,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1087063859948012584}
     - target: {fileID: 6583515353590309091, guid: f3c7b956bb8e2ae47a33403dbf3195bc, type: 3}
+      propertyPath: navigation
+      value: 
+      objectReference: {fileID: 6890741603307523585}
+    - target: {fileID: 6583515353590309091, guid: f3c7b956bb8e2ae47a33403dbf3195bc, type: 3}
       propertyPath: onClick.m_PersistentCalls.m_Calls.Array.size
       value: 1
       objectReference: {fileID: 0}
@@ -3281,6 +3294,10 @@ PrefabInstance:
       propertyPath: juice2
       value: 
       objectReference: {fileID: 1087063859948012584}
+    - target: {fileID: 6583515353590309091, guid: f3c7b956bb8e2ae47a33403dbf3195bc, type: 3}
+      propertyPath: navigation
+      value: 
+      objectReference: {fileID: 6890741603307523585}
     - target: {fileID: 6583515353590309091, guid: f3c7b956bb8e2ae47a33403dbf3195bc, type: 3}
       propertyPath: onClick.m_PersistentCalls.m_Calls.Array.size
       value: 1
@@ -3710,6 +3727,10 @@ PrefabInstance:
       propertyPath: juice2
       value: 
       objectReference: {fileID: 1087063859948012584}
+    - target: {fileID: 6583515353590309091, guid: f3c7b956bb8e2ae47a33403dbf3195bc, type: 3}
+      propertyPath: navigation
+      value: 
+      objectReference: {fileID: 6890741603307523585}
     - target: {fileID: 6583515353590309091, guid: f3c7b956bb8e2ae47a33403dbf3195bc, type: 3}
       propertyPath: onClick.m_PersistentCalls.m_Calls.Array.size
       value: 1

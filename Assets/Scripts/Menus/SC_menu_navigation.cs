@@ -785,7 +785,7 @@ public class SC_menu_navigation : MonoBehaviour
         {
             currentIndex = lastSelected;
 
-            buttons[currentIndex].Select();
+            buttons[currentIndex].ForceSelect();
 
             Debug.Log("bouton " + currentIndex);
 
@@ -803,7 +803,7 @@ public class SC_menu_navigation : MonoBehaviour
             currentIndex = defaultSelected;
             lastSelected = defaultSelected;
 
-            buttons[currentIndex].Select();
+            buttons[currentIndex].ForceSelect();
 
             return;
         }
@@ -820,7 +820,7 @@ public class SC_menu_navigation : MonoBehaviour
             currentIndex = first;
             lastSelected = first;
 
-            buttons[currentIndex].Select();
+            buttons[currentIndex].ForceSelect();
         }
         else
         {

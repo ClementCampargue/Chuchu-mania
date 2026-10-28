@@ -8,6 +8,7 @@ using UnityEngine.SceneManagement;
 public class SC_pause : MonoBehaviour
 {
     [Header("Input")]
+    public InputActionReference moveaction;
     public InputActionReference pauseAction;
     public InputActionReference backAction;
 
@@ -126,7 +127,7 @@ public class SC_pause : MonoBehaviour
 
         if (!isPaused || !canUsePauseInput)
             return;
-
+        moveaction.action.Enable();
         if (backAction != null &&
             backAction.action.WasPressedThisFrame())
         {

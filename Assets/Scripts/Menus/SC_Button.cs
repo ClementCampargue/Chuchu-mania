@@ -1,3 +1,4 @@
+
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -5,166 +6,269 @@ using UnityEngine.Events;
 public class SC_Button : MonoBehaviour
 {
     public bool select_on_enable;
+
     [Header("Animations")]
     public string hover;
     public string unhover;
     public string press;
-
 
     [Header("Events")]
     public UnityEvent onClick;
     public UnityEvent onHover;
     public UnityEvent onUnhover;
 
-    private Animator anim;
-
-    public bool isSelected;   // Navigation clavier/manette
-    public bool isHovered;    // Souris
+    [Header("States")]
+    public bool isSelected;
+    public bool isHovered;
     public bool isPressed;
+
+    [Header("References")]
     public GameObject indicator;
-    public bool accept_input = true;
     public SC_juiciness juice;
     public SC_juiciness juice2;
-    public bool clickable = true;
     public SC_menu_navigation navigation;
+
+    [Header("Settings")]
+    public bool accept_input = true;
+    public bool clickable = true;
+
+    private Animator anim;
+
+    // Un seul bouton actif pour tout le menu.
+    private static SC_Button activeButton;
+
+    private bool mouseInside;
+    private bool wasController;
+
     private void Awake()
     {
         anim = GetComponent<Animator>();
+        previousController = IsUsingController();
+        wasController = previousController;
+        UpdateIndicator();
     }
     private void Start()
     {
-        if (select_on_enable)
+        if (select_on_enable && clickable)
+        {
+            Select();
+        }
+    }
+
+    private void OnEnable()
+    {
+        if (select_on_enable && IsUsingController() && clickable)
         {
             Select();
         }
     }
 
 
+    private bool previousController;
+
+    private void Update()
+    {
+        bool usingController = IsUsingController();
+
+        // Passage de la souris à la manette.
+        if (usingController && !previousController)
+        {
+            previousController = true;
+
+            // Le bouton survolé devient la sélection de départ.
+            if (activeButton != null && activeButton.isHovered)
+            {
+                SC_Button hoveredButton = activeButton;
+
+                hoveredButton.isHovered = false;
+                hoveredButton.isSelected = false;
+
+                hoveredButton.ForceSelect();
+            }
+            else if (isHovered)
+            {
+                isHovered = false;
+                Select();
+            }
+
+            mouseInside = false;
+            UpdateIndicator();
+        }
+        // Passage de la manette à la souris.
+        else if (!usingController && previousController)
+        {
+            previousController = false;
+
+            // On conserve la sélection actuelle jusqu'au
+            // prochain survol réel de la souris.
+            mouseInside = false;
+        }
+
+        // Un seul bouton actif à la fois.
+        if ((!isActiveAndEnabled || !clickable) && activeButton == this)
+        {
+            ReleaseActiveButton();
+        }
+
+        if (activeButton != this && (isSelected || isHovered))
+        {
+            isSelected = false;
+            isHovered = false;
+            UpdateIndicator();
+        }
+    }
+
+    private bool IsUsingController()
+    {
+        return SC_controller_manager.instance != null &&
+               SC_controller_manager.instance.using_controller;
+    }
+
+    // Sélection clavier/manette.
     public void Select()
-    {if (juice != null)
-        {
+    {
+        if (!clickable || !accept_input || !isActiveAndEnabled)
+            return;
+
+        Activate();
+
+        if (juice != null)
             juice.PlayJuice();
-        }
+
         isSelected = true;
-        if (indicator != null)
-        {
-            indicator.SetActive(true);
-        }
+        isHovered = false;
+        mouseInside = false;
+
+        UpdateIndicator();
+        Hover();
+        PlayAnimation(hover);
+    }
+    
+    public void ForceSelect()
+    {
+
+
+        Activate();
+
+        if (juice != null)
+            juice.PlayJuice();
+
+        isSelected = true;
+        isHovered = false;
+        mouseInside = false;
+
+        UpdateIndicator();
         Hover();
         PlayAnimation(hover);
     }
 
-    private void OnDisable()
-    {
-        //     if (indicator != null)
-        //     {
-        //     indicator.SetActive(false);
-        // 
-        //     }
-        //     PlayAnimation(unhover);
-        //     OnUnhover();
-        //     isSelected = false;
-        //    isPressed = false;
-        //    isHovered = false;
-    }
-    private void OnEnable()
-    {
-        if (select_on_enable && SC_controller_manager.instance.using_controller)
-        {
-            Select();
-        }
-    }
-
-    // Appelé par EventSystem Deselect()
+    // Désélection clavier/manette.
     public void UnSelect()
     {
-        if (!isSelected)
+        if (!isSelected && activeButton != this)
             return;
-
 
         isSelected = false;
 
-        // Si la souris est dessus, on garde l'état hover
         if (!isHovered)
         {
-            PlayAnimation(unhover);
-            if (indicator != null)
-            {
-            indicator.SetActive(false);
+            if (activeButton == this)
+                activeButton = null;
 
-            }
+            OnUnhover();
+            PlayAnimation(unhover);
         }
+
+        UpdateIndicator();
     }
 
+    private void Activate()
+    {
+        if (activeButton != null && activeButton != this)
+        {
+            activeButton.ClearActiveState();
+        }
+
+        activeButton = this;
+    }
+
+    private void ClearActiveState()
+    {
+        bool wasActive = isSelected || isHovered;
+
+        isSelected = false;
+        isHovered = false;
+        mouseInside = false;
+
+        if (wasActive)
+        {
+            OnUnhover();
+            PlayAnimation(unhover);
+        }
+
+        UpdateIndicator();
+    }
+
+    private void ReleaseActiveButton()
+    {
+        if (activeButton == this)
+            activeButton = null;
+
+        ClearActiveState();
+    }
 
     private void OnMouseEnter()
     {
-        if (SC_controller_manager.instance != null &&
-            SC_controller_manager.instance.using_controller)
+        if (IsUsingController())
             return;
-        if(navigation != null)
-        {if(navigation.buttons.Length > 0)
-            {
-                foreach (SC_Button button in navigation.buttons)
-                {
-                    button.UnSelect();
-                }
-            }
 
-        }
-        if (!clickable)
-            {
-                return;
-        }
-        Hover();
+        mouseInside = true;
+
+        if (!clickable || !accept_input)
+            return;
+
+        Activate();
+
+        isHovered = true;
+        isSelected = false;
+        isPressed = false;
 
         if (juice != null)
-        {
             juice.PlayJuice();
-        }
 
-        isPressed = false;
-        isHovered = true;
-        if (indicator != null)
-        {
-        indicator.SetActive(true);
-
-        }
-
+        Hover();
+        UpdateIndicator();
         PlayAnimation(hover);
     }
 
     private void OnMouseExit()
     {
-        if (!clickable)
-        {
-            return;
-        }
-        if (SC_controller_manager.instance != null &&
-            SC_controller_manager.instance.using_controller)
-            return;
-        OnUnhover();
-        isHovered = false;
-        if (indicator != null)
-        {
-        indicator.SetActive(false);
+        mouseInside = false;
 
-        }
+        if (IsUsingController())
+            return;
+
+        if (!isHovered)
+            return;
+
+        isHovered = false;
+        OnUnhover();
+
+        if (activeButton == this)
+            activeButton = null;
+
+        UpdateIndicator();
 
         if (!isSelected)
-        {
             PlayAnimation(unhover);
-        }
     }
 
     private void OnMouseDown()
     {
-        if (!clickable)
-        {
+        if (IsUsingController())
             return;
-        }
-        if (SC_controller_manager.instance != null &&
-            SC_controller_manager.instance.using_controller)
+
+        if (!clickable || !accept_input || !isHovered)
             return;
 
         PressAnimation();
@@ -172,56 +276,56 @@ public class SC_Button : MonoBehaviour
 
     private void OnMouseUp()
     {
-        if (!clickable)
-        {
-            return;
-        }
-        if (SC_controller_manager.instance != null &&
-            SC_controller_manager.instance.using_controller)
+        if (IsUsingController())
             return;
 
-        if (isHovered)
+        if (!clickable || !accept_input)
+            return;
+
+        if (isHovered && mouseInside)
         {
             Click();
         }
-        if (indicator != null)
-        {
-        indicator.SetActive(false);
 
-        }
         isPressed = false;
     }
 
-
-
+    // Appel externe, par exemple depuis la navigation.
     public void Press()
     {
+        if (!clickable || !accept_input)
+            return;
+
+        Select();
         PressAnimation();
         Click();
     }
-
 
     private void PressAnimation()
     {
         if (isPressed)
             return;
+
         isPressed = true;
 
         if (juice2 != null)
-        {
             juice2.PlayJuice();
-        }
+
         PlayAnimation(press);
-        Invoke("delay",0.5f);
+        CancelInvoke(nameof(ResetPressed));
+        Invoke(nameof(ResetPressed), 0.5f);
     }
-    void delay()
+
+    private void ResetPressed()
     {
         isPressed = false;
     }
 
     public void Click()
     {
-      
+        if (!clickable || !accept_input)
+            return;
+
         onClick?.Invoke();
     }
 
@@ -233,21 +337,56 @@ public class SC_Button : MonoBehaviour
     public void OnUnhover()
     {
         onUnhover?.Invoke();
-
     }
 
+    private void UpdateIndicator()
+    {
+        if (indicator != null)
+        {
+            indicator.SetActive(isSelected || isHovered);
+        }
+    }
 
     public void PlayAnimation(string trigger)
     {
         if (anim == null || string.IsNullOrEmpty(trigger))
             return;
-        anim.enabled = true;
-        anim.ResetTrigger("Hover");
-        anim.ResetTrigger("Unhover");
 
-        anim.ResetTrigger(trigger);
+        anim.enabled = true;
+
+        if (!string.IsNullOrEmpty(hover))
+            anim.ResetTrigger(hover);
+
+        if (!string.IsNullOrEmpty(unhover))
+            anim.ResetTrigger(unhover);
+
+        if (!string.IsNullOrEmpty(press))
+            anim.ResetTrigger(press);
+
         anim.SetTrigger(trigger);
     }
+
+    private void OnDisable()
+    {
+        CancelInvoke();
+
+        if (activeButton == this)
+            activeButton = null;
+
+        isSelected = false;
+        isHovered = false;
+        isPressed = false;
+        mouseInside = false;
+
+        UpdateIndicator();
+    }
+
+    private void OnDestroy()
+    {
+        if (activeButton == this)
+            activeButton = null;
+    }
+
     private void OnDrawGizmosSelected()
     {
         Collider2D col = GetComponent<Collider2D>();
