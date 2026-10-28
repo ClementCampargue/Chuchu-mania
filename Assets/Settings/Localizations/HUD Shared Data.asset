@@ -1,0 +1,76 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5b11a58205ec3474ca216360e9fa74a8, type: 3}
+  m_Name: HUD Shared Data
+  m_EditorClassIdentifier: 
+  m_TableCollectionName: HUD
+  m_TableCollectionNameGuidString: 1e717d2d8766cef439598bd0974a3072
+  m_Entries:
+  - m_Id: 23607394304
+    m_Key: HUD01
+    m_Metadata:
+      m_Items: []
+  - m_Id: 23628365824
+    m_Key: HUD02
+    m_Metadata:
+      m_Items: []
+  - m_Id: 23628365825
+    m_Key: HUD03
+    m_Metadata:
+      m_Items: []
+  - m_Id: 23628365826
+    m_Key: HUD04
+    m_Metadata:
+      m_Items: []
+  - m_Id: 23628365827
+    m_Key: HUD05
+    m_Metadata:
+      m_Items: []
+  - m_Id: 23628365828
+    m_Key: HUD06
+    m_Metadata:
+      m_Items: []
+  - m_Id: 23628365829
+    m_Key: HUD07
+    m_Metadata:
+      m_Items: []
+  - m_Id: 290163802112
+    m_Key: HUD08
+    m_Metadata:
+      m_Items: []
+  - m_Id: 290163802113
+    m_Key: HUD09
+    m_Metadata:
+      m_Items: []
+  - m_Id: 290163802114
+    m_Key: HUD10
+    m_Metadata:
+      m_Items: []
+  - m_Id: 290163802115
+    m_Key: HUD11
+    m_Metadata:
+      m_Items: []
+  - m_Id: 290163802116
+    m_Key: HUD12
+    m_Metadata:
+      m_Items: []
+  m_Metadata:
+    m_Items: []
+  m_KeyGenerator:
+    rid: 1772536535881875537
+  references:
+    version: 2
+    RefIds:
+    - rid: 1772536535881875537
+      type: {class: DistributedUIDGenerator, ns: UnityEngine.Localization.Tables, asm: Unity.Localization}
+      data:
+        m_CustomEpoch: 1793194785484

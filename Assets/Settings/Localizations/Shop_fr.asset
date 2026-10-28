@@ -1,0 +1,129 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e9620f8c34305754d8cc9a7e49e852d9, type: 3}
+  m_Name: Shop_fr
+  m_EditorClassIdentifier: 
+  m_LocaleId:
+    m_Code: fr
+  m_SharedData: {fileID: 11400000, guid: bd1c074ee1187054682a51424306ff77, type: 2}
+  m_Metadata:
+    m_Items: []
+  m_TableData:
+  - m_Id: 19970932736
+    m_Localized: Boutique
+    m_Metadata:
+      m_Items: []
+  - m_Id: 19987709952
+    m_Localized: "Mr D\xF4"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 19987709953
+    m_Localized: "Oh ma cliente pr\xE9f\xE9r\xE9e! Viens voir tout ce que j'ai \xE0
+      te proposer, Jolli-Jelli!"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 19987709954
+    m_Localized: Acheter
+    m_Metadata:
+      m_Items: []
+  - m_Id: 19991904256
+    m_Localized: Yanyapon
+    m_Metadata:
+      m_Items: []
+  - m_Id: 19991904257
+    m_Localized: "L'adr\xE9naline du hasard! Vas-tu tomber sur LE sticker ultime?
+      Ou bien le m\xEAme en 10 exemplaire..."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 19991904258
+    m_Localized: "D\xF4 no Gelato n'est pas tenu responsable de votre malchance"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 19991904259
+    m_Localized: "Sticker \xE0 l'unit\xE9"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 19991904260
+    m_Localized: Si la chance ne te sourit pas, c'est l'alternative parfaite pour
+      etoffer ta collection!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 19991904261
+    m_Localized: "Cadre \xE0 l'unit\xE9"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 19991904262
+    m_Localized: Donne un petit coup de polish aux bordures entourant notre monde!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 19991904263
+    m_Localized: Souhait
+    m_Metadata:
+      m_Items: []
+  - m_Id: 19991904264
+    m_Localized: "Certains succ\xE8s te donnent du fil \xE0 retordre? Tu n'as qu'\xE0
+      souhaiter qu'il se r\xE9alise!"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 19991904265
+    m_Localized: Petit sourire
+    m_Metadata:
+      m_Items: []
+  - m_Id: 19991904266
+    m_Localized: "La bonne humeur \xE7a n'a pas de prix!"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 19991904267
+    m_Localized: Un plaisir de faire affaire avec toi, honhonhon
+    m_Metadata:
+      m_Items: []
+  - m_Id: 19991904268
+    m_Localized: A plus tard Chuchu!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 19991904269
+    m_Localized: Discuter
+    m_Metadata:
+      m_Items: []
+  - m_Id: 19991904270
+    m_Localized: "Yanya m'a fait d\xE9couvrir l'un de ces jeux \xE9lectroniques avec
+      du poker mais les r\xE8gles sont totalement diff\xE9rentes!"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 19991904271
+    m_Localized: "Chuchu, Merry est en train de me fixer depuis dix minutes je suis
+      pris en hottage \xE0 l'aide cette femme est une menace"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 19991904272
+    m_Localized: "Il faudra un jour que je t'apprenne deux trois techniques de combat.
+      J'\xE9tais un champion autrefois, tu sais?"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 19991904273
+    m_Localized: "Ce caf\xE9 est tout pour moi! C'est une promesse que j'ai tenu
+      pour elle... J'esp\xE8re qu'elle va bien..."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 19991904274
+    m_Localized: "Yanya ne peut pas s'emp\xEAcher d'adopter tous les chats errants
+      qu'elle trouve mais bon au moins \xE7a attire la client\xE8le"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 19991904275
+    m_Localized: "JE SUIS EN DETTE CHUCHU! Alors ach\xE8te moi un truc au moins!
+      Un peu, juste un peu!"
+    m_Metadata:
+      m_Items: []
+  references:
+    version: 2
+    RefIds: []

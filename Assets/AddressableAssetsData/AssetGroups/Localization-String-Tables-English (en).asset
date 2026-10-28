@@ -15,6 +15,24 @@ MonoBehaviour:
   m_GroupName: Localization-String-Tables-English (en)
   m_GUID: d85032a6ec68854478b2bc0f76868855
   m_SerializeEntries:
+  - m_GUID: 1b1582e0f7c9afe4a8354146dfe2fbe5
+    m_Address: General_en
+    m_ReadOnly: 1
+    m_SerializedLabels:
+    - Locale-en
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 3d174853ea8859a48a5ed0d0f2f2cdf6
+    m_Address: Settings_en
+    m_ReadOnly: 1
+    m_SerializedLabels:
+    - Locale-en
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 680177d02fde88944be4acce19cec804
+    m_Address: Galaxy_en
+    m_ReadOnly: 1
+    m_SerializedLabels:
+    - Locale-en
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 73b548e7aa7e11a4d90d9e5abc8c39b5
     m_Address: "Succ\xE8s_en"
     m_ReadOnly: 1
@@ -40,6 +58,12 @@ MonoBehaviour:
     - Locale-en
     - Preload
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: a4e8c404952c14b4eb8961597ab0b38b
+    m_Address: Shop_en
+    m_ReadOnly: 1
+    m_SerializedLabels:
+    - Locale-en
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: b2c38516ab8238c4fada3c6e0eb7f218
     m_Address: Tutoriel_en
     m_ReadOnly: 1
@@ -52,6 +76,12 @@ MonoBehaviour:
     m_SerializedLabels:
     - Locale-en
     - Preload
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: e3a0d9e9192e57f409ca829cea8d4cea
+    m_Address: HUD_en
+    m_ReadOnly: 1
+    m_SerializedLabels:
+    - Locale-en
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: e7fcc3f80b15a364bb06f609e0cb3576
     m_Address: Cutscenes_en
