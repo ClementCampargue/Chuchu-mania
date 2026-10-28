@@ -23,67 +23,68 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 19987709952
-    m_Localized: "Mr D\xF4"
-    m_Metadata:
-      m_Items: []
-  - m_Id: 19987709953
     m_Localized: "Oh ma cliente pr\xE9f\xE9r\xE9e! Viens voir tout ce que j'ai \xE0
       te proposer, Jolli-Jelli!"
     m_Metadata:
       m_Items: []
-  - m_Id: 19987709954
+  - m_Id: 19987709953
     m_Localized: Acheter
     m_Metadata:
       m_Items: []
-  - m_Id: 19991904256
+  - m_Id: 19987709954
     m_Localized: Yanyapon
     m_Metadata:
       m_Items: []
-  - m_Id: 19991904257
+  - m_Id: 19991904256
     m_Localized: "L'adr\xE9naline du hasard! Vas-tu tomber sur LE sticker ultime?
       Ou bien le m\xEAme en 10 exemplaire..."
     m_Metadata:
       m_Items: []
-  - m_Id: 19991904258
+  - m_Id: 19991904257
     m_Localized: "D\xF4 no Gelato n'est pas tenu responsable de votre malchance"
     m_Metadata:
       m_Items: []
-  - m_Id: 19991904259
+  - m_Id: 19991904258
     m_Localized: "Sticker \xE0 l'unit\xE9"
     m_Metadata:
       m_Items: []
-  - m_Id: 19991904260
+  - m_Id: 19991904259
     m_Localized: Si la chance ne te sourit pas, c'est l'alternative parfaite pour
       etoffer ta collection!
     m_Metadata:
       m_Items: []
-  - m_Id: 19991904261
+  - m_Id: 19991904260
     m_Localized: "Cadre \xE0 l'unit\xE9"
     m_Metadata:
       m_Items: []
-  - m_Id: 19991904262
+  - m_Id: 19991904261
     m_Localized: Donne un petit coup de polish aux bordures entourant notre monde!
     m_Metadata:
       m_Items: []
-  - m_Id: 19991904263
+  - m_Id: 19991904262
     m_Localized: Souhait
     m_Metadata:
       m_Items: []
-  - m_Id: 19991904264
+  - m_Id: 19991904263
     m_Localized: "Certains succ\xE8s te donnent du fil \xE0 retordre? Tu n'as qu'\xE0
       souhaiter qu'il se r\xE9alise!"
     m_Metadata:
       m_Items: []
-  - m_Id: 19991904265
+  - m_Id: 19991904264
     m_Localized: Petit sourire
     m_Metadata:
       m_Items: []
-  - m_Id: 19991904266
+  - m_Id: 19991904265
     m_Localized: "La bonne humeur \xE7a n'a pas de prix!"
     m_Metadata:
       m_Items: []
-  - m_Id: 19991904267
+  - m_Id: 19991904266
     m_Localized: Un plaisir de faire affaire avec toi, honhonhon
+    m_Metadata:
+      m_Items: []
+  - m_Id: 19991904267
+    m_Localized: "D\xE9sol\xE9 Chuchu, je ne fais pas cr\xE9dit. Reviens quand tu
+      sera plus hmmm... riche!"
     m_Metadata:
       m_Items: []
   - m_Id: 19991904268
@@ -122,6 +123,11 @@ MonoBehaviour:
   - m_Id: 19991904275
     m_Localized: "JE SUIS EN DETTE CHUCHU! Alors ach\xE8te moi un truc au moins!
       Un peu, juste un peu!"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29411606544384
+    m_Localized: "Et un sourire gratuit pour toi! Bon maintenant tu ach\xE8tes quelque
+      chose pour de vrai?"
     m_Metadata:
       m_Items: []
   references:

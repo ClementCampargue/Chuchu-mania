@@ -79,7 +79,7 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 157615407122
-    m_Localized: New!
+    m_Localized: NEW!
     m_Metadata:
       m_Items: []
   - m_Id: 157615407123
@@ -104,6 +104,18 @@ MonoBehaviour:
       m_Items: []
   - m_Id: 157615407128
     m_Localized: Get Wish!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 157615407112
+    m_Localized: Come back to Pebble Lauchpad?
+    m_Metadata:
+      m_Items: []
+  - m_Id: 157615407113
+    m_Localized: (You will start the galaxy from the start)
+    m_Metadata:
+      m_Items: []
+  - m_Id: 157615407116
+    m_Localized: Apply
     m_Metadata:
       m_Items: []
   references:

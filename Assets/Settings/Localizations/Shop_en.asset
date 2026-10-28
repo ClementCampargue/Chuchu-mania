@@ -23,31 +23,31 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 19987709952
-    m_Localized: "Mr D\xF4"
+    m_Localized: 
     m_Metadata:
       m_Items: []
   - m_Id: 19987709954
-    m_Localized: Buy
-    m_Metadata:
-      m_Items: []
-  - m_Id: 19991904256
     m_Localized: Yanyapon
     m_Metadata:
       m_Items: []
+  - m_Id: 19991904256
+    m_Localized: 
+    m_Metadata:
+      m_Items: []
   - m_Id: 19991904259
-    m_Localized: Sticker
+    m_Localized: 
     m_Metadata:
       m_Items: []
   - m_Id: 19991904261
-    m_Localized: Overlay
+    m_Localized: 
     m_Metadata:
       m_Items: []
   - m_Id: 19991904263
-    m_Localized: Wish
+    m_Localized: 
     m_Metadata:
       m_Items: []
   - m_Id: 19991904265
-    m_Localized: Little Smile
+    m_Localized: 
     m_Metadata:
       m_Items: []
   - m_Id: 19991904268
@@ -56,6 +56,35 @@ MonoBehaviour:
       m_Items: []
   - m_Id: 19991904269
     m_Localized: Talk
+    m_Metadata:
+      m_Items: []
+  - m_Id: 19991904270
+    m_Localized: 
+    m_Metadata:
+      m_Items: []
+  - m_Id: 19987709953
+    m_Localized: Buy
+    m_Metadata:
+      m_Items: []
+  - m_Id: 19991904258
+    m_Localized: Sticker
+    m_Metadata:
+      m_Items: []
+  - m_Id: 19991904260
+    m_Localized: Overlay
+    m_Metadata:
+      m_Items: []
+  - m_Id: 19991904262
+    m_Localized: Wish
+    m_Metadata:
+      m_Items: []
+  - m_Id: 19991904264
+    m_Localized: Little Smile
+    m_Metadata:
+      m_Items: []
+  - m_Id: 19991904267
+    m_Localized: Sorry Chuchu, I can't give credits. Come back when you're a little
+      hmmm... richer!
     m_Metadata:
       m_Items: []
   references:

@@ -19,7 +19,7 @@ MonoBehaviour:
     m_Items: []
   m_TableData:
   - m_Id: 18779750400
-    m_Localized: Galaxies
+    m_Localized: Explore the Galaxies
     m_Metadata:
       m_Items: []
   - m_Id: 18800721920
@@ -43,38 +43,42 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 18800721925
-    m_Localized: Bubble Beach Galaxy
+    m_Localized: Select a level
     m_Metadata:
       m_Items: []
   - m_Id: 18800721926
-    m_Localized: Sandcastles
+    m_Localized: Bubble Beach Galaxy
     m_Metadata:
       m_Items: []
   - m_Id: 18800721927
-    m_Localized: Han'Bo swamp
+    m_Localized: Sandcastles
     m_Metadata:
       m_Items: []
   - m_Id: 18800721928
-    m_Localized: Honey Hoop Galaxy
+    m_Localized: Han'Bo swamp
     m_Metadata:
       m_Items: []
   - m_Id: 18800721929
-    m_Localized: Honey Factory
+    m_Localized: Honey Hoop Galaxy
     m_Metadata:
       m_Items: []
   - m_Id: 18800721930
-    m_Localized: Bramble Forest
+    m_Localized: Honey Factory
     m_Metadata:
       m_Items: []
   - m_Id: 18800721931
-    m_Localized: Mochi Moondom
+    m_Localized: Bramble Forest
     m_Metadata:
       m_Items: []
   - m_Id: 18804916224
-    m_Localized: Museum
+    m_Localized: Mochi Moondom
     m_Metadata:
       m_Items: []
   - m_Id: 18804916225
+    m_Localized: Museum
+    m_Metadata:
+      m_Items: []
+  - m_Id: 11354259603456
     m_Localized: Mega Fiesta
     m_Metadata:
       m_Items: []

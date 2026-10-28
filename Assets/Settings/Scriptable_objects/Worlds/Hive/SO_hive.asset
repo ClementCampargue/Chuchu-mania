@@ -25,5 +25,16 @@ MonoBehaviour:
   - {fileID: 21300000, guid: 9500c4314c78f994187e319c100c0817, type: 3}
   startUnlocked: 0
   defaultSpiritsUnlocked: 
-  name_: Hive
+  name_:
+    m_TableReference:
+      m_TableCollectionName: GUID:6d3a16d1ddbf8974faf506af4f6bf59f
+    m_TableEntryReference:
+      m_KeyId: 18800721929
+      m_Key: 
+    m_FallbackState: 0
+    m_WaitForCompletion: 0
+    m_LocalVariables: []
   price: 2
+  references:
+    version: 2
+    RefIds: []

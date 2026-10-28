@@ -13,7 +13,18 @@ MonoBehaviour:
   m_Name: Hive
   m_EditorClassIdentifier: 
   levelId: Hive
-  levelname: Hive
+  levelname:
+    m_TableReference:
+      m_TableCollectionName: GUID:6d3a16d1ddbf8974faf506af4f6bf59f
+    m_TableEntryReference:
+      m_KeyId: 18800721930
+      m_Key: 
+    m_FallbackState: 0
+    m_WaitForCompletion: 0
+    m_LocalVariables: []
   scene_to_load: CS_Hive1
   spirit: {fileID: 21300000, guid: 201183dde677bda46897618b80c00ce6, type: 3}
   startUnlocked: 1
+  references:
+    version: 2
+    RefIds: []
