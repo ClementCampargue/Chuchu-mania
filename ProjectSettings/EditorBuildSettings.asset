@@ -24,7 +24,7 @@ EditorBuildSettings:
     path: Assets/Scenes/Menus/LEVEL_SELECTION.unity
     guid: 7305c06f63c59ce41a06bb6805d7f2a7
   - enabled: 1
-    path: Assets/Scenes/TUTO.unity
+    path: Assets/Scenes/Levels/TUTO.unity
     guid: 40a7882b8fe35e04dafd92e6c32a3978
   - enabled: 1
     path: Assets/Scenes/Menus/Achievements.unity
@@ -36,7 +36,7 @@ EditorBuildSettings:
     path: Assets/Scenes/Menus/Shop.unity
     guid: d068b002ea635e848a3c98c8411e16be
   - enabled: 1
-    path: Assets/Scenes/Levels/BRAMBLES.unity
+    path: Assets/Scenes/Levels/Brambles.unity
     guid: e8ed7105b59267743852ffe1c04db612
   - enabled: 1
     path: Assets/Scenes/Levels/FISH.unity
@@ -45,10 +45,10 @@ EditorBuildSettings:
     path: Assets/Scenes/Levels/LEVEL_TEMPLATE.unity
     guid: 8dd48e296680dbb40885ae3fb2d2ca82
   - enabled: 1
-    path: Assets/Scenes/Levels/MUSEUM.unity
+    path: Assets/Scenes/Levels/Museum.unity
     guid: 50533f07192380e438aa2170b098d730
   - enabled: 1
-    path: Assets/Scenes/Levels/BEACH.unity
+    path: Assets/Scenes/Levels/Beach.unity
     guid: db35c0ac1a9635043857db9523f4b24a
   - enabled: 1
     path: Assets/Scenes/Levels/MOON.unity

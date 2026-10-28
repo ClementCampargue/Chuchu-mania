@@ -49,6 +49,7 @@ public class SC_jauge_settings : MonoBehaviour
     {
         if (slider == null)
             return;
+        SC_scursorManager.instance.SetGrabCursor();
 
         isDragging = true;
         SetSliderFromMouse();
@@ -62,6 +63,8 @@ public class SC_jauge_settings : MonoBehaviour
 
     private void OnMouseUp()
     {
+        SC_scursorManager.instance.SetNormalCursor();
+        slider.PlayRandom();
         isDragging = false;
     }
 
@@ -69,7 +72,6 @@ public class SC_jauge_settings : MonoBehaviour
     {
         if (slider == null || mainCamera == null)
             return;
-
         slider.SetValueFromMouse(Input.mousePosition, mainCamera);
     }
 }

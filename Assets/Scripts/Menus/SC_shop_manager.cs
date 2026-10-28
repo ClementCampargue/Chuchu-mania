@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 using UnityEngine.Localization;
 
@@ -28,7 +29,7 @@ public class SC_shop_manager : MonoBehaviour
     public GameObject buttons_;
     public static SC_shop_manager instance;
     public SC_menu_navigation menu;
-
+    public SC_Button button;
     public bool cantalk;
     public bool canquit;
 
@@ -196,6 +197,7 @@ public class SC_shop_manager : MonoBehaviour
 
         typewriter.TriggerText(random);
     }
+
     private void UpdateCursorMode()
     {
         if (SC_controller_manager.instance == null)
@@ -213,6 +215,11 @@ public class SC_shop_manager : MonoBehaviour
             }
 
 
+            if (EventSystem.current != null &&
+                EventSystem.current.currentSelectedGameObject == null)
+            {
+                SelectDefaultButton();
+            }
         }
         else
         {
@@ -221,6 +228,18 @@ public class SC_shop_manager : MonoBehaviour
                 SC_scursorManager.instance.enable_cursor();
             }
         }
+    }
+
+
+    private void SelectDefaultButton()
+    {
+        if (button == null)
+            return;
+
+        if (!button.gameObject.activeInHierarchy)
+            return;
+
+        button.Select();
     }
 
 }

@@ -41,6 +41,7 @@ public class SC_list_text : MonoBehaviour
     public bool can_move;
     public SC_Button button;
 
+    public SC_juiciness juice;
     private float inputCooldown;
     private bool wasMoving;
     private bool actionEnabledByThisComponent;
@@ -156,6 +157,7 @@ public class SC_list_text : MonoBehaviour
 
         if (count <= 0)
             return;
+        juice.PlayJuice();
 
         // Sécurise l'index avant de le modifier.
         index = ((index % count) + count) % count;
@@ -203,7 +205,6 @@ public class SC_list_text : MonoBehaviour
             return;
 
         index = ((newIndex % count) + count) % count;
-
         UpdateText();
     }
 

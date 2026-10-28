@@ -59,6 +59,7 @@ public class SC_arrow_settings : MonoBehaviour
             return;
 
         int direction = next ? 1 : -1;
+        optionList.juice.PlayJuice();
 
         optionList.SetIndex(optionList.index + direction);
     }
