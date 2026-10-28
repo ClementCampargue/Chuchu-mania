@@ -1,3 +1,4 @@
+
 using TMPro;
 using UnityEngine;
 
@@ -23,55 +24,53 @@ public class SC_next_to_text : MonoBehaviour
         if (textInfo.characterCount == 0)
             return;
 
-        TMP_CharacterInfo character;
+        int index = right ? textInfo.characterCount - 1 : 0;
 
+        // Ignore les espaces et caractères invisibles aux extrémités
         if (right)
         {
-            // Dernier caractère du texte
-            character = textInfo.characterInfo[textInfo.characterCount - 1];
-
-            // Fin du texte
-            Vector3 finTexte = new Vector3(
-                character.topRight.x,
-                character.baseLine,
-                0f
-            );
-
-            Vector3 positionMonde =
-                textMesh.transform.TransformPoint(finTexte);
-
-            // Sprite à droite de la fin du texte
-            Vector3 nouvellePosition =
-                positionMonde + textMesh.transform.right * distance;
-
-            // Garde le Y du sprite
-            nouvellePosition.y = sprite.position.y;
-
-            sprite.position = nouvellePosition;
+            while (index >= 0 &&
+                   (!textInfo.characterInfo[index].isVisible))
+            {
+                index--;
+            }
         }
         else
         {
-            // Premier caractère du texte
-            character = textInfo.characterInfo[0];
-
-            // Début du texte
-            Vector3 debutTexte = new Vector3(
-                character.bottomLeft.x,
-                character.baseLine,
-                0f
-            );
-
-            Vector3 positionMonde =
-                textMesh.transform.TransformPoint(debutTexte);
-
-            // Sprite à gauche du début du texte
-            Vector3 nouvellePosition =
-                positionMonde - textMesh.transform.right * distance;
-
-            // Garde le Y du sprite
-            nouvellePosition.y = sprite.position.y;
-
-            sprite.position = nouvellePosition;
+            while (index < textInfo.characterCount &&
+                   (!textInfo.characterInfo[index].isVisible))
+            {
+                index++;
+            }
         }
+
+        if (index < 0 || index >= textInfo.characterCount)
+            return;
+
+        TMP_CharacterInfo character = textInfo.characterInfo[index];
+
+        Vector3 pointLocal;
+
+        if (right)
+        {
+            pointLocal = character.topRight;
+        }
+        else
+        {
+            pointLocal = character.bottomLeft;
+        }
+
+        Vector3 positionMonde =
+            textMesh.transform.TransformPoint(pointLocal);
+
+        Vector3 direction = textMesh.transform.right;
+
+        Vector3 nouvellePosition = positionMonde
+            + direction * (right ? distance : -distance);
+
+        // Conserve la hauteur actuelle du sprite
+        nouvellePosition.y = sprite.position.y;
+
+        sprite.position = nouvellePosition;
     }
 }
