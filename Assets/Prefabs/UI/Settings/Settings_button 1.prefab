@@ -123,13 +123,14 @@ GameObject:
   m_Component:
   - component: {fileID: 8382677336855467326}
   - component: {fileID: 4902760736150388436}
+  - component: {fileID: 3564104362941718871}
   m_Layer: 0
   m_Name: Square
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &8382677336855467326
 RectTransform:
   m_ObjectHideFlags: 0
@@ -204,6 +205,22 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &3564104362941718871
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2544745346002551559}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 77c1baac82b07774290d914cfdb8aed4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  textMesh: {fileID: 7140470472354941628}
+  sprite: {fileID: 8382677336855467326}
+  distance: 0.49
+  right: 0
 --- !u!1 &3605113643491440998
 GameObject:
   m_ObjectHideFlags: 0
@@ -357,13 +374,14 @@ GameObject:
   m_Component:
   - component: {fileID: 3273541500156096641}
   - component: {fileID: 930664364828365535}
+  - component: {fileID: 1083525769537819193}
   m_Layer: 0
   m_Name: Square (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &3273541500156096641
 RectTransform:
   m_ObjectHideFlags: 0
@@ -438,6 +456,22 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &1083525769537819193
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4536826785977101353}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 77c1baac82b07774290d914cfdb8aed4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  textMesh: {fileID: 7140470472354941628}
+  sprite: {fileID: 3273541500156096641}
+  distance: 0.49
+  right: 1
 --- !u!1 &4541404096193775450
 GameObject:
   m_ObjectHideFlags: 0

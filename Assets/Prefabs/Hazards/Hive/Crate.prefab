@@ -176,7 +176,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   rb: {fileID: 5580005585471006362}
-  maxSpeed: 1
+  maxSpeed: 2
   damage_player: 0
   anim: {fileID: 5942058491316125545}
   land_juice: {fileID: 8935331558162829318}

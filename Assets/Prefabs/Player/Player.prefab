@@ -32010,7 +32010,7 @@ MonoBehaviour:
   jumpBufferTime: 0.1
   jumpBufferCounter: 0
   canJump: 1
-  climbSpeed: 2
+  climbSpeed: 1
   climbAttachUpThreshold: 0.6
   climbAttachDiagonalLimit: 1
   climbReattachDelay: 0.2
