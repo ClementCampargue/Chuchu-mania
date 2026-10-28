@@ -629,8 +629,16 @@ PrefabInstance:
       value: 23464843403345920
       objectReference: {fileID: 0}
     - target: {fileID: 3807753818518875703, guid: 81c47e3fa2ef3d64eb54300b8ec77da8, type: 3}
+      propertyPath: m_Size.x
+      value: 2.75
+      objectReference: {fileID: 0}
+    - target: {fileID: 3807753818518875703, guid: 81c47e3fa2ef3d64eb54300b8ec77da8, type: 3}
       propertyPath: m_Enabled
-      value: 0
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3807753818518875703, guid: 81c47e3fa2ef3d64eb54300b8ec77da8, type: 3}
+      propertyPath: m_Offset.x
+      value: -1.44
       objectReference: {fileID: 0}
     - target: {fileID: 4902760736150388436, guid: 81c47e3fa2ef3d64eb54300b8ec77da8, type: 3}
       propertyPath: m_Enabled
@@ -918,8 +926,16 @@ PrefabInstance:
       value: 23464876286689280
       objectReference: {fileID: 0}
     - target: {fileID: 3807753818518875703, guid: 81c47e3fa2ef3d64eb54300b8ec77da8, type: 3}
+      propertyPath: m_Size.x
+      value: 2.75
+      objectReference: {fileID: 0}
+    - target: {fileID: 3807753818518875703, guid: 81c47e3fa2ef3d64eb54300b8ec77da8, type: 3}
       propertyPath: m_Enabled
-      value: 0
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3807753818518875703, guid: 81c47e3fa2ef3d64eb54300b8ec77da8, type: 3}
+      propertyPath: m_Offset.x
+      value: -1.44
       objectReference: {fileID: 0}
     - target: {fileID: 4902760736150388436, guid: 81c47e3fa2ef3d64eb54300b8ec77da8, type: 3}
       propertyPath: m_Enabled
@@ -1059,8 +1075,16 @@ PrefabInstance:
       value: 23464778475520000
       objectReference: {fileID: 0}
     - target: {fileID: 3807753818518875703, guid: 81c47e3fa2ef3d64eb54300b8ec77da8, type: 3}
+      propertyPath: m_Size.x
+      value: 2.75
+      objectReference: {fileID: 0}
+    - target: {fileID: 3807753818518875703, guid: 81c47e3fa2ef3d64eb54300b8ec77da8, type: 3}
       propertyPath: m_Enabled
-      value: 0
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3807753818518875703, guid: 81c47e3fa2ef3d64eb54300b8ec77da8, type: 3}
+      propertyPath: m_Offset.x
+      value: -1.44
       objectReference: {fileID: 0}
     - target: {fileID: 4902760736150388436, guid: 81c47e3fa2ef3d64eb54300b8ec77da8, type: 3}
       propertyPath: m_Enabled
