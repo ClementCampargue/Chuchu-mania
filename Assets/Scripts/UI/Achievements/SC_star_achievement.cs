@@ -1,6 +1,4 @@
-
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class SC_star_achievement : MonoBehaviour
@@ -11,8 +9,8 @@ public class SC_star_achievement : MonoBehaviour
         [HideInInspector] public GameObject objectA;
         public GameObject objectB;
     }
-    public SC_constellation constellation;
 
+    public SC_constellation constellation;
     public SO_achievement achievement;
     public SC_Button button;
 
@@ -35,7 +33,7 @@ public class SC_star_achievement : MonoBehaviour
     public Sprite unlocked_;
     public Sprite red_;
 
-    private List<LineRenderer> lines = new List<LineRenderer>();
+    private readonly List<LineRenderer> lines = new List<LineRenderer>();
 
     public Animator anim;
     public ParticleSystem ps;
@@ -45,166 +43,117 @@ public class SC_star_achievement : MonoBehaviour
     {
         foreach (Connection connection in connections)
         {
-            connection.objectA = gameObject;
+            if (connection != null)
+                connection.objectA = gameObject;
         }
     }
 
     private void Start()
     {
+        if (achievement == null || SC_SaveManager.instance == null)
+            return;
+
         SC_SaveManager save = SC_SaveManager.instance;
 
-        if (save.IsAchievementFinished(achievement))
-        {
-            debloque = true;
+        debloque = save.IsAchievementFinished(achievement)
+                   || save.IsAchievementCollected(achievement);
+        récolté = save.IsAchievementCollected(achievement);
 
-            if (!save.IsAchievementCollected(achievement))
-            {
-                ps.Play();
-                hue.enabled = true;
-            }
+        if (debloque && !récolté)
+        {
+            if (ps != null) ps.Play();
+            if (hue != null) hue.enabled = true;
         }
 
-        if (save.IsAchievementCollected(achievement))
-        {
-            récolté = true;
-        }        bool finished = SC_SaveManager.instance.IsAchievementFinished(achievement);
-        bool collected = SC_SaveManager.instance.IsAchievementCollected(achievement);
-
-        if (!collected && finished ||
-            SC_achievement_menu.instance.current_wishes > 0)
-        {
-            anim.SetBool("Unlockable", true);
-        }
-        else
-        {
-            anim.SetBool("Unlockable", false);
-        }
-
-        UpdateRedState();
-
-        if (collected)
-        {
-            anim.SetBool("Can_press", false);
-            spr.sprite = unlocked_;
-        }
-        else if (red)
-        {
-            anim.SetBool("Can_press", true);
-            spr.sprite = red_;
-        }
-        else
-        {
-            anim.SetBool("Can_press", true);
-            spr.sprite = default_;
-        }
-
-        UpdateLines();
+        RefreshVisuals();
+        RefreshConnectedStars();
     }
 
     private void Update()
     {
-        if (SC_achievement_menu.instance.caninteract)
-        {
-            button.enabled = true;
-            button.accept_input = true;
-            button.clickable = true;
-        }
-        else
-        {
-            button.isSelected = false;
-            button.isHovered = false;
-            button.enabled = false;
-            button.accept_input = false;
-            button.clickable = false;
-        }
-        if (button.isHovered || button.isSelected)
-        {
-            SC_achievement_menu.instance.update_display(achievement, this);
-        }
+        if (SC_achievement_menu.instance == null)
+            return;
 
+        bool canInteract = SC_achievement_menu.instance.caninteract;
 
+        if (button != null)
+        {
+            if (canInteract)
+            {
+                button.enabled = true;
+                button.accept_input = true;
+                button.clickable = true;
+            }
+            else
+            {
+                button.isSelected = false;
+                button.isHovered = false;
+                button.enabled = false;
+                button.accept_input = false;
+                button.clickable = false;
+            }
+
+            if (button.isHovered || button.isSelected)
+                SC_achievement_menu.instance.update_display(achievement, this);
+        }
     }
 
     private void UpdateRedState()
     {
-        if (!debloque)
-        {
-            red = !HasActiveConnection();
-        }
-        else
-        {
-            red = false;
-        }
+        red = !debloque && !HasActiveConnection();
     }
 
     private bool HasActiveConnection()
     {
         foreach (Connection connection in connections)
         {
-            if (connection.objectB == null)
-            {
-                Debug.LogWarning(name + " : objectB n'est pas assigné.");
+            if (connection == null || connection.objectB == null)
                 continue;
-            }
 
             SC_star_achievement otherStar =
                 connection.objectB.GetComponent<SC_star_achievement>();
 
-            if (otherStar == null)
-            {
-                Debug.LogWarning(
-                    connection.objectB.name +
-                    " n'a pas de SC_star_achievement."
-                );
-                continue;
-            }
-
-            Debug.Log(
-                name + " connecté à " + otherStar.name +
-                " | debloque = " + otherStar.debloque
-            );
-
-            if (otherStar.debloque)
+            if (otherStar != null && otherStar.debloque)
                 return true;
         }
 
         return false;
     }
+
     // Appelée lorsque le joueur essaie de débloquer l'étoile.
     public void unlock()
     {
+        if (achievement == null || SC_SaveManager.instance == null)
+            return;
+
         SC_SaveManager save = SC_SaveManager.instance;
 
-        // Ne pas proposer de récupérer une récompense déjà collectée.
         if (récolté || save.IsAchievementCollected(achievement))
             return;
 
-        // Si le succès est terminé, aucun wish n'est nécessaire.
         if (save.IsAchievementFinished(achievement))
         {
             TryUnlock(false);
             return;
         }
 
-        // Un succès non terminé nécessite un wish.
         if (SC_achievement_menu.instance.current_wishes <= 0)
         {
             Debug.Log("Pas assez de wishes pour débloquer ce succès.");
             return;
         }
 
-        // On demande confirmation sans dépenser le wish.
         SC_achievement_menu.instance.ShowWishPopup(this);
     }
 
     // Appelée uniquement après confirmation dans la popup.
     public void ConfirmWishUnlock()
     {
-        if (récolté ||
-            SC_SaveManager.instance.IsAchievementCollected(achievement))
-        {
+        if (achievement == null || SC_SaveManager.instance == null)
             return;
-        }
+
+        if (récolté || SC_SaveManager.instance.IsAchievementCollected(achievement))
+            return;
 
         if (SC_SaveManager.instance.IsAchievementFinished(achievement))
         {
@@ -221,116 +170,160 @@ public class SC_star_achievement : MonoBehaviour
         TryUnlock(true);
     }
 
+    public void hide()
+    {
+        if (SC_achievement_menu.instance == null)
+            return;
+
+        SC_achievement_menu.instance.item_box.gameObject.SetActive(false);
+        SC_achievement_menu.instance.hide_sticker();
+    }
+
     private void TryUnlock(bool useWish)
     {
+        if (achievement == null ||
+            SC_SaveManager.instance == null ||
+            SC_achievement_menu.instance == null)
+            return;
+
         SC_SaveManager save = SC_SaveManager.instance;
         SC_achievement_menu menu = SC_achievement_menu.instance;
 
-        // Vérification juste avant de dépenser le wish.
         if (récolté || save.IsAchievementCollected(achievement))
             return;
 
         if (useWish && menu.current_wishes <= 0)
             return;
 
-        bool success = save.CollectAchievementReward(
-            achievement,
-            useWish
-        );
+        bool success = save.CollectAchievementReward(achievement, useWish);
 
         if (!success)
         {
-            Debug.LogWarning(
-                "Impossible de récupérer le succès : " +
-                achievement.achievementId
-            );
-
+            Debug.LogWarning("Impossible de récupérer le succès : " + achievement.achievementId);
             return;
         }
 
-        // Le wish est dépensé uniquement si la récupération réussit.
         if (useWish)
-        {
             menu.use_wish();
-        }
 
         debloque = true;
         récolté = true;
         red = false;
 
-        // Animation jouée après confirmation et récupération réussie.
-        anim.SetTrigger("Press");
-
-
+        if (anim != null)
+            anim.SetTrigger("Press");
 
         if (ps != null)
-        {
             ps.Stop();
-        }
 
-        UpdateLines();
+        if (hue != null)
+            hue.enabled = false;
 
         if (button != null)
-        {
             button.UnSelect();
-        }
 
-        Debug.Log(
-            "Succès récupéré : " + achievement.achievementId
-        );
+        // Met immédiatement à jour cette étoile et toutes ses voisines.
+
+        Invoke("delay", 2);
+        Debug.Log("Succès récupéré : " + achievement.achievementId);
     }
+
+    void delay()
+    {
+        RefreshVisuals();
+        RefreshConnectedStars();
+    }
+
+    // Rafraîchit l'apparence de cette étoile à partir de son état actuel.
     public void update_visual_unlock()
     {
-        hue.enabled = false;
-        spr.color = Color.white;
-        spr.sprite = unlocked_;
+        RefreshVisuals();
+        RefreshConnectedStars();
+    }
+
+    private void RefreshVisuals()
+    {
+        if (achievement == null || SC_SaveManager.instance == null)
+            return;
+
         bool finished = SC_SaveManager.instance.IsAchievementFinished(achievement);
         bool collected = SC_SaveManager.instance.IsAchievementCollected(achievement);
 
-        if (!collected && finished ||
-            SC_achievement_menu.instance.current_wishes > 0)
-        {
-            anim.SetBool("Unlockable", true);
-        }
-        else
-        {
-            anim.SetBool("Unlockable", false);
-        }
+        // Synchronise les booléens locaux avec la sauvegarde.
+        if (finished || collected)
+            debloque = true;
+
+        if (collected)
+            récolté = true;
 
         UpdateRedState();
 
-        if (collected)
+        if (hue != null && collected)
+            hue.enabled = false;
+
+        if (spr != null)
         {
-            anim.SetBool("Can_press", false);
-            spr.sprite = unlocked_;
+            spr.color = Color.white;
+
+            if (récolté)
+                spr.sprite = unlocked_;
+            else if (red)
+                spr.sprite = red_;
+            else
+                spr.sprite = default_;
         }
-        else if (red)
+
+        if (anim != null)
         {
-            anim.SetBool("Can_press", true);
-            spr.sprite = red_;
+            bool unlockable = (!collected && finished) ||
+                              SC_achievement_menu.instance != null &&
+                              SC_achievement_menu.instance.current_wishes > 0;
+
+            anim.SetBool("Unlockable", unlockable);
+            anim.SetBool("Can_press", !collected);
         }
-        else
+
+        UpdateLines();
+    }
+
+    // Actualise l'état visuel et les lignes des étoiles directement connectées.
+    private void RefreshConnectedStars()
+    {
+        foreach (Connection connection in connections)
         {
-            anim.SetBool("Can_press", true);
-            spr.sprite = default_;
+            if (connection == null || connection.objectB == null)
+                continue;
+
+            SC_star_achievement otherStar =
+                connection.objectB.GetComponent<SC_star_achievement>();
+
+            if (otherStar == null || otherStar == this)
+                continue;
+
+            otherStar.RefreshVisuals();
         }
     }
+
     public void show_reward()
     {
         if (ps != null)
-        {
             ps.Stop();
-        }
-        SC_achievement_menu.instance.pendingStar = this;
 
-        SC_sticker_popup.instance.ShowStickers(
-            new SO_Sticker[] { achievement.sticker_reward }
-        );
+        if (SC_achievement_menu.instance != null)
+            SC_achievement_menu.instance.pendingStar = this;
+
+        if (SC_sticker_popup.instance != null && achievement != null)
+        {
+            SC_sticker_popup.instance.ShowStickers(
+                new SO_Sticker[] { achievement.sticker_reward }
+            );
+        }
     }
 
     public void disable_movement()
     {
-        SC_ConstellationNavigation.instance.enabled = false;
+        if (SC_ConstellationNavigation.instance != null)
+            SC_ConstellationNavigation.instance.enabled = false;
     }
 
     private void UpdateLines()
@@ -342,7 +335,9 @@ public class SC_star_achievement : MonoBehaviour
 
         foreach (Connection connection in connections)
         {
-            if (connection.objectA == null || connection.objectB == null)
+            if (connection == null ||
+                connection.objectA == null ||
+                connection.objectB == null)
                 continue;
 
             CreateLine(connection.objectA, connection.objectB);
@@ -352,10 +347,9 @@ public class SC_star_achievement : MonoBehaviour
     private void CreateLine(GameObject objectA, GameObject objectB)
     {
         GameObject lineObject = new GameObject("AchievementLine");
-        lineObject.transform.SetParent(transform);
+        lineObject.transform.SetParent(transform, true);
 
         LineRenderer line = lineObject.AddComponent<LineRenderer>();
-
         line.sortingOrder = 10;
         line.positionCount = 2;
         line.useWorldSpace = true;
@@ -365,19 +359,14 @@ public class SC_star_achievement : MonoBehaviour
         line.endWidth = lineWidth;
 
         if (lineMaterial != null)
-        {
             line.material = lineMaterial;
-        }
 
         Vector3 posA = objectA.transform.position;
         Vector3 posB = objectB.transform.position;
         Vector3 direction = (posB - posA).normalized;
 
-        Vector3 startPosition = posA + direction * distanceFromCenter;
-        Vector3 endPosition = posB - direction * distanceFromCenter;
-
-        line.SetPosition(0, startPosition);
-        line.SetPosition(1, endPosition);
+        line.SetPosition(0, posA + direction * distanceFromCenter);
+        line.SetPosition(1, posB - direction * distanceFromCenter);
 
         lines.Add(line);
     }
@@ -387,9 +376,7 @@ public class SC_star_achievement : MonoBehaviour
         foreach (LineRenderer line in lines)
         {
             if (line != null)
-            {
                 Destroy(line.gameObject);
-            }
         }
 
         lines.Clear();
@@ -402,7 +389,7 @@ public class SC_star_achievement : MonoBehaviour
 
         foreach (Connection connection in connections)
         {
-            if (connection.objectB == null)
+            if (connection == null || connection.objectB == null)
                 continue;
 
             Vector3 posA = transform.position;

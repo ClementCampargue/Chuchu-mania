@@ -34,6 +34,7 @@ public class SC_achievement_menu : MonoBehaviour
 
     public SC_star_achievement pendingStar;
     public bool caninteract = true;
+
     private void Awake()
     {
         instance = this;
@@ -207,11 +208,14 @@ public class SC_achievement_menu : MonoBehaviour
 
     public void hide_sticker()
     {
+        item_box.ResetTrigger("show");
         item_box.SetTrigger("hide");
     }
 
     public void show_sticker()
     {
+        item_box.gameObject.SetActive(true);
+        item_box.ResetTrigger("hide");
         item_box.SetTrigger("show");
     }
 
@@ -243,7 +247,10 @@ public class SC_achievement_menu : MonoBehaviour
         SO_achievement achievement,
         SC_star_achievement star)
     {
+
         item.sprite = achievement.sticker_reward.sticker_sprite;
+
+   
 
         if (star.red)
         {

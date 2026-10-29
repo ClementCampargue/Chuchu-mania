@@ -21,7 +21,7 @@ public class SC_Button : MonoBehaviour
     public bool isSelected;
     public bool isHovered;
     public bool isPressed;
-
+    private Collider2D collider_;
     [Header("References")]
     public GameObject indicator;
     public SC_juiciness juice;
@@ -49,6 +49,7 @@ public class SC_Button : MonoBehaviour
     }
     private void Start()
     {
+        collider_ = GetComponent<Collider2D>();
         if (select_on_enable && clickable)
         {
             Select();
@@ -57,11 +58,15 @@ public class SC_Button : MonoBehaviour
 
     private void OnEnable()
     {
+        collider_.enabled = true;
+
         if (select_on_enable && IsUsingController() && clickable)
         {
             Select();
         }
     }
+
+    
 
 
     private bool previousController;
@@ -369,6 +374,7 @@ public class SC_Button : MonoBehaviour
     private void OnDisable()
     {
         CancelInvoke();
+        collider_.enabled = false;
 
         if (activeButton == this)
             activeButton = null;
