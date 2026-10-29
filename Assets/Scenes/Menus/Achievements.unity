@@ -2309,6 +2309,10 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4601312581709383970, guid: fa7a00e1256369944ba351743981a0e1, type: 3}
+      propertyPath: achievement
+      value: 
+      objectReference: {fileID: 11400000, guid: fa537132f7d1c434182ea9c68d90fb63, type: 2}
+    - target: {fileID: 4601312581709383970, guid: fa7a00e1256369944ba351743981a0e1, type: 3}
       propertyPath: constellation
       value: 
       objectReference: {fileID: 1186338524}
@@ -2605,6 +2609,10 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2162210843292826712, guid: 988c2e3b8a49d9e4aa4ce434c607974a, type: 3}
+      propertyPath: achievement
+      value: 
+      objectReference: {fileID: 11400000, guid: 04820e683eede6f4b8993628d3dd849c, type: 2}
+    - target: {fileID: 2162210843292826712, guid: 988c2e3b8a49d9e4aa4ce434c607974a, type: 3}
       propertyPath: constellation
       value: 
       objectReference: {fileID: 1186338524}
@@ -2753,6 +2761,10 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5229027062398376351, guid: 988c2e3b8a49d9e4aa4ce434c607974a, type: 3}
+      propertyPath: achievement
+      value: 
+      objectReference: {fileID: 11400000, guid: 073784dc5bf68514da7c01aee61f11a3, type: 2}
+    - target: {fileID: 5229027062398376351, guid: 988c2e3b8a49d9e4aa4ce434c607974a, type: 3}
       propertyPath: constellation
       value: 
       objectReference: {fileID: 1186338524}
@@ -2777,6 +2789,10 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5646126141789955314, guid: 988c2e3b8a49d9e4aa4ce434c607974a, type: 3}
+      propertyPath: achievement
+      value: 
+      objectReference: {fileID: 11400000, guid: 3e2db1607a0599f4db13bbea7ffa58be, type: 2}
+    - target: {fileID: 5646126141789955314, guid: 988c2e3b8a49d9e4aa4ce434c607974a, type: 3}
       propertyPath: constellation
       value: 
       objectReference: {fileID: 1186338524}
@@ -2800,6 +2816,10 @@ PrefabInstance:
       propertyPath: m_LocalPosition.y
       value: 0.74
       objectReference: {fileID: 0}
+    - target: {fileID: 8308775901386917465, guid: 988c2e3b8a49d9e4aa4ce434c607974a, type: 3}
+      propertyPath: reward
+      value: 
+      objectReference: {fileID: 11400000, guid: b98298023e86e374a9443ea1a004efd2, type: 2}
     - target: {fileID: 8308775901386917465, guid: 988c2e3b8a49d9e4aa4ce434c607974a, type: 3}
       propertyPath: stars.Array.size
       value: 6
@@ -2832,6 +2852,10 @@ PrefabInstance:
       propertyPath: debloque
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8743992986664462540, guid: 988c2e3b8a49d9e4aa4ce434c607974a, type: 3}
+      propertyPath: achievement
+      value: 
+      objectReference: {fileID: 11400000, guid: b9098de34babeb34a8a1aa78a2f20510, type: 2}
     - target: {fileID: 8743992986664462540, guid: 988c2e3b8a49d9e4aa4ce434c607974a, type: 3}
       propertyPath: constellation
       value: 
@@ -3005,6 +3029,10 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2162210843292826712, guid: 988c2e3b8a49d9e4aa4ce434c607974a, type: 3}
+      propertyPath: achievement
+      value: 
+      objectReference: {fileID: 11400000, guid: d491b102d11dd6c4c8c07162d4bf10c3, type: 2}
+    - target: {fileID: 2162210843292826712, guid: 988c2e3b8a49d9e4aa4ce434c607974a, type: 3}
       propertyPath: constellation
       value: 
       objectReference: {fileID: 1275994537}
@@ -3109,6 +3137,10 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5013085002863252076, guid: 988c2e3b8a49d9e4aa4ce434c607974a, type: 3}
+      propertyPath: achievement
+      value: 
+      objectReference: {fileID: 11400000, guid: 6c3ab8204c2b51248b4988c5b67e5121, type: 2}
+    - target: {fileID: 5013085002863252076, guid: 988c2e3b8a49d9e4aa4ce434c607974a, type: 3}
       propertyPath: constellation
       value: 
       objectReference: {fileID: 1275994537}
@@ -3132,6 +3164,10 @@ PrefabInstance:
       propertyPath: debloque
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5229027062398376351, guid: 988c2e3b8a49d9e4aa4ce434c607974a, type: 3}
+      propertyPath: achievement
+      value: 
+      objectReference: {fileID: 11400000, guid: a0154cfb78da3d4429ccbfdd5ac59d04, type: 2}
     - target: {fileID: 5229027062398376351, guid: 988c2e3b8a49d9e4aa4ce434c607974a, type: 3}
       propertyPath: constellation
       value: 
@@ -3164,6 +3200,10 @@ PrefabInstance:
       propertyPath: debloque
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5646126141789955314, guid: 988c2e3b8a49d9e4aa4ce434c607974a, type: 3}
+      propertyPath: achievement
+      value: 
+      objectReference: {fileID: 11400000, guid: e37205256f5993f42a2602df1557c858, type: 2}
     - target: {fileID: 5646126141789955314, guid: 988c2e3b8a49d9e4aa4ce434c607974a, type: 3}
       propertyPath: constellation
       value: 
@@ -3204,6 +3244,10 @@ PrefabInstance:
       propertyPath: m_LocalPosition.y
       value: 1.83
       objectReference: {fileID: 0}
+    - target: {fileID: 8308775901386917465, guid: 988c2e3b8a49d9e4aa4ce434c607974a, type: 3}
+      propertyPath: reward
+      value: 
+      objectReference: {fileID: 11400000, guid: 68b3af5d84d78d14c936652a763c4bc5, type: 2}
     - target: {fileID: 8308775901386917465, guid: 988c2e3b8a49d9e4aa4ce434c607974a, type: 3}
       propertyPath: stars.Array.size
       value: 8
@@ -9303,7 +9347,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4735648650218365287, guid: 3ce41f75411c41f448f4f822ac6d67b0, type: 3}
       propertyPath: m_margin.z
-      value: 8.390136
+      value: 5.2210107
       objectReference: {fileID: 0}
     - target: {fileID: 4735648650218365287, guid: 3ce41f75411c41f448f4f822ac6d67b0, type: 3}
       propertyPath: m_fontStyle
@@ -12474,6 +12518,10 @@ PrefabInstance:
       propertyPath: connections.Array.data[1].objectB
       value: 
       objectReference: {fileID: 1513251145}
+    - target: {fileID: 8308775901386917465, guid: 988c2e3b8a49d9e4aa4ce434c607974a, type: 3}
+      propertyPath: reward
+      value: 
+      objectReference: {fileID: 11400000, guid: 4766159b40db4c249847412aaa1af890, type: 2}
     - target: {fileID: 8308775901386917465, guid: 988c2e3b8a49d9e4aa4ce434c607974a, type: 3}
       propertyPath: stars.Array.size
       value: 5

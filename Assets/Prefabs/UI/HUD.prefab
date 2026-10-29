@@ -394,7 +394,7 @@ Transform:
   m_GameObject: {fileID: 1653642536164988465}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -3.456666, y: 6.6933327, z: 0}
+  m_LocalPosition: {x: -0.956666, y: 6.6933327, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1695,9 +1695,21 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 8117396181676065302}
     m_Modifications:
+    - target: {fileID: 1640027130389494777, guid: be32bd5204c8ff744944233561695ee7, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -2.3791294
+      objectReference: {fileID: 0}
     - target: {fileID: 1895039072248512857, guid: be32bd5204c8ff744944233561695ee7, type: 3}
       propertyPath: m_Name
       value: Eat_system
+      objectReference: {fileID: 0}
+    - target: {fileID: 2493599001407652850, guid: be32bd5204c8ff744944233561695ee7, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -2.1499996
+      objectReference: {fileID: 0}
+    - target: {fileID: 5169860696823799935, guid: be32bd5204c8ff744944233561695ee7, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -1.2066665
       objectReference: {fileID: 0}
     - target: {fileID: 5286284455900837583, guid: be32bd5204c8ff744944233561695ee7, type: 3}
       propertyPath: multiplierText
@@ -1846,6 +1858,10 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3809789759598194910, guid: 3ce41f75411c41f448f4f822ac6d67b0, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3809789759598194910, guid: 3ce41f75411c41f448f4f822ac6d67b0, type: 3}
       propertyPath: m_StringReference.m_TableEntryReference.m_KeyId
       value: 348027609169920
       objectReference: {fileID: 0}
@@ -1863,19 +1879,19 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4735648650218365287, guid: 3ce41f75411c41f448f4f822ac6d67b0, type: 3}
       propertyPath: m_fontColor.b
-      value: 1
+      value: 0.85098046
       objectReference: {fileID: 0}
     - target: {fileID: 4735648650218365287, guid: 3ce41f75411c41f448f4f822ac6d67b0, type: 3}
       propertyPath: m_fontColor.g
-      value: 1
+      value: 0.9960785
       objectReference: {fileID: 0}
     - target: {fileID: 4735648650218365287, guid: 3ce41f75411c41f448f4f822ac6d67b0, type: 3}
       propertyPath: m_fontColor.r
-      value: 1
+      value: 0.9960785
       objectReference: {fileID: 0}
     - target: {fileID: 4735648650218365287, guid: 3ce41f75411c41f448f4f822ac6d67b0, type: 3}
       propertyPath: m_fontColor32.rgba
-      value: 4294967295
+      value: 4292476670
       objectReference: {fileID: 0}
     - target: {fileID: 4735648650218365287, guid: 3ce41f75411c41f448f4f822ac6d67b0, type: 3}
       propertyPath: m_HorizontalAlignment
@@ -1965,7 +1981,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7948153262931269924, guid: aa4fe90c2df8b4c4c9f5cc54ffe4b47b, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 6.76
+      value: 6.726667
       objectReference: {fileID: 0}
     - target: {fileID: 7948153262931269924, guid: aa4fe90c2df8b4c4c9f5cc54ffe4b47b, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -1978,6 +1994,10 @@ PrefabInstance:
     - target: {fileID: 7948153262931269924, guid: aa4fe90c2df8b4c4c9f5cc54ffe4b47b, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8069222324704052316, guid: aa4fe90c2df8b4c4c9f5cc54ffe4b47b, type: 3}
+      propertyPath: m_text
+      value: 000
       objectReference: {fileID: 0}
     - target: {fileID: 8171668662906484813, guid: aa4fe90c2df8b4c4c9f5cc54ffe4b47b, type: 3}
       propertyPath: m_Name
@@ -2086,6 +2106,10 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3809789759598194910, guid: 3ce41f75411c41f448f4f822ac6d67b0, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3809789759598194910, guid: 3ce41f75411c41f448f4f822ac6d67b0, type: 3}
       propertyPath: m_StringReference.m_TableEntryReference.m_KeyId
       value: 348016406183936
       objectReference: {fileID: 0}
@@ -2103,19 +2127,19 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4735648650218365287, guid: 3ce41f75411c41f448f4f822ac6d67b0, type: 3}
       propertyPath: m_fontColor.b
-      value: 1
+      value: 0.85098046
       objectReference: {fileID: 0}
     - target: {fileID: 4735648650218365287, guid: 3ce41f75411c41f448f4f822ac6d67b0, type: 3}
       propertyPath: m_fontColor.g
-      value: 1
+      value: 0.9960785
       objectReference: {fileID: 0}
     - target: {fileID: 4735648650218365287, guid: 3ce41f75411c41f448f4f822ac6d67b0, type: 3}
       propertyPath: m_fontColor.r
-      value: 1
+      value: 0.9960785
       objectReference: {fileID: 0}
     - target: {fileID: 4735648650218365287, guid: 3ce41f75411c41f448f4f822ac6d67b0, type: 3}
       propertyPath: m_fontColor32.rgba
-      value: 4294967295
+      value: 4292476670
       objectReference: {fileID: 0}
     - target: {fileID: 4735648650218365287, guid: 3ce41f75411c41f448f4f822ac6d67b0, type: 3}
       propertyPath: m_HorizontalAlignment
@@ -2205,7 +2229,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2813768196200715495, guid: 3ce41f75411c41f448f4f822ac6d67b0, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: -3.220459
+      value: -2.9871259
       objectReference: {fileID: 0}
     - target: {fileID: 2813768196200715495, guid: 3ce41f75411c41f448f4f822ac6d67b0, type: 3}
       propertyPath: m_AnchoredPosition.y
@@ -2221,6 +2245,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2813768196200715495, guid: 3ce41f75411c41f448f4f822ac6d67b0, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3809789759598194910, guid: 3ce41f75411c41f448f4f822ac6d67b0, type: 3}
+      propertyPath: m_Enabled
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3809789759598194910, guid: 3ce41f75411c41f448f4f822ac6d67b0, type: 3}
@@ -2241,19 +2269,19 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4735648650218365287, guid: 3ce41f75411c41f448f4f822ac6d67b0, type: 3}
       propertyPath: m_fontColor.b
-      value: 1
+      value: 0.85098046
       objectReference: {fileID: 0}
     - target: {fileID: 4735648650218365287, guid: 3ce41f75411c41f448f4f822ac6d67b0, type: 3}
       propertyPath: m_fontColor.g
-      value: 1
+      value: 0.9960785
       objectReference: {fileID: 0}
     - target: {fileID: 4735648650218365287, guid: 3ce41f75411c41f448f4f822ac6d67b0, type: 3}
       propertyPath: m_fontColor.r
-      value: 1
+      value: 0.9960785
       objectReference: {fileID: 0}
     - target: {fileID: 4735648650218365287, guid: 3ce41f75411c41f448f4f822ac6d67b0, type: 3}
       propertyPath: m_fontColor32.rgba
-      value: 4294967295
+      value: 4292476670
       objectReference: {fileID: 0}
     - target: {fileID: 4735648650218365287, guid: 3ce41f75411c41f448f4f822ac6d67b0, type: 3}
       propertyPath: m_HorizontalAlignment

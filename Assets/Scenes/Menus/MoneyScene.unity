@@ -171,6 +171,7 @@ MonoBehaviour:
   textMesh: {fileID: 320877946}
   sprite: {fileID: 35127859}
   distance: 0.74
+  right: 0
 --- !u!212 &35127861
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -755,6 +756,7 @@ MonoBehaviour:
   score_per_star: 10
   star_color_max: {r: 0.22926305, g: 0.35798395, b: 0.4528302, a: 1}
   tongue_max_abs: -1.35
+  money_for_max_tongue: 100
   anim_speed_range: {x: 1, y: 15}
   score_total: {fileID: 909619283}
   score_toadd: {fileID: 592175416}
@@ -979,7 +981,7 @@ Transform:
   m_GameObject: {fileID: 579289898}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.007879019, y: -1.0166659, z: 0}
+  m_LocalPosition: {x: 0.007879019, y: -0.98333263, z: 0}
   m_LocalScale: {x: 1, y: 2, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1629,6 +1631,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   gamemaster: {fileID: 5541224540911051492, guid: 894c74b520a88a24e88966d64bc5ea3e, type: 3}
   vector: {x: 0.33333334, y: -1.9333334, z: 0}
+  reload_: 1
 --- !u!4 &986094844
 Transform:
   m_ObjectHideFlags: 0
@@ -1840,6 +1843,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2e893645860fd154a88d411c92fd8b3b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  select_on_enable: 0
   hover: 
   unhover: 
   press: 
@@ -1858,11 +1862,20 @@ MonoBehaviour:
           m_StringArgument: ART
           m_BoolArgument: 0
         m_CallState: 2
+  onHover:
+    m_PersistentCalls:
+      m_Calls: []
+  onUnhover:
+    m_PersistentCalls:
+      m_Calls: []
+  isSelected: 0
   isHovered: 0
+  isPressed: 0
   indicator: {fileID: 0}
-  accept_input: 1
   juice: {fileID: 0}
   juice2: {fileID: 0}
+  navigation: {fileID: 0}
+  accept_input: 1
   clickable: 1
 --- !u!61 &1164680542
 BoxCollider2D:
@@ -6824,7 +6837,7 @@ Transform:
   m_GameObject: {fileID: 1311399214}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.014253344, y: 0.050000668, z: 0}
+  m_LocalPosition: {x: 0.04758668, y: 0.050000668, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []

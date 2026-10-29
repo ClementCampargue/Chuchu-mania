@@ -262,10 +262,7 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 1049678611521369945, guid: 3ce41f75411c41f448f4f822ac6d67b0, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 0}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 3ce41f75411c41f448f4f822ac6d67b0, type: 3}
 --- !u!224 &261997561 stripped
 RectTransform:
@@ -476,6 +473,7 @@ MonoBehaviour:
   levels: 
   actioen: {fileID: -2099379676528639254, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
   language: {fileID: 0}
+  button: {fileID: 0}
 --- !u!1001 &963183235
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -690,7 +688,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8738824580280653252, guid: 81c47e3fa2ef3d64eb54300b8ec77da8, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: -2.35
+      value: -2.1499999
       objectReference: {fileID: 0}
     - target: {fileID: 8738824580280653252, guid: 81c47e3fa2ef3d64eb54300b8ec77da8, type: 3}
       propertyPath: m_AnchoredPosition.y
