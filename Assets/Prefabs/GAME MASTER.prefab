@@ -892,7 +892,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 95d22d5a3960e5a478acd36b07c805e8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  money: 0
 --- !u!1 &3173916421014115576
 GameObject:
   m_ObjectHideFlags: 0
@@ -2209,14 +2208,14 @@ MonoBehaviour:
   trigger_left: {fileID: 0}
   select: {fileID: 0}
   start: {fileID: 21300000, guid: 4e689f6e18c1b784b9c5b8cbd86cb5ec, type: 3}
-  mouse_right: {fileID: 21300000, guid: c3c1059de4746fb4282fb2c95375bfd5, type: 3}
-  mouse_left: {fileID: 21300000, guid: 9995b5ff3ef2ab0469e5835bd34dfa01, type: 3}
-  mouse_middle: {fileID: 21300000, guid: 80619a8bfd214ae4eacb80d6aebbfc96, type: 3}
+  mouse_right: {fileID: 21300000, guid: 11628ca2a4268ec44a4ec3eafa911f75, type: 3}
+  mouse_left: {fileID: 21300000, guid: 5fb90ea83b0e2dd46a58fe5462aca3fb, type: 3}
+  mouse_middle: {fileID: 21300000, guid: ead6f79b2b936714c9068a49eb93133c, type: 3}
   default_sprite: {fileID: 21300000, guid: a03079b4b018fde4585d3d9b01d95668, type: 3}
   space_bar: {fileID: 21300000, guid: c963415a6a0ef4d40a645a8ac49c8783, type: 3}
-  ctrl: {fileID: 0}
-  maj: {fileID: 0}
-  tab: {fileID: 0}
+  ctrl: {fileID: 21300000, guid: 47f95d68db058ab43910f9f43aeab448, type: 3}
+  maj: {fileID: 21300000, guid: 5998205da8b16e446946aa9db8d1f780, type: 3}
+  tab: {fileID: 21300000, guid: 3569e80765d27814cbaf26ab02289f09, type: 3}
   escape: {fileID: 21300000, guid: e2bde3c93ce15c541a844e8f3aae299e, type: 3}
   arrow_up: {fileID: 21300000, guid: 121f55cd7c3115245979f2e0c027cc70, type: 3}
   arrow_down: {fileID: 21300000, guid: 2c02eaba13951d64ba9342be1cca12f3, type: 3}
