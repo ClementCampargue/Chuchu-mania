@@ -202,6 +202,8 @@ public class SC_player : MonoBehaviour
 
         if (Move != null)
             Move.action.Enable();
+
+        SC_scursorManager.instance.disable_cursor();
     }
 
     private void OnDisable()

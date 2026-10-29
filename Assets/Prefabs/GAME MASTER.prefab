@@ -635,7 +635,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   using_controller: 0
-  keyboardAsController: 0
+  keyboardAsController: 1
 --- !u!1 &2278703575595963018
 GameObject:
   m_ObjectHideFlags: 0

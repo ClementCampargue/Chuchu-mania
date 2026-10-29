@@ -84,7 +84,7 @@ public class SC_first_launch : MonoBehaviour
             // DISPLAY
 
             PlayerPrefs.SetFloat("Resolution", 3);
-            PlayerPrefs.SetFloat("Ecran", 0);
+            PlayerPrefs.SetFloat("Ecran", 1);
             PlayerPrefs.SetFloat("V sync", 0);
             PlayerPrefs.SetFloat("FPS", 2);
             PlayerPrefs.SetFloat("Overlay", 0);
