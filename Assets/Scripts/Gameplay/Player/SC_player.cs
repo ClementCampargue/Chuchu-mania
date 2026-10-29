@@ -183,14 +183,34 @@ public class SC_player : MonoBehaviour
     // =========================================================
     // AWAKE / ENABLE / DISABLE
     // =========================================================
-
     private void Awake()
     {
+        if (instance != null && instance != this)
+        {
+            Debug.LogError(
+                $"Deux instances de SC_player détectées : " +
+                $"{instance.gameObject.name} et {gameObject.name}",
+                this
+            );
+            return;
+        }
+
         instance = this;
+
         base_speed = moveSpeed;
         BasePowermoveSpeed = PowermoveSpeed;
+
+        Debug.Log(
+            $"SC_player.instance assignée : {instance.gameObject.name}",
+            this
+        );
     }
 
+    private void OnDestroy()
+    {
+        if (instance == this)
+            instance = null;
+    }
     private void OnEnable()
     {
         if (Jump != null)
@@ -202,8 +222,10 @@ public class SC_player : MonoBehaviour
 
         if (Move != null)
             Move.action.Enable();
-
-        SC_scursorManager.instance.disable_cursor();
+        if(SC_scursorManager.instance != null)
+        {
+            SC_scursorManager.instance.disable_cursor();
+        }
     }
 
     private void OnDisable()

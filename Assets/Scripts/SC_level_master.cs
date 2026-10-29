@@ -86,7 +86,7 @@ public class SC_level_master : MonoBehaviour
             player.gameObject.SetActive(true);
 
             player.rb.linearVelocity = Vector2.zero;
-
+            Invoke("delay", 1);
             player.transform.position = spawn.position;
             player.anim.SetTrigger("Start");
             player.start.PlayJuice();
@@ -108,6 +108,11 @@ public class SC_level_master : MonoBehaviour
                 discordLargeImage
             );
         }
+    }
+    public void delay()
+    {
+        SC_player.instance.canMove = true;
+
     }
 
 
