@@ -1687,7 +1687,6 @@ public class SC_player : MonoBehaviour
         isInvincible = false;
         burning = false;
         canTakeDamage = true;
-        canMove = true;
 
         moveSpeed = base_speed;
         PowermoveSpeed = BasePowermoveSpeed;

@@ -6,6 +6,7 @@ public class SC_level_master : MonoBehaviour
     public string next_scene;
     public AudioClip music;
     public bool overlay_on = true;
+    public bool hub;
     public bool level;
     public Transform spawn;
     public static SC_level_master instance;
@@ -42,29 +43,52 @@ public class SC_level_master : MonoBehaviour
             .transform.GetChild(0)
             .gameObject.SetActive(overlay_on);
 
-        SC_player.instance.moveSpeed =
-            SC_player.instance.base_speed;
+        player.moveSpeed = player.base_speed;
         SC_score.Instance.reset_score_level();
         SC_timer.instance.reset_timer();
         SC_timer.instance.pause();
 
         if (level)
         {
+            player.enabled = true;
+
             PlayerPrefs.SetInt("nodamage", 0);
             PlayerPrefs.SetInt("angry_fish", 0);
             PlayerPrefs.SetInt("museum", 0);
             PlayerPrefs.SetInt("museum_no_hiding", 0);
             PlayerPrefs.SetInt("fish_no_eat", 0);
             PlayerPrefs.SetInt("currentlevel", PlayerPrefs.GetInt("currentlevel") + 1);
-
+            player.canMove = false;
             player.Revive();
             player.gameObject.SetActive(true);
 
             player.rb.linearVelocity = Vector2.zero;
 
             player.transform.position = spawn.position;
+            player.anim.SetTrigger("Start");
+            player.start.PlayJuice();
+            //  Invoke("delay", 0.1f);
+        }
 
-            Invoke("delay", 0.1f);
+        else if (hub)
+        {
+            player.enabled = true;
+            PlayerPrefs.SetInt("nodamage", 0);
+            PlayerPrefs.SetInt("angry_fish", 0);
+            PlayerPrefs.SetInt("museum", 0);
+            PlayerPrefs.SetInt("museum_no_hiding", 0);
+            PlayerPrefs.SetInt("fish_no_eat", 0);
+            PlayerPrefs.SetInt("currentlevel", PlayerPrefs.GetInt("currentlevel") + 1);
+            player.canMove = false;
+            player.Revive();
+            player.gameObject.SetActive(true);
+
+            player.rb.linearVelocity = Vector2.zero;
+
+            player.transform.position = spawn.position;
+            player.anim.SetTrigger("Start");
+            player.start.PlayJuice();
+            Invoke("delay",0.5f);
         }
         else
         {
@@ -73,7 +97,7 @@ public class SC_level_master : MonoBehaviour
             player.gameObject.SetActive(false);
         }
 
-        SC_player.instance.rb.gravityScale = 3;
+        player.rb.gravityScale = 3;
 
         if (SC_discord_manager.Instance != null)
         {
@@ -86,13 +110,12 @@ public class SC_level_master : MonoBehaviour
 
     private void delay()
     {
-        SC_player.instance.enabled = false;
+        player.enabled = false;
 
         player.gameObject.SetActive(true);
 
         player.enabled = true;
-        player.anim.SetTrigger("Start");
-        player.start.PlayJuice();
+
     }
 
     private void Update()
