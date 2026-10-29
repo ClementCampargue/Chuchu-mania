@@ -43,6 +43,8 @@ public class SC_level_master : MonoBehaviour
             .transform.GetChild(0)
             .gameObject.SetActive(overlay_on);
 
+        SC_player.instance.moveSpeed =
+            SC_player.instance.base_speed;
         player.moveSpeed = player.base_speed;
         SC_score.Instance.reset_score_level();
         SC_timer.instance.reset_timer();
@@ -58,6 +60,7 @@ public class SC_level_master : MonoBehaviour
             PlayerPrefs.SetInt("museum_no_hiding", 0);
             PlayerPrefs.SetInt("fish_no_eat", 0);
             PlayerPrefs.SetInt("currentlevel", PlayerPrefs.GetInt("currentlevel") + 1);
+
             player.canMove = false;
             player.Revive();
             player.gameObject.SetActive(true);
@@ -67,7 +70,6 @@ public class SC_level_master : MonoBehaviour
             player.transform.position = spawn.position;
             player.anim.SetTrigger("Start");
             player.start.PlayJuice();
-            //  Invoke("delay", 0.1f);
         }
 
         else if (hub)
@@ -88,7 +90,6 @@ public class SC_level_master : MonoBehaviour
             player.transform.position = spawn.position;
             player.anim.SetTrigger("Start");
             player.start.PlayJuice();
-            Invoke("delay",0.5f);
         }
         else
         {
@@ -97,6 +98,7 @@ public class SC_level_master : MonoBehaviour
             player.gameObject.SetActive(false);
         }
 
+        SC_player.instance.rb.gravityScale = 3;
         player.rb.gravityScale = 3;
 
         if (SC_discord_manager.Instance != null)
@@ -110,11 +112,14 @@ public class SC_level_master : MonoBehaviour
 
     private void delay()
     {
+        SC_player.instance.enabled = false;
         player.enabled = false;
 
         player.gameObject.SetActive(true);
 
         player.enabled = true;
+        player.anim.SetTrigger("Start");
+        player.start.PlayJuice();
 
     }
 

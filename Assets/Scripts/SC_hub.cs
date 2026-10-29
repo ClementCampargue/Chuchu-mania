@@ -46,10 +46,10 @@ public class SC_hub : MonoBehaviour
     {
 
         money = SC_money_manager.instance;
-        money_text.text = SC_SaveManager.instance.data.money.ToString("D6");
         PlayerPrefs.SetInt("Score", 0);
         PlayerPrefs.SetInt("Level",0);
         SC_player.instance.canMove = true;
+        money_text.text = SC_SaveManager.instance.data.money.ToString("D6");
     }
 
     // Update is called once per frame

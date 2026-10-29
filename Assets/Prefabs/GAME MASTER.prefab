@@ -635,7 +635,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   using_controller: 0
-  keyboardAsController: 1
+  using_keyboard: 0
+  using_keyboard_controller: 0
 --- !u!1 &2278703575595963018
 GameObject:
   m_ObjectHideFlags: 0
@@ -957,6 +958,50 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 5a7854cd67fd3a54ba89f266527af175, type: 2}
   - {fileID: 11400000, guid: 6d9e24cabf2c95a45974e6d008db7728, type: 2}
   - {fileID: 11400000, guid: 759863b31864fd94696b6c06a51ec0db, type: 2}
+--- !u!1 &3513363463262311209
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5271967947333564063}
+  - component: {fileID: 4592182550554732086}
+  m_Layer: 0
+  m_Name: RuntimeConsole
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
+--- !u!4 &5271967947333564063
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3513363463262311209}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -0.46458334, y: 0.7148534, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2787567252766539913}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &4592182550554732086
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3513363463262311209}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 364d4fbe82259bb4ca519efd3de73c9b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &3583162067977784093
 GameObject:
   m_ObjectHideFlags: 0
@@ -1503,6 +1548,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 3982436711994883479}
+  - {fileID: 5271967947333564063}
   - {fileID: 6046020296652772576}
   - {fileID: 9130708477111820375}
   - {fileID: 9201310815598684785}

@@ -214,8 +214,6 @@ public class SC_player : MonoBehaviour
             Jump.action.canceled -= OnJumpReleased;
         }
 
-        if (Move != null)
-            Move.action.Disable();
     }
 
     // =========================================================

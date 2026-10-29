@@ -8,6 +8,7 @@ public class SC_controller_manager : MonoBehaviour
 
     public bool using_controller;
     public bool using_keyboard;
+    public bool using_keyboard_controller;
 
     //public bool keyboardAsController = false;
 
@@ -25,6 +26,7 @@ public class SC_controller_manager : MonoBehaviour
             using_controller = false;
             using_keyboard = true;
 
+            using_keyboard_controller = false;
 
         }
         // Détection des inputs clavier et souris
@@ -32,6 +34,7 @@ public class SC_controller_manager : MonoBehaviour
         {
             using_controller = false;
             using_keyboard = true;
+            using_keyboard_controller = true;
             return;
         }
 
@@ -39,6 +42,7 @@ public class SC_controller_manager : MonoBehaviour
         if (IsControllerInput())
         {
             using_controller = true;
+            using_keyboard_controller = true;
             using_keyboard = false;
         }
     }

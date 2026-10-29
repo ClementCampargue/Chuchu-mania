@@ -1,8 +1,9 @@
 using UnityEngine;
-using UnityEngine.UI;
+using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.LowLevel;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 public class SC_scursorManager : MonoBehaviour
 {
     public static SC_scursorManager instance;
@@ -113,7 +114,7 @@ public class SC_scursorManager : MonoBehaviour
     void Update()
     {
         bool usingController = SC_controller_manager.instance.using_controller;
-
+        UpdateCursorMode();
         // =========================
         // VISIBILITÉ
         // =========================
@@ -266,11 +267,15 @@ public class SC_scursorManager : MonoBehaviour
 
     public void enable_cursor()
     {
+        Cursor.visible = false;
+
         cursor_enabled = true;
     }
 
     public void disable_cursor()
     {
+        Cursor.visible = false;
+
         RecenterCursor();
         cursor_enabled = false;
     }
@@ -282,5 +287,23 @@ public class SC_scursorManager : MonoBehaviour
         );
 
         UpdateCursor();
+    }
+    private void UpdateCursorMode()
+    {
+        if (SC_controller_manager.instance == null)
+            return;
+
+        bool usingController =
+            SC_controller_manager.instance.using_keyboard_controller;
+
+
+        if (usingController || SC_player.instance.enabled && SC_player.instance.gameObject.activeInHierarchy)
+        {
+            disable_cursor();
+        }
+        else
+        {
+            enable_cursor();
+        }
     }
 }

@@ -98,7 +98,6 @@ public class SC_shop_manager : MonoBehaviour
         {
             SC_screenshot_transition.instance.Capture("HUB");
         }
-        UpdateCursorMode();
     }
     public void show_text_start()
     {
@@ -198,37 +197,7 @@ public class SC_shop_manager : MonoBehaviour
         typewriter.TriggerText(random);
     }
 
-    private void UpdateCursorMode()
-    {
-        if (SC_controller_manager.instance == null)
-            return;
 
-        bool usingController =
-            SC_controller_manager.instance.using_controller;
-
-
-        if (usingController)
-        {
-            if (SC_scursorManager.instance != null)
-            {
-                SC_scursorManager.instance.disable_cursor();
-            }
-
-
-            if (EventSystem.current != null &&
-                EventSystem.current.currentSelectedGameObject == null)
-            {
-                SelectDefaultButton();
-            }
-        }
-        else
-        {
-            if (SC_scursorManager.instance != null)
-            {
-                SC_scursorManager.instance.enable_cursor();
-            }
-        }
-    }
 
 
     private void SelectDefaultButton()

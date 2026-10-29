@@ -20571,7 +20571,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 202ee3a233513de4e97c15ba372a6847, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  trs: {fileID: 0}
+  trs: {fileID: 6133907430239164639}
   spriteRenderer: {fileID: 0}
   flashMaterial: {fileID: 0}
   rumble: 0
