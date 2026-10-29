@@ -25,6 +25,10 @@ public class SC_hub : MonoBehaviour
     public LocalizedString constellation_;
     private void Awake()
     {
+        if (SC_game_master.instance.previousScene == "LEVEL_SELECTION")
+        {
+            spawn_point.position = ship.position;
+        }
         if (SC_game_master.instance.previousScene == "Shop")
         {
             spawn_point.position = shop.position;
