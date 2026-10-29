@@ -1,6 +1,8 @@
+using System;
 using System.Collections;
 using TMPro;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 using UnityEngine.Localization;
 using UnityEngine.Localization.Settings;
@@ -116,6 +118,11 @@ public class DialogueManager : MonoBehaviour
                 NextLine();
             }
         }
+        if (waitingInput)
+        {
+            UpdateCursorMode();
+
+        }
     }
 
     public void StartDialogue()
@@ -163,7 +170,7 @@ public class DialogueManager : MonoBehaviour
         if (characterNameText != null)
         {
 
-            if (line.character.name.GetLocalizedString() == "No translation found for 'Interactive' in Noms")
+            if (line.character.name.GetLocalizedString().Contains("EMPTY", StringComparison.OrdinalIgnoreCase))
             {
                 characterNameText.text = "";
             }
@@ -362,4 +369,29 @@ public class DialogueManager : MonoBehaviour
         }
 
     }
+    private void UpdateCursorMode()
+    {
+        if (SC_controller_manager.instance == null)
+            return;
+
+        bool usingController =
+            SC_controller_manager.instance.using_controller;
+
+        if (usingController)
+        {
+            if (SC_scursorManager.instance != null)
+            {
+                SC_scursorManager.instance.disable_cursor();
+            }
+
+        }
+        else
+        {
+            if (SC_scursorManager.instance != null)
+            {
+                SC_scursorManager.instance.enable_cursor();
+            }
+        }
+    }
+
 }

@@ -41,6 +41,7 @@ public class SC_save_menu : MonoBehaviour
     }
     void delay()
     {
+        menu.SetActive(true);
         canact = true;
     }
     void update_files()
@@ -81,8 +82,8 @@ public class SC_save_menu : MonoBehaviour
             if (delete.action.WasPressedThisFrame() && manager.SlotExists(manager.activeSlot))
             {
                 Debug.Log("cbon");
-                menu.SetActive(false);
                 menu_opened = true;
+                menu.SetActive(false);
                 delete_menu.SetActive(true); 
             }
         }
@@ -197,7 +198,7 @@ public class SC_save_menu : MonoBehaviour
             return;
         }
         update_files();
-
+        load_slot();
     }
 
     // Charge les données avant de lancer la transition.

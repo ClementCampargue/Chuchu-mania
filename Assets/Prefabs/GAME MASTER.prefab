@@ -2209,9 +2209,9 @@ MonoBehaviour:
   trigger_left: {fileID: 0}
   select: {fileID: 0}
   start: {fileID: 21300000, guid: 4e689f6e18c1b784b9c5b8cbd86cb5ec, type: 3}
-  mouse_right: {fileID: 0}
-  mouse_left: {fileID: 0}
-  mouse_middle: {fileID: 0}
+  mouse_right: {fileID: 21300000, guid: c3c1059de4746fb4282fb2c95375bfd5, type: 3}
+  mouse_left: {fileID: 21300000, guid: 9995b5ff3ef2ab0469e5835bd34dfa01, type: 3}
+  mouse_middle: {fileID: 21300000, guid: 80619a8bfd214ae4eacb80d6aebbfc96, type: 3}
   default_sprite: {fileID: 21300000, guid: a03079b4b018fde4585d3d9b01d95668, type: 3}
   space_bar: {fileID: 21300000, guid: c963415a6a0ef4d40a645a8ac49c8783, type: 3}
   ctrl: {fileID: 0}
