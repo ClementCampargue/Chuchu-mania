@@ -110,22 +110,6 @@ public class SC_level_master : MonoBehaviour
         }
     }
 
-    private void delay()
-    {
-        SC_player.instance.enabled = false;
-        player.enabled = false;
-
-        player.gameObject.SetActive(true);
-
-        player.enabled = true;
-        player.anim.SetTrigger("Start");
-        player.start.PlayJuice();
-
-    }
-
-    private void Update()
-    {
-    }
 
     private void OnDrawGizmosSelected()
     {
