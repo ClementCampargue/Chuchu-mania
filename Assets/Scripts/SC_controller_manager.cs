@@ -7,9 +7,9 @@ public class SC_controller_manager : MonoBehaviour
     public static SC_controller_manager instance;
 
     public bool using_controller;
+    public bool using_keyboard;
 
-    [Header("Configuration")]
-    public bool keyboardAsController = false;
+    //public bool keyboardAsController = false;
 
     private void Awake()
     {
@@ -19,13 +19,19 @@ public class SC_controller_manager : MonoBehaviour
     void Update()
     {
         // Détection des inputs clavier et souris
-        if (IsKeyboardOrMouseInput())
+        if (IsMouseInput())
         {
             EventSystem.current.SetSelectedGameObject(null);
+            using_controller = false;
+            using_keyboard = true;
 
-            // Si le clavier est considéré comme une manette
-            using_controller = keyboardAsController && IsKeyboardInput();
 
+        }
+        // Détection des inputs clavier et souris
+        if (IsKeyboardInput())
+        {
+            using_controller = false;
+            using_keyboard = true;
             return;
         }
 
@@ -33,6 +39,7 @@ public class SC_controller_manager : MonoBehaviour
         if (IsControllerInput())
         {
             using_controller = true;
+            using_keyboard = false;
         }
     }
 
@@ -47,6 +54,8 @@ public class SC_controller_manager : MonoBehaviour
             Input.GetKeyDown(KeyCode.A) ||
             Input.GetKeyDown(KeyCode.S) ||
             Input.GetKeyDown(KeyCode.D) ||
+            Input.GetKeyDown(KeyCode.Q) ||
+            Input.GetKeyDown(KeyCode.Z) ||
             Input.GetKeyDown(KeyCode.UpArrow) ||
             Input.GetKeyDown(KeyCode.DownArrow) ||
             Input.GetKeyDown(KeyCode.LeftArrow) ||

@@ -64,8 +64,6 @@ public class SC_sticker_menu : MonoBehaviour
 
     private void Start()
     {
-        if (SC_controller_manager.instance != null)
-            SC_controller_manager.instance.keyboardAsController = true;
 
         if (SC_scursorManager.instance != null)
         {
@@ -173,8 +171,7 @@ public class SC_sticker_menu : MonoBehaviour
         if (quit != null && quit.action != null &&
             quit.action.WasPerformedThisFrame())
         {
-            if (SC_controller_manager.instance != null)
-                SC_controller_manager.instance.keyboardAsController = false;
+ 
 
             if (SC_scursorManager.instance == null ||
                 !SC_scursorManager.instance.grabing)

@@ -43,7 +43,8 @@ public class SC_input_assign : MonoBehaviour
     private bool rebindInProgress;
     private bool waitingForOpeningInputRelease;
     private string pendingPartName;
-
+    public GamepadInputSprite prompt_down;
+    public KeyboardInputSprite prompt_down2;
     private void Awake()
     {
         if (actionReference != null &&
@@ -476,6 +477,11 @@ public class SC_input_assign : MonoBehaviour
 
             if (prompt_ != null)
                 prompt_.UpdateDisplay();
+
+            if (prompt_down2 != null)
+                prompt_down2.UpdateDisplay();
+            if (prompt_down != null)
+                prompt_down.UpdateSprite();
         }
     }
 
