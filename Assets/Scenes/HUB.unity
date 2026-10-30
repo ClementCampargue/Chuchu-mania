@@ -659,6 +659,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3809789759598194910, guid: 3ce41f75411c41f448f4f822ac6d67b0, type: 3}
+      propertyPath: m_StringReference.m_TableEntryReference.m_KeyId
+      value: 290163802112
+      objectReference: {fileID: 0}
+    - target: {fileID: 3809789759598194910, guid: 3ce41f75411c41f448f4f822ac6d67b0, type: 3}
+      propertyPath: m_StringReference.m_TableReference.m_TableCollectionName
+      value: GUID:1e717d2d8766cef439598bd0974a3072
+      objectReference: {fileID: 0}
     - target: {fileID: 4735648650218365287, guid: 3ce41f75411c41f448f4f822ac6d67b0, type: 3}
       propertyPath: m_text
       value: SUPERNOVA PLAZA
