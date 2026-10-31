@@ -37,8 +37,6 @@ public class SC_slider : MonoBehaviour
 
     private SC_sticker_menu menu;
 
-    private float contentStartY;
-
     private void Start()
     {
         menu = SC_sticker_menu.instance;
@@ -49,10 +47,18 @@ public class SC_slider : MonoBehaviour
         sliderCollider = GetComponent<Collider2D>();
 
         if (handle != null)
+        {
             handleCollider = handle.GetComponent<Collider2D>();
 
-        if (content != null)
-            contentStartY = content.position.y;
+            if (handleCollider == null)
+                handleCollider = handle.GetComponentInChildren<Collider2D>();
+        }
+
+        if (cam == null)
+            Debug.LogError("SC_slider : Camera introuvable !");
+
+        if (sliderCollider == null)
+            Debug.LogError("SC_slider : Collider2D du slider manquant !");
 
         SyncHandle();
     }
@@ -64,7 +70,9 @@ public class SC_slider : MonoBehaviour
             if (dragging)
             {
                 dragging = false;
-                SC_scursorManager.instance.SetNormalCursor();
+
+                if (SC_scursorManager.instance != null)
+                    SC_scursorManager.instance.SetNormalCursor();
             }
 
             return;
@@ -73,6 +81,124 @@ public class SC_slider : MonoBehaviour
         HandleMouseWheel();
         HandleMouseDrag();
         CheckSelectedButton();
+    }
+
+    // --------------------------------------------------
+    // MOUSE TO WORLD
+    // --------------------------------------------------
+
+    private bool GetMouseWorldPosition(out Vector3 worldPosition)
+    {
+        worldPosition = Vector3.zero;
+
+        if (cam == null || handle == null)
+            return false;
+
+        Vector3 mousePosition = Input.mousePosition;
+
+        // Vérifie que la souris est dans la zone de la caméra.
+        if (!cam.pixelRect.Contains(mousePosition))
+            return false;
+
+        // Conversion des pixels réels de l'écran
+        // vers un rayon dans le monde.
+        Ray ray = cam.ScreenPointToRay(mousePosition);
+
+        // Plan XY correspondant à la position du handle.
+        Plane plane = new Plane(
+            Vector3.forward,
+            handle.position
+        );
+
+        if (!plane.Raycast(ray, out float distance))
+            return false;
+
+        worldPosition = ray.GetPoint(distance);
+
+        return true;
+    }
+
+    // --------------------------------------------------
+    // COLLIDER DETECTION
+    // --------------------------------------------------
+
+    private bool IsPointerOverSlider(Vector3 mouseWorld)
+    {
+        bool overSlider =
+            sliderCollider != null &&
+            sliderCollider.OverlapPoint(mouseWorld);
+
+        bool overHandle =
+            handleCollider != null &&
+            handleCollider.OverlapPoint(mouseWorld);
+
+        return overSlider || overHandle;
+    }
+
+    // --------------------------------------------------
+    // MOUSE DRAG
+    // --------------------------------------------------
+
+    private void HandleMouseDrag()
+    {
+        if (cam == null || handle == null)
+            return;
+
+        bool validMousePosition =
+            GetMouseWorldPosition(out Vector3 mouseWorld);
+
+        if (Input.GetMouseButtonDown(0))
+        {
+            if (validMousePosition &&
+                IsPointerOverSlider(mouseWorld))
+            {
+                dragging = true;
+
+                if (SC_scursorManager.instance != null)
+                    SC_scursorManager.instance.SetGrabCursor();
+
+                // Clic directement sur le handle.
+                if (handleCollider != null &&
+                    handleCollider.OverlapPoint(mouseWorld))
+                {
+                    dragOffsetY =
+                        handle.position.y - mouseWorld.y;
+                }
+                else
+                {
+                    // Clic sur la barre.
+                    dragOffsetY = 0f;
+
+                    SetHandlePosition(mouseWorld.y);
+                }
+            }
+        }
+
+        // Pendant le drag, on continue même si la souris
+        // sort du collider du slider.
+        if (Input.GetMouseButton(0) && dragging)
+        {
+            if (validMousePosition)
+            {
+                float targetY = mouseWorld.y + dragOffsetY;
+
+                float newY = Mathf.Lerp(
+                    handle.position.y,
+                    targetY,
+                    Mathf.Clamp01(dragSpeed)
+                );
+
+                SetHandlePosition(newY);
+            }
+        }
+
+        if (Input.GetMouseButtonUp(0))
+        {
+            dragging = false;
+
+            if (SC_scursorManager.instance != null)
+                SC_scursorManager.instance.SetNormalCursor();
+        }
     }
 
     // --------------------------------------------------
@@ -86,75 +212,6 @@ public class SC_slider : MonoBehaviour
         if (Mathf.Abs(wheel) > 0.001f)
         {
             MoveContent(wheel * wheelSpeed);
-        }
-    }
-
-    // --------------------------------------------------
-    // MOUSE
-    // --------------------------------------------------
-
-    private Vector3 GetMouseWorldPosition()
-    {
-        Vector3 mousePosition = Input.mousePosition;
-
-        mousePosition.z = Mathf.Abs(
-            cam.transform.position.z - transform.position.z
-        );
-
-        return cam.ScreenToWorldPoint(mousePosition);
-    }
-
-    private void HandleMouseDrag()
-    {
-        if (cam == null || handle == null)
-            return;
-
-        Vector3 mouseWorld = GetMouseWorldPosition();
-
-        if (Input.GetMouseButtonDown(0))
-        {
-            Collider2D hit = Physics2D.OverlapPoint(mouseWorld);
-
-            if (hit != null && sliderCollider != null &&
-                hit == sliderCollider)
-            {
-                dragging = true;
-
-                if (SC_scursorManager.instance != null)
-                    SC_scursorManager.instance.SetGrabCursor();
-
-                if (handleCollider != null &&
-                    handleCollider.OverlapPoint(mouseWorld))
-                {
-                    dragOffsetY = handle.position.y - mouseWorld.y;
-                }
-                else
-                {
-                    dragOffsetY = 0f;
-                    SetHandlePosition(mouseWorld.y);
-                }
-            }
-        }
-
-        if (Input.GetMouseButton(0) && dragging)
-        {
-            float targetY = mouseWorld.y + dragOffsetY;
-
-            SetHandlePosition(
-                Mathf.Lerp(
-                    handle.position.y,
-                    targetY,
-                    dragSpeed
-                )
-            );
-        }
-
-        if (Input.GetMouseButtonUp(0))
-        {
-            dragging = false;
-
-            if (SC_scursorManager.instance != null)
-                SC_scursorManager.instance.SetNormalCursor();
         }
     }
 
@@ -189,17 +246,13 @@ public class SC_slider : MonoBehaviour
             selected.transform.position
         );
 
-        float screenMinY = 0f;
-        float screenMaxY = Screen.height;
-
         float boxMinY = visibleBoxCenter.y -
                         visibleBoxSize.y * 0.5f;
 
         float boxMaxY = visibleBoxCenter.y +
                         visibleBoxSize.y * 0.5f;
 
-        // Les limites sont converties depuis le monde vers l'écran.
-        Vector3 minWorld = cam.WorldToScreenPoint(
+        Vector3 minScreen = cam.WorldToScreenPoint(
             new Vector3(
                 visibleBoxCenter.x,
                 boxMinY,
@@ -207,7 +260,7 @@ public class SC_slider : MonoBehaviour
             )
         );
 
-        Vector3 maxWorld = cam.WorldToScreenPoint(
+        Vector3 maxScreen = cam.WorldToScreenPoint(
             new Vector3(
                 visibleBoxCenter.x,
                 boxMaxY,
@@ -215,24 +268,20 @@ public class SC_slider : MonoBehaviour
             )
         );
 
-        screenMinY = Mathf.Min(minWorld.y, maxWorld.y);
-        screenMaxY = Mathf.Max(minWorld.y, maxWorld.y);
+        float screenMinY = Mathf.Min(minScreen.y, maxScreen.y);
+        float screenMaxY = Mathf.Max(minScreen.y, maxScreen.y);
 
         if (screenPosition.y < screenMinY)
         {
             float difference = screenMinY - screenPosition.y;
 
-            MoveContent(
-                ScreenToWorldY(difference)
-            );
+            MoveContent(ScreenToWorldY(difference));
         }
         else if (screenPosition.y > screenMaxY)
         {
             float difference = screenMaxY - screenPosition.y;
 
-            MoveContent(
-                ScreenToWorldY(difference)
-            );
+            MoveContent(ScreenToWorldY(difference));
         }
     }
 
@@ -241,17 +290,30 @@ public class SC_slider : MonoBehaviour
         if (cam == null)
             return pixels;
 
-        Vector3 a = cam.ScreenToWorldPoint(
-            new Vector3(0f, 0f,
-                Mathf.Abs(cam.transform.position.z - transform.position.z))
+        float centerX = cam.pixelRect.center.x;
+        float centerY = cam.pixelRect.center.y;
+
+        Ray rayA = cam.ScreenPointToRay(
+            new Vector3(centerX, centerY, 0f)
         );
 
-        Vector3 b = cam.ScreenToWorldPoint(
-            new Vector3(0f, pixels,
-                Mathf.Abs(cam.transform.position.z - transform.position.z))
+        Ray rayB = cam.ScreenPointToRay(
+            new Vector3(centerX, centerY + pixels, 0f)
         );
 
-        return b.y - a.y;
+        Plane plane = new Plane(
+            Vector3.forward,
+            new Vector3(0f, 0f, transform.position.z)
+        );
+
+        if (plane.Raycast(rayA, out float distanceA) &&
+            plane.Raycast(rayB, out float distanceB))
+        {
+            return rayB.GetPoint(distanceB).y -
+                   rayA.GetPoint(distanceA).y;
+        }
+
+        return 0f;
     }
 
     // --------------------------------------------------

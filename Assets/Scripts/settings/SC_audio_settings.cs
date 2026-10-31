@@ -1,4 +1,3 @@
-
 using UnityEngine;
 using UnityEngine.Audio;
 
@@ -13,11 +12,12 @@ public class SC_audio_settings : MonoBehaviour
 
     public void update_sound()
     {
+        float master = PlayerPrefs.GetFloat("Master", 1f);
         float music = PlayerPrefs.GetFloat("Music", 1f);
         float sound = PlayerPrefs.GetFloat("Sound", 1f);
 
         // Master Volume
-        mixer.SetFloat("MasterVolume", music <= 0f ? -80f : Mathf.Log10(PlayerPrefs.GetFloat("Master", 1f)) * 20f);
+        mixer.SetFloat("MasterVolume", master <= 0f ? -80f : Mathf.Log10(master) * 20f);
 
         // Music Volume
         mixer.SetFloat("MusicVolume", music <= 0f ? -80f : Mathf.Log10(music) * 20f);
