@@ -87,9 +87,13 @@ public class SC_bee_stinger : MonoBehaviour
             this.enabled = false;
         }
 
-        if (Input.GetKeyDown(KeyCode.I)) 
+        if (PlayerPrefs.GetFloat("Cheats") == 0)
         {
-            StartCoroutine(CheeksSequence());
+            if (Input.GetKeyDown(KeyCode.I))
+            {
+                StartCoroutine(CheeksSequence());
+            }
+
         }
     }
 

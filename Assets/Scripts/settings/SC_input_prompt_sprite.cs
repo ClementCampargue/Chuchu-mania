@@ -1,9 +1,8 @@
-
 using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.UI;
 
-[RequireComponent(typeof(SpriteRenderer))]
 public class GamepadInputSprite : MonoBehaviour
 {
     [Header("Input")]
@@ -19,12 +18,20 @@ public class GamepadInputSprite : MonoBehaviour
     [Header("Fallback")]
     [SerializeField] private Sprite defaultSprite;
 
-    private SpriteRenderer spriteRenderer;
+    [Header("Display")]
+    [SerializeField] private SpriteRenderer spriteRenderer;
+    [SerializeField] private Image uiImage;
+
     private SC_input_display_master master;
 
     private void Awake()
     {
-        spriteRenderer = GetComponent<SpriteRenderer>();
+        // Détection automatique des composants.
+        if (spriteRenderer == null)
+            spriteRenderer = GetComponent<SpriteRenderer>();
+
+        if (uiImage == null)
+            uiImage = GetComponent<Image>();
     }
 
     private void Start()
@@ -40,9 +47,6 @@ public class GamepadInputSprite : MonoBehaviour
 
     public void UpdateSprite()
     {
-        if (spriteRenderer == null)
-            spriteRenderer = GetComponent<SpriteRenderer>();
-
         if (master == null)
             master = SC_input_display_master.instance;
 
@@ -62,9 +66,7 @@ public class GamepadInputSprite : MonoBehaviour
 
         Sprite result = GetSpriteFromPath(path);
 
-        spriteRenderer.sprite = result != null
-            ? result
-            : defaultSprite;
+        SetSprite(result != null ? result : defaultSprite);
     }
 
     // --------------------------------------------------
@@ -87,9 +89,7 @@ public class GamepadInputSprite : MonoBehaviour
 
                 if (compositeParentBindingIndex >= 0 &&
                     parent != compositeParentBindingIndex)
-                {
                     continue;
-                }
 
                 for (int i = parent + 1; i < action.bindings.Count; i++)
                 {
@@ -105,9 +105,7 @@ public class GamepadInputSprite : MonoBehaviour
                         binding.name,
                         compositePartName,
                         StringComparison.OrdinalIgnoreCase))
-                    {
                         continue;
-                    }
 
                     string path = binding.effectivePath;
 
@@ -119,8 +117,7 @@ public class GamepadInputSprite : MonoBehaviour
             return null;
         }
 
-        // Cas d'une action classique : recherche un binding
-        // manette concret, sans dépendre d'un index fixe.
+        // Action classique : recherche un binding manette.
         foreach (var binding in action.bindings)
         {
             if (binding.isComposite || binding.isPartOfComposite)
@@ -140,8 +137,7 @@ public class GamepadInputSprite : MonoBehaviour
         return !string.IsNullOrEmpty(path) &&
                path.IndexOf(
                    "<Gamepad>",
-                   StringComparison.OrdinalIgnoreCase
-               ) >= 0;
+                   StringComparison.OrdinalIgnoreCase) >= 0;
     }
 
     // --------------------------------------------------
@@ -220,9 +216,21 @@ public class GamepadInputSprite : MonoBehaviour
         return defaultSprite;
     }
 
-    private void SetFallback()
+    // --------------------------------------------------
+    // AFFICHAGE SPRITE / IMAGE UI
+    // --------------------------------------------------
+
+    private void SetSprite(Sprite sprite)
     {
         if (spriteRenderer != null)
-            spriteRenderer.sprite = defaultSprite;
+            spriteRenderer.sprite = sprite;
+
+        if (uiImage != null)
+            uiImage.sprite = sprite;
+    }
+
+    private void SetFallback()
+    {
+        SetSprite(defaultSprite);
     }
 }

@@ -69,10 +69,6 @@ public class SC_pause : MonoBehaviour
             pauseAction.action.Disable();
         }
 
-        if (backAction != null)
-        {
-            backAction.action.Disable();
-        }
     }
 
     private void Start()
@@ -171,7 +167,10 @@ public class SC_pause : MonoBehaviour
 
         if (SceneManager.GetActiveScene().name == "Stickers")
             return;
-
+        if (backAction != null)
+        {
+            backAction.action.Enable();
+        }
         if (!isPaused)
         {
             if (!SC_player.instance.canMove)

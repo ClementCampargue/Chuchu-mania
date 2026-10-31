@@ -2248,11 +2248,11 @@ MonoBehaviour:
   pad_down: {fileID: 21300000, guid: db68a5e3776e67842be446a3920010fd, type: 3}
   pad_right: {fileID: 21300000, guid: fde903ef795650a488552ed015caba1d, type: 3}
   pad_left: {fileID: 21300000, guid: 939f4b3fab5cda14baa96d9a2b745081, type: 3}
-  bump_right: {fileID: 21300000, guid: ed6cad9bc971c0346b6d7769b99855e9, type: 3}
-  bump_left: {fileID: 21300000, guid: c39aec988424ecc4991ef51e01703208, type: 3}
-  trigger_right: {fileID: 0}
-  trigger_left: {fileID: 0}
-  select: {fileID: 0}
+  bump_right: {fileID: 21300000, guid: 53785709a698fd146bd081827ad45f7f, type: 3}
+  bump_left: {fileID: 21300000, guid: ea2e3cc996defc04a949aa5db2c258f3, type: 3}
+  trigger_right: {fileID: 21300000, guid: 0a3fcacf55bca3340b87ac8666f531ac, type: 3}
+  trigger_left: {fileID: 21300000, guid: 5d1cf895e9392cb41bdb10b42331a0ec, type: 3}
+  select: {fileID: 21300000, guid: b2314ac065fe38d4d9b539ff2c51f4be, type: 3}
   start: {fileID: 21300000, guid: 4e689f6e18c1b784b9c5b8cbd86cb5ec, type: 3}
   mouse_right: {fileID: 21300000, guid: 11628ca2a4268ec44a4ec3eafa911f75, type: 3}
   mouse_left: {fileID: 21300000, guid: 5fb90ea83b0e2dd46a58fe5462aca3fb, type: 3}

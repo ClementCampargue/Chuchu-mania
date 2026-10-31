@@ -194,8 +194,6 @@ public class SC_achievement_menu : MonoBehaviour
             }
         }
 
-        UpdateCursorMode();
-
         if (Input.GetKeyDown(KeyCode.W))
         {
             SC_SaveManager.instance.AddWish(1);
@@ -217,30 +215,6 @@ public class SC_achievement_menu : MonoBehaviour
         item_box.gameObject.SetActive(true);
         item_box.ResetTrigger("hide");
         item_box.SetTrigger("show");
-    }
-
-    private void UpdateCursorMode()
-    {
-        if (SC_controller_manager.instance == null)
-            return;
-
-        bool usingController =
-            SC_controller_manager.instance.using_controller;
-
-        if (usingController)
-        {
-            if (SC_scursorManager.instance != null)
-            {
-                SC_scursorManager.instance.disable_cursor();
-            }
-        }
-        else
-        {
-            if (SC_scursorManager.instance != null)
-            {
-                SC_scursorManager.instance.enable_cursor();
-            }
-        }
     }
 
     public void update_display(

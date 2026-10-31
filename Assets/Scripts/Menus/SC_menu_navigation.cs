@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -74,18 +75,14 @@ public class SC_menu_navigation : MonoBehaviour
 
     private void OnEnable()
     {
-        // IMPORTANT :
-        // On recherche et retrie les boutons à CHAQUE ouverture.
         RefreshButtons();
 
-        // On remet les états internes à zéro.
         isHolding = false;
         holdTimer = 0f;
         currentMoveInput = Vector2.zero;
         mouseMode = false;
         lastMoveTime = -moveCooldown;
 
-        // Activation des inputs.
         if (move != null)
         {
             move.action.Enable();
@@ -112,25 +109,28 @@ public class SC_menu_navigation : MonoBehaviour
             lastMousePosition =
                 pointerPosition.action.ReadValue<Vector2>();
         }
-        foreach (SC_Button button in buttons) 
+
+        foreach (SC_Button button in buttons)
         {
-            button.navigation = this;
+            if (button != null)
+                button.navigation = this;
         }
 
-        // Vérifie que l'ancien bouton sélectionné existe
-        // toujours dans le nouveau tableau.
-        ValidateLastSelected();
-
-        // Sélectionne le bon bouton.
-        SelectFirstAvailable();
+        StartCoroutine(RestoreSelectionNextFrame());
     }
 
+    private IEnumerator RestoreSelectionNextFrame()
+    {
+        yield return null;
+
+        ValidateLastSelected();
+        SelectFirstAvailable();
+    }
 
     private void OnDisable()
     {
         // Mémorise le bouton actuellement sélectionné.
-        if (IsValidIndex(currentIndex) &&
-            IsButtonAvailable(buttons[currentIndex]))
+        if (IsValidIndex(currentIndex))
         {
             lastSelected = currentIndex;
         }
@@ -233,7 +233,7 @@ public class SC_menu_navigation : MonoBehaviour
     // REFRESH BUTTONS
     // =========================================================
 
-    private void RefreshButtons()
+    public void RefreshButtons()
     {
         if (autoFindButtons)
         {

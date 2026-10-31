@@ -1,10 +1,9 @@
-
 using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.UI;
 using TMPro;
 
-[RequireComponent(typeof(SpriteRenderer))]
 public class KeyboardInputSprite : MonoBehaviour
 {
     [Header("Input")]
@@ -21,15 +20,28 @@ public class KeyboardInputSprite : MonoBehaviour
     [SerializeField] private Sprite defaultSprite;
     [SerializeField] private string defaultText = "?";
 
-    [Header("Text")]
+    [Header("Display")]
+    [SerializeField] private SpriteRenderer spriteRenderer;
+    [SerializeField] private Image uiImage;
     [SerializeField] private TextMeshPro textMesh;
+    [SerializeField] private TextMeshProUGUI uiText;
 
-    private SpriteRenderer spriteRenderer;
     private SC_input_display_master master;
 
     private void Awake()
     {
-        spriteRenderer = GetComponent<SpriteRenderer>();
+        // Récupération automatique des composants.
+        if (spriteRenderer == null)
+            spriteRenderer = GetComponent<SpriteRenderer>();
+
+        if (uiImage == null)
+            uiImage = GetComponent<Image>();
+
+        if (textMesh == null)
+            textMesh = GetComponentInChildren<TextMeshPro>();
+
+        if (uiText == null)
+            uiText = GetComponentInChildren<TextMeshProUGUI>();
     }
 
     private void Start()
@@ -45,9 +57,6 @@ public class KeyboardInputSprite : MonoBehaviour
 
     public void UpdateDisplay()
     {
-        if (spriteRenderer == null)
-            spriteRenderer = GetComponent<SpriteRenderer>();
-
         if (master == null)
             master = SC_input_display_master.instance;
 
@@ -83,9 +92,7 @@ public class KeyboardInputSprite : MonoBehaviour
 
                 if (compositeParentBindingIndex >= 0 &&
                     parent != compositeParentBindingIndex)
-                {
                     continue;
-                }
 
                 for (int i = parent + 1; i < action.bindings.Count; i++)
                 {
@@ -101,13 +108,11 @@ public class KeyboardInputSprite : MonoBehaviour
                         binding.name,
                         compositePartName,
                         StringComparison.OrdinalIgnoreCase))
-                    {
                         continue;
-                    }
 
                     string path = binding.effectivePath;
 
-                    if (IsKeyboardPath(path))
+                    if (IsSupportedPath(path))
                         return path;
                 }
             }
@@ -122,20 +127,20 @@ public class KeyboardInputSprite : MonoBehaviour
 
             string path = binding.effectivePath;
 
-            if (IsKeyboardPath(path))
+            if (IsSupportedPath(path))
                 return path;
         }
 
         return null;
     }
 
-    private bool IsKeyboardPath(string path)
+    private bool IsSupportedPath(string path)
     {
-        return !string.IsNullOrEmpty(path) &&
-               path.StartsWith(
-                   "<Keyboard>/",
-                   StringComparison.OrdinalIgnoreCase
-               );
+        if (string.IsNullOrEmpty(path))
+            return false;
+
+        return path.StartsWith("<Keyboard>/", StringComparison.OrdinalIgnoreCase)
+            || path.StartsWith("<Mouse>/", StringComparison.OrdinalIgnoreCase);
     }
 
     private void UpdateFromPath(string path)
@@ -147,11 +152,8 @@ public class KeyboardInputSprite : MonoBehaviour
 
         if (specialSprite != null)
         {
-            spriteRenderer.sprite = specialSprite;
-
-            if (textMesh != null)
-                textMesh.text = "";
-
+            SetSprite(specialSprite);
+            SetText("");
             return;
         }
 
@@ -159,10 +161,26 @@ public class KeyboardInputSprite : MonoBehaviour
             ? master.default_sprite
             : defaultSprite;
 
-        spriteRenderer.sprite = regularSprite;
+        SetSprite(regularSprite);
+        SetText(GetDisplayName(keyName));
+    }
 
+    private void SetSprite(Sprite sprite)
+    {
+        if (spriteRenderer != null)
+            spriteRenderer.sprite = sprite;
+
+        if (uiImage != null)
+            uiImage.sprite = sprite;
+    }
+
+    private void SetText(string value)
+    {
         if (textMesh != null)
-            textMesh.text = GetDisplayName(keyName);
+            textMesh.text = value;
+
+        if (uiText != null)
+            uiText.text = value;
     }
 
     private Sprite GetSpecialKeySprite(string keyName)
@@ -187,6 +205,18 @@ public class KeyboardInputSprite : MonoBehaviour
 
             case "tab":
                 return master.tab;
+
+            case "leftbutton":
+            case "mouse 0":
+                return master.mouse_left;
+
+            case "rightbutton":
+            case "mouse 1":
+                return master.mouse_right;
+
+            case "middlebutton":
+            case "mouse 2":
+                return master.mouse_middle;
 
             case "escape":
                 return master.escape;
@@ -247,14 +277,11 @@ public class KeyboardInputSprite : MonoBehaviour
 
     private void SetFallback()
     {
-        if (spriteRenderer != null)
-        {
-            spriteRenderer.sprite = master != null
-                ? master.default_sprite
-                : defaultSprite;
-        }
+        Sprite fallback = master != null
+            ? master.default_sprite
+            : defaultSprite;
 
-        if (textMesh != null)
-            textMesh.text = defaultText;
+        SetSprite(fallback);
+        SetText(defaultText);
     }
 }

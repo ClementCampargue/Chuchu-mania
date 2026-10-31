@@ -241,10 +241,14 @@ public class SC_balloon_player : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.I))
+        if (PlayerPrefs.GetFloat("Cheats") == 0)
         {
-            Activate();
+            if (Input.GetKeyDown(KeyCode.I))
+            {
+                Activate();
+            }
         }
+
 
         if (player.eat_system.isPowerUpActive)
             return;

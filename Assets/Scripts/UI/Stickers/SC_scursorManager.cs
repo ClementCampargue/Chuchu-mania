@@ -1,9 +1,10 @@
+
 using UnityEngine;
-using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.LowLevel;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+
 public class SC_scursorManager : MonoBehaviour
 {
     public static SC_scursorManager instance;
@@ -21,149 +22,141 @@ public class SC_scursorManager : MonoBehaviour
     public Image cursorRenderer;
     public RectTransform cursorRect;
 
-
     public bool grabing;
+
     [Header("Gamepad")]
     public InputActionReference cursorMoveAction;
     public InputActionReference cursorClickAction;
 
     public float gamepadCursorSpeed = 1200f;
 
-
     public Image img;
     public Image img2;
-    private Mouse virtualMouse;
 
+    private Mouse virtualMouse;
     private Vector2 cursorPosition;
 
+    public Vector2 CursorPosition => cursorPosition;
 
-
-
-    // Position utilisée par tous les objets
-    public Vector2 CursorPosition
+    private void Awake()
     {
-        get
-        {
-            return cursorPosition;
-        }
-    }
-
-
-
-    void Awake()
-    {
-
         instance = this;
-
 
         Cursor.visible = false;
 
+        cursorPosition = new Vector2(
+            Screen.width / 2f,
+            Screen.height / 2f
+        );
 
+        if (cursorRect != null)
+            cursorRect.position = cursorPosition;
 
-        cursorPosition =
-            new Vector2(
-                Screen.width / 2f,
-                Screen.height / 2f
-            );
-
-
-
-        cursorRect.position =
-            cursorPosition;
-
-
-
-
-        virtualMouse =
-            InputSystem.AddDevice<Mouse>();
-
-
+        virtualMouse = InputSystem.AddDevice<Mouse>();
 
         InputSystem.EnableDevice(virtualMouse);
-
-
-
 
         InputState.Change(
             virtualMouse.position,
             cursorPosition
         );
 
-
-
         SetNormalCursor();
-
     }
 
-
-
-    void OnEnable()
+    private void OnEnable()
     {
-        cursorMoveAction.action.Enable();
-        cursorClickAction.action.Enable();
+        if (cursorMoveAction != null)
+            cursorMoveAction.action.Enable();
+
+        if (cursorClickAction != null)
+            cursorClickAction.action.Enable();
     }
 
-
-
-    void OnDisable()
+    private void OnDisable()
     {
-        cursorMoveAction.action.Disable();
+        if (cursorMoveAction != null)
+            cursorMoveAction.action.Disable();
+
+        if (cursorClickAction != null)
+            cursorClickAction.action.Disable();
     }
 
-
-    void Update()
+    private void OnDestroy()
     {
-        bool usingController = SC_controller_manager.instance.using_controller;
-        UpdateCursorMode();
-        // =========================
-        // VISIBILITÉ
-        // =========================
+        if (virtualMouse != null && virtualMouse.added)
+            InputSystem.RemoveDevice(virtualMouse);
 
-        if (SceneManager.GetActiveScene().name != "Stickers")
+        if (instance == this)
+            instance = null;
+    }
+
+    private void Update()
+    {
+        bool usingController =
+            SC_controller_manager.instance != null &&
+            SC_controller_manager.instance.using_controller;
+
+        bool isStickersScene =
+            SceneManager.GetActiveScene().name == "Stickers";
+
+        bool editing =
+            isStickersScene &&
+            SC_sticker_menu.instance != null &&
+            SC_sticker_menu.instance.editing;
+
+        // =================================
+        // DÉPLACEMENT PERMANENT
+        // =================================
+
+        if (usingController)
         {
+            MoveVirtualCursor();
+        }
+        else if (Mouse.current != null)
+        {
+            cursorPosition =
+                Mouse.current.position.ReadValue();
 
-            if (!cursor_enabled)
-            {
-                img.enabled = false;
-                img2.enabled = false;
-                return;
-            }
+            UpdateCursor();
+        }
 
-            if (usingController)
+        // =================================
+        // VISIBILITÉ
+        // =================================
+
+        if (isStickersScene)
+        {
+            // Dans Stickers : curseur visible en edit mode.
+            // Hors edit : comportement normal.
+            if (editing)
             {
-                img.enabled = false;
-                img2.enabled = false;
+                cursor_enabled = true;
+                UpdateVisibility(true);
             }
             else
             {
-                img.enabled = true;
-                img2.enabled = true;
-            }
-
-            if (Input.GetKeyDown(KeyCode.Mouse0))
-            {
-                if (anim.enabled)
-                    anim.SetTrigger("click");
-                else
-                    anim.enabled = true;
+                UpdateCursorMode();
+                UpdateVisibility(cursor_enabled && !usingController);
             }
         }
         else
         {
-            if (!cursor_enabled)
-            {
-                img.enabled = false;
-                img2.enabled = false;
-                return;
-            }
+            // Hors Stickers : comportement normal.
+            UpdateCursorMode();
 
-            else
-            {
-                img.enabled = true;
-                img2.enabled = true;
-            }
+            UpdateVisibility(cursor_enabled && !usingController);
+        }
 
-            if (Input.GetKeyDown(KeyCode.Mouse0))
+        // =================================
+        // ANIMATION CLIC
+        // =================================
+
+        if (!usingController &&
+            Mouse.current != null &&
+            Mouse.current.leftButton.wasPressedThisFrame)
+        {
+            if (anim != null)
             {
                 if (anim.enabled)
                     anim.SetTrigger("click");
@@ -171,114 +164,147 @@ public class SC_scursorManager : MonoBehaviour
                     anim.enabled = true;
             }
         }
+    }
 
-        // =========================
-        // SOURIS PHYSIQUE
-        // =========================
+    // =================================
+    // MODE CURSEUR NORMAL
+    // =================================
 
-        if (!usingController && Mouse.current != null)
-            {
-                cursorPosition = Mouse.current.position.ReadValue();
+    public void UpdateCursorMode()
+    {
+        if (SC_controller_manager.instance == null)
+            return;
 
-                UpdateCursor();
-            }
+        bool usingController =
+            SC_controller_manager.instance.using_keyboard_controller;
 
+        bool playerActive =
+            SC_player.instance != null &&
+            SC_player.instance.enabled &&
+            SC_player.instance.gameObject.activeInHierarchy;
 
-        // =========================
-        // MANETTE
-        // =========================
-
-        if (usingController)
+        if (usingController || playerActive)
         {
-            Vector2 stick = cursorMoveAction.action.ReadValue<Vector2>();
+            cursor_enabled = false;
+        }
+        else
+        {
+            cursor_enabled = true;
+        }
 
-            if (stick.sqrMagnitude > 0.1f)
-            {
-                cursorPosition +=
-                    stick *
-                    gamepadCursorSpeed *
-                    Time.unscaledDeltaTime;
+        Cursor.visible = false;
+    }
 
-                cursorPosition.x = Mathf.Clamp(
-                    cursorPosition.x,
-                    0,
-                    Screen.width
-                );
+    // =================================
+    // SOURIS VIRTUELLE
+    // =================================
 
-                cursorPosition.y = Mathf.Clamp(
-                    cursorPosition.y,
-                    0,
-                    Screen.height
-                );
+    private void MoveVirtualCursor()
+    {
+        if (cursorMoveAction == null)
+            return;
 
-                UpdateCursor();
-            }
+        Vector2 stick =
+            cursorMoveAction.action.ReadValue<Vector2>();
+
+        if (stick.sqrMagnitude < 0.01f)
+            return;
+
+        cursorPosition +=
+            stick *
+            gamepadCursorSpeed *
+            Time.unscaledDeltaTime;
+
+        cursorPosition.x = Mathf.Clamp(
+            cursorPosition.x,
+            0,
+            Screen.width
+        );
+
+        cursorPosition.y = Mathf.Clamp(
+            cursorPosition.y,
+            0,
+            Screen.height
+        );
+
+        UpdateCursor();
+    }
+
+    // =================================
+    // AFFICHAGE
+    // =================================
+
+    private void UpdateVisibility(bool visible)
+    {
+        if (img != null)
+            img.enabled = visible;
+
+        if (img2 != null)
+            img2.enabled = visible;
+    }
+
+    // =================================
+    // POSITION CURSEUR
+    // =================================
+
+    public void UpdateCursor()
+    {
+        if (cursorRect != null)
+            cursorRect.position = cursorPosition;
+
+        if (virtualMouse != null)
+        {
+            InputState.Change(
+                virtualMouse.position,
+                cursorPosition
+            );
         }
     }
 
-
-    void UpdateCursor()
-    {
-
-        // Visuel
-        cursorRect.position =
-            cursorPosition;
-
-
-
-        // Souris UI virtuelle
-        InputState.Change(
-            virtualMouse.position,
-            cursorPosition
-        );
-
-    }
-
-
+    // =================================
+    // SPRITES
+    // =================================
 
     public void SetNormalCursor()
     {
         grabing = false;
+
         if (cursorRenderer != null)
-            cursorRenderer.sprite =
-                normalSprite;
+            cursorRenderer.sprite = normalSprite;
     }
-
-
 
     public void SetHoverCursor()
     {
         grabing = false;
 
         if (cursorRenderer != null)
-            cursorRenderer.sprite =
-                hoverSprite;
+            cursorRenderer.sprite = hoverSprite;
     }
-
-
 
     public void SetGrabCursor()
     {
         grabing = true;
+
         if (cursorRenderer != null)
-            cursorRenderer.sprite =
-                grabSprite;
+            cursorRenderer.sprite = grabSprite;
     }
+
+    // =================================
+    // ACTIVATION
+    // =================================
 
     public void enable_cursor()
     {
-        Cursor.visible = false;
-
         cursor_enabled = true;
+        Cursor.visible = false;
     }
 
     public void disable_cursor()
     {
-        Cursor.visible = false;
-
-        RecenterCursor();
         cursor_enabled = false;
+        Cursor.visible = false;
     }
+
     public void RecenterCursor()
     {
         cursorPosition = new Vector2(
@@ -288,22 +314,28 @@ public class SC_scursorManager : MonoBehaviour
 
         UpdateCursor();
     }
-    private void UpdateCursorMode()
+
+    // =================================
+    // STICKERS
+    // =================================
+
+    public void UpdateStickerCursor(bool editing)
     {
-        if (SC_controller_manager.instance == null)
-            return;
-
-        bool usingController =
-            SC_controller_manager.instance.using_keyboard_controller;
-
-
-        if (usingController || SC_player.instance.enabled && SC_player.instance.gameObject.activeInHierarchy)
+        if (editing)
         {
-            disable_cursor();
+            SetGrabCursor();
+            cursor_enabled = true;
+            UpdateVisibility(true);
         }
         else
         {
-            enable_cursor();
+            UpdateCursorMode();
+
+            bool usingController =
+                SC_controller_manager.instance != null &&
+                SC_controller_manager.instance.using_controller;
+
+            UpdateVisibility(cursor_enabled && !usingController);
         }
     }
 }

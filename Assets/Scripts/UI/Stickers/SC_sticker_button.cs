@@ -1,52 +1,68 @@
+
 using UnityEngine;
-using UnityEngine.EventSystems;
-using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
 public class SC_sticker_button : MonoBehaviour
 {
-    public Image image;
-
+    [Header("Sticker")]
+    public SpriteRenderer spriteRenderer;
     public SO_Sticker sticker;
     public Material locked;
-    public Button button;
     public GameObject Sticker_prefab;
 
-    public InputActionReference selectAction; // <-- Ajoute ça dans l'inspecteur
-
-    private bool selected;
-    private SC_SaveManager saveManager;
-    private SC_StickerSaveSystem save;
-    private SC_sticker_menu menu;
+    [Header("Button")]
+    public SC_Button button;
     public Animator anim;
 
+    [Header("Juiciness")]
     public SC_juiciness juice;
     public SC_juiciness juice2;
 
+    private SC_SaveManager saveManager;
+    private SC_StickerSaveSystem save;
+    private SC_sticker_menu menu;
+
     private void Start()
     {
-        bool unlocked_ =
-    SC_SaveManager.instance.IsStickerUnlocked(sticker);
+        saveManager = SC_SaveManager.instance;
         save = SC_StickerSaveSystem.instance;
         menu = SC_sticker_menu.instance;
-        image.sprite = sticker.sticker_sprite;
-        if (IsUnlocked())
-        {
-            if (sticker.special_mat != null)
-            {
-                image.material = sticker.special_mat;
-            }
-            else
-            {
 
-            }
+        spriteRenderer.sprite = sticker.sticker_sprite;
+
+        UpdateAppearance();
+
+     
+    }
+    private void Update()
+    {
+        if (!menu.editing)
+        {
+            button.enabled = true;
+            button.accept_input = true;
+            button.clickable = true;
         }
         else
         {
-            image.material = locked;
+            button.isSelected = false;
+            button.isHovered = false;
+            button.enabled = false;
+            button.accept_input = false;
+            button.clickable = false;
         }
-
-        image.sprite = sticker.sticker_sprite;
+    }
+    private void UpdateAppearance()
+    {
+        if (IsUnlocked())
+        {
+            spriteRenderer.material = sticker.special_mat != null
+                ? sticker.special_mat
+                : spriteRenderer.material;
+        }
+        else
+        {
+            spriteRenderer.material = locked;
+        }
     }
 
     public bool IsUnlocked()
@@ -59,87 +75,65 @@ public class SC_sticker_button : MonoBehaviour
 
         return saveManager.IsStickerUnlocked(sticker);
     }
-    private void OnEnable()
-    {
-        selectAction.action.Enable();
-    }
-
-
-
-    private void Update()
-    {
-        if (button != null)
-        {
-            button.image.raycastTarget = !SC_controller_manager.instance.using_controller;
-        }
-
-   
-
-        if (selected && selectAction.action.WasPressedThisFrame())
-        {
-            anim.SetTrigger("Press");
-            CreateSticker();
-        }
-    }
 
     public void unhover()
     {
-
-
-        selected = false;
     }
 
     public void update_infos()
     {
+        if (juice != null)
+            juice.PlayJuice();
 
-        selected = true;
-        juice.PlayJuice();
-       
-
-        menu.update_infos(sticker, button);
+        menu.update_infos(sticker, null);
     }
-
 
     public void CreateSticker()
     {
-        bool unlocked =
-    SC_SaveManager.instance.IsStickerUnlocked(sticker);
-        if (!unlocked)
+        if (!IsUnlocked())
             return;
+
+        if (anim != null)
+            anim.SetTrigger("Press");
+
         SC_scursorManager.instance.grabing = true;
-        juice2.PlayJuice();
+
+        if (juice2 != null)
+            juice2.PlayJuice();
+
         menu.start_edit_mode();
         SC_scursorManager.instance.enable_cursor();
-        // Désactive toute sélection/navigation UI
-        EventSystem.current.SetSelectedGameObject(null);
-
-        Canvas canvas = GameObject.Find("MainCanvas").GetComponent<Canvas>();
-        RectTransform canvasRect = canvas.GetComponent<RectTransform>();
+        menu.StartEditMode();
+        if (button != null)
+            button.UnSelect();
 
         GameObject obj = Instantiate(
             Sticker_prefab,
             save.parent
         ).transform.GetChild(0).gameObject;
-        obj.GetComponent<SC_sticker_UI>().spawnedSticker = true;
-        Image img = obj.GetComponent<Image>();
-        RectTransform rect = obj.GetComponent<RectTransform>();
 
-        RectTransformUtility.ScreenPointToLocalPointInRectangle(
-            canvasRect,
-            Input.mousePosition,
-            canvas.worldCamera,
-            out Vector2 localPoint
+        obj.GetComponent<SC_sticker_UI>().spawnedSticker = true;
+
+        // Positionnement du sticker à la position de la souris
+        Vector3 mousePosition = Camera.main.ScreenToWorldPoint(
+            Input.mousePosition
         );
 
-        rect.anchoredPosition = localPoint;
+        mousePosition.z = 0f;
 
-        img.sprite = sticker.sticker_sprite;
+        obj.transform.position = mousePosition;
 
-        if (sticker.special_mat != null  && unlocked)
+        // Application du sprite
+        Image sr = obj.GetComponent<Image>();
+
+        if (sr != null)
         {
-            img.material = sticker.special_mat;
-        }
+            sr.sprite = sticker.sticker_sprite;
 
-        img.maskable = false;
+            if (sticker.special_mat != null)
+                sr.material = sticker.special_mat;
+        }
     }
+
+   
 }

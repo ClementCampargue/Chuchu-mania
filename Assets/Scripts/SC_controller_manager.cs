@@ -30,7 +30,7 @@ public class SC_controller_manager : MonoBehaviour
 
         }
         // Détection des inputs clavier et souris
-        if (IsKeyboardInput())
+        else if(IsKeyboardInput())
         {
             using_controller = false;
             using_keyboard = true;
@@ -39,7 +39,7 @@ public class SC_controller_manager : MonoBehaviour
         }
 
         // Détection des inputs manette
-        if (IsControllerInput())
+        else if (IsControllerInput())
         {
             using_controller = true;
             using_keyboard_controller = true;

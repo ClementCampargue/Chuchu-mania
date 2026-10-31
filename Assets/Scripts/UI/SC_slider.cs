@@ -1,125 +1,254 @@
+
 using UnityEngine;
-using UnityEngine.EventSystems;
 
 public class SC_slider : MonoBehaviour
 {
-    [Header("Références")]
-    public RectTransform handle;
-    public RectTransform content;
-    public RectTransform viewport;
+    [Header("References")]
+    public Transform handle;
+    public Transform content;
+    public Camera cam;
 
-    [Header("Limites Handle")]
-    public float handleMinY = -150f;
-    public float handleMaxY = 150f;
+    [Header("Handle Limits")]
+    public float handleMinY = -3f;
+    public float handleMaxY = 3f;
 
-    [Header("Limites Content")]
+    [Header("Content Limits")]
     public float contentMinY = 0f;
-    public float contentMaxY = -2500f;
+    public float contentMaxY = -25f;
 
-    [Header("Vitesses")]
+    [Header("Speeds")]
     public float dragSpeed = 1f;
-    public float wheelSpeed = 25f;
+    public float wheelSpeed = 0.5f;
 
-    [Header("Auto Scroll")]
-    public float selectionScrollAmount = 150f;
+    [Header("Visible Box")]
+    public Vector2 visibleBoxCenter = new Vector2(0f, 0f);
+    public Vector2 visibleBoxSize = new Vector2(10f, 4f);
 
-    private Vector2 startMouse;
-    private float startHandleY;
-    private SC_sticker_menu menu;
+    [Header("Visible Box Gizmos")]
+    public Color visibleBoxColor = Color.green;
+
+    private bool dragging;
+    private float dragOffsetY;
+
+    private Collider2D sliderCollider;
+    private Collider2D handleCollider;
 
     private GameObject lastSelected;
+
+    private SC_sticker_menu menu;
 
     private void Start()
     {
         menu = SC_sticker_menu.instance;
+
+        if (cam == null)
+            cam = Camera.main;
+
+        sliderCollider = GetComponent<Collider2D>();
+
+        if (handle != null)
+            handleCollider = handle.GetComponent<Collider2D>();
     }
 
     private void Update()
     {
-        if (menu.editing)
-            return;
-
-        // Scroll souris
-        float wheel = Input.mouseScrollDelta.y;
-
-        if (wheel != 0)
+        if (menu != null && menu.editing)
         {
-            SetHandlePosition(
-                handle.anchoredPosition.y + wheel * wheelSpeed
-            );
+            dragging = false;
+            return;
         }
 
-        // Vérifie le bouton sélectionné à la manette
+        HandleMouseWheel();
+        HandleMouseDrag();
         CheckSelectedButton();
     }
 
-    private void CheckSelectedButton()
-    {
-        GameObject selected = EventSystem.current.currentSelectedGameObject;
+    // -------------------------
+    // MOUSE WHEEL
+    // -------------------------
 
-        if (selected == null)
+    private void HandleMouseWheel()
+    {
+        float wheel = Input.mouseScrollDelta.y;
+
+        if (wheel != 0f)
+        {
+            MoveContent(wheel * wheelSpeed);
+        }
+    }
+
+    // -------------------------
+    // MOUSE CLICK AND DRAG
+    // -------------------------
+
+    private void HandleMouseDrag()
+    {
+        if (cam == null || handle == null)
             return;
 
-        // Aucun changement de bouton
+        Vector3 mouseWorld = cam.ScreenToWorldPoint(
+            new Vector3(
+                Input.mousePosition.x,
+                Input.mousePosition.y,
+                Mathf.Abs(cam.transform.position.z - transform.position.z)
+            )
+        );
+
+        if (Input.GetMouseButtonDown(0))
+        {
+            Collider2D hit = Physics2D.OverlapPoint(mouseWorld);
+
+            // Vérifie si on clique sur le slider.
+            if (hit != null && sliderCollider != null &&
+                hit == sliderCollider)
+            {
+                dragging = true;
+                SC_scursorManager.instance.SetGrabCursor();
+                // Clic sur le handle : conserve sa position relative.
+                if (handleCollider != null &&
+                    handleCollider.OverlapPoint(mouseWorld))
+                {
+                    dragOffsetY = handle.position.y - mouseWorld.y;
+                }
+                else
+                {
+                    // Clic ailleurs sur la barre :
+                    // déplacement immédiat à la position cliquée.
+                    dragOffsetY = 0f;
+
+                    SetHandlePosition(mouseWorld.y);
+                }
+            }
+        }
+
+        // Déplacement pendant le maintien du clic.
+        if (Input.GetMouseButton(0) && dragging)
+        {
+            float targetY = mouseWorld.y + dragOffsetY;
+
+            float delta = (targetY - handle.position.y) * dragSpeed;
+
+            SetHandlePosition(handle.position.y + delta);
+        }
+
+        if (Input.GetMouseButtonUp(0))
+        {
+            SC_scursorManager.instance.SetNormalCursor();
+
+            dragging = false;
+        }
+    }
+
+    // -------------------------
+    // SELECTION SCROLL
+    // -------------------------
+
+    private void CheckSelectedButton()
+    {
+        if (!SC_Button.IsControllerNavigation)
+            return;
+
+        SC_Button selectedButton = SC_Button.GetActiveButton();
+
+        if (selectedButton == null)
+        {
+            lastSelected = null;
+            return;
+        }
+
+        GameObject selected = selectedButton.gameObject;
+
         if (selected == lastSelected)
             return;
 
-        // Si c'est le premier bouton sélectionné,
-        // on ne scroll pas.
-        if (lastSelected == null)
-        {
-            lastSelected = selected;
-            return;
-        }
-
-        RectTransform previousRect = lastSelected.GetComponent<RectTransform>();
-        RectTransform selectedRect = selected.GetComponent<RectTransform>();
-
-        if (previousRect == null || selectedRect == null)
-        {
-            lastSelected = selected;
-            return;
-        }
-
-        // Compare la position verticale des deux boutons
-        float previousY = previousRect.position.y;
-        float selectedY = selectedRect.position.y;
-
-        if (selectedY < previousY)
-        {
-            // On descend dans la liste
-            MoveContent(-selectionScrollAmount);
-        }
-        else if (selectedY > previousY)
-        {
-            // On remonte dans la liste
-            MoveContent(selectionScrollAmount);
-        }
-
         lastSelected = selected;
+
+        float selectedY = selected.transform.position.y;
+
+        float boxMinY = visibleBoxCenter.y - visibleBoxSize.y * 0.5f;
+        float boxMaxY = visibleBoxCenter.y + visibleBoxSize.y * 0.5f;
+
+        if (selectedY < boxMinY)
+        {
+            MoveContent(boxMinY - selectedY);
+        }
+        else if (selectedY > boxMaxY)
+        {
+            MoveContent(boxMaxY - selectedY);
+        }
     }
+
+    // -------------------------
+    // CONTENT MOVEMENT
+    // -------------------------
 
     private void MoveContent(float deltaY)
     {
-        float newContentY = content.anchoredPosition.y + deltaY;
+        if (content == null)
+            return;
 
-        // Clamp du contenu
-        newContentY = Mathf.Clamp(
-            newContentY,
+        float newY = content.position.y + deltaY;
+
+        newY = Mathf.Clamp(
+            newY,
             contentMaxY,
             contentMinY
         );
 
-        content.anchoredPosition = new Vector2(
-            content.anchoredPosition.x,
-            newContentY
+        content.position = new Vector3(
+            content.position.x,
+            newY,
+            content.position.z
         );
 
-        // Synchronise le handle avec le contenu
+        SyncHandle();
+    }
+
+    // -------------------------
+    // HANDLE MOVEMENT
+    // -------------------------
+
+    private void SetHandlePosition(float y)
+    {
+        if (handle == null || content == null)
+            return;
+
+        y = Mathf.Clamp(y, handleMinY, handleMaxY);
+
+        handle.position = new Vector3(
+            handle.position.x,
+            y,
+            handle.position.z
+        );
+
+        float t = Mathf.InverseLerp(
+            handleMinY,
+            handleMaxY,
+            y
+        );
+
+        float contentY = Mathf.Lerp(
+            contentMinY,
+            contentMaxY,
+            t
+        );
+
+        content.position = new Vector3(
+            content.position.x,
+            contentY,
+            content.position.z
+        );
+    }
+
+    private void SyncHandle()
+    {
+        if (handle == null || content == null)
+            return;
+
         float t = Mathf.InverseLerp(
             contentMinY,
             contentMaxY,
-            newContentY
+            content.position.y
         );
 
         float handleY = Mathf.Lerp(
@@ -128,56 +257,33 @@ public class SC_slider : MonoBehaviour
             t
         );
 
-        handle.anchoredPosition = new Vector2(
-            handle.anchoredPosition.x,
-            handleY
+        handle.position = new Vector3(
+            handle.position.x,
+            handleY,
+            handle.position.z
         );
     }
 
-    public void OnPointerDown(PointerEventData eventData)
+    // -------------------------
+    // EDITOR GIZMOS
+    // -------------------------
+
+    private void OnDrawGizmos()
     {
-        startMouse = eventData.position;
-        startHandleY = handle.anchoredPosition.y;
-    }
+        Gizmos.color = visibleBoxColor;
 
-    public void OnDrag(PointerEventData eventData)
-    {
-        float delta = (eventData.position.y - startMouse.y) * dragSpeed;
-
-        SetHandlePosition(startHandleY + delta);
-    }
-
-    void SetHandlePosition(float y)
-    {
-        // Clamp du handle
-        y = Mathf.Clamp(
-            y,
-            handleMinY,
-            handleMaxY
+        Vector3 center = new Vector3(
+            visibleBoxCenter.x,
+            visibleBoxCenter.y,
+            transform.position.z
         );
 
-        handle.anchoredPosition = new Vector2(
-            handle.anchoredPosition.x,
-            y
+        Vector3 size = new Vector3(
+            visibleBoxSize.x,
+            visibleBoxSize.y,
+            0.1f
         );
 
-        // Pourcentage du déplacement
-        float t = Mathf.InverseLerp(
-            handleMinY,
-            handleMaxY,
-            y
-        );
-
-        // Position correspondante du contenu
-        float contentY = Mathf.Lerp(
-            contentMinY,
-            contentMaxY,
-            t
-        );
-
-        content.anchoredPosition = new Vector2(
-            content.anchoredPosition.x,
-            contentY
-        );
+        Gizmos.DrawWireCube(center, size);
     }
 }

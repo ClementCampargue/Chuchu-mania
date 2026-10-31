@@ -5,6 +5,8 @@ using UnityEngine.Events;
 [RequireComponent(typeof(Collider2D))]
 public class SC_Button : MonoBehaviour
 {
+    public bool IsControllerSelected => isSelected && !isHovered;
+    public static bool IsControllerNavigation { get; private set; }
     public bool select_on_enable;
 
     [Header("Animations")]
@@ -58,7 +60,11 @@ public class SC_Button : MonoBehaviour
 
     private void OnEnable()
     {
-        collider_.enabled = true;
+        
+        if(collider_ != null)
+        {
+            collider_.enabled = true;
+        }
 
         if (select_on_enable && IsUsingController() && clickable)
         {
@@ -122,6 +128,10 @@ public class SC_Button : MonoBehaviour
             UpdateIndicator();
         }
     }
+    public static SC_Button GetActiveButton()
+    {
+        return activeButton;
+    }
 
     private bool IsUsingController()
     {
@@ -134,6 +144,7 @@ public class SC_Button : MonoBehaviour
     {
         if (!clickable || !accept_input || !isActiveAndEnabled)
             return;
+        IsControllerNavigation = true;
 
         Activate();
 
@@ -152,7 +163,7 @@ public class SC_Button : MonoBehaviour
     public void ForceSelect()
     {
 
-
+        IsControllerNavigation = true;
         Activate();
 
         if (juice != null)
@@ -226,7 +237,7 @@ public class SC_Button : MonoBehaviour
     {
         if (IsUsingController())
             return;
-
+        IsControllerNavigation = false;
         mouseInside = true;
 
         if (!clickable || !accept_input)
@@ -374,7 +385,10 @@ public class SC_Button : MonoBehaviour
     private void OnDisable()
     {
         CancelInvoke();
-        collider_.enabled = false;
+        if (collider_ != null)
+        {
+            collider_.enabled = false;
+        }
 
         if (activeButton == this)
             activeButton = null;

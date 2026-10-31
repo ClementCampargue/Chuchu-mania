@@ -4,7 +4,6 @@ using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
-using static UnityEngine.Rendering.DebugUI;
 
 public class SC_sticker_UI : MonoBehaviour,
     IPointerEnterHandler,
@@ -265,13 +264,6 @@ public class SC_sticker_UI : MonoBehaviour,
         }
     }
 
-    private void DisableAction(InputActionReference action)
-    {
-        if (action != null && action.action != null)
-        {
-            action.action.Disable();
-        }
-    }
 
     // =========================================================
     // START
@@ -281,7 +273,7 @@ public class SC_sticker_UI : MonoBehaviour,
     {
         cursor =
             SC_scursorManager.instance;
-
+        cursor.RecenterCursor();
         // -----------------------------------------------------
         // TRASH ZONE
         // -----------------------------------------------------
@@ -304,12 +296,17 @@ public class SC_sticker_UI : MonoBehaviour,
 
         if (spawnedSticker)
         {
+            Invoke("delay", 0.1f);
             PrepareShaderMaterial();
 
-            shaderMaterial.SetFloat(
-                shaderFloatProperty,
-                shaderStartValue_2
-            );
+            if (shaderMaterial != null &&
+                shaderMaterial.HasProperty(shaderFloatProperty_2))
+            {
+                shaderMaterial.SetFloat(
+                    shaderFloatProperty_2,
+                    shaderStartValue_2
+                );
+            }
             stickerScale =
                 Mathf.Clamp(
                     Mathf.Abs(rect.localScale.x),
@@ -332,7 +329,6 @@ public class SC_sticker_UI : MonoBehaviour,
             // START DRAG
             // -------------------------------------------------
 
-            dragging = true;
 
             if (SC_sticker_menu.instance != null)
             {
@@ -350,6 +346,13 @@ public class SC_sticker_UI : MonoBehaviour,
 
             lastDragPosition =
                 rect.anchoredPosition;
+            HandleScaleRotation();
+
+            HandleDrag();
+
+            HandleBalatroEffect();
+
+            CheckDeleteZone();
         }
 
         // -----------------------------------------------------
@@ -370,9 +373,14 @@ public class SC_sticker_UI : MonoBehaviour,
     // =========================================================
     // UPDATE
     // =========================================================
+    void delay()
+    {
+        dragging = true;
 
+    }
     private void Update()
     {
+
         if (SceneManager.GetActiveScene().name != "Stickers")
             return;
 
@@ -380,7 +388,7 @@ public class SC_sticker_UI : MonoBehaviour,
         // DELETE
         // =====================================================
 
-        if (IsReleased(deleteSticker) && isHovered)
+        if (IsPressed(deleteSticker) && isHovered && SC_sticker_menu.instance.editing)
         {
             DeleteSticker();
             return;
@@ -390,7 +398,7 @@ public class SC_sticker_UI : MonoBehaviour,
         // FLIP
         // =====================================================
 
-        if (IsPressed(flip))
+        if (IsPressed(flip) && isHovered)
         {
             if (dragging)
             {
@@ -421,9 +429,18 @@ public class SC_sticker_UI : MonoBehaviour,
         // CLICK
         // =====================================================
 
-        if (IsPressed(click))
+        if (IsPressed(click) && isHovered && !dragging && SC_sticker_menu.instance.editing)
+        {
+
+            StartDrag();
+        }
+        else if (IsPressed(click) && isHovered && SC_controller_manager.instance.using_keyboard)
         {
             ToggleDrag();
+        }
+        else if (IsPressed(click) && dragging && SC_controller_manager.instance.using_controller)
+        {
+            StopDrag();
         }
     }
 
@@ -747,11 +764,12 @@ public class SC_sticker_UI : MonoBehaviour,
 
     private void StopDrag()
     {
+        cursor.SetNormalCursor();
+
         SaveDefaultState();
-
-        if (cut != null)
-            cut.cut();
-
+        dragging = false;
+        // L'Alpha Cut sera déclenché au démarrage réel
+        // de l'animation du shader dans la coroutine 2.
 
         // -----------------------------------------------------
         // RESET VISUAL BALATRO AVANT SAVE
@@ -827,7 +845,7 @@ public class SC_sticker_UI : MonoBehaviour,
         // MENU
         // -----------------------------------------------------
 
-        if (SC_sticker_menu.instance != null)
+        if (SC_sticker_menu.instance != null && !SC_sticker_menu.instance.editing_controller)
             SC_sticker_menu.instance.quit_edit_mode();
 
         // -----------------------------------------------------
@@ -838,9 +856,8 @@ public class SC_sticker_UI : MonoBehaviour,
         {
             SC_StickerSaveSystem.instance.AutoSave();
         }
+        cursor.SetNormalCursor();
 
-        if (cursor != null)
-            cursor.SetHoverCursor();
     }
 
     // =========================================================
@@ -1071,13 +1088,7 @@ public class SC_sticker_UI : MonoBehaviour,
 
     private void DeleteSticker()
     {
-        if (!SC_controller_manager.instance.using_controller)
-        {
-            if (SC_sticker_menu.instance != null)
-                SC_sticker_menu.instance.quit_edit_mode();
-        }
-
-        if (spawnedSticker)
+        if (!SC_sticker_menu.instance.editing_controller)
         {
             if (SC_sticker_menu.instance != null)
                 SC_sticker_menu.instance.quit_edit_mode();
@@ -1139,11 +1150,11 @@ public class SC_sticker_UI : MonoBehaviour,
     public void OnPointerExit(
         PointerEventData eventData)
     {
-        isHovered = false;
 
         if (!dragging &&
             cursor != null)
         {
+            isHovered = false;
 
             cursor.SetNormalCursor();
         }
@@ -1387,7 +1398,7 @@ public class SC_sticker_UI : MonoBehaviour,
             selected.SetActive(false);
         }
 
-        if (anim != null)
+        if (anim != null && SC_sticker_menu.instance.editing_controller)
         {
             anim.ResetTrigger("grab");
         }
@@ -1461,6 +1472,9 @@ public class SC_sticker_UI : MonoBehaviour,
     }
     public void AnimateShaderFloat_2()
     {
+        if (cursor != null)
+            cursor.SetNormalCursor();
+
         if (shaderPropertyCoroutine != null)
         {
             StopCoroutine(
@@ -1636,6 +1650,7 @@ public class SC_sticker_UI : MonoBehaviour,
     }
     private IEnumerator AnimateShaderFloatCoroutine_2()
     {
+
         if (img == null)
             yield break;
 
@@ -1667,14 +1682,19 @@ public class SC_sticker_UI : MonoBehaviour,
         }
 
         // -----------------------------------------------------
-        // START VALUE
+        // START VALUE + ALPHA CUT
         // -----------------------------------------------------
-        yield return new WaitForSecondsRealtime(0.5f);
 
+        // Initialise d'abord le shader à sa valeur de départ.
         shaderMaterial.SetFloat(
             shaderFloatProperty_2,
             shaderStartValue_2
         );
+
+        // Déclenche l'Alpha Cut exactement au début de l'animation.
+        if (cut != null)
+            cut.cut();
+        yield return new WaitForSecondsRealtime(0.5f);
 
         float elapsed = 0f;
 
@@ -1715,7 +1735,7 @@ public class SC_sticker_UI : MonoBehaviour,
                 // Remet la valeur correspondant
                 // à l'avancement actuel.
                 shaderMaterial.SetFloat(
-                    shaderFloatProperty,
+                    shaderFloatProperty_2,
                     Mathf.Lerp(
                         shaderStartValue_2,
                         shaderEndValue_2,
@@ -1776,12 +1796,10 @@ public class SC_sticker_UI : MonoBehaviour,
 
             yield return null;
         }
-        img.maskable =
-true;
+        img.maskable = true;
         // -----------------------------------------------------
         // FINAL VALUE
         // -----------------------------------------------------
-        dragging = false;
 
         if (shaderMaterial != null)
         {

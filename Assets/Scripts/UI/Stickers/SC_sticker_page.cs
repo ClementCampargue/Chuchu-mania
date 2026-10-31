@@ -1,23 +1,33 @@
+
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
-using UnityEngine.EventSystems;
 
 public class SC_sticker_page : MonoBehaviour
 {
-    private Button default_selected;
+    private SC_Button default_selected;
 
+    [Header("Stickers")]
     public SO_sticker_list stickers;
     public Transform list_parent;
     public GameObject button;
-    public List<SC_sticker_button> buttons;
+
+    [Header("Grid Settings")]
+    [Min(1)]
+    public int columnCount = 4;
+
+    public float spacingX = 1.5f;
+    public float spacingY = 1.5f;
+
+    public List<SC_sticker_button> buttons = new List<SC_sticker_button>();
+
+    public SC_menu_navigation nav;
 
     private void Start()
     {
         buttons.Clear();
-        CreateButtons();
 
+        CreateButtons();
         StartCoroutine(SelectDefaultButton());
     }
 
@@ -28,6 +38,7 @@ public class SC_sticker_page : MonoBehaviour
             Destroy(child.gameObject);
         }
 
+        buttons.Clear();
         default_selected = null;
 
         if (stickers == null || stickers.stickers == null)
@@ -36,11 +47,23 @@ public class SC_sticker_page : MonoBehaviour
             return;
         }
 
-        foreach (SO_Sticker sticker in stickers.stickers)
+        for (int i = 0; i < stickers.stickers.Count; i++)
         {
-            GameObject go = Instantiate(button, list_parent, false);
+            SO_Sticker sticker = stickers.stickers[i];
 
-            SC_sticker_button stickerButton = go.GetComponent<SC_sticker_button>();
+            GameObject go = Instantiate(button, list_parent);
+
+            // Calcul de la position dans la grille
+            int column = i % columnCount;
+            int row = i / columnCount;
+
+            float x = column * spacingX;
+            float y = -row * spacingY;
+
+            go.transform.localPosition = new Vector3(x, y, 0);
+
+            SC_sticker_button stickerButton =
+                go.GetComponent<SC_sticker_button>();
 
             if (stickerButton != null)
             {
@@ -50,34 +73,56 @@ public class SC_sticker_page : MonoBehaviour
                 {
                     default_selected = stickerButton.button;
                 }
-
                 buttons.Add(stickerButton);
             }
             else
             {
-                Debug.LogWarning("Le prefab bouton n'a pas de SC_sticker_button !");
+                Debug.LogWarning(
+                    "Le prefab bouton n'a pas de SC_sticker_button !"
+                );
             }
         }
+
+        // Centre automatiquement la grille
+        float totalWidth = (columnCount - 1) * spacingX;
+
+        foreach (Transform child in list_parent)
+        {
+            Vector3 pos = child.localPosition;
+            pos.x -= totalWidth / 2f;
+            child.localPosition = pos;
+        }
+        nav.RefreshButtons();
+        nav.SelectFirstAvailable();
     }
+
+
 
     private IEnumerator SelectDefaultButton()
     {
-        // Attend que Unity ait terminé de construire le Canvas
         yield return null;
+        SelectDefault();
+    }
 
-        if (default_selected != null && default_selected.gameObject.activeInHierarchy)
-        {
-            EventSystem.current.SetSelectedGameObject(default_selected.gameObject);
-            default_selected.Select();
-        }
+    private void SelectDefault()
+    {
+        if (default_selected == null)
+            return;
+
+        if (!default_selected.gameObject.activeInHierarchy)
+            return;
+
+        default_selected.Select();
     }
 
     private void OnEnable()
     {
-        if (default_selected != null)
-        {
-            EventSystem.current.SetSelectedGameObject(default_selected.gameObject);
-            default_selected.Select();
-        }
+        StartCoroutine(SelectDefaultNextFrame());
+    }
+
+    private IEnumerator SelectDefaultNextFrame()
+    {
+        yield return null;
+        SelectDefault();
     }
 }

@@ -4,7 +4,7 @@ using UnityEngine;
 public class SC_debug : MonoBehaviour
 {
     private SC_icecream_eat_system eat;
-
+    
     void Start()
     {
         eat = SC_icecream_eat_system.instance;
@@ -12,39 +12,43 @@ public class SC_debug : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.X))
+        if(PlayerPrefs.GetFloat("Cheats") == 0)
         {
-            SC_SaveManager.instance.ClearAllSaves();
-        }
-        if (Input.GetKeyDown(KeyCode.T))
-        {
-            SC_score.Instance.score = 1000;
-            eat.ActivatePowerUpInstant();
-        }
-        if (Input.GetKeyDown(KeyCode.M))
-        {
-            SC_SaveManager.instance.Addmoney(100);
+            if (Input.GetKeyDown(KeyCode.X))
+            {
+                SC_SaveManager.instance.ClearAllSaves();
+            }
+            if (Input.GetKeyDown(KeyCode.T))
+            {
+                SC_score.Instance.score = 1000;
+                eat.ActivatePowerUpInstant();
+            }
+            if (Input.GetKeyDown(KeyCode.M))
+            {
+                SC_SaveManager.instance.Addmoney(100);
+            }
+
+            if (Input.GetKeyDown(KeyCode.R))
+            {
+                SC_player.instance.Revive();
+            }
+
+            if (Input.GetKeyDown(KeyCode.N))
+            {
+                SC_phases.instance.NextPhase();
+            }
+
+            if (Input.GetKeyDown(KeyCode.B))
+            {
+                Time.timeScale = 5;
+            }
+
+            if (Input.GetKeyDown(KeyCode.K))
+            {
+                SC_player.instance.Die();
+            }
         }
 
-        if (Input.GetKeyDown(KeyCode.R))
-        {
-            SC_player.instance.Revive();
-        }
-
-        if (Input.GetKeyDown(KeyCode.N))
-        {
-            SC_phases.instance.NextPhase();
-        }
-
-        if (Input.GetKeyDown(KeyCode.B))
-        {
-            Time.timeScale = 5;
-        }
-
-        if (Input.GetKeyDown(KeyCode.K))
-        {
-            SC_player.instance.Die();
-        }
     }
 }
 
