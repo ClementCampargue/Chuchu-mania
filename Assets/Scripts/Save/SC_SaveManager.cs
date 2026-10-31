@@ -313,6 +313,29 @@ public class SC_SaveManager : MonoBehaviour
             ? progress.unlocked
             : world.startUnlocked;
     }
+    public void SetWorldPlayed(SO_world world, bool played)
+    {
+        if (world == null || data == null)
+            return;
+
+        SC_WorldProgress progress = GetWorldProgress(world, true);
+
+        progress.played_once = played;
+
+        SaveGame();
+    }
+    public bool HasPlayedWorld(SO_world world)
+    {
+        if (world == null)
+            return false;
+
+        if (data == null)
+            return false;
+
+        SC_WorldProgress progress = GetWorldProgress(world, false);
+
+        return progress != null && progress.played_once;
+    }
     public int GetCompletedLevelsCount()
     {
         if (data == null || data.levels == null)

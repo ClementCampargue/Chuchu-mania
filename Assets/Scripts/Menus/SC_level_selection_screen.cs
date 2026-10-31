@@ -130,6 +130,7 @@ public class SC_level_selection_screen : MonoBehaviour
 
     public void load_scene()
     {
+        SC_SaveManager.instance.SetWorldPlayed(world,true);
         SC_screenshot_transition.instance.Capture(scene_toload);
 
     }
@@ -187,7 +188,21 @@ public class SC_level_selection_screen : MonoBehaviour
             ? SC_SaveManager.instance.IsWorldUnlocked(world)
             : world.startUnlocked;
 
-        if (unlocked)
+
+        bool hasPlayed = saveManager != null
+            ? saveManager.HasPlayedWorld(world)
+            : false;
+
+        if (unlocked && !hasPlayed)
+        {
+            spr.sprite = world.planet_sprite;
+            base_menu.SetActive(false);
+            locked_menu.SetActive(false);
+            price.SetActive(false);
+            new_menu.SetActive(true);
+        }
+
+        else if (unlocked && hasPlayed)
         {
             spr.sprite = world.planet_sprite;
             base_menu.SetActive(true);

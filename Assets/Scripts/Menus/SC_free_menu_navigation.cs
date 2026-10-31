@@ -100,10 +100,6 @@ public class SC_ConstellationNavigation : MonoBehaviour
         // La souris reprend le contrôle
         navigationMode = false;
 
-        if (SC_controller_manager.instance != null)
-        {
-            SC_controller_manager.instance.using_controller = false;
-        }
 
         // Rien à désélectionner
         if (currentIndex < 0)
@@ -142,10 +138,6 @@ public class SC_ConstellationNavigation : MonoBehaviour
         // Le clavier/manette reprend le contrôle
         navigationMode = true;
 
-        if (SC_controller_manager.instance != null)
-        {
-            SC_controller_manager.instance.using_controller = true;
-        }
 
         input.Normalize();
 
@@ -404,10 +396,6 @@ public class SC_ConstellationNavigation : MonoBehaviour
         // Le submit force le mode navigation
         navigationMode = true;
 
-        if (SC_controller_manager.instance != null)
-        {
-            SC_controller_manager.instance.using_controller = true;
-        }
 
         if (currentIndex < 0)
         {

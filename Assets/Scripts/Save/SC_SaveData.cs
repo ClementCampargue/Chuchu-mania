@@ -48,6 +48,7 @@ public class SC_WorldProgress
 {
     public string worldId;
     public bool unlocked;
+    public bool played_once;
 
     public List<bool> spiritsUnlocked =
         new List<bool>();
