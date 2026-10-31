@@ -296,7 +296,7 @@ public class SC_sticker_UI : MonoBehaviour,
 
         if (spawnedSticker)
         {
-            Invoke("delay", 0.1f);
+            Invoke("delay", 0.01f);
             PrepareShaderMaterial();
 
             if (shaderMaterial != null &&
