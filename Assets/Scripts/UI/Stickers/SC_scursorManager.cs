@@ -323,7 +323,6 @@ public class SC_scursorManager : MonoBehaviour
     {
         if (editing)
         {
-            SetGrabCursor();
             cursor_enabled = true;
             UpdateVisibility(true);
         }

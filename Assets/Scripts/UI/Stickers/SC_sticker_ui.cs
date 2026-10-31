@@ -339,6 +339,10 @@ public class SC_sticker_UI : MonoBehaviour,
             offset =
                 Vector2.zero;
 
+            if (cursor != null)
+            {
+                cursor.SetGrabCursor();
+            }
 
             lastDragPosition =
                 rect.anchoredPosition;
@@ -448,6 +452,11 @@ public class SC_sticker_UI : MonoBehaviour,
     {
         if (canvas == null || cursor == null)
             return;
+
+        if (cursor != null)
+        {
+            cursor.SetGrabCursor();
+        }
 
         Vector2 screenPos =
             RectTransformUtility.WorldToScreenPoint(
@@ -750,8 +759,6 @@ public class SC_sticker_UI : MonoBehaviour,
             anim.SetTrigger("grab");
         }
 
-        if (cursor != null)
-            cursor.SetGrabCursor();
     }
 
     // =========================================================
