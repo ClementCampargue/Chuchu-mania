@@ -265,10 +265,10 @@ public class SC_shop_button : MonoBehaviour
 
         if (anim != null)
         {
+            anim.SetBool("cant_buy", true);
             anim.ResetTrigger("Hover");
             anim.ResetTrigger("Unhover");
-            anim.ResetTrigger("Press");
-            anim.SetTrigger("cant_buy");
+            anim.SetTrigger("Press");
         }
 
         if (shop != null)

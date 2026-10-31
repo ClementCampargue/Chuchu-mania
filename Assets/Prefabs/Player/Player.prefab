@@ -32030,7 +32030,7 @@ MonoBehaviour:
   climbReattachDelay: 0.2
   platformLayer:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 8
   dropThroughTime: 0.25
   dropThroughVelocity: 2
   hitFreezeTime: 0.51
@@ -32043,10 +32043,10 @@ MonoBehaviour:
   groundLayer:
     serializedVersion: 2
     m_Bits: 8
-  groundCheckWidthMultiplier: 1
+  groundCheckWidthMultiplier: 0.994
   groundCheckHeight: 0.06
-  groundCheckYOffset: 0
-  groundRaycastDistance: 0.1
+  groundCheckYOffset: -0.04
+  groundRaycastDistance: 0.07
   groundRaycastSideInset: 0.05
   fallAnimName: Fall
   playLandSoundAfterFall: 1

@@ -48,6 +48,7 @@ public class SC_NPC : MonoBehaviour
     private bool playerInRange;
     [Header("NPC Flip")]
     public bool flip_towards_player = true;
+    public bool hasfliped = false;
     public bool flip_only_in_range = true;
 
     public bool starts_facing_left = false;
@@ -149,6 +150,15 @@ public class SC_NPC : MonoBehaviour
             ? playerIsRight
             : !playerIsRight;
 
+        if (shouldFlip)
+        {
+            hasfliped = true;
+        }
+        else
+        {
+            hasfliped = false;
+        }
+
         Vector3 scale = transform.localScale;
 
         scale.x = shouldFlip
@@ -221,7 +231,7 @@ public class SC_NPC : MonoBehaviour
             return;
         }
         FlipTowardsPlayer();
-
+ 
         // Configure le dialogue avant de démarrer le typewriter.
         dialogue.currentDialogue =
             dialogues[currentDialogueIndex];
@@ -332,6 +342,14 @@ public class SC_NPC : MonoBehaviour
     public void EndTalking()
     {
         NextDialogue();
+        if (hasfliped)
+        {
+            Vector3 scale = transform.localScale;
+
+            scale.x =  initialScale.x;
+
+            transform.localScale = scale;
+        }
 
         if (dialogue != null &&
             dialogue.anim != null &&
