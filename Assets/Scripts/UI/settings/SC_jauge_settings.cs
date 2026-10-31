@@ -16,15 +16,15 @@ public class SC_jauge_settings : MonoBehaviour
 
     private void OnMouseEnter()
     {
-        button.enabled = false;
-        button.isPressed = false;
-        button.isHovered = true;
+        //    button.enabled = false;
+        //    button.isPressed = false;
+        //    button.isHovered = true;
 
         if (button.indicator != null)
             button.indicator.SetActive(true);
 
         button.PlayAnimation(button.hover);
-        button.Hover();
+        //     button.Hover();
     }
 
     private void OnMouseExit()
@@ -35,8 +35,8 @@ public class SC_jauge_settings : MonoBehaviour
             SC_controller_manager.instance.using_controller)
             return;
 
-        button.OnUnhover();
-        button.isHovered = false;
+        //button.OnUnhover();
+        //       button.isHovered = false;
 
         if (button.indicator != null)
             button.indicator.SetActive(false);

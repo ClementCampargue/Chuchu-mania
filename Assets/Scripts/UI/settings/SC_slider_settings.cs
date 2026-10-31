@@ -6,11 +6,15 @@ using UnityEngine.InputSystem;
 
 public class SC_slider_ : MonoBehaviour
 {
+    [Header("Events")]
     public UnityEvent event_;
+
+    [Header("Audio")]
     public AudioSource audio;
     public List<AudioClip> audios;
     public bool play_random_audio;
     public AudioClip juice;
+
     [Header("Input")]
     [SerializeField] private InputActionReference moveAction;
 
@@ -25,6 +29,7 @@ public class SC_slider_ : MonoBehaviour
 
     [Header("Segmentation")]
     [SerializeField] private bool segmented = false;
+
     [Min(2)]
     [SerializeField] private int numberOfSteps = 5;
 
@@ -32,24 +37,40 @@ public class SC_slider_ : MonoBehaviour
     [Min(0f)]
     [SerializeField] private float speed = 1f;
 
+    [Header("Camera")]
+    [SerializeField] private Camera cam;
+
     public bool can_move;
+
     public float Value => value;
+
     public SC_Button button;
 
     private int lastPlayedStep = -1;
 
-    // Gestion de la souris
     private bool mouseIsDragging;
     private int mouseStartStep = -1;
+
+    // --------------------------------------------------
+    // INITIALISATION
+    // --------------------------------------------------
 
     private void OnEnable()
     {
         if (moveAction != null && moveAction.action != null)
             moveAction.action.Enable();
 
+        if (cam == null)
+            cam = Camera.main;
+
         UpdateCursor();
+
         lastPlayedStep = GetCurrentStep(value);
     }
+
+    // --------------------------------------------------
+    // ACTIVATION
+    // --------------------------------------------------
 
     public void _eneable()
     {
@@ -65,51 +86,57 @@ public class SC_slider_ : MonoBehaviour
     // SOURIS
     // --------------------------------------------------
 
-    // Appeler cette méthode au début du clic/drag.
     public void OnMousePress()
     {
         mouseIsDragging = true;
         mouseStartStep = GetCurrentStep(value);
     }
 
-    // Appeler cette méthode pendant le déplacement.
-    public void SetValueFromMouse(Vector3 mousePosition, Camera cam)
+    public void SetValueFromMouse(
+        Vector3 mousePosition,
+        Camera cameraToUse
+    )
     {
-        if (cursor == null || pointMin == null ||
-            pointMax == null || cam == null)
+        Camera currentCam = cameraToUse != null
+            ? cameraToUse
+            : cam;
+
+        if (cursor == null ||
+            pointMin == null ||
+            pointMax == null ||
+            currentCam == null)
             return;
 
-        Vector3 worldMouse = cam.ScreenToWorldPoint(
-            new Vector3(
-                mousePosition.x,
-                mousePosition.y,
-                Mathf.Abs(cam.transform.position.z - transform.position.z)
-            )
+        Vector3 minScreen = currentCam.WorldToScreenPoint(
+            pointMin.position
         );
 
-        Vector3 min = pointMin.position;
-        Vector3 axis = pointMax.position - min;
+        Vector3 maxScreen = currentCam.WorldToScreenPoint(
+            pointMax.position
+        );
+
+        Vector2 axis = (Vector2)maxScreen - (Vector2)minScreen;
 
         float lengthSquared = axis.sqrMagnitude;
 
         if (lengthSquared < 0.0001f)
             return;
 
-        float newValue = Vector3.Dot(worldMouse - min, axis)
-                         / lengthSquared;
+        float newValue = Vector2.Dot(
+            (Vector2)mousePosition - (Vector2)minScreen,
+            axis
+        ) / lengthSquared;
 
         newValue = Mathf.Clamp01(newValue);
 
-        // Si le drag n'a pas été initialisé, on l'initialise.
         if (!mouseIsDragging)
             OnMousePress();
 
-        // Mise à jour visuelle sans jouer de son pendant le drag.
         value = newValue;
+
         UpdateCursor();
     }
 
-    // Appeler une seule fois au relâchement du clic.
     public void OnMouseRelease()
     {
         if (!mouseIsDragging)
@@ -117,7 +144,6 @@ public class SC_slider_ : MonoBehaviour
 
         int finalStep = GetCurrentStep(value);
 
-        // Un son seulement si on a terminé sur un autre snap.
         if (finalStep != mouseStartStep)
         {
             lastPlayedStep = finalStep;
@@ -133,7 +159,8 @@ public class SC_slider_ : MonoBehaviour
 
     private void Update()
     {
-        if (moveAction == null || moveAction.action == null)
+        if (moveAction == null ||
+            moveAction.action == null)
             return;
 
         if (!can_move)
@@ -175,33 +202,39 @@ public class SC_slider_ : MonoBehaviour
 
     public void PlayRandom()
     {
-        if (audio == null ||
-            audios == null || audios.Count == 0)
+        if (audio == null)
             return;
-
-        List<AudioClip> validAudios = audios.FindAll(
-            clip => clip != null
-        );
-
-        if (validAudios.Count == 0)
-            return;
-
-        int randomIndex = Random.Range(0, validAudios.Count);
-
 
         if (play_random_audio)
         {
+            if (audios == null || audios.Count == 0)
+                return;
+
+            List<AudioClip> validAudios = audios.FindAll(
+                clip => clip != null
+            );
+
+            if (validAudios.Count == 0)
+                return;
+
+            int randomIndex = Random.Range(
+                0,
+                validAudios.Count
+            );
+
             audio.Stop();
             audio.clip = validAudios[randomIndex];
-
+            audio.enabled = true;
             audio.Play();
         }
         else
         {
-            audio.clip = juice;
+            if (juice == null)
+                return;
+
+            audio.enabled = true;
             audio.PlayOneShot(juice);
         }
-        audio.enabled = true;
     }
 
     // --------------------------------------------------
@@ -218,12 +251,14 @@ public class SC_slider_ : MonoBehaviour
     }
 
     // --------------------------------------------------
-    // CURSEUR / VALEUR
+    // CURSEUR
     // --------------------------------------------------
 
     private void UpdateCursor()
     {
-        if (cursor == null || pointMin == null || pointMax == null)
+        if (cursor == null ||
+            pointMin == null ||
+            pointMax == null)
             return;
 
         float displayValue = value;
@@ -232,8 +267,9 @@ public class SC_slider_ : MonoBehaviour
         {
             int steps = Mathf.Max(2, numberOfSteps);
 
-            displayValue = Mathf.Round(value * (steps - 1))
-                         / (steps - 1);
+            displayValue = Mathf.Round(
+                value * (steps - 1)
+            ) / (steps - 1);
         }
 
         cursor.transform.position = Vector3.Lerp(
@@ -244,6 +280,10 @@ public class SC_slider_ : MonoBehaviour
 
         event_?.Invoke();
     }
+
+    // --------------------------------------------------
+    // VALEUR EXTERNE
+    // --------------------------------------------------
 
     public void SetValue(float newValue)
     {
@@ -256,7 +296,8 @@ public class SC_slider_ : MonoBehaviour
             int oldStep = GetCurrentStep(oldValue);
             int newStep = GetCurrentStep(value);
 
-            if (oldStep != newStep && newStep != lastPlayedStep)
+            if (oldStep != newStep &&
+                newStep != lastPlayedStep)
             {
                 lastPlayedStep = newStep;
                 PlayRandom();
