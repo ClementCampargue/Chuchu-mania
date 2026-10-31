@@ -36,6 +36,10 @@ public class SC_sticker_button : MonoBehaviour
     }
     private void Update()
     {
+        if (!IsUnlocked())
+        {
+            anim.SetBool("cant_buy", true);
+        }
         if (!menu.editing)
         {
             button.enabled = true;

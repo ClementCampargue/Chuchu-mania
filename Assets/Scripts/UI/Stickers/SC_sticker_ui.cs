@@ -339,10 +339,6 @@ public class SC_sticker_UI : MonoBehaviour,
             offset =
                 Vector2.zero;
 
-            if (cursor != null)
-            {
-                cursor.SetGrabCursor();
-            }
 
             lastDragPosition =
                 rect.anchoredPosition;
