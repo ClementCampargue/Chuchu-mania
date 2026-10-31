@@ -27,6 +27,7 @@ public class SC_achievement_menu : MonoBehaviour
 
     [Header("Wishes")]
     public List<GameObject> wishes;
+    public List<GameObject> wishes2;
     public int current_wishes;
 
     [Header("Popup Use Wish")]
@@ -71,6 +72,10 @@ public class SC_achievement_menu : MonoBehaviour
         for (int i = 0; i < wishes.Count; i++)
         {
             wishes[i].SetActive(i < current_wishes);
+        }
+        for (int i = 0; i < wishes2.Count; i++)
+        {
+            wishes2[i].SetActive(i < current_wishes);
         }
     }
 
