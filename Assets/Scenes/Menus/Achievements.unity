@@ -11286,7 +11286,7 @@ Transform:
   m_GameObject: {fileID: 1768333740}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.71115255, y: 0.025019169, z: 0}
+  m_LocalPosition: {x: 0.731, y: 0.009, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -11305,7 +11305,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   spriteRenderer: {fileID: 1348460959}
-  distance: 0.24
+  distance: 0.27
   right: 1
 --- !u!212 &1768333743
 SpriteRenderer:
@@ -11692,7 +11692,7 @@ Transform:
   m_GameObject: {fileID: 1850157897}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.71115255, y: 0.025019169, z: 0}
+  m_LocalPosition: {x: 0.73099995, y: 0.0089998245, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -11766,7 +11766,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   spriteRenderer: {fileID: 1268800611}
-  distance: 0.24
+  distance: 0.27
   right: 1
 --- !u!1 &1916823802 stripped
 GameObject:
