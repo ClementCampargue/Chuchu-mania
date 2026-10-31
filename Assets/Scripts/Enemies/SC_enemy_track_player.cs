@@ -81,8 +81,7 @@ public class SC_enemy_track_player : MonoBehaviour
     void FixedUpdate()
     {
 
-        // Si le tracking est OFF, on ne fait rien
-        if (!tracking)
+        if (!tracking || !SC_player.instance.canMove)
         {
             rb.linearVelocity = Vector2.zero;
             return;

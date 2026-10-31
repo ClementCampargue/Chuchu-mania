@@ -43,7 +43,10 @@ public class SC_Cycle_spawn : MonoBehaviour
     }
     void Update()
     {
-        timer += Time.deltaTime;
+        if (SC_player.instance.canMove)
+        {
+            timer += Time.deltaTime;
+        }
 
         if (timer < spawnInterval)
             return;
