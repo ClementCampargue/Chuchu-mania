@@ -180,6 +180,7 @@ MonoBehaviour:
   play_random_audio: 0
   juice: {fileID: 8300000, guid: b95f9d757c38baa4ebf2ffe4740c24af, type: 3}
   moveAction: {fileID: -1680190386980627800, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
+  resetAction: {fileID: -7868807682114652187, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
   cursor: {fileID: 6898595095263498261}
   pointMin: {fileID: 7274913092036401818}
   pointMax: {fileID: 7097143235044681524}
@@ -187,6 +188,7 @@ MonoBehaviour:
   segmented: 1
   numberOfSteps: 10
   speed: 1
+  cam: {fileID: 0}
   can_move: 0
   button: {fileID: 7805468491656663224}
 --- !u!114 &645652151006371052
@@ -1246,11 +1248,11 @@ MonoBehaviour:
   isHovered: 0
   isPressed: 0
   indicator: {fileID: 3605113643491440998}
-  accept_input: 1
   juice: {fileID: 3954748705410926226}
   juice2: {fileID: 0}
-  clickable: 1
   navigation: {fileID: 0}
+  accept_input: 1
+  clickable: 1
 --- !u!23 &1070630327919324280
 MeshRenderer:
   m_ObjectHideFlags: 0

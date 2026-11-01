@@ -2958,7 +2958,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 2824323693909931653}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 0}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9541d86e2fd84c1d9990edf0852d74ab, type: 3}
   m_Name: 
@@ -3256,6 +3256,10 @@ PrefabInstance:
       propertyPath: m_CullingMask.m_Bits
       value: 8191
       objectReference: {fileID: 0}
+    - target: {fileID: 2655784499452763992, guid: 84769b7f5fd09df48b870d7ae06c2fcd, type: 3}
+      propertyPath: m_AllowDynamicResolution
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2744248652469630910, guid: 84769b7f5fd09df48b870d7ae06c2fcd, type: 3}
       propertyPath: m_LocalPosition.x
       value: -0.33046
@@ -3410,40 +3414,8 @@ PrefabInstance:
     - {fileID: 7205087156145873246, guid: 84769b7f5fd09df48b870d7ae06c2fcd, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 8163210339639146115, guid: 84769b7f5fd09df48b870d7ae06c2fcd, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 5432858931673940260}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 84769b7f5fd09df48b870d7ae06c2fcd, type: 3}
---- !u!1 &164720625320166639 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 8163210339639146115, guid: 84769b7f5fd09df48b870d7ae06c2fcd, type: 3}
-  m_PrefabInstance: {fileID: 8286825644359103084}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &5432858931673940260
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 164720625320166639}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c88f5cead0c0b2a4eb05b5900433f8d1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_ComponentVersion: 1
-  m_AssetsPPU: 30
-  m_RefResolutionX: 640
-  m_RefResolutionY: 336
-  m_CropFrame: 0
-  m_GridSnapping: 1
-  m_FilterMode: 0
-  m_UpscaleRT: 0
-  m_PixelSnapping: 0
-  m_CropFrameX: 0
-  m_CropFrameY: 0
-  m_StretchFill: 0
 --- !u!4 &6130876392056079826 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2744248652469630910, guid: 84769b7f5fd09df48b870d7ae06c2fcd, type: 3}

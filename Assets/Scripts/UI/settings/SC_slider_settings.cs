@@ -17,6 +17,7 @@ public class SC_slider_ : MonoBehaviour
 
     [Header("Input")]
     [SerializeField] private InputActionReference moveAction;
+    [SerializeField] private InputActionReference resetAction;
 
     [Header("Curseur")]
     [SerializeField] private SpriteRenderer cursor;
@@ -159,6 +160,12 @@ public class SC_slider_ : MonoBehaviour
 
     private void Update()
     {
+
+        if (resetAction.action.WasPressedThisFrame() && can_move)
+        {
+            value = 1;
+            UpdateCursor();
+        }
         if (moveAction == null ||
             moveAction.action == null)
             return;
