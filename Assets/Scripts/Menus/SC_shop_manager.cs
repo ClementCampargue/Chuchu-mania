@@ -77,7 +77,7 @@ public class SC_shop_manager : MonoBehaviour
         if (typewriter.finished && talking)
         {
             typewriter.SetWaitInputVisible(true);
-            if (submit.action.WasPerformedThisFrame() || submit2.action.WasCompletedThisFrame())
+            if (submit.action.WasPerformedThisFrame() || submit2.action.WasCompletedThisFrame()|| Input.GetKeyDown(KeyCode.Mouse0))
             {
                 show_menu();
             }
@@ -89,6 +89,12 @@ public class SC_shop_manager : MonoBehaviour
         }
         else
         if (!typewriter.finished && talking && submit2.action.WasCompletedThisFrame())
+        {
+            typewriter.FinishText();
+            typewriter.SetWaitInputVisible(true);
+        }
+        else
+        if (!typewriter.finished && talking &&Input.GetKeyDown(KeyCode.Mouse0))
         {
             typewriter.FinishText();
             typewriter.SetWaitInputVisible(true);
