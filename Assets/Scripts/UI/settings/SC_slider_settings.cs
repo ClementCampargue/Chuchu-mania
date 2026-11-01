@@ -165,6 +165,7 @@ public class SC_slider_ : MonoBehaviour
         {
             value = 1;
             UpdateCursor();
+            PlayRandom();
         }
         if (moveAction == null ||
             moveAction.action == null)
