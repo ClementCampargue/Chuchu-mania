@@ -1,0 +1,30 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5be51871efa6c3e4eae1703925c8f5ac, type: 3}
+  m_Name: Constellations
+  m_EditorClassIdentifier: 
+  m_SharedTableData: {fileID: 11400000, guid: 31f458e8ef02a0d4a8172f4a595158e4, type: 2}
+  m_Tables:
+  - {fileID: 11400000, guid: 03d4c5b929f009f49af43308b0a27a79, type: 2}
+  - {fileID: 11400000, guid: 476fa298d490bb74f9229b20c07f08f9, type: 2}
+  - {fileID: 11400000, guid: 88f1f5802e69a9841a7a6a4f9e0923b4, type: 2}
+  - {fileID: 11400000, guid: bdc1c0a9a7a40714ba9d1f1fa9d2cb2f, type: 2}
+  - {fileID: 11400000, guid: f2aa94218373e7d4e9b8dddb82cba184, type: 2}
+  - {fileID: 11400000, guid: 480ced418f2e57b4393652e38dd4715b, type: 2}
+  - {fileID: 11400000, guid: 330f8b68c266d6442aee02743f572828, type: 2}
+  - {fileID: 11400000, guid: 5a5e4ce93e6a68b4c97230ca28e5f740, type: 2}
+  - {fileID: 11400000, guid: 4c165265229e8ed4bae01d4e9b23f948, type: 2}
+  m_Extensions: []
+  m_Group: String Table
+  references:
+    version: 2
+    RefIds: []

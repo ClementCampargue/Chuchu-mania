@@ -15,18 +15,18 @@ MonoBehaviour:
   achievementId: fish not angry
   achievement_name:
     m_TableReference:
-      m_TableCollectionName: GUID:976456d53a24ec242b5bf82b25f149e2
+      m_TableCollectionName: GUID:31f458e8ef02a0d4a8172f4a595158e4
     m_TableEntryReference:
-      m_KeyId: 2220729212616721
+      m_KeyId: 12423065617
       m_Key: 
     m_FallbackState: 0
     m_WaitForCompletion: 0
     m_LocalVariables: []
   requirement:
     m_TableReference:
-      m_TableCollectionName: GUID:976456d53a24ec242b5bf82b25f149e2
+      m_TableCollectionName: GUID:31f458e8ef02a0d4a8172f4a595158e4
     m_TableEntryReference:
-      m_KeyId: 2220729212616722
+      m_KeyId: 12423065618
       m_Key: 
     m_FallbackState: 0
     m_WaitForCompletion: 0

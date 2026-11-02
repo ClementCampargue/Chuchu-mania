@@ -89,6 +89,12 @@ MonoBehaviour:
     m_SerializedLabels:
     - Locale-it
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: f2aa94218373e7d4e9b8dddb82cba184
+    m_Address: Constellations_it
+    m_ReadOnly: 1
+    m_SerializedLabels:
+    - Locale-it
+    FlaggedDuringContentUpdateRestriction: 0
   m_ReadOnly: 1
   m_Settings: {fileID: 11400000, guid: 81a29239053a8aa46bf9eb55d08dc7e3, type: 2}
   m_SchemaSet:

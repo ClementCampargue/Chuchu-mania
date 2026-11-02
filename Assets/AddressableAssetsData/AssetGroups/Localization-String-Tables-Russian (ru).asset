@@ -58,6 +58,12 @@ MonoBehaviour:
     - Locale-ru
     - Preload
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 5a5e4ce93e6a68b4c97230ca28e5f740
+    m_Address: Constellations_ru
+    m_ReadOnly: 1
+    m_SerializedLabels:
+    - Locale-ru
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: ac55e5a906ae43945a7982b8479eff3a
     m_Address: Shop_ru
     m_ReadOnly: 1

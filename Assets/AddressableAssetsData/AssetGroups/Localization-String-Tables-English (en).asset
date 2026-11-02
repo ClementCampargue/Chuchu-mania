@@ -27,6 +27,12 @@ MonoBehaviour:
     m_SerializedLabels:
     - Locale-en
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 476fa298d490bb74f9229b20c07f08f9
+    m_Address: Constellations_en
+    m_ReadOnly: 1
+    m_SerializedLabels:
+    - Locale-en
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 680177d02fde88944be4acce19cec804
     m_Address: Galaxy_en
     m_ReadOnly: 1

@@ -34,6 +34,12 @@ MonoBehaviour:
     - Locale-pt
     - Preload
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 330f8b68c266d6442aee02743f572828
+    m_Address: Constellations_pt
+    m_ReadOnly: 1
+    m_SerializedLabels:
+    - Locale-pt
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 51d1efb6ef509654aaf4292b4f68d953
     m_Address: Cutscenes_pt
     m_ReadOnly: 1

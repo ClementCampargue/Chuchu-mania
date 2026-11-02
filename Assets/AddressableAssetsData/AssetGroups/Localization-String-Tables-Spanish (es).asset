@@ -41,6 +41,12 @@ MonoBehaviour:
     - Locale-es
     - Preload
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 4c165265229e8ed4bae01d4e9b23f948
+    m_Address: Constellations_es
+    m_ReadOnly: 1
+    m_SerializedLabels:
+    - Locale-es
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 5b0a57da5bf573945b1b3187af24dcaf
     m_Address: "Succ\xE8s_es"
     m_ReadOnly: 1

@@ -1,0 +1,111 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e9620f8c34305754d8cc9a7e49e852d9, type: 3}
+  m_Name: Constellations_en
+  m_EditorClassIdentifier: 
+  m_LocaleId:
+    m_Code: en
+  m_SharedData: {fileID: 11400000, guid: 31f458e8ef02a0d4a8172f4a595158e4, type: 2}
+  m_Metadata:
+    m_Items: []
+  m_TableData:
+  - m_Id: 12385316864
+    m_Localized: Gold medal
+    m_Metadata:
+      m_Items: []
+  - m_Id: 12423065600
+    m_Localized: Get an S rank
+    m_Metadata:
+      m_Items: []
+  - m_Id: 12423065602
+    m_Localized: Complete a level without taking demage
+    m_Metadata:
+      m_Items: []
+  - m_Id: 12423065604
+    m_Localized: Get a game over in level 1
+    m_Metadata:
+      m_Items: []
+  - m_Id: 12423065605
+    m_Localized: Capitalism
+    m_Metadata:
+      m_Items: []
+  - m_Id: 12423065606
+    m_Localized: Win 1000 coins in total
+    m_Metadata:
+      m_Items: []
+  - m_Id: 12423065607
+    m_Localized: Food coma
+    m_Metadata:
+      m_Items: []
+  - m_Id: 12423065608
+    m_Localized: Eat 100 ice cream scoops
+    m_Metadata:
+      m_Items: []
+  - m_Id: 12423065610
+    m_Localized: Beat an enemy when Chuchu gets her butt burned
+    m_Metadata:
+      m_Items: []
+  - m_Id: 12423065611
+    m_Localized: Karma
+    m_Metadata:
+      m_Items: []
+  - m_Id: 12423065612
+    m_Localized: Inflate a bee in level BRAMBLES
+    m_Metadata:
+      m_Items: []
+  - m_Id: 12423065614
+    m_Localized: Get 20 different stickers
+    m_Metadata:
+      m_Items: []
+  - m_Id: 12423065615
+    m_Localized: Colonel, I'm done here
+    m_Metadata:
+      m_Items: []
+  - m_Id: 12423065616
+    m_Localized: Complete level MUSEUM without being spotted
+    m_Metadata:
+      m_Items: []
+  - m_Id: 12423065618
+    m_Localized: Complete level FISH without annoying a single fish
+    m_Metadata:
+      m_Items: []
+  - m_Id: 12423065619
+    m_Localized: Survivor
+    m_Metadata:
+      m_Items: []
+  - m_Id: 12423065620
+    m_Localized: Complete level MOON whitout taking any damage
+    m_Metadata:
+      m_Items: []
+  - m_Id: 12423065624
+    m_Localized: Complete level MUSEUM without hiding yourself
+    m_Metadata:
+      m_Items: []
+  - m_Id: 12423065626
+    m_Localized: Get at least an A rank in every level
+    m_Metadata:
+      m_Items: []
+  - m_Id: 12423065627
+    m_Localized: Worse than death?
+    m_Metadata:
+      m_Items: []
+  - m_Id: 12423065628
+    m_Localized: Listen to Cuicui's whole story
+    m_Metadata:
+      m_Items: []
+  - m_Id: 12423065629
+    m_Localized: Hamburger
+    m_Metadata:
+      m_Items: []
+  references:
+    version: 2
+    RefIds: []

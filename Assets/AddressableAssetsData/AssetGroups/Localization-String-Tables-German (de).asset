@@ -70,6 +70,12 @@ MonoBehaviour:
     - Locale-de
     - Preload
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: bdc1c0a9a7a40714ba9d1f1fa9d2cb2f
+    m_Address: Constellations_de
+    m_ReadOnly: 1
+    m_SerializedLabels:
+    - Locale-de
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: c59dcc58fda78154092cea3261986555
     m_Address: Tutoriel_de
     m_ReadOnly: 1

@@ -15,18 +15,18 @@ MonoBehaviour:
   achievementId: sticker 20
   achievement_name:
     m_TableReference:
-      m_TableCollectionName: GUID:976456d53a24ec242b5bf82b25f149e2
+      m_TableCollectionName: GUID:31f458e8ef02a0d4a8172f4a595158e4
     m_TableEntryReference:
-      m_KeyId: 2220729212616717
+      m_KeyId: 12423065613
       m_Key: 
     m_FallbackState: 0
     m_WaitForCompletion: 0
     m_LocalVariables: []
   requirement:
     m_TableReference:
-      m_TableCollectionName: GUID:976456d53a24ec242b5bf82b25f149e2
+      m_TableCollectionName: GUID:31f458e8ef02a0d4a8172f4a595158e4
     m_TableEntryReference:
-      m_KeyId: 2220729212616718
+      m_KeyId: 12423065614
       m_Key: 
     m_FallbackState: 0
     m_WaitForCompletion: 0
