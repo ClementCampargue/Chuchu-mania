@@ -4,7 +4,7 @@ using UnityEngine;
 public class SC_debug : MonoBehaviour
 {
     private SC_icecream_eat_system eat;
-    
+    public GameObject fps;
     void Start()
     {
         eat = SC_icecream_eat_system.instance;
@@ -14,6 +14,7 @@ public class SC_debug : MonoBehaviour
     {
         if(PlayerPrefs.GetFloat("Cheats") == 0)
         {
+            fps.SetActive(true);
             if (Input.GetKeyDown(KeyCode.X))
             {
                 SC_SaveManager.instance.ClearAllSaves();
@@ -47,6 +48,11 @@ public class SC_debug : MonoBehaviour
             {
                 SC_player.instance.Die();
             }
+        }
+        else
+        {
+            fps.SetActive(false);
+
         }
 
     }

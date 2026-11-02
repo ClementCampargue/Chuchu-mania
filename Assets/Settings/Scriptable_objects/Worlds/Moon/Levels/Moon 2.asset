@@ -13,7 +13,18 @@ MonoBehaviour:
   m_Name: Moon 2
   m_EditorClassIdentifier: 
   levelId: Boss
-  levelname: Boss
+  levelname:
+    m_TableReference:
+      m_TableCollectionName: GUID:71d64c1e148486e4887f3f66640476cd
+    m_TableEntryReference:
+      m_KeyId: 23792445972299776
+      m_Key: 
+    m_FallbackState: 0
+    m_WaitForCompletion: 0
+    m_LocalVariables: []
   scene_to_load: CS_Moon3
   spirit: {fileID: 21300000, guid: 201183dde677bda46897618b80c00ce6, type: 3}
   startUnlocked: 0
+  references:
+    version: 2
+    RefIds: []

@@ -13,18 +13,11 @@ public class SC_grillage : MonoBehaviour
     // CLIMBING
     // =========================================================
 
-    [Header("Climbing")]
 
-    [Tooltip("Si activé, le joueur ne peut se déplacer que verticalement.")]
-    public bool isLadder = false;
-
-    [Tooltip("Si activé, le joueur peut s'accrocher à la grille alors qu'il est dans les airs.")]
     public bool canAttachInAir = true;
 
-    [Tooltip("Point optionnel utilisé pour centrer le joueur sur l'échelle.")]
     public Transform climbAttachPoint;
 
-    [Tooltip("Si activé, les limites sont calculées automatiquement depuis le BoxCollider2D.")]
     public bool autoCompute = true;
 
 

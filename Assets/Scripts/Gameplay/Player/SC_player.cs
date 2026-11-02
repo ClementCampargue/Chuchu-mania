@@ -12,7 +12,8 @@ public class SC_player : MonoBehaviour
     private Coroutine hitCoroutine;
     private Coroutine dropThroughCoroutine;
     private Coroutine knockbackInvincibilityCoroutine;
-
+    private SC_ladder echelle;
+    private bool isOnLadder;
     public bool climb_delay = true;
 
     [Header("Power Up Stats")]
@@ -314,13 +315,13 @@ public class SC_player : MonoBehaviour
             {
                 StartDropThrough();
             }
-
             if (!isClimbing &&
                 !isDroppingThrough &&
                 canClimb &&
                 climbReattachTimer <= 0f)
             {
                 TryStartClimbing(input);
+                TryStartLadder(input);
             }
         }
         else
@@ -672,7 +673,33 @@ public class SC_player : MonoBehaviour
         isDroppingThrough = false;
         dropThroughCoroutine = null;
     }
+    private void StopClimbingLadder()
+    {
+        if (!isOnLadder)
+            return;
 
+        isOnLadder = false;
+        isClimbing = false;
+
+        collision.isTrigger = false;
+
+        rb.gravityScale = base_gravity;
+        rb.linearVelocity = Vector2.zero;
+
+        climbReattachTimer = climbReattachDelay;
+
+        canClimb = false;
+        echelle = null;
+
+        anim.SetBool("Climb", false);
+        anim.SetBool("Run", false);
+
+        if (grid != null)
+            grid.Stop();
+
+        landingHandled = false;
+        wasGroundedBeforeCheck = false;
+    }
     // =========================================================
     // FIXED UPDATE
     // =========================================================
@@ -681,7 +708,66 @@ public class SC_player : MonoBehaviour
     {
         if (Time.timeScale == 0f)
             return;
+        // =========================================================
+// LADDER MOVEMENT
+// =========================================================
 
+if (isClimbing && isOnLadder)
+{
+    if (echelle == null)
+    {
+        StopClimbingLadder();
+        return;
+    }
+
+    Vector2 input = Move != null
+        ? Move.action.ReadValue<Vector2>()
+        : Vector2.zero;
+
+    float vertical = 0f;
+
+    if (input.y > 0.1f)
+        vertical = 1f;
+    else if (input.y < -0.1f)
+        vertical = -1f;
+
+    float nextY = rb.position.y +
+        vertical * climbSpeed * Time.fixedDeltaTime;
+
+// ARRIVÉ EN HAUT
+if (vertical > 0f && nextY >= echelle.TopY)
+{
+    rb.position = new Vector2(
+        echelle.CenterX,
+        echelle.TopY +0.2f
+    );
+
+    StopClimbingLadder();
+    return;
+}
+
+    // ARRIVÉ EN BAS
+    if (nextY <= echelle.BottomY)
+    {
+        rb.position = new Vector2(
+            echelle.CenterX,
+            echelle.BottomY
+        );
+
+        StopClimbingLadder();
+        return;
+    }
+
+    // DÉPLACEMENT VERTICAL UNIQUEMENT
+    rb.linearVelocity = new Vector2(0f, vertical * climbSpeed);
+
+    rb.position = new Vector2(
+        echelle.CenterX,
+        nextY
+    );
+
+    return;
+}
         if (isClimbing)
         {
             if (grillage == null)
@@ -701,46 +787,14 @@ public class SC_player : MonoBehaviour
 
             Vector2 climbVelocity;
 
-            if (grillage.isLadder)
-            {
-                climbVelocity = new Vector2(
-                    0f,
-                    climbInput.y * climbSpeed
-                );
-            }
-            else
-            {
-                climbVelocity = climbInput * climbSpeed;
-            }
+            climbVelocity = climbInput * climbSpeed;
+
 
             Vector2 nextPosition = rb.position +
                 climbVelocity * Time.fixedDeltaTime;
 
             nextPosition = grillage.ClampPosition(nextPosition);
 
-            if (grillage.isLadder)
-            {
-                bool reachedBottom =
-                    nextPosition.y <= grillage.minY + 0.5f &&
-                    climbInput.y < 0f;
-
-                bool reachedTop =
-                    nextPosition.y >= grillage.maxY - 0.5f &&
-                    climbInput.y > 0f;
-
-                if (reachedBottom || reachedTop)
-                {
-                    nextPosition.y = reachedBottom
-                        ? grillage.minY
-                        : grillage.maxY;
-
-                    nextPosition.x = rb.position.x;
-                    rb.position = nextPosition;
-
-                    StopClimbing();
-                    return;
-                }
-            }
 
             rb.linearVelocity = climbVelocity;
             rb.position = nextPosition;
@@ -809,22 +863,21 @@ public class SC_player : MonoBehaviour
 
         if (eat_system.isEating)
             return;
-
+        // SORTIE DE L'ECHELLE SANS SAUT
+        if (isOnLadder)
+        {
+            StopClimbingLadder();
+            return;
+        }
         // SAUT DEPUIS UNE GRILLE
         if (isClimbing)
         {
             if (grillage == null)
                 return;
 
-            if (grillage.isLadder)
-            {
-                StopClimbing();
-            }
-            else
-            {
-                StopClimbingJump();
-                PerformJump();
-            }
+            StopClimbingJump();
+            PerformJump();
+
 
             return;
         }
@@ -1435,6 +1488,13 @@ public class SC_player : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D other)
     {
+        if (other.CompareTag("Ladder"))
+        {
+            echelle = other.GetComponent<SC_ladder>();
+            canClimb = echelle != null;
+        }
+
+        // Conserve ici ton ancienne détection Climb.
         if (!other.CompareTag("Climb"))
             return;
 
@@ -1444,17 +1504,20 @@ public class SC_player : MonoBehaviour
             StartClimbing();
     }
 
-    private void OnTriggerExit2D(Collider2D other)
-    {
-        if (!other.CompareTag("Climb"))
-            return;
-
-        canClimb = false;
-        grillage = null;
-    }
-
     private void OnTriggerStay2D(Collider2D other)
     {
+        if (other.CompareTag("Ladder"))
+        {
+            SC_ladder detectedLadder =
+                other.GetComponent<SC_ladder>();
+
+            if (detectedLadder != null)
+            {
+                echelle = detectedLadder;
+                canClimb = true;
+            }
+        }
+
         if (!other.CompareTag("Climb"))
             return;
 
@@ -1465,6 +1528,65 @@ public class SC_player : MonoBehaviour
 
         if (isDroppingThrough && grillage != null)
             StartClimbing();
+    }
+    public float ladderTopEntryDistance = 0.8f;
+    private void TryStartLadder(Vector2 input)
+    {
+        if (isClimbing ||
+            isOnLadder ||
+            echelle == null ||
+            !canClimb ||
+            !climb_delay ||
+            climbReattachTimer > 0f)
+            return;
+
+        // Entrée classique : le joueur appuie vers le haut.
+        bool enterFromBottom = input.y >= climbAttachUpThreshold;
+
+
+        bool enterFromTop = input.y <= -climbAttachUpThreshold ;
+
+        if (enterFromBottom  && rb.position.y < echelle .TopY-0.5f|| enterFromTop && rb.position.y > echelle.BottomY + 0.5f)
+        {
+            StartClimbingLadder();
+        }
+    }
+    private void StartClimbingLadder()
+    {
+        if (echelle == null)
+            return;
+
+        isOnLadder = true;
+        isClimbing = true;
+
+        collision.isTrigger = true;
+
+        StopFallAnimation();
+        landingHandled = false;
+
+        rb.gravityScale = 0f;
+        rb.linearVelocity = Vector2.zero;
+
+        rb.position = new Vector2(echelle.CenterX, rb.position.y);
+
+        anim.SetBool("Climb", true);
+    }
+    private void OnTriggerExit2D(Collider2D other)
+    {
+        if (other.CompareTag("Ladder"))
+        {
+            if (isOnLadder)
+                StopClimbingLadder();
+
+            echelle = null;
+            canClimb = false;
+        }
+
+        if (!other.CompareTag("Climb"))
+            return;
+
+        canClimb = false;
+        grillage = null;
     }
 
     // =========================================================
@@ -1511,17 +1633,6 @@ public class SC_player : MonoBehaviour
         isClimbing = true;
         landingHandled = false;
 
-        if (grillage.isLadder)
-        {
-            float ladderX;
-
-            if (grillage.box != null)
-                ladderX = grillage.box.bounds.center.x;
-            else
-                ladderX = (grillage.minX + grillage.maxX) / 2f;
-
-            rb.position = new Vector2(ladderX, rb.position.y);
-        }
 
         rb.gravityScale = 0f;
         rb.linearVelocity = Vector2.zero;
@@ -1543,9 +1654,6 @@ public class SC_player : MonoBehaviour
 
     private void StopClimbing()
     {
-        if (!isClimbing)
-            return;
-
         collision.isTrigger = false;
 
         Invoke(nameof(delay_climb), 0.5f);
@@ -1568,9 +1676,6 @@ public class SC_player : MonoBehaviour
 
     private void StopClimbingJump()
     {
-        if (!isClimbing)
-            return;
-
         CancelInvoke(nameof(delay_climb));
 
         climb_delay = true;

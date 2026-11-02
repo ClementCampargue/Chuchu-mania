@@ -29,7 +29,7 @@ public class SC_guard_movement : MonoBehaviour
     // ============================================================
 
     [Header("Références")]
-    [SerializeField] private GameObject flashlight;
+    [SerializeField] private Animator flashlight;
     [SerializeField] private Animator animator;
 
     // ============================================================
@@ -1838,7 +1838,8 @@ public class SC_guard_movement : MonoBehaviour
             return;
         }
 
-        flashlight.SetActive(
+        flashlight.SetBool("on",
+            
             enabled
         );
     }

@@ -13576,7 +13576,7 @@ PrefabInstance:
     - target: {fileID: 4259070463357950628, guid: 395dec93595553041b55de1f646ad561, type: 3}
       propertyPath: sprite
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 1421446126}
     - target: {fileID: 4979359182892653856, guid: 395dec93595553041b55de1f646ad561, type: 3}
       propertyPath: m_Sprite
       value: 
@@ -13591,12 +13591,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8921107259852292238, guid: 395dec93595553041b55de1f646ad561, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 8921107259852292238, guid: 395dec93595553041b55de1f646ad561, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 0}
   m_SourcePrefab: {fileID: 100100000, guid: 395dec93595553041b55de1f646ad561, type: 3}
 --- !u!212 &1066152779 stripped
 SpriteRenderer:
@@ -14474,6 +14477,11 @@ PrefabInstance:
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 5711959724483633440, guid: ba9c838bd4da52540ac468259ab07190, type: 3}
   m_PrefabInstance: {fileID: 1343571787}
+  m_PrefabAsset: {fileID: 0}
+--- !u!212 &1421446126 stripped
+SpriteRenderer:
+  m_CorrespondingSourceObject: {fileID: 2245294661617682495, guid: 395dec93595553041b55de1f646ad561, type: 3}
+  m_PrefabInstance: {fileID: 1008963669}
   m_PrefabAsset: {fileID: 0}
 --- !u!1 &1434744206
 GameObject:

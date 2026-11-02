@@ -180,7 +180,8 @@ public class SC_scursorManager : MonoBehaviour
 
         bool playerActive =
             SC_player.instance != null &&
-            SC_player.instance.enabled &&
+            SC_player.instance.enabled&&
+            sc_health_system.instance.current_health> 0 &&
             SC_player.instance.gameObject.activeInHierarchy;
 
         if (usingController || playerActive)
