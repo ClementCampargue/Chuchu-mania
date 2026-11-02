@@ -536,7 +536,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &969793890521566022
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1080,6 +1080,7 @@ MonoBehaviour:
   next_scene: 
   music: {fileID: 8300000, guid: aa969eeb7f296354b9932bada0039bd7, type: 3}
   overlay_on: 1
+  hub: 0
   level: 1
   spawn: {fileID: 1409162263840171399}
   limits: {x: -5.95, y: 7.5}
