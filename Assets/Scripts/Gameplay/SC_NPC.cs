@@ -201,9 +201,7 @@ public class SC_NPC : MonoBehaviour
 
     public void StartTalking()
     {
-      
-        if (dialogueActive)
-            return;
+ 
 
         if (player == null)
             player = SC_player.instance;
@@ -225,11 +223,6 @@ public class SC_NPC : MonoBehaviour
         if (dialogue == null)
             dialogue = DialogueManager.instance;
 
-        if (dialogue == null)
-        {
-            Debug.LogError("Aucun DialogueManager trouvé !", this);
-            return;
-        }
         FlipTowardsPlayer();
  
         // Configure le dialogue avant de démarrer le typewriter.

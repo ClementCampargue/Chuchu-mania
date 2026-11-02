@@ -41,6 +41,7 @@ public class DialogueManager : MonoBehaviour
     public static DialogueManager instance;
 
     public bool cutscene;
+    public bool talking;
     private bool blockingInput;
 
     private void Awake()
@@ -128,7 +129,7 @@ public class DialogueManager : MonoBehaviour
     public void StartDialogue()
     {
         choicePanel.SetActive(false);
-
+        talking = true;
         if (anim != null)
         {
             anim.enabled = true;
@@ -362,6 +363,7 @@ public class DialogueManager : MonoBehaviour
 
         choicePanel.SetActive(false);
 
+        talking = false;
 
         if (npc != null)
         {

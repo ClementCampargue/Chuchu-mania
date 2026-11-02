@@ -5,6 +5,7 @@ public class SC_tuto_wall : MonoBehaviour
 {
     public Animator anim;
     public SC_Tuto_master tuto;
+    public DialogueManager manager;
     bool cancollide;
 
     public int index;
@@ -33,8 +34,11 @@ public class SC_tuto_wall : MonoBehaviour
                 {
                     return;
                 }
-                timer = 0;
-                tuto.npc_wall_stupido.StartTalking();
+                timer = 0; 
+                if (!manager.talking)
+                {
+                    tuto.npc_wall_stupido.StartTalking();
+                }
 
                 once = true;
             }
@@ -54,6 +58,7 @@ public class SC_tuto_wall : MonoBehaviour
             }
             else
             {
+                
                 tuto.npc_wall2.StartTalking();
                 Destroy(this);
             }
