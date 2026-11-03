@@ -30,6 +30,7 @@ public class SC_balloon : MonoBehaviour
     public SC_damage_player damage;
     public Animator anim;
     public SC_enemy_damage enemy;
+    public Collider2D collider;
     private void Start()
     {
         // Choisit un skin aléatoire
@@ -120,6 +121,7 @@ public class SC_balloon : MonoBehaviour
         {
             Destroy(damage);
         }
+        Destroy(collider);
         anim.enabled = true;
         this.enabled = false;
     }
