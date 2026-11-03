@@ -1,9 +1,9 @@
-
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.InputSystem;
 
+[RequireComponent(typeof(Collider2D))]
 public class SC_slider_ : MonoBehaviour
 {
     [Header("Events")]
@@ -41,38 +41,52 @@ public class SC_slider_ : MonoBehaviour
     [Header("Camera")]
     [SerializeField] private Camera cam;
 
+    [Header("References")]
+    public SC_Button button;
+
+    [Header("Settings")]
     public bool can_move;
 
     public float Value => value;
 
-    public SC_Button button;
-
+    private Collider2D sliderCollider;
     private int lastPlayedStep = -1;
 
     private bool mouseIsDragging;
     private int mouseStartStep = -1;
 
-    // --------------------------------------------------
-    // INITIALISATION
-    // --------------------------------------------------
+    private void Awake()
+    {
+        sliderCollider = GetComponent<Collider2D>();
+    }
 
     private void OnEnable()
     {
         if (moveAction != null && moveAction.action != null)
             moveAction.action.Enable();
 
+        if (resetAction != null && resetAction.action != null)
+            resetAction.action.Enable();
+
         if (cam == null)
             cam = Camera.main;
 
         UpdateCursor();
-
         lastPlayedStep = GetCurrentStep(value);
     }
 
-    // --------------------------------------------------
-    // ACTIVATION
-    // --------------------------------------------------
+    private void OnDisable()
+    {
+        if (moveAction != null && moveAction.action != null)
+            moveAction.action.Disable();
 
+        if (resetAction != null && resetAction.action != null)
+            resetAction.action.Disable();
+
+        StopMouseDrag();
+    }
+
+    // Compatibilité avec les appels déjà présents dans le projet.
     public void _eneable()
     {
         can_move = false;
@@ -83,24 +97,108 @@ public class SC_slider_ : MonoBehaviour
         can_move = true;
     }
 
+    private void Update()
+    {
+        HandleMouseInput();
+        HandleControllerInput();
+    }
+
     // --------------------------------------------------
-    // SOURIS
+    // SOURIS : même principe que SC_Button
     // --------------------------------------------------
+
+    private bool TryGetCursorPosition(out Vector2 screenPosition, out Vector3 worldPosition)
+    {
+        screenPosition = Vector2.zero;
+        worldPosition = Vector3.zero;
+
+        if (SC_scursorManager.instance == null ||
+            sliderCollider == null ||
+            cam == null)
+            return false;
+
+        Vector3 cursorPosition = SC_scursorManager.instance.transform.position;
+        screenPosition = new Vector2(cursorPosition.x, cursorPosition.y);
+
+        if (!cam.pixelRect.Contains(screenPosition))
+            return false;
+
+        float depth = cam.WorldToScreenPoint(sliderCollider.bounds.center).z;
+
+        worldPosition = cam.ScreenToWorldPoint(
+            new Vector3(screenPosition.x, screenPosition.y, depth)
+        );
+
+        return true;
+    }
+
+    private void HandleMouseInput()
+    {
+        Mouse mouse = Mouse.current;
+
+        if (mouse == null)
+        {
+            StopMouseDrag();
+            return;
+        }
+
+        bool usingController =
+            SC_controller_manager.instance != null &&
+            SC_controller_manager.instance.using_controller;
+
+        if (usingController)
+        {
+            StopMouseDrag();
+            return;
+        }
+
+        if (cam == null)
+            cam = Camera.main;
+
+        if (cam == null || sliderCollider == null ||
+            !sliderCollider.enabled || !isActiveAndEnabled)
+        {
+            StopMouseDrag();
+            return;
+        }
+
+        bool validPosition = TryGetCursorPosition(
+            out Vector2 screenPosition,
+            out Vector3 worldPosition
+        );
+
+        bool pointerInside =
+            validPosition && sliderCollider.OverlapPoint(worldPosition);
+
+        if (mouse.leftButton.wasPressedThisFrame && pointerInside)
+        {
+            OnMousePress();
+            SetValueFromMouse(screenPosition, cam);
+        }
+
+        if (mouseIsDragging && mouse.leftButton.isPressed && validPosition)
+        {
+            SetValueFromMouse(screenPosition, cam);
+        }
+
+        if (mouse.leftButton.wasReleasedThisFrame)
+        {
+            OnMouseRelease();
+        }
+    }
 
     public void OnMousePress()
     {
+        if (mouseIsDragging)
+            return;
+
         mouseIsDragging = true;
         mouseStartStep = GetCurrentStep(value);
     }
 
-    public void SetValueFromMouse(
-        Vector3 mousePosition,
-        Camera cameraToUse
-    )
+    public void SetValueFromMouse(Vector3 mousePosition, Camera cameraToUse)
     {
-        Camera currentCam = cameraToUse != null
-            ? cameraToUse
-            : cam;
+        Camera currentCam = cameraToUse != null ? cameraToUse : cam;
 
         if (cursor == null ||
             pointMin == null ||
@@ -108,16 +206,10 @@ public class SC_slider_ : MonoBehaviour
             currentCam == null)
             return;
 
-        Vector3 minScreen = currentCam.WorldToScreenPoint(
-            pointMin.position
-        );
-
-        Vector3 maxScreen = currentCam.WorldToScreenPoint(
-            pointMax.position
-        );
+        Vector3 minScreen = currentCam.WorldToScreenPoint(pointMin.position);
+        Vector3 maxScreen = currentCam.WorldToScreenPoint(pointMax.position);
 
         Vector2 axis = (Vector2)maxScreen - (Vector2)minScreen;
-
         float lengthSquared = axis.sqrMagnitude;
 
         if (lengthSquared < 0.0001f)
@@ -128,13 +220,7 @@ public class SC_slider_ : MonoBehaviour
             axis
         ) / lengthSquared;
 
-        newValue = Mathf.Clamp01(newValue);
-
-        if (!mouseIsDragging)
-            OnMousePress();
-
-        value = newValue;
-
+        value = Mathf.Clamp01(newValue);
         UpdateCursor();
     }
 
@@ -146,36 +232,40 @@ public class SC_slider_ : MonoBehaviour
         int finalStep = GetCurrentStep(value);
 
         if (finalStep != mouseStartStep)
-        {
             lastPlayedStep = finalStep;
-        }
 
         mouseIsDragging = false;
         mouseStartStep = -1;
+    }
+
+    private void StopMouseDrag()
+    {
+        if (mouseIsDragging)
+            OnMouseRelease();
     }
 
     // --------------------------------------------------
     // MANETTE / CLAVIER
     // --------------------------------------------------
 
-    private void Update()
+    private void HandleControllerInput()
     {
-
-        if (resetAction.action.WasPressedThisFrame() && can_move)
-        {
-            value = 1;
-            UpdateCursor();
-            PlayRandom();
-        }
-        if (moveAction == null ||
-            moveAction.action == null)
-            return;
-
         if (!can_move)
             return;
 
-        if (button == null ||
-            (!button.isSelected && !button.isHovered))
+        if (resetAction != null &&
+            resetAction.action != null &&
+            resetAction.action.WasPressedThisFrame())
+        {
+            value = 1f;
+            UpdateCursor();
+            PlayRandom();
+        }
+
+        if (moveAction == null || moveAction.action == null)
+            return;
+
+        if (button == null || (!button.isSelected && !button.isHovered))
             return;
 
         float input = moveAction.action.ReadValue<Vector2>().x;
@@ -192,13 +282,10 @@ public class SC_slider_ : MonoBehaviour
         int oldStep = GetCurrentStep(oldValue);
         int newStep = GetCurrentStep(value);
 
-        if (newStep != oldStep)
+        if (newStep != oldStep && newStep != lastPlayedStep)
         {
-            if (newStep != lastPlayedStep)
-            {
-                lastPlayedStep = newStep;
-                PlayRandom();
-            }
+            lastPlayedStep = newStep;
+            PlayRandom();
         }
 
         UpdateCursor();
@@ -218,17 +305,12 @@ public class SC_slider_ : MonoBehaviour
             if (audios == null || audios.Count == 0)
                 return;
 
-            List<AudioClip> validAudios = audios.FindAll(
-                clip => clip != null
-            );
+            List<AudioClip> validAudios = audios.FindAll(clip => clip != null);
 
             if (validAudios.Count == 0)
                 return;
 
-            int randomIndex = Random.Range(
-                0,
-                validAudios.Count
-            );
+            int randomIndex = Random.Range(0, validAudios.Count);
 
             audio.Stop();
             audio.clip = validAudios[randomIndex];
@@ -246,27 +328,22 @@ public class SC_slider_ : MonoBehaviour
     }
 
     // --------------------------------------------------
-    // SNAPS
+    // SEGMENTATION
     // --------------------------------------------------
 
     private int GetCurrentStep(float val)
     {
         int steps = Mathf.Max(2, numberOfSteps);
-
-        return Mathf.RoundToInt(
-            Mathf.Clamp01(val) * (steps - 1)
-        );
+        return Mathf.RoundToInt(Mathf.Clamp01(val) * (steps - 1));
     }
 
     // --------------------------------------------------
-    // CURSEUR
+    // CURSEUR VISUEL
     // --------------------------------------------------
 
     private void UpdateCursor()
     {
-        if (cursor == null ||
-            pointMin == null ||
-            pointMax == null)
+        if (cursor == null || pointMin == null || pointMax == null)
             return;
 
         float displayValue = value;
@@ -274,10 +351,7 @@ public class SC_slider_ : MonoBehaviour
         if (segmented)
         {
             int steps = Mathf.Max(2, numberOfSteps);
-
-            displayValue = Mathf.Round(
-                value * (steps - 1)
-            ) / (steps - 1);
+            displayValue = Mathf.Round(value * (steps - 1)) / (steps - 1);
         }
 
         cursor.transform.position = Vector3.Lerp(
@@ -296,7 +370,6 @@ public class SC_slider_ : MonoBehaviour
     public void SetValue(float newValue)
     {
         float oldValue = value;
-
         value = Mathf.Clamp01(newValue);
 
         if (segmented)
@@ -304,8 +377,7 @@ public class SC_slider_ : MonoBehaviour
             int oldStep = GetCurrentStep(oldValue);
             int newStep = GetCurrentStep(value);
 
-            if (oldStep != newStep &&
-                newStep != lastPlayedStep)
+            if (oldStep != newStep && newStep != lastPlayedStep)
             {
                 lastPlayedStep = newStep;
                 PlayRandom();
