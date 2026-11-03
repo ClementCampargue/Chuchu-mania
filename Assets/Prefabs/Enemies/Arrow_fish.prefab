@@ -195,7 +195,7 @@ EdgeCollider2D:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1694692489752159291}
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 3
   m_Density: 1
   m_Material: {fileID: 0}
@@ -6003,6 +6003,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   startPoint: {fileID: 0}
   endPoint: {fileID: 0}
+  edgeCollider: {fileID: 339560776553442332}
   aimBeforeJump: 1
   distanceFromPoint: 3
   moveSpeed: 5

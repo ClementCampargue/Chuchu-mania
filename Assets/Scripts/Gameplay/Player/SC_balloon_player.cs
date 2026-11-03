@@ -179,7 +179,6 @@ public class SC_balloon_player : MonoBehaviour
 
         // Désactive les mouvements normaux
         player.enabled = false;
-        player.canMove = false;
 
         player.isFrozen = false;
         player.isStunned = false;
@@ -468,9 +467,6 @@ public class SC_balloon_player : MonoBehaviour
         // Remet la physique normale
         rb.gravityScale = player.base_gravity;
         rb.linearVelocity = Vector2.zero;
-
-        // Réactive les mouvements normaux
-        player.canMove = true;
 
         // Désactive le ballon
         if (balloonVisual != null)

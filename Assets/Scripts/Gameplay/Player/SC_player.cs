@@ -1790,9 +1790,10 @@ if (vertical > 0f && nextY >= echelle.TopY)
 
     public void Revive()
     {
+        GetComponent<SC_balloon_player>().Exit();
         isKnockbackInvincible = false;
         knockbackInvincibilityCoroutine = null;
-
+        collider.isTrigger = false;
         Time.timeScale = 1f;
 
         normal.SetActive(true);

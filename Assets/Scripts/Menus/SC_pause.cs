@@ -176,9 +176,6 @@ public class SC_pause : MonoBehaviour
             if (!SC_player.instance.canMove)
                 return;
 
-            if (!SC_player.instance.enabled)
-                return;
-
             StartInputCooldown();
             UpdateObjectState();
             OpenPause();

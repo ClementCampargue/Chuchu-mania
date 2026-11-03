@@ -7,6 +7,8 @@ public class SC_arrow_fish : MonoBehaviour
     public Transform startPoint;
     public Transform endPoint;
 
+    public EdgeCollider2D edgeCollider;
+
     [Header("Joueur")]
     public bool aimBeforeJump = true;
 
@@ -587,15 +589,26 @@ public class SC_arrow_fish : MonoBehaviour
 
     private void EnableTrail()
     {
+        if (trail_ != null)
+            trail_.Clear();
+        trail_.enabled = false;
+
         if (trail != null)
-        {
             trail.SetActive(true);
-        }
+        trail_.enabled = true;
+        Invoke("EnableTrail2",0.2f);
+    }
+
+    public void EnableTrail2()
+    {
+        edgeCollider.enabled = true;
+
     }
 
 
     private void DisableTrail()
     {
+        edgeCollider.enabled = false;
         if (trail_ != null)
         {
             trail_.Clear();

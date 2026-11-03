@@ -57,7 +57,7 @@ EditorBuildSettings:
     path: Assets/Scenes/Levels/Beach.unity
     guid: db35c0ac1a9635043857db9523f4b24a
   - enabled: 1
-    path: Assets/Scenes/Levels/MOON.unity
+    path: Assets/Scenes/Levels/Moon.unity
     guid: 1dfcbdc2864702c428ff2031eb0f9bb2
   - enabled: 1
     path: Assets/Scenes/Levels/HIVE.unity
