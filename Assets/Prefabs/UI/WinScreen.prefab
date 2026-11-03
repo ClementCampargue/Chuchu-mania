@@ -287,7 +287,7 @@ MonoBehaviour:
   - {fileID: 21300000, guid: d537bfdb31e256b49bda560fe9809126, type: 3}
   - {fileID: 21300000, guid: 20ff3c27465c697438b8d05346370faf, type: 3}
   - {fileID: 21300000, guid: 648f548a391fb8f4794dcb64d4f373e9, type: 3}
-  rank_scores: 00000000d0070000ac0d00008813000064190000
+  rank_scores: 00000000c4090000a00f00007c15000064190000
   hearts:
   - {fileID: 5509708825738288113}
   - {fileID: 8750093641094353277}
@@ -1820,11 +1820,11 @@ MonoBehaviour:
   isHovered: 0
   isPressed: 0
   indicator: {fileID: 0}
-  accept_input: 1
   juice: {fileID: 0}
   juice2: {fileID: 0}
-  clickable: 1
   navigation: {fileID: 0}
+  accept_input: 1
+  clickable: 1
 --- !u!1 &3823650806254352815
 GameObject:
   m_ObjectHideFlags: 0
