@@ -767,44 +767,35 @@ public class SC_sticker_UI : MonoBehaviour,
 
     private void StopDrag()
     {
-        cursor.SetNormalCursor();
+        if (cursor != null)
+            cursor.SetNormalCursor();
 
-        SaveDefaultState();
         dragging = false;
-        // L'Alpha Cut sera déclenché au démarrage réel
-        // de l'animation du shader dans la coroutine 2.
 
         // -----------------------------------------------------
-        // RESET VISUAL BALATRO AVANT SAVE
+        // RESET VISUAL BALATRO
         // -----------------------------------------------------
 
         currentTiltX = 0f;
         currentTiltY = 0f;
 
-        rect.localScale =
-            new Vector3(
-                GetScaleSignX() * stickerScale,
-                GetScaleSignY() * stickerScale,
-                1f
-            );
+        rect.localScale = new Vector3(
+            GetScaleSignX() * stickerScale,
+            GetScaleSignY() * stickerScale,
+            1f
+        );
 
-        rect.localRotation =
-            Quaternion.Euler(
-                0f,
-                0f,
-                stickerRotationZ
-            );
-
-        // -----------------------------------------------------
-        // UI
-        // -----------------------------------------------------
+        rect.localRotation = Quaternion.Euler(
+            0f,
+            0f,
+            stickerRotationZ
+        );
 
         if (selected != null)
             selected.SetActive(false);
-        AnimateShaderFloat_2();
 
         // -----------------------------------------------------
-        // DELETE ZONE
+        // CHECK DELETE ZONE
         // -----------------------------------------------------
 
         bool delete = false;
@@ -813,28 +804,55 @@ public class SC_sticker_UI : MonoBehaviour,
             cursor != null &&
             canvas != null)
         {
-            delete =
-                RectTransformUtility.RectangleContainsScreenPoint(
-                    deleteZone,
-                    cursor.transform.position,
-                    canvas.worldCamera
-                );
+            delete = RectTransformUtility.RectangleContainsScreenPoint(
+                deleteZone,
+                cursor.transform.position,
+                canvas.worldCamera
+            );
         }
+
+        // -----------------------------------------------------
+        // DROP ON DELETE ZONE
+        // -----------------------------------------------------
 
         if (delete)
         {
-            DeleteSticker();
+            if (spawnedSticker)
+            {
+                // Nouveau sticker : suppression.
+                DeleteSticker();
+            }
+            else
+            {
+                // Sticker existant : retour à sa position.
+                ResetStickerToDefault();
+
+                if (SC_sticker_menu.instance != null &&
+                    !SC_sticker_menu.instance.editing_controller)
+                {
+                    SC_sticker_menu.instance.quit_edit_mode();
+                }
+
+                if (SC_StickerSaveSystem.instance != null)
+                    SC_StickerSaveSystem.instance.AutoSave();
+            }
+
+            spawnedSticker = false;
+
             return;
         }
 
         // -----------------------------------------------------
-        // RESET DRAG
+        // NORMAL DROP
         // -----------------------------------------------------
 
-        dragVelocity =
-            Vector2.zero;
+        SaveDefaultState();
+
+        dragVelocity = Vector2.zero;
 
         spawnedSticker = false;
+
+        AnimateShaderFloat_2();
 
         if (anim != null)
         {
@@ -842,14 +860,15 @@ public class SC_sticker_UI : MonoBehaviour,
             anim.SetTrigger("drop");
         }
 
-
-
         // -----------------------------------------------------
         // MENU
         // -----------------------------------------------------
 
-        if (SC_sticker_menu.instance != null && !SC_sticker_menu.instance.editing_controller)
+        if (SC_sticker_menu.instance != null &&
+            !SC_sticker_menu.instance.editing_controller)
+        {
             SC_sticker_menu.instance.quit_edit_mode();
+        }
 
         // -----------------------------------------------------
         // SAVE
@@ -859,10 +878,10 @@ public class SC_sticker_UI : MonoBehaviour,
         {
             SC_StickerSaveSystem.instance.AutoSave();
         }
-        cursor.SetNormalCursor();
 
+        if (cursor != null)
+            cursor.SetNormalCursor();
     }
-
     // =========================================================
     // SCALE + ROTATION
     // =========================================================

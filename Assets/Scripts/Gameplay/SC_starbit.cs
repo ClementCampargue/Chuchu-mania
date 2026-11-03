@@ -4,7 +4,7 @@ public class SC_starbit : MonoBehaviour
 {
     [HideInInspector]
     public SC_starbit_spawning spawner;
-
+    public Animator anim;
     public float detectionRadius = 0.5f;
     public LayerMask playerLayer;
     public GameObject ice_cream_UI;
@@ -56,6 +56,10 @@ public class SC_starbit : MonoBehaviour
             canpickup = false;
             get.PlayJuice();
             Invoke("delay_destroy", 0.5f);
+        }
+        else
+        {
+            anim.SetTrigger("cant");
         }
     }
 

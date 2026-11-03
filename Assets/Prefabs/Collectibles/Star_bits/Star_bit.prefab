@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 8850293883598317108}
   - component: {fileID: 6038040437515322048}
   - component: {fileID: 1168317179502656240}
+  - component: {fileID: 5085917020329070551}
   m_Layer: 10
   m_Name: Star_bit
   m_TagString: Untagged
@@ -50,6 +51,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   spawner: {fileID: 0}
+  anim: {fileID: 5085917020329070551}
   detectionRadius: 0.29
   playerLayer:
     serializedVersion: 2
@@ -113,6 +115,28 @@ MonoBehaviour:
   useSmooth: 1
   rotationAxis: {x: 0, y: 0, z: 0}
   rotationSpeed: 0
+--- !u!95 &5085917020329070551
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 793143194083467424}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 4cde3377f622e164dbdc930f924c3f0b, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &3220170749131341252
 GameObject:
   m_ObjectHideFlags: 0
@@ -5063,6 +5087,7 @@ MonoBehaviour:
   rumbleLow: 0.1
   rumbleHigh: 0.18
   rumbleDuration: 0.1
+  cameraTransform: {fileID: 0}
   shakeAmplitude: 0
   shakeFrequency: 0
   shakeScreenDuration: 0
@@ -5129,6 +5154,7 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+  play_onawake: 0
 --- !u!82 &7552994343958804318
 AudioSource:
   m_ObjectHideFlags: 0

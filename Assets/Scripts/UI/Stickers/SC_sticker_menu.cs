@@ -7,7 +7,8 @@ using UnityEngine.InputSystem;
 public class SC_sticker_menu : MonoBehaviour
 {
     public static SC_sticker_menu instance;
-
+    public GameObject popup_delete_all;
+    public GameObject stickers;
     private SC_sticker_UI currentDraggingSticker;
     private Material unlocked;
     private SC_SaveManager saveManager;
@@ -34,6 +35,8 @@ public class SC_sticker_menu : MonoBehaviour
     public InputActionReference quit;
     public InputActionReference edit;
     public InputActionReference editend;
+    public InputActionReference delete_all;
+    public InputActionReference back;
 
     [Header("Materials")]
     public Material not_unlocked;
@@ -54,6 +57,7 @@ public class SC_sticker_menu : MonoBehaviour
         EnableAction(quit);
         EnableAction(edit);
         EnableAction(editend);
+        EnableAction(delete_all);
     }
 
     private void OnEnable()
@@ -104,11 +108,55 @@ public class SC_sticker_menu : MonoBehaviour
         if (currentDraggingSticker == sticker)
             currentDraggingSticker = null;
     }
+    public void DeleteAllStickers()
+    {
+        if (currentDraggingSticker != null)
+        {
+            SC_sticker_UI sticker = currentDraggingSticker;
+            currentDraggingSticker = null;
+            sticker.DeleteIfDragging();
+        }
 
+        SC_StickerSaveSystem saveSystem = SC_StickerSaveSystem.instance;
+
+        if (saveSystem != null)
+        {
+            // À adapter selon la structure de ton système de sauvegarde.
+            saveSystem.DeleteAllStickers();
+        }
+        cancel();
+        editing = true;
+        QuitEditMode();
+    }
+    public void cancel()
+    {
+        editing = true;
+        if (anim != null)
+            anim.SetTrigger("On");
+        stickers.SetActive(true);
+        popup_delete_all.SetActive(false);
+    }
     private void Update()
     {
         EnableAction(move);
+        if (delete_all != null &&
+            delete_all.action.WasReleasedThisFrame() &&
+            editing  && SC_StickerSaveSystem.instance.stickerCount > 0)
+        {
+            if (anim != null)
+                anim.SetTrigger("Off");
+            editing = false;
+            stickers.SetActive(false);
+            popup_delete_all.SetActive(true);
 
+        }
+        if (back != null &&
+            back.action.WasReleasedThisFrame() &&
+            editing && popup_delete_all.activeInHierarchy)
+        {
+            cancel();
+
+        }
         if (number_of_stickers != null &&
             SC_StickerSaveSystem.instance != null)
         {

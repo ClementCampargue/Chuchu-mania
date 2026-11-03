@@ -596,7 +596,7 @@ public class SC_arrow_fish : MonoBehaviour
         if (trail != null)
             trail.SetActive(true);
         trail_.enabled = true;
-        Invoke("EnableTrail2",0.2f);
+        Invoke("EnableTrail2",0.5f);
     }
 
     public void EnableTrail2()

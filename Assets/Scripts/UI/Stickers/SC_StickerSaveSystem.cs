@@ -777,7 +777,26 @@ public class SC_StickerSaveSystem : MonoBehaviour
     // =========================================================
     // CLEAR
     // =========================================================
+    public void DeleteAllStickers()
+    {
+        if (parent != null)
+        {
+            // Supprimer tous les stickers du parent
+            for (int i = parent.childCount - 1; i >= 0; i--)
+            {
+                Destroy(parent.GetChild(i).gameObject);
+            }
+        }
 
+        // Supprimer la sauvegarde
+        PlayerPrefs.DeleteKey(SAVE_KEY);
+        PlayerPrefs.Save();
+
+        // Réinitialiser le compteur
+        stickerCount = 0;
+
+        Debug.Log("Tous les stickers ont été supprimés.");
+    }
     public void Clear()
     {
         PlayerPrefs.DeleteKey(

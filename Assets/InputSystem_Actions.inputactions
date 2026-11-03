@@ -574,6 +574,15 @@
                     "initialStateCheck": false
                 },
                 {
+                    "name": "DeleteAll",
+                    "type": "Button",
+                    "id": "4ea771c9-ca2a-4870-b014-b984acaa664b",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
                     "name": "Edit START",
                     "type": "Button",
                     "id": "62258a2f-b66b-4473-ae89-a9d49d9852a3",
@@ -851,6 +860,39 @@
                 },
                 {
                     "name": "",
+                    "id": "8426debf-e99f-49ed-bc45-d96003a20a1e",
+                    "path": "<Keyboard>/delete",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard&Mouse",
+                    "action": "DeleteAll",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "c59b30ab-95aa-482b-9ade-2b294e7715f5",
+                    "path": "<Gamepad>/start",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Gamepad",
+                    "action": "DeleteAll",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "51c276f5-eb34-4f03-9f27-3006decefffa",
+                    "path": "<XRController>/secondaryButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "XR",
+                    "action": "DeleteAll",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
                     "id": "d513d8bc-4ad3-4407-a466-c9ca4d0d888b",
                     "path": "<Mouse>/middleButton",
                     "interactions": "",
@@ -884,17 +926,6 @@
                 },
                 {
                     "name": "",
-                    "id": "eed8bfe2-b23a-45ad-bdc9-7a9a69f2c162",
-                    "path": "<Keyboard>/e",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Stickers_R_bump",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
                     "id": "aab02c61-e3bc-4d30-be75-22a09584510f",
                     "path": "<Gamepad>/rightShoulder",
                     "interactions": "",
@@ -912,17 +943,6 @@
                     "processors": "",
                     "groups": "",
                     "action": "L_trigger",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "b31822bb-7227-4904-9315-257176bdedc6",
-                    "path": "<Keyboard>/q",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Stickers_L_bump",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
