@@ -1,6 +1,7 @@
-
 using UnityEngine;
+using UnityEngine.InputSystem;
 
+[RequireComponent(typeof(Collider2D))]
 public class SC_arrow_settings : MonoBehaviour
 {
     [Header("References")]
@@ -10,74 +11,107 @@ public class SC_arrow_settings : MonoBehaviour
     [Header("Settings")]
     [SerializeField] private bool next = true;
 
+    private Collider2D collider_;
     private bool mouseInside;
 
-
-    private void OnMouseEnter()
+    private void Awake()
     {
-        if (button == null)
-            return;
-
-        mouseInside = true;
-
-        //    button.enabled = false;
-        //    button.isPressed = false;
-        //    button.isHovered = true;
-
-        if (button.indicator != null)
-            button.indicator.SetActive(true);
-
-        button.PlayAnimation(button.hover);
-    //    button.Hover();
+        collider_ = GetComponent<Collider2D>();
     }
 
-    private void OnMouseExit()
+    private void Update()
     {
-        if (button == null)
+        if (button == null || optionList == null || collider_ == null)
             return;
 
-        mouseInside = false;
-
-        //       button.enabled = true;
-
+        // Pas de détection souris avec une manette
         if (SC_controller_manager.instance != null &&
             SC_controller_manager.instance.using_controller)
+        {
+            mouseInside = false;
+            return;
+        }
+
+        if (SC_scursorManager.instance == null)
             return;
 
-        //    button.OnUnhover();
-        //    button.isHovered = false;
+        if (!collider_.enabled || !button.clickable || !button.accept_input)
+        {
+            mouseInside = false;
+            return;
+        }
 
-        if (button.indicator != null)
-            button.indicator.SetActive(false);
+        // Même détection que SC_Button
+        Vector2 cursorPosition =
+            SC_scursorManager.instance.transform.position;
 
-        if (!button.isSelected)
-            button.PlayAnimation(button.unhover);
-    }
+        Camera cam = Camera.main;
 
-    private void OnMouseDown()
-    {
-        if (button == null || optionList == null)
+        if (cam == null)
             return;
 
-        if (!mouseInside)
-            return;
+        Vector3 colliderScreenPosition =
+            cam.WorldToScreenPoint(collider_.bounds.center);
 
-        if (!button.gameObject.activeInHierarchy)
-            return;
-
-        if (!enabled)
-            return;
-
-        button.Press();
-
-        int direction = next ? 1 : -1;
-
-        if (optionList.juice != null)
-            optionList.juice.PlayJuice();
-
-        optionList.SetIndex(
-            optionList.index + direction
+        Vector3 cursorScreenPosition = new Vector3(
+            cursorPosition.x,
+            cursorPosition.y,
+            colliderScreenPosition.z
         );
+
+        Vector3 cursorWorldPosition =
+            cam.ScreenToWorldPoint(cursorScreenPosition);
+
+        bool inside = collider_.OverlapPoint(cursorWorldPosition);
+
+        // Entrée souris
+        if (inside && !mouseInside)
+        {
+            mouseInside = true;
+
+            button.isHovered = true;
+            button.isSelected = false;
+
+            if (button.indicator != null)
+                button.indicator.SetActive(true);
+
+            button.PlayAnimation(button.hover);
+            button.Hover();
+        }
+
+        // Sortie souris
+        else if (!inside && mouseInside)
+        {
+            mouseInside = false;
+
+            button.isHovered = false;
+
+            if (!button.isSelected)
+            {
+                if (button.indicator != null)
+                    button.indicator.SetActive(false);
+
+                button.OnUnhover();
+                button.PlayAnimation(button.unhover);
+            }
+        }
+
+        // Clic souris
+        if (inside && Mouse.current != null &&
+            Mouse.current.leftButton.wasReleasedThisFrame)
+        {
+            if (!button.gameObject.activeInHierarchy)
+                return;
+
+            button.Press();
+
+            int direction = next ? 1 : -1;
+
+            if (optionList.juice != null)
+                optionList.juice.PlayJuice();
+
+            optionList.SetIndex(optionList.index + direction);
+        }
     }
 
     private void OnDisable()
@@ -87,9 +121,7 @@ public class SC_arrow_settings : MonoBehaviour
         if (button == null)
             return;
 
-        button.enabled = true;
         button.isHovered = false;
-        button.isPressed = false;
 
         if (button.indicator != null)
             button.indicator.SetActive(false);

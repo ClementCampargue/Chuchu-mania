@@ -189,8 +189,8 @@ MonoBehaviour:
   numberOfSteps: 10
   speed: 1
   cam: {fileID: 0}
-  can_move: 0
   button: {fileID: 7805468491656663224}
+  can_move: 0
 --- !u!114 &645652151006371052
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1458,7 +1458,7 @@ BoxCollider2D:
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Size: {x: 7.733115, y: 0.94}
+  m_Size: {x: 7.733115, y: 0.57}
   m_EdgeRadius: 0
 --- !u!114 &2170134826950248751
 MonoBehaviour:

@@ -55,6 +55,9 @@ public class SC_slider_ : MonoBehaviour
     private bool mouseIsDragging;
     private int mouseStartStep = -1;
 
+    // Hover souris
+    private bool mouseInside;
+
     private void Awake()
     {
         sliderCollider = GetComponent<Collider2D>();
@@ -84,9 +87,9 @@ public class SC_slider_ : MonoBehaviour
             resetAction.action.Disable();
 
         StopMouseDrag();
+        ResetHover();
     }
 
-    // Compatibilité avec les appels déjà présents dans le projet.
     public void _eneable()
     {
         can_move = false;
@@ -104,7 +107,7 @@ public class SC_slider_ : MonoBehaviour
     }
 
     // --------------------------------------------------
-    // SOURIS : même principe que SC_Button
+    // SOURIS : HOVER + DRAG
     // --------------------------------------------------
 
     private bool TryGetCursorPosition(out Vector2 screenPosition, out Vector3 worldPosition)
@@ -118,6 +121,7 @@ public class SC_slider_ : MonoBehaviour
             return false;
 
         Vector3 cursorPosition = SC_scursorManager.instance.transform.position;
+
         screenPosition = new Vector2(cursorPosition.x, cursorPosition.y);
 
         if (!cam.pixelRect.Contains(screenPosition))
@@ -139,6 +143,7 @@ public class SC_slider_ : MonoBehaviour
         if (mouse == null)
         {
             StopMouseDrag();
+            ResetHover();
             return;
         }
 
@@ -149,6 +154,7 @@ public class SC_slider_ : MonoBehaviour
         if (usingController)
         {
             StopMouseDrag();
+            ResetHover();
             return;
         }
 
@@ -159,6 +165,7 @@ public class SC_slider_ : MonoBehaviour
             !sliderCollider.enabled || !isActiveAndEnabled)
         {
             StopMouseDrag();
+            ResetHover();
             return;
         }
 
@@ -167,10 +174,53 @@ public class SC_slider_ : MonoBehaviour
             out Vector3 worldPosition
         );
 
-        bool pointerInside =
+        bool inside =
             validPosition && sliderCollider.OverlapPoint(worldPosition);
 
-        if (mouse.leftButton.wasPressedThisFrame && pointerInside)
+        // ----------------------------------------------
+        // HOVER : même logique que SC_arrow_settings
+        // ----------------------------------------------
+
+        if (inside && !mouseInside)
+        {
+            mouseInside = true;
+
+            if (button != null)
+            {
+                button.isHovered = true;
+                button.isSelected = false;
+
+                if (button.indicator != null)
+                    button.indicator.SetActive(true);
+
+                button.PlayAnimation(button.hover);
+                button.Hover();
+            }
+        }
+        else if (!inside && mouseInside)
+        {
+            mouseInside = false;
+
+            if (button != null)
+            {
+                button.isHovered = false;
+
+                if (!button.isSelected)
+                {
+                    if (button.indicator != null)
+                        button.indicator.SetActive(false);
+
+                    button.OnUnhover();
+                    button.PlayAnimation(button.unhover);
+                }
+            }
+        }
+
+        // ----------------------------------------------
+        // DRAG DU SLIDER
+        // ----------------------------------------------
+
+        if (mouse.leftButton.wasPressedThisFrame && inside)
         {
             OnMousePress();
             SetValueFromMouse(screenPosition, cam);
@@ -187,10 +237,33 @@ public class SC_slider_ : MonoBehaviour
         }
     }
 
+    private void ResetHover()
+    {
+        if (!mouseInside)
+            return;
+
+        mouseInside = false;
+
+        if (button == null)
+            return;
+
+        button.isHovered = false;
+
+        if (!button.isSelected)
+        {
+            if (button.indicator != null)
+                button.indicator.SetActive(false);
+
+            button.OnUnhover();
+            button.PlayAnimation(button.unhover);
+        }
+    }
+
     public void OnMousePress()
     {
         if (mouseIsDragging)
             return;
+        SC_scursorManager.instance.SetGrabCursor();
 
         mouseIsDragging = true;
         mouseStartStep = GetCurrentStep(value);
@@ -228,12 +301,12 @@ public class SC_slider_ : MonoBehaviour
     {
         if (!mouseIsDragging)
             return;
-
+        SC_scursorManager.instance.SetNormalCursor();
         int finalStep = GetCurrentStep(value);
 
         if (finalStep != mouseStartStep)
             lastPlayedStep = finalStep;
-
+        PlayRandom();
         mouseIsDragging = false;
         mouseStartStep = -1;
     }
@@ -322,8 +395,9 @@ public class SC_slider_ : MonoBehaviour
             if (juice == null)
                 return;
 
+            audio.clip = juice;
             audio.enabled = true;
-            audio.PlayOneShot(juice);
+            audio.Play();
         }
     }
 
