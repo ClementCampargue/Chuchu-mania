@@ -24,7 +24,7 @@ MonoBehaviour:
       m_Items: []
   - m_Id: 12027948711936
     m_Localized: "N\u2019aies crainte,<p=2> jeune stellanaute en herbe!<p=5> Cette
-      simulation va te r\xE9apprendre les bases pour ton odyss\xE9e!"
+      simulation va te r\xE9apprendre les bases!"
     m_Metadata:
       m_Items: []
   - m_Id: 12027948711937
@@ -72,8 +72,8 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 12027948711946
-    m_Localized: Laisse appuyer sur E pour valider les boules sur ton cornet et les
-      manger d'un coup!
+    m_Localized: Laisse appuyer sur E (clavier) ou X (manette) pour valider les boules
+      sur ton cornet et les manger d'un coup!
     m_Metadata:
       m_Items: []
   - m_Id: 12027948711947
@@ -86,7 +86,7 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 12027948711949
-    m_Localized: "Manger 10 boules de glace d\u2019un coup t\u2019octroient un coeur
+    m_Localized: "Manger 10 boules de glace d\u2019un coup t\u2019octroie un coeur
       suppl\xE9mentaire!<p=5> Ne l\u2019oublies pas!"
     m_Metadata:
       m_Items: []
@@ -139,8 +139,8 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 12027952906243
-    m_Localized: "C'est presque \xE7a,<p=2> mais tu dois appuyer sur E plus longuement
-      pour s\xE9lectionner toutes les boules!"
+    m_Localized: "C'est presque \xE7a,<p=2> mais tu dois appuyer sur la touche plus
+      longuement pour s\xE9lectionner toutes les boules!"
     m_Metadata:
       m_Items: []
   references:

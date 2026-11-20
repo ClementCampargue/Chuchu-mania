@@ -23,7 +23,7 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 140592607233
-    m_Localized: Faites lui honneur en proposant un gameplay digne de cette ovation!
+    m_Localized: Ce gameplay est absolu
     m_Metadata:
       m_Items: []
   - m_Id: 140592607234
@@ -96,8 +96,7 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 140592607251
-    m_Localized: "La fra\xEEcheur de la menthe combin\xE9e \xE0 la gourmandise du
-      chocolat"
+    m_Localized: Le combo tout frais
     m_Metadata:
       m_Items: []
   - m_Id: 140592607252
@@ -153,7 +152,7 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 140592607265
-    m_Localized: "Votre gameplay ne le laisse pas indiff\xE9rent"
+    m_Localized: "Ca ne le laisse pas indiff\xE9rent"
     m_Metadata:
       m_Items: []
   - m_Id: 140592607266
@@ -161,7 +160,7 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 140592607267
-    m_Localized: "Pourquoi m\xEAme dans l'espace, elle tire toujours autant la tronche?"
+    m_Localized: "Toujours \xE0 faire la tronche"
     m_Metadata:
       m_Items: []
   - m_Id: 140592607268
@@ -169,7 +168,7 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 140592607269
-    m_Localized: "Si vous voyez cette expression sur son visgae, vous \xEAtes d\xE9j\xE0
+    m_Localized: "Si vous voyez cette expression sur son visage, vous \xEAtes d\xE9j\xE0
       mort"
     m_Metadata:
       m_Items: []
@@ -194,8 +193,7 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 140592607275
-    m_Localized: "Croyez en vos r\xEAves car m\xEAme un petit piaf peut invoquer
-      l'esprit d'un super h\xE9ros"
+    m_Localized: "Croyez en vos r\xEAves"
     m_Metadata:
       m_Items: []
   - m_Id: 140592607276

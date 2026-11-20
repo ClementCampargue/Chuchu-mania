@@ -478,7 +478,7 @@ MonoBehaviour:
   sleepDuration: 3
   flashlight: {fileID: 2380945124946967503}
   animator: {fileID: 2519460489625166877}
-  moveSpeed: 2
+  moveSpeed: 1.8
   movementMode: 0
   currentNode: {fileID: 0}
   baseNode: {fileID: 0}
@@ -5568,7 +5568,7 @@ BoxCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: -0.029932499, y: -0.17333496}
+  m_Offset: {x: -0.051486492, y: -0.114831924}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0, y: 0}
@@ -5578,7 +5578,7 @@ BoxCollider2D:
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Size: {x: 0.44924247, y: 0.6533301}
+  m_Size: {x: 0.344553, y: 0.536324}
   m_EdgeRadius: 0
 --- !u!114 &2680671972605215812
 MonoBehaviour:

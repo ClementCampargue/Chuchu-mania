@@ -47,7 +47,7 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 13540277396193289
-    m_Localized: <sh>YESSS!</sh><p=5> This is the best work of the galaxy!
+    m_Localized: <sh>YESSS!</sh><p=5> This is the best work of art in the galaxy!
     m_Metadata:
       m_Items: []
   - m_Id: 13540277396193290
@@ -55,16 +55,16 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 13540277396193291
-    m_Localized: Well...<p=5> Magenta has <w>very specific</w> tastes in shows,
+    m_Localized: Well...<p=5> Magenta has <w>very specific</w> tastes in shows.
     m_Metadata:
       m_Items: []
   - m_Id: 13540277396193292
     m_Localized: Oh really?<p=5> I want to know everything! <p=5>I'd be glad to watch
-      some show with her!
+      a show with her!
     m_Metadata:
       m_Items: []
   - m_Id: 13540277396193293
-    m_Localized: What would you suggest?
+    m_Localized: What do you suggest?
     m_Metadata:
       m_Items: []
   - m_Id: 13540277396193295
@@ -94,11 +94,12 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 13540277396193301
-    m_Localized: All of it
+    m_Localized: All of this is skillfully conveyed through delicate and poetic illustrations,<p=2>
+      which explore complex themes.
     m_Metadata:
       m_Items: []
   - m_Id: 13540277396193302
-    m_Localized: It's a yuri classic,<p=2> you
+    m_Localized: It's a yuri classic,<p=2> you bunch of ignoramuses!
     m_Metadata:
       m_Items: []
   - m_Id: 13540277396193303
@@ -126,7 +127,7 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 13540277396193317
-    m_Localized: What about
+    m_Localized: How about a restaurant?
     m_Metadata:
       m_Items: []
   - m_Id: 13540277396193318
@@ -134,7 +135,7 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 13540277396193319
-    m_Localized: I'm just
+    m_Localized: I'm just really hungry...
     m_Metadata:
       m_Items: []
   - m_Id: 13540277396193323
@@ -168,7 +169,7 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 13540277396193340
-    m_Localized: "Oh don't be so hard on the lass, <p=2> ch\xE9rie."
+    m_Localized: "Oh don't be so hard on the lass, <p=2>ch\xE9rie."
     m_Metadata:
       m_Items: []
   - m_Id: 13540277396193341
@@ -177,7 +178,7 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 13540277404581888
-    m_Localized: "Y<p=1>-yes Merry dear\u2026"
+    m_Localized: Y<p=1>-yes Merry dear...
     m_Metadata:
       m_Items: []
   - m_Id: 13540277404581890
@@ -205,7 +206,7 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 13540277404581901
-    m_Localized: "Grmbl\u2026"
+    m_Localized: Grmbl...
     m_Metadata:
       m_Items: []
   - m_Id: 13540277404581907
@@ -225,7 +226,7 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 13540277404581912
-    m_Localized: "Oh uh...<p=5> hi Chuchu\u2026"
+    m_Localized: Oh uh...<p=5> hi Chuchu...
     m_Metadata:
       m_Items: []
   - m_Id: 13540277404581913
@@ -233,7 +234,157 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 13540277404581914
-    m_Localized: You looked very
+    m_Localized: You looked really focused!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 13540277396193308
+    m_Localized: It's a crime series where people get turned into stone!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 13540277396193309
+    m_Localized: "The heroine is a harpy who has to investigate this case, and she
+      meets a vampire and... <p=5>um\u2026"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 13540277396193310
+    m_Localized: So what?...
+    m_Metadata:
+      m_Items: []
+  - m_Id: 13540277396193311
+    m_Localized: We'll talk about this again in a few years...
+    m_Metadata:
+      m_Items: []
+  - m_Id: 13540277396193312
+    m_Localized: Your girlfriend is weird
+    m_Metadata:
+      m_Items: []
+  - m_Id: 13540277396193320
+    m_Localized: That would have surprised me...
+    m_Metadata:
+      m_Items: []
+  - m_Id: 13540277396193322
+    m_Localized: Let's go watch a bad movie!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 13540277396193326
+    m_Localized: A good sleep!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 13540277396193327
+    m_Localized: I have to admit, I'd really like that. <p=5>I need my favorite pillow
+    m_Metadata:
+      m_Items: []
+  - m_Id: 13540277396193329
+    m_Localized: I'll make you a snack!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 13540277396193332
+    m_Localized: "That would be a great night\u2026"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 13540277396193333
+    m_Localized: <w>Snack time</w>
+    m_Metadata:
+      m_Items: []
+  - m_Id: 13540277396193334
+    m_Localized: I don't get it
+    m_Metadata:
+      m_Items: []
+  - m_Id: 13540277396193335
+    m_Localized: Don't change, Chuchu. <p=5>Never change
+    m_Metadata:
+      m_Items: []
+  - m_Id: 13540277404581898
+    m_Localized: There's a hero tournament or something like that, and Cuicui is
+      participating, but I'm not because they say I'm too small!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 13540277404581899
+    m_Localized: I want my own super magic marble that gives me powers, too!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 13540277404581900
+    m_Localized: I'd love to help you, PiouPiou, but my thing is eating and beating
+      up the bad guys...
+    m_Metadata:
+      m_Items: []
+  - m_Id: 13540277404581902
+    m_Localized: You stink!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 13540277404581903
+    m_Localized: Strangely enough, <p=2>being judged by that snotty 5-year-old hurts
+      more than you'd expect...
+    m_Metadata:
+      m_Items: []
+  - m_Id: 13540277404581905
+    m_Localized: She stares into space without moving, <p=2>almost drooling
+    m_Metadata:
+      m_Items: []
+  - m_Id: 13540277404581915
+    m_Localized: It's shadow boxing. <p=5>Well... <p=5>not really. <p=5>I'm practicing
+      my game in my head.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 13540277404581916
+    m_Localized: Oh are you talking about the one where you pick fruit and there's
+      weird music playing?
+    m_Metadata:
+      m_Items: []
+  - m_Id: 13540277404581917
+    m_Localized: Yes! <p=5>It helps me relax to think about it during my break.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 13540277404581918
+    m_Localized: <sh>Yanya!</sh> <p=5>Get your pale little butt moving instead of
+      daydreaming! <p=5>We're opening soon!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 13540277404581919
+    m_Localized: Speaking of breaks... <p=5>Mine is already over...
+    m_Metadata:
+      m_Items: []
+  - m_Id: 13540277404581921
+    m_Localized: Oh?<p=5> Haven't we met before?
+    m_Metadata:
+      m_Items: []
+  - m_Id: 13540277404581922
+    m_Localized: YOU!!! It's all your fault!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 13540277404581923
+    m_Localized: What?
+    m_Metadata:
+      m_Items: []
+  - m_Id: 13540277404581924
+    m_Localized: I was the star of that game,<p=2> and they tossed me aside like
+      an old sock as soon as you showed up!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 13540277404581925
+    m_Localized: I'm really sorry about what happened to you...<p=5> How about some
+      ice cream?<p=5> It always makes you feel better!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 13540277404581926
+    m_Localized: ...
+    m_Metadata:
+      m_Items: []
+  - m_Id: 13540277404581927
+    m_Localized: Heh...<p=5> I'm just a placeholder, you know.<p=5> I was meant to
+      pass the torch on to you.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 13540277404581928
+    m_Localized: You'd better impress them.<p=5> Do it for me.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 13540277404581929
+    m_Localized: I'll make you proud!<p=5> So hum,<p=2> what about the ice cream?
+    m_Metadata:
+      m_Items: []
+  - m_Id: 13540277404581930
+    m_Localized: You're a lost cause
     m_Metadata:
       m_Items: []
   references:

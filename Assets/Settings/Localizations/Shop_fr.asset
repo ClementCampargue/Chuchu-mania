@@ -37,11 +37,11 @@ MonoBehaviour:
       m_Items: []
   - m_Id: 19991904256
     m_Localized: "L'adr\xE9naline du hasard! Vas-tu tomber sur LE sticker ultime?
-      Ou bien le m\xEAme en 10 exemplaire..."
+      Ou bien le m\xEAme en 10 exemplaires..."
     m_Metadata:
       m_Items: []
   - m_Id: 19991904257
-    m_Localized: "D\xF4 no Gelato n'est pas tenu responsable de votre malchance."
+    m_Localized: "D\xF4 no Gelato n'est pas tenu responsable de votre malchance"
     m_Metadata:
       m_Items: []
   - m_Id: 19991904258
@@ -49,8 +49,8 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 19991904259
-    m_Localized: Si la chance ne te sourit pas, c'est l'alternative parfaite pour
-      etoffer ta collection!
+    m_Localized: "Si la chance ne te sourit pas, c'est l'alternative parfaite pour
+      \xE9toffer ta collection!"
     m_Metadata:
       m_Items: []
   - m_Id: 19991904260
@@ -102,7 +102,7 @@ MonoBehaviour:
       m_Items: []
   - m_Id: 19991904271
     m_Localized: "Chuchu, Merry est en train de me fixer depuis dix minutes je suis
-      pris en hottage \xE0 l'aide cette femme est une menace"
+      pris en otage \xE0 l'aide cette femme est une menace"
     m_Metadata:
       m_Items: []
   - m_Id: 19991904272
@@ -111,7 +111,7 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 19991904273
-    m_Localized: "Ce caf\xE9 est tout pour moi! C'est une promesse que j'ai tenu
+    m_Localized: "Ce caf\xE9 est tout pour moi! C'est une promesse que j'ai tenue
       pour elle... J'esp\xE8re qu'elle va bien..."
     m_Metadata:
       m_Items: []

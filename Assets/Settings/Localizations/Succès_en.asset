@@ -102,6 +102,26 @@ MonoBehaviour:
     m_Localized: Gold medal
     m_Metadata:
       m_Items: []
+  - m_Id: 6128600272662551
+    m_Localized: Complete level FISH without letting them get any Star Bits
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6128600272662558
+    m_Localized: Constellations
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6128600272662559
+    m_Localized: Make a wish
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6128600272662560
+    m_Localized: Use a wish to unlock the reward?
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6128600272662561
+    m_Localized: Overview
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds: []

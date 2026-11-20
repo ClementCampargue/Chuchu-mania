@@ -17,7 +17,131 @@ MonoBehaviour:
   m_SharedData: {fileID: 11400000, guid: 6d1405209915e0e42a30b70f3369f33c, type: 2}
   m_Metadata:
     m_Items: []
-  m_TableData: []
+  m_TableData:
+  - m_Id: 15071985664
+    m_Localized: YAHAH!<p=5> Stellaman comes to the rescue!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 12027948711936
+    m_Localized: Do not fret,<p=2> young stellanaut!<p=5> This simulation will teach
+      you the basics!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 12027948711937
+    m_Localized: A true Stellanaut must be in top shape!<p=5> Good grief!<p=5> Your
+      stomach is growling!...
+    m_Metadata:
+      m_Items: []
+  - m_Id: 12027948711938
+    m_Localized: In this state,<p=2> you're defenseless...<p=5> And there's no way
+      to destroy the cage holding your friend!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 12027948711939
+    m_Localized: What is this?<p=5> Star bits have fallen from the heavenly vault!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 12027948711940
+    m_Localized: These star bits have come at just the right time!<p=5> Collect 10
+      of them,<p=2> brave stellanaut!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 12027948711941
+    m_Localized: Let's go!<p=5> Jump to grab those cosmic treats!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 12027948711942
+    m_Localized: What on earth is that?<p=5> An enemy wall is blocking our path!<p=5>
+      There must be a way to get around it...
+    m_Metadata:
+      m_Items: []
+  - m_Id: 12027948711943
+    m_Localized: Sometimes,<p=2> you have to look at things from a different angle...<p=5>
+      Or from a different direction!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 12027948711944
+    m_Localized: Way to go,<p=2> Stellanaut!<p=5> It looks like you can orbit in
+      space!<p=5> That's crucial information!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 12027948711945
+    m_Localized: Look,<p=2> these star bits have piled up like scoops of ice cream!<p=5>
+      You're in for a treat!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 12027948711946
+    m_Localized: Press and hold E (keyboard) or X (controller) to confirm the scoops
+      on your cone and eat them all at once!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 12027948711947
+    m_Localized: "Bon app\xE9tit!"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 12027948711948
+    m_Localized: Can you feel your cosmic power rising?<p=5> Every ice cream you
+      eat will gradually fill your stomach.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 12027948711949
+    m_Localized: Eating 10 scoops of ice cream at once gives you an extra heart!<p=5>
+      Don't forget that!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 12027948711950
+    m_Localized: But be careful!<p=5> When you're eating,<p=2> you can't move.<p=5>
+      So pick the right moment!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 12027948711951
+    m_Localized: Once all the star bits have been collected,<p=5> a new batch appears!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 12027948711952
+    m_Localized: Good grief!<p=5> It looks like the rumbling of your cosmic stomach
+      has attracted a vile creature!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 12027948711953
+    m_Localized: It seems that various enemies and obstacles may appear as your stomach
+      fills up...
+    m_Metadata:
+      m_Items: []
+  - m_Id: 12027948711954
+    m_Localized: So always be on your guard,<p=2> because anything can happen during
+      your adventure!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 12027948711955
+    m_Localized: Hang in there,<p=2> stellanaut!<p=5> The universe is counting on
+      you!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 12027948711956
+    m_Localized: Now you're finally full,<p=2> stellanaut!<p=5> Your cosmic powers
+      are emerging!<p=5> You're invincible!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 12027952906240
+    m_Localized: Now,<p=2> you can eliminate any threat and even jump indefinitely!<p=5>
+      Go free your friend!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 12027952906241
+    m_Localized: GO STELLANAUT!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 12027952906242
+    m_Localized: Space seems distorted at the edges...<p=5> Try going through the
+      other side,<p=2> Stellanaut!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 12027952906243
+    m_Localized: That's almost right,<p=2> but you have to hold down the button a
+      little longer to select all the scoops!
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds: []

@@ -330,7 +330,7 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 13540277404581905
-    m_Localized: Elle regarde dans le vide sans bouger, <p=2>presque en bavant
+    m_Localized: "Elle regarde dans le vide sans bouger, <p=2>presque en b\xE2vant"
     m_Metadata:
       m_Items: []
   - m_Id: 13540277404581906

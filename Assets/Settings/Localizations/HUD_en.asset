@@ -47,7 +47,23 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 290163802115
-    m_Localized: 
+    m_Localized: Sticker Workshop
+    m_Metadata:
+      m_Items: []
+  - m_Id: 290163802112
+    m_Localized: Pebble Launchpad Galaxy
+    m_Metadata:
+      m_Items: []
+  - m_Id: 290163802113
+    m_Localized: Adventure
+    m_Metadata:
+      m_Items: []
+  - m_Id: 290163802114
+    m_Localized: "D\xF4 no Gelato Shop"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 290163802116
+    m_Localized: Achievements
     m_Metadata:
       m_Items: []
   references:
