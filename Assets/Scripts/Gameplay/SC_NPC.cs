@@ -42,6 +42,7 @@ public class SC_NPC : MonoBehaviour
     [Header("Interaction")]
     public GameObject interaction_popup;
     public InputActionReference interactAction;
+    public InputActionReference interactAction2;
 
     private DialogueManager dialogue;
     private SC_player player;
@@ -75,6 +76,8 @@ public class SC_NPC : MonoBehaviour
     {
         if (interactAction != null)
             interactAction.action.Enable();
+        if (interactAction2 != null)
+            interactAction2.action.Enable();
     }
 
     private void OnDisable()
@@ -107,7 +110,10 @@ public class SC_NPC : MonoBehaviour
         Vector2 stick = interactAction.action.ReadValue<Vector2>();
 
         bool interactPressed = stick.y > 0.9f;
-
+        if (interactAction2.action.WasPressedThisFrame())
+        {
+            interactPressed = true;
+        }
         if (interactPressed && !interactWasPressed)
         {
             if (player != null &&

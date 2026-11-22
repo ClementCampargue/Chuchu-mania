@@ -150,11 +150,17 @@ MonoBehaviour:
   loopLastDialogue: 1
   interaction_popup: {fileID: 5782342065406189963}
   interactAction: {fileID: -1680190386980627800, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
+  interactAction2: {fileID: -7868807682114652187, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
+  flip_towards_player: 1
+  hasfliped: 0
+  flip_only_in_range: 1
+  starts_facing_left: 0
   disable_player_on_start: 1
   enable_player_on_end: 1
   player_look_at_npc: 1
   hide_dialogue_box_end: 1
   player_onground_required: 1
+  talks: 1
 --- !u!95 &1144582369965934250
 Animator:
   serializedVersion: 7
