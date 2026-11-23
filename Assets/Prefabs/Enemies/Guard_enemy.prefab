@@ -472,10 +472,10 @@ MonoBehaviour:
   exclamation: {fileID: 4181699033222870022, guid: 2c642d6e40fb2624287c03f9ace97d33, type: 3}
   exclamation_point: {fileID: 4326461346714959402}
   damage: {fileID: 2680671972605215812}
-  chaseMaxSpeed: 4.5
+  chaseMaxSpeed: 3
   chaseAccelerationTime: 0.8
   chaseDecelerationTime: 0.5
-  sleepDuration: 3
+  sleepDuration: 3.61
   flashlight: {fileID: 2380945124946967503}
   animator: {fileID: 2519460489625166877}
   moveSpeed: 1.8
@@ -491,12 +491,18 @@ MonoBehaviour:
   minSleepDuration: 2
   maxSleepDuration: 5
   canSleepWhileMoving: 1
-  chaseRefreshRate: 0.03
-  verticalTolerance: 2
-  verticalWeight: 0.15
+  chaseRefreshRate: 0.15
+  floorDetectionTolerance: 0.35
+  floorSwitchTolerance: 0.2
+  floorSwitchCooldown: 0.6
+  verticalNodeHorizontalWeight: 0.35
+  floorSearchDistance: 29.36
+  floorConfirmationTime: 0.2
   useNearestLadder: 1
   ladderDecisionDistance: 8
   allowMidSegmentTurn: 1
+  ladderSpeed: 1
+  ladderAlignmentTolerance: 0.025
   chaseHopHeight: 0.28
   chaseHopDuration: 0.32
   hopSquash: 0.12
