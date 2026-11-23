@@ -1,223 +1,118 @@
+
 using System.Collections.Generic;
 using UnityEngine;
 
 public class SC_guard_movement : MonoBehaviour
 {
-    public enum MovementMode
-    {
-        Chase,
-        Patrol
-    }
+    public enum MovementMode { Chase, Patrol }
+
     public GameObject exclamation;
     public Transform exclamation_point;
     public SC_damage_player damage;
-    [Header("Accélération / Décélération - Traque")]
-    [Tooltip("Vitesse maximale du garde pendant la traque.")]
+
+    [Header("Traque - Vitesse")]
     [SerializeField] private float chaseMaxSpeed = 4.5f;
-
-    [Tooltip("Temps nécessaire pour atteindre la vitesse maximale.")]
     [SerializeField] private float chaseAccelerationTime = 0.8f;
-
-    [Tooltip("Temps nécessaire pour ralentir jusqu'à l'arrêt.")]
     [SerializeField] private float chaseDecelerationTime = 0.5f;
 
-    private float currentChaseSpeed = 0f;
-    [Header("Sommeil après une traque")]
+    private float currentChaseSpeed;
+
+    [Header("Sommeil après traque")]
     [SerializeField] private float sleepDuration = 3f;
-    // ============================================================
-    // REFERENCES
-    // ============================================================
 
     [Header("Références")]
     [SerializeField] private Animator flashlight;
     [SerializeField] private Animator animator;
 
-    // ============================================================
-    // DEPLACEMENT
-    // ============================================================
-
     [Header("Déplacement")]
     [SerializeField] private float moveSpeed = 3f;
-
-    [SerializeField]
-    private MovementMode movementMode = MovementMode.Patrol;
-
-    // ============================================================
-    // NODE ACTUEL
-    // ============================================================
+    [SerializeField] private MovementMode movementMode = MovementMode.Patrol;
 
     [Header("Point actuel")]
     [SerializeField] private SC_guard_point currentNode;
 
-    // ============================================================
-    // BASE
-    // ============================================================
-
     [Header("Zone de base")]
-    [Tooltip("Conservé pour compatibilité avec le reste du projet.")]
     [SerializeField] private SC_guard_point baseNode;
 
-    // ============================================================
-    // PATROUILLE
-    // ============================================================
-
     [Header("Patrouille")]
-    [Tooltip("Points entre lesquels le garde se balade.")]
     [SerializeField]
     private List<SC_guard_point> patrolPoints =
         new List<SC_guard_point>();
 
-    [Tooltip("Temps d'attente sur un point.")]
     [SerializeField] private float patrolWaitTime = 1.5f;
+    [SerializeField] private bool randomPatrol = false;
 
-    [Tooltip("Choisit aléatoirement le prochain point.")]
-    [SerializeField] private bool randomPatrol = true;
-
-    // ============================================================
-    // SOMMEIL ALEATOIRE
-    // ============================================================
+    private int currentPatrolIndex = -1;
+    private int patrolDirection = 1;
 
     [Header("Sommeil aléatoire")]
-
-    [Tooltip("Le garde peut s'endormir aléatoirement pendant sa patrouille.")]
     [SerializeField] private bool allowRandomSleep = true;
-
-    [Tooltip("Temps minimum avant qu'un nouveau sommeil puisse commencer.")]
     [SerializeField] private float minSleepInterval = 8f;
-
-    [Tooltip("Temps maximum avant qu'un nouveau sommeil puisse commencer.")]
     [SerializeField] private float maxSleepInterval = 20f;
-
-    [Tooltip("Durée minimale d'un sommeil.")]
     [SerializeField] private float minSleepDuration = 2f;
-
-    [Tooltip("Durée maximale d'un sommeil.")]
     [SerializeField] private float maxSleepDuration = 5f;
-
-    [Tooltip("Le garde peut s'endormir même lorsqu'il marche entre deux nodes.")]
     [SerializeField] private bool canSleepWhileMoving = true;
 
     private float randomSleepTimer;
-
-    // ============================================================
-    // TRAQUE
-    // ============================================================
+    private bool randomSleepInProgress;
 
     [Header("Traque")]
-    [Tooltip("Fréquence de recalcul du chemin vers le joueur.")]
     [SerializeField] private float chaseRefreshRate = 0.25f;
-
-    [Tooltip("Tolérance verticale pour considérer deux positions comme étant au même niveau.")]
     [SerializeField] private float verticalTolerance = 0.5f;
-
-    [Tooltip("Influence de la hauteur dans la recherche du node joueur.")]
     [SerializeField] private float verticalWeight = 0.15f;
-
-    [Tooltip("Permet au garde de chercher une échelle lorsqu'il doit changer de niveau.")]
     [SerializeField] private bool useNearestLadder = true;
-
-    [Tooltip("Distance maximale à laquelle le garde peut abandonner son segment horizontal pour rejoindre une échelle.")]
     [SerializeField] private float ladderDecisionDistance = 8f;
-
-    [Tooltip("Le garde peut changer de direction même au milieu d'une liaison horizontale.")]
     [SerializeField] private bool allowMidSegmentTurn = true;
 
-    // ============================================================
-    // BONDS GOOFY DE TRAQUE
-    // ============================================================
+    [Header("Déplacement échelles")]
+    [Tooltip("Vitesse de déplacement sur les échelles pendant la patrouille.")]
+    [SerializeField] private float ladderSpeed = 3f;
+
+    [Tooltip("Tolérance pour considérer que le garde est aligné avec l'échelle.")]
+    [SerializeField] private float ladderAlignmentTolerance = 0.025f;
 
     [Header("Bonds goofy - Traque uniquement")]
-
-    [Tooltip("Hauteur des petits bonds pendant la traque.")]
     [SerializeField] private float chaseHopHeight = 0.28f;
-
-    [Tooltip("Durée d'un bond.")]
     [SerializeField] private float chaseHopDuration = 0.32f;
-
-    [Tooltip("Écrasement du personnage à l'atterrissage.")]
     [SerializeField] private float hopSquash = 0.12f;
-
-    [Tooltip("Étirement vertical pendant le bond.")]
     [SerializeField] private float hopStretch = 0.08f;
-
-    [Tooltip("Petit mouvement latéral pendant le bond.")]
     [SerializeField] private float hopWobble = 0.025f;
 
     private float hopTimer;
 
-    // ============================================================
-    // ANIMATION SOMMEIL
-    // ============================================================
-
     [Header("Sommeil")]
     [SerializeField] private string sleepParameter = "Sleep";
 
-    // ============================================================
-    // ANIMATION
-    // ============================================================
-
     [Header("Animation")]
     [SerializeField] private string walkParameter = "Walk";
-
     [SerializeField] private string ladderUpParameter = "LadderUp";
-
     [SerializeField] private string ladderDownParameter = "LadderDown";
-
-    // ============================================================
-    // FLIP
-    // ============================================================
 
     [Header("Flip")]
     [SerializeField] private bool flipCharacter = true;
-
     [SerializeField] private bool facingRightByDefault = true;
 
     private Vector3 originalScale;
 
-    // ============================================================
-    // CHEMIN
-    // ============================================================
-
     private List<SC_guard_point> currentPath =
         new List<SC_guard_point>();
 
-    private int pathIndex = 0;
-
-    // ============================================================
-    // SEGMENT ACTUEL
-    // ============================================================
+    private int pathIndex;
 
     private SC_guard_point segmentStartNode;
-
     private SC_guard_point segmentTargetNode;
 
-    // ============================================================
-    // TIMERS
-    // ============================================================
-
     private float chaseTimer;
-
     private float patrolWaitTimer;
-
     private float sleepTimer;
 
-    // ============================================================
-    // ETATS
-    // ============================================================
-
     private bool isMovingBetweenNodes;
-
     private bool isChasing;
-
+    private bool isSleeping;
     private bool isWaitingAtPatrolPoint;
 
-    private bool isSleeping;
-
-    private int currentPatrolIndex = -1;
-
-    // ============================================================
-    // TYPE ANIMATION
-    // ============================================================
+    // Le chemin sera recalculé dès que le segment actuel sera terminé.
+    private bool chasePathDirty;
 
     private enum AnimationMovement
     {
@@ -235,32 +130,18 @@ public class SC_guard_movement : MonoBehaviour
         originalScale = transform.localScale;
 
         if (animator == null)
-        {
-            animator =
-                GetComponentInChildren<Animator>();
-        }
+            animator = GetComponentInChildren<Animator>();
 
         if (currentNode == null)
-        {
-            currentNode =
-                FindClosestNode(
-                    transform.position
-                );
-        }
+            currentNode = FindClosestNode(transform.position);
 
         if (baseNode == null)
-        {
             baseNode = currentNode;
-        }
 
         if (currentNode != null)
-        {
-            transform.position =
-                currentNode.transform.position;
-        }
+            transform.position = currentNode.transform.position;
 
-        movementMode =
-            MovementMode.Patrol;
+        movementMode = MovementMode.Patrol;
 
         ResetRandomSleepTimer();
 
@@ -286,24 +167,24 @@ public class SC_guard_movement : MonoBehaviour
         }
 
         UpdatePatrol();
-
-        /*
-         * Le sommeil aléatoire est uniquement possible
-         * lorsqu'il n'est PAS en train de poursuivre le joueur.
-         */
         UpdateRandomSleep();
     }
+
+    // ============================================================
+    // VITESSE DE CHASSE
+    // ============================================================
+
     private float UpdateChaseSpeed(bool hasTarget)
     {
-        float accelerationTime = Mathf.Max(0.01f, chaseAccelerationTime);
-        float decelerationTime = Mathf.Max(0.01f, chaseDecelerationTime);
+        float acceleration = Mathf.Max(0.01f, chaseAccelerationTime);
+        float deceleration = Mathf.Max(0.01f, chaseDecelerationTime);
 
         if (hasTarget)
         {
             currentChaseSpeed = Mathf.MoveTowards(
                 currentChaseSpeed,
                 chaseMaxSpeed,
-                (chaseMaxSpeed / accelerationTime) * Time.deltaTime
+                (chaseMaxSpeed / acceleration) * Time.deltaTime
             );
         }
         else
@@ -311,12 +192,21 @@ public class SC_guard_movement : MonoBehaviour
             currentChaseSpeed = Mathf.MoveTowards(
                 currentChaseSpeed,
                 0f,
-                (chaseMaxSpeed / decelerationTime) * Time.deltaTime
+                (chaseMaxSpeed / deceleration) * Time.deltaTime
             );
         }
 
         return currentChaseSpeed;
     }
+
+    private float GetCurrentMovementSpeed()
+    {
+        if (isChasing)
+            return UpdateChaseSpeed(true);
+
+        return moveSpeed;
+    }
+
     // ============================================================
     // SOMMEIL ALEATOIRE
     // ============================================================
@@ -325,112 +215,52 @@ public class SC_guard_movement : MonoBehaviour
     {
         if (!allowRandomSleep)
         {
-            randomSleepTimer =
-                Mathf.Infinity;
-
+            randomSleepTimer = Mathf.Infinity;
             return;
         }
 
-        float min =
-            Mathf.Max(
-                0f,
-                minSleepInterval
-            );
-
-        float max =
-            Mathf.Max(
-                min,
-                maxSleepInterval
-            );
-
-        randomSleepTimer =
-            Random.Range(
-                min,
-                max
-            );
+        randomSleepTimer = Random.Range(
+            Mathf.Max(0f, minSleepInterval),
+            Mathf.Max(minSleepInterval, maxSleepInterval)
+        );
     }
 
     private void UpdateRandomSleep()
     {
-        if (!allowRandomSleep)
-        {
+        if (!allowRandomSleep || isChasing || isSleeping)
             return;
-        }
 
-        if (isChasing ||
-            isSleeping)
-        {
+        if (!canSleepWhileMoving && isMovingBetweenNodes)
             return;
-        }
 
-        /*
-         * Le garde peut être configuré pour ne dormir
-         * que lorsqu'il est en train de marcher.
-         */
-
-        if (canSleepWhileMoving &&
-            !isMovingBetweenNodes)
-        {
-            return;
-        }
-
-        randomSleepTimer -=
-            Time.deltaTime;
+        randomSleepTimer -= Time.deltaTime;
 
         if (randomSleepTimer <= 0f)
-        {
             StartRandomSleep();
-        }
     }
 
     private void StartRandomSleep()
     {
-        if (isChasing)
-        {
+        if (isChasing || isSleeping)
             return;
-        }
 
-        /*
-         * On ne change PAS le currentNode ici.
-         *
-         * Le garde peut donc réellement s'endormir
-         * au milieu d'un déplacement.
-         */
-        damage.enabled = false;
-
+        randomSleepInProgress = true;
         isSleeping = true;
 
-        float min =
-            Mathf.Max(
-                0f,
-                minSleepDuration
-            );
+        sleepTimer = Random.Range(
+            Mathf.Max(0f, minSleepDuration),
+            Mathf.Max(minSleepDuration, maxSleepDuration)
+        );
 
-        float max =
-            Mathf.Max(
-                min,
-                maxSleepDuration
-            );
-
-        sleepTimer =
-            Random.Range(
-                min,
-                max
-            );
+        if (damage != null)
+            damage.enabled = false;
 
         SetFlashlight(false);
-
         StopMovementAnimation();
-
         ResetGoofyScale();
 
         if (animator != null)
-        {
-            animator.SetBool(
-                sleepParameter,
-                true
-            );
-        }
+            animator.SetBool(sleepParameter, true);
     }
 
     // ============================================================
@@ -439,60 +269,57 @@ public class SC_guard_movement : MonoBehaviour
 
     private void UpdateSleep()
     {
-        /*
-         * Si la traque commence pendant le sommeil,
-         * SetChaseMode(true) sortira immédiatement de cet état.
-         */
-
-        sleepTimer -=
-            Time.deltaTime;
+        sleepTimer -= Time.deltaTime;
 
         if (sleepTimer <= 0f)
-        {
             FinishSleep();
-        }
     }
 
     private void FinishSleep()
     {
-        damage.enabled = true;
-
         isSleeping = false;
 
+        if (damage != null)
+            damage.enabled = true;
+
         if (animator != null)
-        {
-            animator.SetBool(
-                sleepParameter,
-                false
-            );
-        }
-
-        /*
-         * Le garde peut s'être endormi au milieu
-         * d'un segment.
-         *
-         * On le rattache au node le plus proche.
-         */
-
-        SC_guard_point nearestNode =
-            FindClosestNode(
-                transform.position
-            );
-
-        if (nearestNode != null)
-        {
-            currentNode =
-                nearestNode;
-
-            transform.position =
-                nearestNode.transform.position;
-        }
-
-        FinishPath();
+            animator.SetBool(sleepParameter, false);
 
         SetFlashlight(true);
 
-        ResetRandomSleepTimer();
+        if (randomSleepInProgress)
+        {
+            randomSleepInProgress = false;
+
+            ResetRandomSleepTimer();
+
+            // IMPORTANT :
+            // Aucun changement de currentNode.
+            // Aucune téléportation.
+            // Aucun FinishPath().
+            // Le segment reprend depuis la position exacte.
+
+            if (isMovingBetweenNodes)
+            {
+                if (segmentStartNode != null &&
+                    segmentTargetNode != null)
+                {
+                    UpdateFlip(
+                        segmentStartNode.transform.position,
+                        segmentTargetNode.transform.position
+                    );
+
+                    SetMovementAnimation(
+                        GetMovementAnimation(
+                            segmentStartNode,
+                            segmentTargetNode
+                        )
+                    );
+                }
+            }
+
+            return;
+        }
 
         StartPatrol();
     }
@@ -504,405 +331,50 @@ public class SC_guard_movement : MonoBehaviour
     private void UpdateChase()
     {
         if (SC_player.instance == null)
-        {
             return;
-        }
 
-        if (isMovingBetweenNodes)
-        {
-            if (allowMidSegmentTurn &&
-                useNearestLadder)
-            {
-                CheckForNearestLadderDecision();
-            }
-
-            FollowCurrentPath();
-
-            return;
-        }
-
-        chaseTimer -=
-            Time.deltaTime;
+        // Le timer continue de tourner même pendant le déplacement.
+        chaseTimer -= Time.deltaTime;
 
         if (chaseTimer <= 0f)
         {
-            chaseTimer =
-                Mathf.Max(
-                    0.01f,
-                    chaseRefreshRate
-                );
+            chaseTimer = Mathf.Max(0.01f, chaseRefreshRate);
 
+            chasePathDirty = true;
+        }
+
+        // On laisse le segment actuel se terminer.
+        // Le nouveau chemin sera pris au prochain node.
+        if (isMovingBetweenNodes)
+        {
+            if (allowMidSegmentTurn && useNearestLadder)
+                CheckForNearestLadderDecision();
+
+            FollowCurrentPath();
+            return;
+        }
+
+        if (chasePathDirty)
+        {
+            chasePathDirty = false;
             RecalculateChasePath();
         }
 
         if (isMovingBetweenNodes)
-        {
             FollowCurrentPath();
-        }
     }
-
-    // ============================================================
-    // DECISION ECHELLE
-    // ============================================================
-
-    private void CheckForNearestLadderDecision()
-    {
-        if (!isChasing)
-        {
-            return;
-        }
-
-        if (!isMovingBetweenNodes)
-        {
-            return;
-        }
-
-        if (currentNode == null ||
-            segmentStartNode == null ||
-            segmentTargetNode == null)
-        {
-            return;
-        }
-
-        if (SC_player.instance == null)
-        {
-            return;
-        }
-
-        Vector3 playerPosition =
-            SC_player.instance.transform.position;
-
-        float verticalDifference =
-            Mathf.Abs(
-                playerPosition.y -
-                transform.position.y
-            );
-
-        if (verticalDifference <=
-            verticalTolerance)
-        {
-            return;
-        }
-
-        float segmentVerticalDifference =
-            Mathf.Abs(
-                segmentTargetNode.transform.position.y -
-                segmentStartNode.transform.position.y
-            );
-
-        if (segmentVerticalDifference > 0.05f)
-        {
-            return;
-        }
-
-        SC_guard_point nearestLadderNode =
-            FindNearestUsefulLadderNode(
-                playerPosition
-            );
-
-        if (nearestLadderNode == null)
-        {
-            return;
-        }
-
-        float distanceToLadder =
-            Vector3.Distance(
-                transform.position,
-                nearestLadderNode.transform.position
-            );
-
-        if (distanceToLadder >
-            ladderDecisionDistance)
-        {
-            return;
-        }
-
-        float distanceToStart =
-            Vector3.Distance(
-                transform.position,
-                segmentStartNode.transform.position
-            );
-
-        float distanceToTarget =
-            Vector3.Distance(
-                transform.position,
-                segmentTargetNode.transform.position
-            );
-
-        SC_guard_point bestEntryNode =
-            FindBestLadderEntryNode(
-                segmentStartNode,
-                segmentTargetNode,
-                nearestLadderNode
-            );
-
-        if (bestEntryNode == null)
-        {
-            return;
-        }
-
-        if (bestEntryNode == currentNode)
-        {
-            return;
-        }
-
-        if (bestEntryNode == segmentStartNode)
-        {
-            if (distanceToStart <
-                distanceToTarget)
-            {
-                ReverseCurrentSegmentToward(
-                    segmentStartNode
-                );
-            }
-        }
-    }
-
-    // ============================================================
-    // DEMI-TOUR
-    // ============================================================
-
-    private void ReverseCurrentSegmentToward(
-        SC_guard_point destinationNode)
-    {
-        if (destinationNode == null)
-        {
-            return;
-        }
-
-        currentPath.Clear();
-
-        pathIndex = 0;
-
-        isMovingBetweenNodes = false;
-
-        segmentStartNode = null;
-        segmentTargetNode = null;
-
-        ResetGoofyScale();
-
-        currentPath.Add(
-            destinationNode
-        );
-
-        pathIndex = 0;
-
-        StartNextNodeMovement();
-    }
-
-    // ============================================================
-    // RECHERCHE ECHELLE UTILE
-    // ============================================================
-
-    private SC_guard_point FindNearestUsefulLadderNode(
-        Vector3 playerPosition)
-    {
-        SC_guard_point[] nodes =
-            FindObjectsByType<SC_guard_point>(
-                FindObjectsSortMode.None
-            );
-
-        SC_guard_point bestNode = null;
-
-        float bestScore =
-            Mathf.Infinity;
-
-        foreach (
-            SC_guard_point node
-            in nodes)
-        {
-            if (node == null)
-            {
-                continue;
-            }
-
-            if (!HasVerticalConnection(node))
-            {
-                continue;
-            }
-
-            float guardDistance =
-                Vector3.Distance(
-                    transform.position,
-                    node.transform.position
-                );
-
-            float playerDistance =
-                Vector3.Distance(
-                    node.transform.position,
-                    playerPosition
-                );
-
-            float score =
-                guardDistance +
-                playerDistance * 0.35f;
-
-            if (score < bestScore)
-            {
-                bestScore = score;
-                bestNode = node;
-            }
-        }
-
-        return bestNode;
-    }
-
-    // ============================================================
-    // DETECTION ECHELLE
-    // ============================================================
-
-    private bool HasVerticalConnection(
-        SC_guard_point node)
-    {
-        if (node == null ||
-            node.connections == null)
-        {
-            return false;
-        }
-
-        foreach (
-            SC_guard_point connection
-            in node.connections)
-        {
-            if (connection == null)
-            {
-                continue;
-            }
-
-            float verticalDifference =
-                Mathf.Abs(
-                    connection.transform.position.y -
-                    node.transform.position.y
-                );
-
-            if (verticalDifference > 0.05f)
-            {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    // ============================================================
-    // CHOIX ENTREE ECHELLE
-    // ============================================================
-
-    private SC_guard_point FindBestLadderEntryNode(
-        SC_guard_point start,
-        SC_guard_point target,
-        SC_guard_point ladderNode)
-    {
-        if (start == null ||
-            target == null ||
-            ladderNode == null)
-        {
-            return null;
-        }
-
-        float startDistance =
-            EstimatePathDistance(
-                start,
-                ladderNode
-            );
-
-        float targetDistance =
-            EstimatePathDistance(
-                target,
-                ladderNode
-            );
-
-        if (startDistance <= targetDistance)
-        {
-            return start;
-        }
-
-        return target;
-    }
-
-    // ============================================================
-    // ESTIMATION DISTANCE
-    // ============================================================
-
-    private float EstimatePathDistance(
-        SC_guard_point start,
-        SC_guard_point target)
-    {
-        if (start == null ||
-            target == null)
-        {
-            return Mathf.Infinity;
-        }
-
-        if (start == target)
-        {
-            return 0f;
-        }
-
-        List<SC_guard_point> path =
-            FindShortestPath(
-                start,
-                target
-            );
-
-        if (path == null)
-        {
-            return Mathf.Infinity;
-        }
-
-        float totalDistance = 0f;
-
-        SC_guard_point previous =
-            start;
-
-        foreach (
-            SC_guard_point node
-            in path)
-        {
-            if (node == null)
-            {
-                return Mathf.Infinity;
-            }
-
-            totalDistance +=
-                Vector3.Distance(
-                    previous.transform.position,
-                    node.transform.position
-                );
-
-            previous = node;
-        }
-
-        return totalDistance;
-    }
-
-    // ============================================================
-    // RECALCUL TRAQUE
-    // ============================================================
 
     private void RecalculateChasePath()
     {
-        if (!isChasing)
-        {
+        if (!isChasing || SC_player.instance == null)
             return;
-        }
-
-        if (SC_player.instance == null)
-        {
-            return;
-        }
 
         if (currentNode == null)
         {
-            currentNode =
-                FindClosestNode(
-                    transform.position
-                );
+            currentNode = FindClosestNode(transform.position);
 
             if (currentNode == null)
-            {
                 return;
-            }
         }
 
         SC_guard_point targetNode =
@@ -911,9 +383,7 @@ public class SC_guard_movement : MonoBehaviour
             );
 
         if (targetNode == null)
-        {
             return;
-        }
 
         if (targetNode == currentNode)
         {
@@ -922,17 +392,11 @@ public class SC_guard_movement : MonoBehaviour
         }
 
         List<SC_guard_point> newPath =
-            FindShortestPath(
-                currentNode,
-                targetNode
-            );
+            FindShortestPath(currentNode, targetNode);
 
-        if (newPath != null &&
-            newPath.Count > 0)
+        if (newPath != null && newPath.Count > 0)
         {
-            currentPath =
-                newPath;
-
+            currentPath = newPath;
             pathIndex = 0;
 
             StartNextNodeMovement();
@@ -944,441 +408,474 @@ public class SC_guard_movement : MonoBehaviour
     }
 
     // ============================================================
-    // DEMARRER SEGMENT
+    // DECISION ECHELLE
+    // ============================================================
+
+    private void CheckForNearestLadderDecision()
+    {
+        if (!isChasing || !isMovingBetweenNodes)
+            return;
+
+        if (segmentStartNode == null ||
+            segmentTargetNode == null ||
+            SC_player.instance == null)
+            return;
+
+        float verticalDifference = Mathf.Abs(
+            SC_player.instance.transform.position.y -
+            transform.position.y
+        );
+
+        if (verticalDifference <= verticalTolerance)
+            return;
+
+        float segmentHeight = Mathf.Abs(
+            segmentTargetNode.transform.position.y -
+            segmentStartNode.transform.position.y
+        );
+
+        if (segmentHeight > 0.05f)
+            return;
+
+        SC_guard_point ladder =
+            FindNearestUsefulLadderNode(
+                SC_player.instance.transform.position
+            );
+
+        if (ladder == null)
+            return;
+
+        if (Vector3.Distance(
+            transform.position,
+            ladder.transform.position
+        ) > ladderDecisionDistance)
+            return;
+
+        float startDistance = Vector3.Distance(
+            transform.position,
+            segmentStartNode.transform.position
+        );
+
+        float targetDistance = Vector3.Distance(
+            transform.position,
+            segmentTargetNode.transform.position
+        );
+
+        SC_guard_point bestEntry = FindBestLadderEntryNode(
+            segmentStartNode,
+            segmentTargetNode,
+            ladder
+        );
+
+        if (bestEntry == null || bestEntry != segmentStartNode)
+            return;
+
+        if (startDistance < targetDistance)
+        {
+            ReverseCurrentSegmentToward(segmentStartNode);
+            chasePathDirty = true;
+        }
+    }
+
+    private void ReverseCurrentSegmentToward(
+        SC_guard_point destination)
+    {
+        if (destination == null)
+            return;
+
+        currentPath.Clear();
+        pathIndex = 0;
+
+        isMovingBetweenNodes = false;
+
+        segmentStartNode = null;
+        segmentTargetNode = null;
+
+        ResetGoofyScale();
+
+        currentPath.Add(destination);
+
+        StartNextNodeMovement();
+    }
+
+    // ============================================================
+    // RECHERCHE ECHELLE
+    // ============================================================
+
+    private SC_guard_point FindNearestUsefulLadderNode(
+        Vector3 playerPosition)
+    {
+        SC_guard_point[] nodes =
+            FindObjectsByType<SC_guard_point>(
+                FindObjectsSortMode.None
+            );
+
+        SC_guard_point bestNode = null;
+        float bestScore = Mathf.Infinity;
+
+        foreach (SC_guard_point node in nodes)
+        {
+            if (node == null || !HasVerticalConnection(node))
+                continue;
+
+            float guardDistance = Vector3.Distance(
+                transform.position,
+                node.transform.position
+            );
+
+            float playerDistance = Vector3.Distance(
+                node.transform.position,
+                playerPosition
+            );
+
+            float score = guardDistance + playerDistance * 0.35f;
+
+            if (score < bestScore)
+            {
+                bestScore = score;
+                bestNode = node;
+            }
+        }
+
+        return bestNode;
+    }
+
+    private bool HasVerticalConnection(SC_guard_point node)
+    {
+        if (node == null || node.connections == null)
+            return false;
+
+        foreach (SC_guard_point connection in node.connections)
+        {
+            if (connection == null)
+                continue;
+
+            if (Mathf.Abs(
+                connection.transform.position.y -
+                node.transform.position.y
+            ) > 0.05f)
+                return true;
+        }
+
+        return false;
+    }
+
+    private SC_guard_point FindBestLadderEntryNode(
+        SC_guard_point start,
+        SC_guard_point target,
+        SC_guard_point ladder)
+    {
+        if (start == null || target == null || ladder == null)
+            return null;
+
+        float startDistance = EstimatePathDistance(start, ladder);
+        float targetDistance = EstimatePathDistance(target, ladder);
+
+        return startDistance <= targetDistance ? start : target;
+    }
+
+    private float EstimatePathDistance(
+        SC_guard_point start,
+        SC_guard_point target)
+    {
+        if (start == null || target == null)
+            return Mathf.Infinity;
+
+        if (start == target)
+            return 0f;
+
+        List<SC_guard_point> path = FindShortestPath(start, target);
+
+        if (path == null)
+            return Mathf.Infinity;
+
+        float distance = 0f;
+        SC_guard_point previous = start;
+
+        foreach (SC_guard_point node in path)
+        {
+            if (node == null)
+                return Mathf.Infinity;
+
+            distance += Vector3.Distance(
+                previous.transform.position,
+                node.transform.position
+            );
+
+            previous = node;
+        }
+
+        return distance;
+    }
+
+    // ============================================================
+    // DEMARRER DEPLACEMENT
     // ============================================================
 
     private void StartNextNodeMovement()
     {
-        if (currentNode == null)
+        if (currentNode == null ||
+            currentPath == null ||
+            pathIndex >= currentPath.Count)
         {
             FinishPath();
             return;
         }
 
-        if (currentPath == null ||
-            currentPath.Count == 0)
+        SC_guard_point nextNode = currentPath[pathIndex];
+
+        if (nextNode == null || !IsConnected(currentNode, nextNode))
         {
             FinishPath();
             return;
         }
 
-        if (pathIndex >=
-            currentPath.Count)
-        {
-            FinishPath();
-            return;
-        }
-
-        SC_guard_point nextNode =
-            currentPath[pathIndex];
-
-        if (nextNode == null)
-        {
-            FinishPath();
-            return;
-        }
-
-        if (!IsConnected(
-                currentNode,
-                nextNode))
-        {
-            FinishPath();
-            return;
-        }
-
-        segmentStartNode =
-            currentNode;
-
-        segmentTargetNode =
-            nextNode;
-
-        /*
-         * Nouveau segment :
-         * on recommence le cycle de bond.
-         */
+        segmentStartNode = currentNode;
+        segmentTargetNode = nextNode;
 
         hopTimer = 0f;
 
-        UpdateFlip(
-            currentNode,
-            nextNode
-        );
+        UpdateFlip(currentNode, nextNode);
 
         SetMovementAnimation(
-            GetMovementAnimation(
-                currentNode,
-                nextNode
-            )
+            GetMovementAnimation(currentNode, nextNode)
         );
 
         isMovingBetweenNodes = true;
     }
 
     // ============================================================
-    // SUIVI CHEMIN
+    // SUIVI DU CHEMIN
     // ============================================================
 
     private void FollowCurrentPath()
     {
         if (currentPath == null ||
-            currentPath.Count == 0)
+            pathIndex >= currentPath.Count ||
+            currentNode == null)
         {
             FinishPath();
             return;
         }
 
-        if (pathIndex >=
-            currentPath.Count)
+        SC_guard_point target = currentPath[pathIndex];
+
+        if (target == null || !IsConnected(currentNode, target))
         {
             FinishPath();
             return;
         }
 
-        if (currentNode == null)
-        {
-            FinishPath();
-            return;
-        }
-
-        SC_guard_point target =
-            currentPath[pathIndex];
-
-        if (target == null)
-        {
-            FinishPath();
-            return;
-        }
-
-        if (!IsConnected(
-                currentNode,
-                target))
-        {
-            FinishPath();
-            return;
-        }
-
-        Vector3 targetPosition =
-            target.transform.position;
+        Vector3 targetPosition = target.transform.position;
 
         AnimationMovement movement =
-            GetMovementAnimation(
-                currentNode,
-                target
-            );
+            GetMovementAnimation(currentNode, target);
 
-        /*
-         * ========================================================
-         * SOL
-         * ========================================================
-         *
-         * PATROUILLE :
-         * déplacement NORMAL.
-         *
-         * TRAQUE :
-         * petits bonds goofy.
-         */
-
-        if (movement ==
-            AnimationMovement.Walk)
+        if (movement == AnimationMovement.Walk)
         {
             if (isChasing)
-            {
-                FollowGroundWithGoofyHops(
-                    targetPosition
-                );
-            }
+                FollowGroundWithGoofyHops(targetPosition);
             else
+                FollowGroundNormally(targetPosition);
+
+            Vector3 currentFlat = new Vector3(
+                transform.position.x, 0f, transform.position.z
+            );
+
+            Vector3 targetFlat = new Vector3(
+                targetPosition.x, 0f, targetPosition.z
+            );
+
+            if (Vector3.Distance(currentFlat, targetFlat) <= 0.001f)
             {
-                FollowGroundNormally(
-                    targetPosition
-                );
-            }
-        }
-        else
-        {
-            /*
-             * ECHELLE :
-             * déplacement normal.
-             */
-
-            transform.position =
-                Vector3.MoveTowards(
-                    transform.position,
-                    targetPosition,
-                    moveSpeed *
-                    Time.deltaTime
-                );
-
-            ResetGoofyScale();
-        }
-
-        /*
-         * ========================================================
-         * ARRIVEE
-         * ========================================================
-         */
-
-        if (movement ==
-            AnimationMovement.Walk)
-        {
-            Vector3 flatCurrent =
-                new Vector3(
-                    transform.position.x,
-                    0f,
-                    transform.position.z
-                );
-
-            Vector3 flatTarget =
-                new Vector3(
-                    targetPosition.x,
-                    0f,
-                    targetPosition.z
-                );
-
-            if (Vector3.Distance(
-                    flatCurrent,
-                    flatTarget
-                ) <= 0.001f)
-            {
-                transform.position =
-                    targetPosition;
-
+                transform.position = targetPosition;
                 ResetGoofyScale();
-
                 ArriveAtCurrentPathNode();
             }
         }
         else
         {
+            FollowLadder(targetPosition);
+
             if (Vector3.Distance(
-                    transform.position,
-                    targetPosition
-                ) <= 0.001f)
+                transform.position,
+                targetPosition
+            ) <= 0.001f)
             {
-                transform.position =
-                    targetPosition;
-
+                transform.position = targetPosition;
                 ResetGoofyScale();
-
                 ArriveAtCurrentPathNode();
             }
         }
     }
 
     // ============================================================
-    // DEPLACEMENT NORMAL
+    // DEPLACEMENT ECHELLE SANS DIAGONALE
     // ============================================================
 
-    private void FollowGroundNormally(
-        Vector3 targetPosition)
+    private void FollowLadder(Vector3 targetPosition)
     {
-        transform.position =
-            Vector3.MoveTowards(
-                transform.position,
-                targetPosition,
-                moveSpeed *
-                Time.deltaTime
+        float speed = GetCurrentMovementSpeed();
+
+        Vector3 position = transform.position;
+
+        // ETAPE 1 :
+        // Alignement horizontal avec l'échelle.
+        // On ne monte PAS en diagonale.
+
+        float horizontalDifference =
+            targetPosition.x - position.x;
+
+        if (Mathf.Abs(horizontalDifference) >
+            ladderAlignmentTolerance)
+        {
+            position.x = Mathf.MoveTowards(
+                position.x,
+                targetPosition.x,
+                speed * Time.deltaTime
             );
 
-        /*
-         * Très important :
-         * aucun squash/stretch en patrouille.
-         */
+            transform.position = position;
+
+            ResetGoofyScale();
+            return;
+        }
+
+        // ETAPE 2 :
+        // Le garde est aligné.
+        // Il peut maintenant monter ou descendre verticalement.
+
+        position.x = targetPosition.x;
+
+        position.y = Mathf.MoveTowards(
+            position.y,
+            targetPosition.y,
+            speed * Time.deltaTime
+        );
+
+        position.z = Mathf.MoveTowards(
+            position.z,
+            targetPosition.z,
+            speed * Time.deltaTime
+        );
+
+        transform.position = position;
 
         ResetGoofyScale();
     }
 
     // ============================================================
-    // DEPLACEMENT GOOFY DE TRAQUE
+    // DEPLACEMENT SOL NORMAL
     // ============================================================
 
-    private void FollowGroundWithGoofyHops(
-        Vector3 targetPosition)
+    private void FollowGroundNormally(Vector3 targetPosition)
     {
-        Vector3 currentPosition = transform.position;
+        transform.position = Vector3.MoveTowards(
+            transform.position,
+            targetPosition,
+            moveSpeed * Time.deltaTime
+        );
 
-        /*
-         * ========================================================
-         * ACCELERATION
-         * ========================================================
-         */
+        ResetGoofyScale();
+    }
 
-        float currentSpeed = UpdateChaseSpeed(true);
+    // ============================================================
+    // BONDS GOOFY - CHASSE
+    // ============================================================
 
-        /*
-         * On retire le bond actuel pour calculer correctement
-         * le déplacement horizontal.
-         */
+    private void FollowGroundWithGoofyHops(Vector3 targetPosition)
+    {
+        // La vitesse de chasse continue de monter jusqu'au maximum.
+        // Aucun reset lors du changement de segment ou d'étage.
 
-        float groundY = targetPosition.y;
+        float speed = GetCurrentMovementSpeed();
+
+        Vector3 current = transform.position;
 
         Vector3 horizontalCurrent = new Vector3(
-            currentPosition.x,
-            groundY,
-            currentPosition.z
+            current.x,
+            targetPosition.y,
+            current.z
         );
 
         Vector3 horizontalTarget = new Vector3(
             targetPosition.x,
-            groundY,
+            targetPosition.y,
             targetPosition.z
         );
 
         Vector3 nextPosition = Vector3.MoveTowards(
             horizontalCurrent,
             horizontalTarget,
-            currentSpeed * Time.deltaTime
+            speed * Time.deltaTime
         );
 
-        /*
-         * ========================================================
-         * BOND GOOFY
-         * ========================================================
-         */
-
-        float hopDuration = Mathf.Max(
-            0.05f,
-            chaseHopDuration
-        );
-
-        float hopHeight = chaseHopHeight;
+        float duration = Mathf.Max(0.05f, chaseHopDuration);
 
         hopTimer += Time.deltaTime;
 
         float normalizedTime =
-            (hopTimer % hopDuration) / hopDuration;
+            (hopTimer % duration) / duration;
 
-        float hopOffset =
-            Mathf.Sin(
-                normalizedTime * Mathf.PI
-            ) * hopHeight;
+        float hopOffset = Mathf.Sin(
+            normalizedTime * Mathf.PI
+        ) * chaseHopHeight;
 
-        /*
-         * ========================================================
-         * PETIT WOBBLE
-         * ========================================================
-         */
+        float wobble = Mathf.Sin(
+            normalizedTime * Mathf.PI * 2f
+        ) * hopWobble;
 
-        float wobble =
-            Mathf.Sin(
-                normalizedTime * Mathf.PI * 2f
-            ) * hopWobble;
-
-        Vector3 direction =
-            targetPosition -
-            segmentStartNode.transform.position;
-
-        direction.y = 0f;
-
-        if (Mathf.Abs(direction.x) > 0.001f)
+        if (segmentStartNode != null)
         {
-            float wobbleDirection =
-                Mathf.Sign(direction.x);
+            Vector3 direction =
+                targetPosition -
+                segmentStartNode.transform.position;
 
-            nextPosition.x +=
-                wobble *
-                wobbleDirection;
+            direction.y = 0f;
+
+            if (Mathf.Abs(direction.x) > 0.001f)
+                nextPosition.x += wobble * Mathf.Sign(direction.x);
         }
 
-        /*
-         * ========================================================
-         * POSITION FINALE
-         * ========================================================
-         */
+        nextPosition.y = targetPosition.y + hopOffset;
 
-        nextPosition.y =
-            groundY +
-            hopOffset;
+        transform.position = nextPosition;
 
-        transform.position =
-            nextPosition;
-
-        /*
-         * ========================================================
-         * SQUASH / STRETCH
-         * ========================================================
-         */
-
-        UpdateHopScale(
-            normalizedTime
-        );
+        UpdateHopScale(normalizedTime);
     }
+
     // ============================================================
     // SQUASH / STRETCH
     // ============================================================
 
-    private void UpdateHopScale(
-        float normalizedTime)
+    private void UpdateHopScale(float normalizedTime)
     {
         float scaleY;
         float scaleX;
 
         if (normalizedTime < 0.5f)
         {
-            float t =
-                normalizedTime /
-                0.5f;
+            float t = normalizedTime / 0.5f;
 
-            scaleY =
-                Mathf.Lerp(
-                    1f,
-                    1f + hopStretch,
-                    t
-                );
-
-            scaleX =
-                Mathf.Lerp(
-                    1f,
-                    1f - hopSquash * 0.5f,
-                    t
-                );
+            scaleY = Mathf.Lerp(1f, 1f + hopStretch, t);
+            scaleX = Mathf.Lerp(1f, 1f - hopSquash * 0.5f, t);
         }
         else
         {
-            float t =
-                (normalizedTime - 0.5f) /
-                0.5f;
+            float t = (normalizedTime - 0.5f) / 0.5f;
 
-            scaleY =
-                Mathf.Lerp(
-                    1f + hopStretch,
-                    1f - hopSquash,
-                    t
-                );
-
-            scaleX =
-                Mathf.Lerp(
-                    1f - hopSquash * 0.5f,
-                    1f + hopSquash,
-                    t
-                );
+            scaleY = Mathf.Lerp(1f + hopStretch, 1f - hopSquash, t);
+            scaleX = Mathf.Lerp(1f - hopSquash * 0.5f, 1f + hopSquash, t);
         }
 
-        Vector3 scale =
-            originalScale;
+        Vector3 scale = originalScale;
 
-        /*
-         * On conserve le signe X correspondant au flip.
-         */
+        float signX = Mathf.Sign(transform.localScale.x);
 
-        float currentSignX =
-            Mathf.Sign(
-                transform.localScale.x
-            );
+        scale.x = Mathf.Abs(originalScale.x) * signX * scaleX;
+        scale.y = originalScale.y * scaleY;
 
-        scale.x =
-            Mathf.Abs(
-                originalScale.x
-            ) *
-            currentSignX *
-            scaleX;
-
-        scale.y =
-            originalScale.y *
-            scaleY;
-
-        transform.localScale =
-            scale;
+        transform.localScale = scale;
     }
 
     // ============================================================
@@ -1387,54 +884,54 @@ public class SC_guard_movement : MonoBehaviour
 
     private void ArriveAtCurrentPathNode()
     {
-        currentNode =
-            currentPath[pathIndex];
+        currentNode = currentPath[pathIndex];
 
         pathIndex++;
 
-        if (pathIndex >=
-            currentPath.Count)
+        // Si on est en chasse et que le timer est arrivé à zéro,
+        // on termine le segment et on recalcule immédiatement.
+        if (isChasing && chasePathDirty)
+        {
+            FinishPath();
+
+            chasePathDirty = false;
+
+            RecalculateChasePath();
+
+            return;
+        }
+
+        if (pathIndex >= currentPath.Count)
         {
             FinishPath();
 
             if (isChasing)
-            {
-                chaseTimer = 0f;
-            }
+                chasePathDirty = true;
 
             return;
         }
 
-        SC_guard_point nextNode =
-            currentPath[pathIndex];
+        SC_guard_point nextNode = currentPath[pathIndex];
 
-        if (nextNode == null ||
-            !IsConnected(
-                currentNode,
-                nextNode))
+        if (nextNode == null || !IsConnected(currentNode, nextNode))
         {
             FinishPath();
+
+            if (isChasing)
+                chasePathDirty = true;
+
             return;
         }
 
-        segmentStartNode =
-            currentNode;
-
-        segmentTargetNode =
-            nextNode;
+        segmentStartNode = currentNode;
+        segmentTargetNode = nextNode;
 
         hopTimer = 0f;
 
-        UpdateFlip(
-            currentNode,
-            nextNode
-        );
+        UpdateFlip(currentNode, nextNode);
 
         SetMovementAnimation(
-            GetMovementAnimation(
-                currentNode,
-                nextNode
-            )
+            GetMovementAnimation(currentNode, nextNode)
         );
 
         isMovingBetweenNodes = true;
@@ -1446,21 +943,16 @@ public class SC_guard_movement : MonoBehaviour
 
     private void UpdatePatrol()
     {
-        if (patrolPoints == null ||
-            patrolPoints.Count == 0)
-        {
+        if (patrolPoints == null || patrolPoints.Count == 0)
             return;
-        }
 
         if (isWaitingAtPatrolPoint)
         {
-            patrolWaitTimer -=
-                Time.deltaTime;
+            patrolWaitTimer -= Time.deltaTime;
 
             if (patrolWaitTimer <= 0f)
             {
                 isWaitingAtPatrolPoint = false;
-
                 ChooseNextPatrolPoint();
             }
 
@@ -1476,108 +968,125 @@ public class SC_guard_movement : MonoBehaviour
         ChooseNextPatrolPoint();
     }
 
-    // ============================================================
-    // CHOIX PATROUILLE
-    // ============================================================
-
     private void ChooseNextPatrolPoint()
     {
-        if (patrolPoints == null ||
-            patrolPoints.Count == 0)
-        {
+        if (patrolPoints == null || patrolPoints.Count == 0)
             return;
-        }
 
         if (currentNode == null)
         {
-            currentNode =
-                FindClosestNode(
-                    transform.position
-                );
+            currentNode = FindClosestNode(transform.position);
 
             if (currentNode == null)
-            {
                 return;
-            }
         }
 
-        List<SC_guard_point> validPoints =
-            new List<SC_guard_point>();
-
-        foreach (
-            SC_guard_point point
-            in patrolPoints)
-        {
-            if (point == null)
-            {
-                continue;
-            }
-
-            if (point == currentNode &&
-                patrolPoints.Count > 1)
-            {
-                continue;
-            }
-
-            validPoints.Add(point);
-        }
-
-        if (validPoints.Count == 0)
-        {
-            return;
-        }
-
-        SC_guard_point targetPoint;
+        // PATROUILLE ALEATOIRE
 
         if (randomPatrol)
         {
-            targetPoint =
-                validPoints[
-                    Random.Range(
-                        0,
-                        validPoints.Count
-                    )
-                ];
-        }
-        else
-        {
-            currentPatrolIndex++;
+            List<SC_guard_point> validPoints =
+                new List<SC_guard_point>();
 
-            if (currentPatrolIndex >=
-                validPoints.Count)
+            foreach (SC_guard_point point in patrolPoints)
             {
-                currentPatrolIndex = 0;
+                if (point != null && point != currentNode)
+                    validPoints.Add(point);
             }
 
-            targetPoint =
-                validPoints[
-                    currentPatrolIndex
-                ];
-        }
+            if (validPoints.Count == 0)
+            {
+                BeginPatrolWait();
+                return;
+            }
 
-        if (targetPoint == null)
-        {
+            SC_guard_point randomTarget =
+                validPoints[Random.Range(0, validPoints.Count)];
+
+            SetPatrolDestination(randomTarget);
             return;
         }
 
-        if (targetPoint == currentNode)
+        // PATROUILLE ALLER-RETOUR
+
+        if (currentPatrolIndex < 0)
+        {
+            currentPatrolIndex = patrolPoints.IndexOf(currentNode);
+
+            if (currentPatrolIndex < 0)
+                currentPatrolIndex = FindClosestPatrolIndex();
+        }
+
+        if (patrolPoints.Count <= 1)
+        {
+            BeginPatrolWait();
+            return;
+        }
+
+        int nextIndex = currentPatrolIndex + patrolDirection;
+
+        if (nextIndex >= patrolPoints.Count || nextIndex < 0)
+        {
+            patrolDirection *= -1;
+
+            nextIndex = currentPatrolIndex + patrolDirection;
+        }
+
+        SC_guard_point target = patrolPoints[nextIndex];
+
+        if (target == null)
+        {
+            patrolDirection *= -1;
+            return;
+        }
+
+        currentPatrolIndex = nextIndex;
+
+        SetPatrolDestination(target);
+    }
+
+    private int FindClosestPatrolIndex()
+    {
+        int bestIndex = 0;
+        float bestDistance = Mathf.Infinity;
+
+        for (int i = 0; i < patrolPoints.Count; i++)
+        {
+            if (patrolPoints[i] == null)
+                continue;
+
+            float distance = Vector3.Distance(
+                transform.position,
+                patrolPoints[i].transform.position
+            );
+
+            if (distance < bestDistance)
+            {
+                bestDistance = distance;
+                bestIndex = i;
+            }
+        }
+
+        return bestIndex;
+    }
+
+    private void SetPatrolDestination(SC_guard_point target)
+    {
+        if (target == null || currentNode == null)
+            return;
+
+        if (target == currentNode)
         {
             BeginPatrolWait();
             return;
         }
 
         List<SC_guard_point> newPath =
-            FindShortestPath(
-                currentNode,
-                targetPoint
-            );
+            FindShortestPath(currentNode, target);
 
-        if (newPath != null &&
-            newPath.Count > 0)
+        if (newPath != null && newPath.Count > 0)
         {
-            currentPath =
-                newPath;
-
+            currentPath = newPath;
             pathIndex = 0;
 
             StartNextNodeMovement();
@@ -1588,30 +1097,20 @@ public class SC_guard_movement : MonoBehaviour
         }
     }
 
-    // ============================================================
-    // ATTENTE PATROUILLE
-    // ============================================================
-
     private void BeginPatrolWait()
     {
         FinishPath();
 
         isWaitingAtPatrolPoint = true;
-
-        patrolWaitTimer =
-            patrolWaitTime;
+        patrolWaitTimer = patrolWaitTime;
     }
-
-    // ============================================================
-    // START PATROUILLE
-    // ============================================================
 
     private void StartPatrol()
     {
-        movementMode =
-            MovementMode.Patrol;
-
+        movementMode = MovementMode.Patrol;
         isChasing = false;
+
+        chasePathDirty = false;
 
         isWaitingAtPatrolPoint = false;
 
@@ -1619,15 +1118,12 @@ public class SC_guard_movement : MonoBehaviour
 
         patrolWaitTimer = 0f;
 
-        currentPatrolIndex = -1;
+        currentPatrolIndex = patrolPoints.IndexOf(currentNode);
 
+        if (currentPatrolIndex < 0)
+            currentPatrolIndex = FindClosestPatrolIndex();
 
-        /*
-         * On ne reset pas forcément le timer ici :
-         * FinishSleep() le fait déjà.
-         *
-         * Au lancement du garde, Start() l'a déjà initialisé.
-         */
+        patrolDirection = 1;
 
         ChooseNextPatrolPoint();
     }
@@ -1645,7 +1141,6 @@ public class SC_guard_movement : MonoBehaviour
         isMovingBetweenNodes = false;
 
         segmentStartNode = null;
-
         segmentTargetNode = null;
 
         hopTimer = 0f;
@@ -1656,106 +1151,66 @@ public class SC_guard_movement : MonoBehaviour
     }
 
     // ============================================================
-    // ANIMATION
+    // ANIMATIONS
     // ============================================================
 
     private AnimationMovement GetMovementAnimation(
         SC_guard_point from,
         SC_guard_point to)
     {
-        if (from == null ||
-            to == null)
-        {
+        if (from == null || to == null)
             return AnimationMovement.Walk;
-        }
 
-        float verticalDifference =
+        float difference =
             to.transform.position.y -
             from.transform.position.y;
 
-        const float verticalThreshold = 0.05f;
-
-        if (verticalDifference >
-            verticalThreshold)
-        {
+        if (difference > 0.05f)
             return AnimationMovement.LadderUp;
-        }
 
-        if (verticalDifference <
-            -verticalThreshold)
-        {
+        if (difference < -0.05f)
             return AnimationMovement.LadderDown;
-        }
 
         return AnimationMovement.Walk;
     }
 
-    private void SetMovementAnimation(
-        AnimationMovement movement)
+    private void SetMovementAnimation(AnimationMovement movement)
     {
         if (animator == null)
-        {
             return;
-        }
 
-        animator.SetBool(
-            walkParameter,
-            false
-        );
+        animator.SetBool(walkParameter, false);
+        animator.SetBool(ladderUpParameter, false);
+        animator.SetBool(ladderDownParameter, false);
 
-        animator.SetBool(
-            ladderUpParameter,
-            false
-        );
-
-        animator.SetBool(
-            ladderDownParameter,
-            false
-        );
-
-        animator.SetBool(
-            sleepParameter,
-            false
-        );
+        // Ne jamais modifier currentChaseSpeed ici.
+        // La vitesse doit rester continue entre les segments.
 
         switch (movement)
         {
             case AnimationMovement.Walk:
 
-                animator.SetBool(
-                    walkParameter,
-                    true
-                );
-                currentChaseSpeed = 0;
+                animator.SetBool(walkParameter, true);
+
                 if (!isChasing)
-                {
                     SetFlashlight(true);
 
-                }
                 break;
 
             case AnimationMovement.LadderUp:
 
-                animator.SetBool(
-                    ladderUpParameter,
-                    true
-                );
+                animator.SetBool(ladderUpParameter, true);
 
                 SetFlashlight(false);
-
                 ResetGoofyScale();
 
                 break;
 
             case AnimationMovement.LadderDown:
 
-                animator.SetBool(
-                    ladderDownParameter,
-                    true
-                );
+                animator.SetBool(ladderDownParameter, true);
 
                 SetFlashlight(false);
-
                 ResetGoofyScale();
 
                 break;
@@ -1765,24 +1220,21 @@ public class SC_guard_movement : MonoBehaviour
     private void StopMovementAnimation()
     {
         if (animator == null)
-        {
             return;
-        }
 
-        animator.SetBool(
-            walkParameter,
-            false
-        );
+        animator.SetBool(walkParameter, false);
+        animator.SetBool(ladderUpParameter, false);
+        animator.SetBool(ladderDownParameter, false);
+    }
 
-        animator.SetBool(
-            ladderUpParameter,
-            false
-        );
+    // ============================================================
+    // LAMPE
+    // ============================================================
 
-        animator.SetBool(
-            ladderDownParameter,
-            false
-        );
+    private void SetFlashlight(bool enabled)
+    {
+        if (flashlight != null)
+            flashlight.SetBool("on", enabled);
     }
 
     // ============================================================
@@ -1791,77 +1243,29 @@ public class SC_guard_movement : MonoBehaviour
 
     private void ResetGoofyScale()
     {
-        /*
-         * Attention :
-         * originalScale contient l'échelle originale,
-         * mais on doit conserver le flip horizontal.
-         */
-
-        Vector3 scale =
-            originalScale;
+        Vector3 scale = originalScale;
 
         if (flipCharacter)
         {
-            float currentSign =
-                Mathf.Sign(
-                    transform.localScale.x
-                );
+            float sign = Mathf.Sign(transform.localScale.x);
 
-            if (currentSign == 0f)
-            {
-                currentSign =
-                    facingRightByDefault
-                        ? 1f
-                        : -1f;
-            }
+            if (sign == 0f)
+                sign = facingRightByDefault ? 1f : -1f;
 
-            scale.x =
-                Mathf.Abs(
-                    originalScale.x
-                ) *
-                currentSign;
+            scale.x = Mathf.Abs(originalScale.x) * sign;
         }
 
-        transform.localScale =
-            scale;
+        transform.localScale = scale;
     }
 
     // ============================================================
-    // LAMPE
+    // FLIP
     // ============================================================
 
-    private void SetFlashlight(
-        bool enabled)
+    private void UpdateFlip(SC_guard_point from, SC_guard_point to)
     {
-        if (flashlight == null)
-        {
+        if (from == null || to == null)
             return;
-        }
-
-        flashlight.SetBool("on",
-            
-            enabled
-        );
-    }
-
-    // ============================================================
-    // FLIP NODE -> NODE
-    // ============================================================
-
-    private void UpdateFlip(
-        SC_guard_point from,
-        SC_guard_point to)
-    {
-        if (!flipCharacter)
-        {
-            return;
-        }
-
-        if (from == null ||
-            to == null)
-        {
-            return;
-        }
 
         UpdateFlip(
             from.transform.position,
@@ -1869,76 +1273,39 @@ public class SC_guard_movement : MonoBehaviour
         );
     }
 
-    // ============================================================
-    // FLIP POSITION -> POSITION
-    // ============================================================
-
-    private void UpdateFlip(
-        Vector3 from,
-        Vector3 to)
+    private void UpdateFlip(Vector3 from, Vector3 to)
     {
         if (!flipCharacter)
-        {
             return;
-        }
 
-        Vector3 direction =
-            to - from;
+        Vector3 direction = to - from;
 
-        if (Mathf.Abs(
-                direction.x
-            ) < 0.01f)
-        {
+        if (Mathf.Abs(direction.x) < 0.01f)
             return;
-        }
 
-        bool movingRight =
-            direction.x > 0f;
+        bool movingRight = direction.x > 0f;
 
         bool shouldFaceRight =
-            facingRightByDefault
-                ? movingRight
-                : !movingRight;
+            facingRightByDefault ? movingRight : !movingRight;
 
-        Vector3 scale =
-            transform.localScale;
+        Vector3 scale = transform.localScale;
 
-        scale.x =
-            Mathf.Abs(
-                originalScale.x
-            ) *
-            (
-                shouldFaceRight
-                    ? 1f
-                    : -1f
-            );
+        scale.x = Mathf.Abs(originalScale.x) *
+                  (shouldFaceRight ? 1f : -1f);
 
-        transform.localScale =
-            scale;
+        transform.localScale = scale;
     }
 
     // ============================================================
-    // CONNEXION
+    // CONNEXIONS
     // ============================================================
 
-    private bool IsConnected(
-        SC_guard_point from,
-        SC_guard_point to)
+    private bool IsConnected(SC_guard_point from, SC_guard_point to)
     {
-        if (from == null ||
-            to == null)
-        {
+        if (from == null || to == null || from.connections == null)
             return false;
-        }
 
-        if (from.connections == null)
-        {
-            return false;
-        }
-
-        return from.connections.Contains(
-            to
-        );
+        return from.connections.Contains(to);
     }
 
     // ============================================================
@@ -1949,16 +1316,11 @@ public class SC_guard_movement : MonoBehaviour
         SC_guard_point start,
         SC_guard_point target)
     {
-        if (start == null ||
-            target == null)
-        {
+        if (start == null || target == null)
             return null;
-        }
 
         if (start == target)
-        {
             return new List<SC_guard_point>();
-        }
 
         List<SC_guard_point> openSet =
             new List<SC_guard_point>();
@@ -1966,156 +1328,67 @@ public class SC_guard_movement : MonoBehaviour
         HashSet<SC_guard_point> closedSet =
             new HashSet<SC_guard_point>();
 
-        Dictionary<
-            SC_guard_point,
-            SC_guard_point
-        > cameFrom =
-            new Dictionary<
-                SC_guard_point,
-                SC_guard_point
-            >();
+        Dictionary<SC_guard_point, SC_guard_point> cameFrom =
+            new Dictionary<SC_guard_point, SC_guard_point>();
 
-        Dictionary<
-            SC_guard_point,
-            float
-        > gCost =
-            new Dictionary<
-                SC_guard_point,
-                float
-            >();
+        Dictionary<SC_guard_point, float> gCost =
+            new Dictionary<SC_guard_point, float>();
 
-        Dictionary<
-            SC_guard_point,
-            float
-        > fCost =
-            new Dictionary<
-                SC_guard_point,
-                float
-            >();
+        Dictionary<SC_guard_point, float> fCost =
+            new Dictionary<SC_guard_point, float>();
 
         openSet.Add(start);
 
         gCost[start] = 0f;
-
-        fCost[start] =
-            Heuristic(
-                start,
-                target
-            );
+        fCost[start] = Heuristic(start, target);
 
         while (openSet.Count > 0)
         {
-            SC_guard_point current =
-                openSet[0];
+            SC_guard_point current = openSet[0];
 
-            for (
-                int i = 1;
-                i < openSet.Count;
-                i++)
+            for (int i = 1; i < openSet.Count; i++)
             {
-                SC_guard_point candidate =
-                    openSet[i];
+                SC_guard_point candidate = openSet[i];
 
-                if (!fCost.ContainsKey(
-                        candidate))
-                {
-                    continue;
-                }
-
-                if (!fCost.ContainsKey(
-                        current
-                    ) ||
-                    fCost[candidate] <
-                    fCost[current])
-                {
-                    current =
-                        candidate;
-                }
+                if (fCost[candidate] < fCost[current])
+                    current = candidate;
             }
 
             if (current == target)
-            {
-                return ReconstructPath(
-                    cameFrom,
-                    current
-                );
-            }
+                return ReconstructPath(cameFrom, current);
 
-            openSet.Remove(
-                current
-            );
-
-            closedSet.Add(
-                current
-            );
+            openSet.Remove(current);
+            closedSet.Add(current);
 
             if (current.connections == null)
-            {
                 continue;
-            }
 
-            foreach (
-                SC_guard_point neighbour
-                in current.connections)
+            foreach (SC_guard_point neighbour in current.connections)
             {
-                if (neighbour == null)
-                {
+                if (neighbour == null || closedSet.Contains(neighbour))
                     continue;
-                }
 
-                if (closedSet.Contains(
-                        neighbour))
-                {
+                if (!IsConnected(current, neighbour))
                     continue;
-                }
 
-                if (!IsConnected(
-                        current,
-                        neighbour))
+                float distance = Vector3.Distance(
+                    current.transform.position,
+                    neighbour.transform.position
+                );
+
+                float tentativeGCost = gCost[current] + distance;
+
+                if (!gCost.ContainsKey(neighbour) ||
+                    tentativeGCost < gCost[neighbour])
                 {
-                    continue;
-                }
-
-                float distance =
-                    Vector3.Distance(
-                        current.transform.position,
-                        neighbour.transform.position
-                    );
-
-                float tentativeGCost =
-                    gCost[current] +
-                    distance;
-
-                if (!gCost.ContainsKey(
-                        neighbour))
-                {
-                    gCost[neighbour] =
-                        Mathf.Infinity;
-                }
-
-                if (tentativeGCost <
-                    gCost[neighbour])
-                {
-                    cameFrom[neighbour] =
-                        current;
-
-                    gCost[neighbour] =
-                        tentativeGCost;
+                    cameFrom[neighbour] = current;
+                    gCost[neighbour] = tentativeGCost;
 
                     fCost[neighbour] =
-                        tentativeGCost +
-                        Heuristic(
-                            neighbour,
-                            target
-                        );
+                        tentativeGCost + Heuristic(neighbour, target);
 
-                    if (!openSet.Contains(
-                            neighbour))
-                    {
-                        openSet.Add(
-                            neighbour
-                        );
-                    }
+                    if (!openSet.Contains(neighbour))
+                        openSet.Add(neighbour);
                 }
             }
         }
@@ -2123,13 +1396,7 @@ public class SC_guard_movement : MonoBehaviour
         return null;
     }
 
-    // ============================================================
-    // HEURISTIQUE
-    // ============================================================
-
-    private float Heuristic(
-        SC_guard_point a,
-        SC_guard_point b)
+    private float Heuristic(SC_guard_point a, SC_guard_point b)
     {
         return Vector3.Distance(
             a.transform.position,
@@ -2137,48 +1404,24 @@ public class SC_guard_movement : MonoBehaviour
         );
     }
 
-    // ============================================================
-    // RECONSTRUCTION A*
-    // ============================================================
-
     private List<SC_guard_point> ReconstructPath(
-        Dictionary<
-            SC_guard_point,
-            SC_guard_point
-        > cameFrom,
+        Dictionary<SC_guard_point, SC_guard_point> cameFrom,
         SC_guard_point current)
     {
-        List<SC_guard_point> path =
-            new List<SC_guard_point>();
+        List<SC_guard_point> path = new List<SC_guard_point>();
 
-        path.Add(
-            current
-        );
+        path.Add(current);
 
-        while (
-            cameFrom.ContainsKey(
-                current
-            ))
+        while (cameFrom.ContainsKey(current))
         {
-            current =
-                cameFrom[current];
-
-            path.Add(
-                current
-            );
+            current = cameFrom[current];
+            path.Add(current);
         }
 
         path.Reverse();
 
-        /*
-         * Le premier node est celui où se trouve
-         * déjà le garde.
-         */
-
         if (path.Count > 0)
-        {
             path.RemoveAt(0);
-        }
 
         return path;
     }
@@ -2187,40 +1430,27 @@ public class SC_guard_movement : MonoBehaviour
     // NODE LE PLUS PROCHE
     // ============================================================
 
-    private SC_guard_point FindClosestNode(
-        Vector3 position)
+    private SC_guard_point FindClosestNode(Vector3 position)
     {
         SC_guard_point[] nodes =
-            FindObjectsByType<SC_guard_point>(
-                FindObjectsSortMode.None
-            );
+            FindObjectsByType<SC_guard_point>(FindObjectsSortMode.None);
 
         SC_guard_point closest = null;
+        float closestDistance = Mathf.Infinity;
 
-        float closestDistance =
-            Mathf.Infinity;
-
-        foreach (
-            SC_guard_point node
-            in nodes)
+        foreach (SC_guard_point node in nodes)
         {
             if (node == null)
-            {
                 continue;
-            }
 
-            float distance =
-                Vector3.Distance(
-                    position,
-                    node.transform.position
-                );
+            float distance = Vector3.Distance(
+                position,
+                node.transform.position
+            );
 
-            if (distance <
-                closestDistance)
+            if (distance < closestDistance)
             {
-                closestDistance =
-                    distance;
-
+                closestDistance = distance;
                 closest = node;
             }
         }
@@ -2232,245 +1462,179 @@ public class SC_guard_movement : MonoBehaviour
     // NODE JOUEUR
     // ============================================================
 
-    private SC_guard_point FindClosestNodeForChase(
-        Vector3 playerPosition)
+    private SC_guard_point FindClosestNodeForChase(Vector3 playerPosition)
     {
         SC_guard_point[] nodes =
-            FindObjectsByType<SC_guard_point>(
-                FindObjectsSortMode.None
-            );
+            FindObjectsByType<SC_guard_point>(FindObjectsSortMode.None);
 
         SC_guard_point bestNode = null;
+        float bestScore = Mathf.Infinity;
 
-        float bestScore =
-            Mathf.Infinity;
+        // PRIORITE : nodes au même étage.
 
-        /*
-         * PRIORITE :
-         *
-         * 1. Même niveau
-         * 2. Distance horizontale
-         * 3. Distance verticale
-         */
-
-        foreach (
-            SC_guard_point node
-            in nodes)
+        foreach (SC_guard_point node in nodes)
         {
             if (node == null)
-            {
                 continue;
-            }
 
-            Vector3 nodePosition =
-                node.transform.position;
+            float verticalDifference = Mathf.Abs(
+                playerPosition.y - node.transform.position.y
+            );
 
-            float verticalDifference =
-                Mathf.Abs(
-                    playerPosition.y -
-                    nodePosition.y
-                );
-
-            if (verticalDifference >
-                verticalTolerance)
-            {
+            if (verticalDifference > verticalTolerance)
                 continue;
-            }
 
-            float horizontalDistance =
-                Mathf.Abs(
-                    playerPosition.x -
-                    nodePosition.x
-                );
+            float horizontalDistance = Mathf.Abs(
+                playerPosition.x - node.transform.position.x
+            );
 
             float score =
                 horizontalDistance +
-                verticalDifference *
-                verticalWeight;
+                verticalDifference * verticalWeight;
 
-            if (score <
-                bestScore)
+            if (score < bestScore)
             {
-                bestScore =
-                    score;
-
-                bestNode =
-                    node;
+                bestScore = score;
+                bestNode = node;
             }
         }
 
-        /*
-         * Aucun node au même niveau.
-         */
+        // Si aucun node n'est au même étage,
+        // on cherche le niveau vertical le plus proche.
+        // On ne ralentit PAS le garde pour autant.
 
         if (bestNode == null)
         {
-            float bestVerticalDifference =
-                Mathf.Infinity;
+            float bestVerticalDifference = Mathf.Infinity;
 
-            foreach (
-                SC_guard_point node
-                in nodes)
+            foreach (SC_guard_point node in nodes)
             {
                 if (node == null)
-                {
                     continue;
-                }
 
-                float verticalDifference =
-                    Mathf.Abs(
-                        playerPosition.y -
-                        node.transform.position.y
-                    );
+                float difference = Mathf.Abs(
+                    playerPosition.y - node.transform.position.y
+                );
 
-                if (verticalDifference <
-                    bestVerticalDifference)
+                if (difference < bestVerticalDifference)
                 {
-                    bestVerticalDifference =
-                        verticalDifference;
-
-                    bestNode =
-                        node;
+                    bestVerticalDifference = difference;
+                    bestNode = node;
                 }
             }
         }
 
         return bestNode;
     }
-    private void OnDisable()
-    {
-        Destroy(GetComponent<Rigidbody2D>());
-    }
+
     // ============================================================
-    // API : CHASE
+    // API CHASE
     // ============================================================
 
-    public void SetChaseMode(
-        bool enabled)
+    public void SetChaseMode(bool enabled)
     {
-        // ========================================================
-        // DEBUT TRAQUE
-        // ========================================================
-
         if (enabled)
         {
-            /*
-             * ====================================================
-             * REVEIL IMMEDIAT
-             * ====================================================
-             *
-             * Même si le garde dormait au moment où le joueur
-             * est détecté, il se réveille instantanément.
-             */
+            if (isChasing)
+                return;
 
             if (isSleeping)
             {
                 isSleeping = false;
-
-                sleepTimer = 0f;
+                randomSleepInProgress = false;
 
                 if (animator != null)
-                {
-                    animator.SetBool(
-                        sleepParameter,
-                        false
-                    );
-                }
+                    animator.SetBool(sleepParameter, false);
 
-                /*
-                 * On conserve sa position actuelle.
-                 * Il ne faut surtout pas le téléporter ici.
-                 */
+                if (damage != null)
+                    damage.enabled = true;
 
                 ResetGoofyScale();
             }
-            Instantiate(exclamation, exclamation_point.transform.position,Quaternion.identity);
+
+            if (exclamation != null && exclamation_point != null)
+            {
+                Instantiate(
+                    exclamation,
+                    exclamation_point.position,
+                    Quaternion.identity
+                );
+            }
+
             isChasing = true;
+            movementMode = MovementMode.Chase;
+
             SetFlashlight(false);
 
-            isWaitingAtPatrolPoint =
-                false;
+            isWaitingAtPatrolPoint = false;
 
-            movementMode =
-                MovementMode.Chase;
-
+            // On conserve la vitesse actuelle si une chasse
+            // reprend pendant un déplacement.
+            if (!isMovingBetweenNodes)
+                currentChaseSpeed = 0f;
 
             chaseTimer = 0f;
-            currentChaseSpeed = 0f;
-            /*
-             * On force un nouveau bond dès le début
-             * de la traque.
-             */
-
+            chasePathDirty = true;
             hopTimer = 0f;
-
-            /*
-             * Le timer de sommeil est suspendu pendant
-             * toute la traque.
-             */
 
             if (!isMovingBetweenNodes)
             {
+                chasePathDirty = false;
                 RecalculateChasePath();
             }
 
             return;
         }
 
-        // ========================================================
-        // FIN TRAQUE
-        // ========================================================
+        if (!isChasing)
+            return;
 
         isChasing = false;
-
-        movementMode =
-            MovementMode.Patrol;
-
+        movementMode = MovementMode.Patrol;
 
         StartSleep();
     }
+
     private void StartSleep()
     {
         isSleeping = true;
+        randomSleepInProgress = false;
+
         sleepTimer = sleepDuration;
 
         FinishPath();
-        damage.enabled  = false;
-        animator.SetTrigger("sleep");
-        animator.SetBool("Walk", false);
-        animator.SetBool("LadderUp", false);
-        animator.SetBool("LadderDown", false);
+
+        if (damage != null)
+            damage.enabled = false;
+
+        if (animator != null)
+        {
+            animator.SetBool(walkParameter, false);
+            animator.SetBool(ladderUpParameter, false);
+            animator.SetBool(ladderDownParameter, false);
+            animator.SetBool(sleepParameter, true);
+        }
 
         SetFlashlight(false);
     }
+
     // ============================================================
     // CHANGER NODE
     // ============================================================
 
-    public void SetCurrentNode(
-        SC_guard_point node)
+    public void SetCurrentNode(SC_guard_point node)
     {
-        currentNode =
-            node;
+        currentNode = node;
 
         if (node != null)
-        {
-            transform.position =
-                node.transform.position;
-        }
+            transform.position = node.transform.position;
 
         FinishPath();
     }
 
-    // ============================================================
-    // DEFINIR BASE
-    // ============================================================
-
-    public void SetBaseNode(
-        SC_guard_point node)
+    public void SetBaseNode(SC_guard_point node)
     {
-        baseNode =
-            node;
+        baseNode = node;
     }
 
     // ============================================================

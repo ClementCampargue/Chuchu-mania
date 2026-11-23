@@ -1,4 +1,5 @@
-using System;
+
+using System.Collections.Generic;
 using UnityEngine;
 
 public class SC_arrow_fish : MonoBehaviour
@@ -23,8 +24,6 @@ public class SC_arrow_fish : MonoBehaviour
 
     [Header("Saut")]
     public float jumpDuration = 1.5f;
-
-    [Tooltip("Hauteur maximale de l'arc au-dessus de la ligne entre les deux points.")]
     public float arcHeight = 3f;
 
     [Header("Délai entre les cycles")]
@@ -32,20 +31,12 @@ public class SC_arrow_fish : MonoBehaviour
 
     [Header("Orientation")]
     public bool rotateTowardsDirection = true;
-
     public float rotationSpeed = 12f;
-
-    [Tooltip(
-        "Si le sprite regarde naturellement vers la droite : 0. " +
-        "S'il regarde naturellement vers la gauche : 180."
-    )]
     public float rotationOffset = 0f;
 
     [Header("Trail")]
     public GameObject trail;
-
     public TrailRenderer trail_;
-
 
     private enum State
     {
@@ -58,47 +49,37 @@ public class SC_arrow_fish : MonoBehaviour
 
     private State state;
 
-
     private float waitTimer;
     private float jumpTimer;
     private float cycleTimer;
 
-
     private Vector3 jumpStart;
     private Vector3 jumpTarget;
-
     private Vector3 leaveTarget;
-
-
-    // Contrôle de la Bezier
     private Vector3 arcControl;
 
-
-    // true  = arrive au START puis saute vers END
-    // false = arrive au END puis saute vers START
     private bool startedFromStart;
 
+    // Buffer pour récupérer les positions réelles du TrailRenderer.
+    private readonly List<Vector2> colliderPoints = new List<Vector2>();
 
     private void Start()
     {
         if (startPoint == null || endPoint == null)
         {
-            Debug.LogError(
-                "SC_arrow_fish : startPoint ou endPoint n'est pas assigné."
-            );
-
+            Debug.LogError("SC_arrow_fish : startPoint ou endPoint non assigné.");
             enabled = false;
             return;
         }
 
+        if (edgeCollider != null)
+            edgeCollider.enabled = false;
+
         RestartPattern();
     }
 
-
     private void Update()
     {
-        arcHeight = (SC_player.instance.transform.position.y+5)*2.5f;
-
         switch (state)
         {
             case State.CycleDelay:
@@ -123,6 +104,75 @@ public class SC_arrow_fish : MonoBehaviour
         }
     }
 
+    // =========================================================
+    // COLLIDER : SUIVRE UNIQUEMENT LE TRAIL REEL
+    // =========================================================
+
+    private void LateUpdate()
+    {
+        if (state != State.Jumping)
+        {
+            DisableCollider();
+            return;
+        }
+
+        UpdateTrailCollider();
+    }
+
+    private void UpdateTrailCollider()
+    {
+        if (edgeCollider == null || trail_ == null)
+            return;
+
+        int count = trail_.positionCount;
+
+        // Pas assez de points pour créer une collision.
+        if (count < 2)
+        {
+            edgeCollider.enabled = false;
+            return;
+        }
+
+        Vector3[] positions = new Vector3[count];
+
+        int received = trail_.GetPositions(positions);
+
+        if (received < 2)
+        {
+            edgeCollider.enabled = false;
+            return;
+        }
+
+        colliderPoints.Clear();
+
+        // Conversion des positions du Trail en coordonnées locales
+        // du EdgeCollider2D.
+        for (int i = 0; i < received; i++)
+        {
+            Vector3 localPosition =
+                edgeCollider.transform.InverseTransformPoint(positions[i]);
+
+            colliderPoints.Add(
+                new Vector2(localPosition.x, localPosition.y)
+            );
+        }
+
+        // Le collider épouse uniquement le trail déjà dessiné.
+        edgeCollider.SetPoints(colliderPoints);
+
+        edgeCollider.enabled = true;
+    }
+
+    private void DisableCollider()
+    {
+        if (edgeCollider == null)
+            return;
+
+        edgeCollider.enabled = false;
+
+        colliderPoints.Clear();
+        edgeCollider.SetPoints(colliderPoints);
+    }
 
     // =========================================================
     // NOUVEAU CYCLE
@@ -130,16 +180,11 @@ public class SC_arrow_fish : MonoBehaviour
 
     private void RestartPattern()
     {
-        startedFromStart =
-            UnityEngine.Random.value > 0.5f;
 
+        startedFromStart = Random.value > 0.5f;
 
         if (startedFromStart)
         {
-            // -----------------------------------------------
-            // Arrive depuis la GAUCHE
-            // -----------------------------------------------
-
             transform.position =
                 startPoint.position +
                 Vector3.left * distanceFromPoint;
@@ -148,10 +193,6 @@ public class SC_arrow_fish : MonoBehaviour
         }
         else
         {
-            // -----------------------------------------------
-            // Arrive depuis la DROITE
-            // -----------------------------------------------
-
             transform.position =
                 endPoint.position +
                 Vector3.right * distanceFromPoint;
@@ -159,15 +200,12 @@ public class SC_arrow_fish : MonoBehaviour
             SetLookDirection(Vector3.left);
         }
 
-
         waitTimer = 0f;
         jumpTimer = 0f;
         cycleTimer = 0f;
 
-
         state = State.MovingToPoint;
     }
-
 
     // =========================================================
     // DELAI
@@ -178,11 +216,8 @@ public class SC_arrow_fish : MonoBehaviour
         cycleTimer -= Time.deltaTime;
 
         if (cycleTimer <= 0f)
-        {
             RestartPattern();
-        }
     }
-
 
     // =========================================================
     // ARRIVEE AU POINT
@@ -190,48 +225,29 @@ public class SC_arrow_fish : MonoBehaviour
 
     private void MoveToStartingPoint()
     {
-        DisableTrail();
 
+        Vector3 target = startedFromStart
+            ? startPoint.position
+            : endPoint.position;
 
-        Vector3 target;
-
-        if (startedFromStart)
-        {
-            target = startPoint.position;
-        }
-        else
-        {
-            target = endPoint.position;
-        }
-
-
-        Vector3 direction =
-            target - transform.position;
-
+        Vector3 direction = target - transform.position;
 
         SetLookDirection(direction);
 
+        transform.position = Vector3.MoveTowards(
+            transform.position,
+            target,
+            moveSpeed * Time.deltaTime
+        );
 
-        transform.position =
-            Vector3.MoveTowards(
-                transform.position,
-                target,
-                moveSpeed * Time.deltaTime
-            );
-
-
-        if (Vector3.Distance(
-                transform.position,
-                target) <= 0.01f)
+        if (Vector3.Distance(transform.position, target) <= 0.01f)
         {
             transform.position = target;
 
             waitTimer = waitTime;
-
             state = State.Waiting;
         }
     }
-
 
     // =========================================================
     // ATTENTE
@@ -239,25 +255,15 @@ public class SC_arrow_fish : MonoBehaviour
 
     private void Wait()
     {
-        // -----------------------------------------------------
-        // REGARDE LE JOUEUR
-        // -----------------------------------------------------
 
         if (aimBeforeJump)
-        {
             LookAtPlayer();
-        }
-
 
         waitTimer -= Time.deltaTime;
 
-
         if (waitTimer <= 0f)
-        {
             StartJump();
-        }
     }
-
 
     // =========================================================
     // REGARDER LE JOUEUR
@@ -268,23 +274,11 @@ public class SC_arrow_fish : MonoBehaviour
         if (SC_player.instance == null)
             return;
 
-
-        Transform player =
-            SC_player.instance.transform;
-
-
-        if (player == null)
-            return;
-
-
         Vector3 direction =
-            player.position -
-            transform.position;
-
+            SC_player.instance.transform.position - transform.position;
 
         SetLookDirection(direction);
     }
-
 
     // =========================================================
     // DEBUT DU SAUT
@@ -292,43 +286,27 @@ public class SC_arrow_fish : MonoBehaviour
 
     private void StartJump()
     {
-        EnableTrail();
+        // Sécurité : aucun ancien collider ne doit subsister.
 
+        jumpStart = transform.position;
 
-        jumpStart =
-            transform.position;
-
-
-        if (startedFromStart)
-        {
-            jumpTarget =
-                endPoint.position;
-        }
-        else
-        {
-            jumpTarget =
-                startPoint.position;
-        }
-
+        jumpTarget = startedFromStart
+            ? endPoint.position
+            : startPoint.position;
 
         jumpTimer = 0f;
 
-
-        // Création de l'arc
         CreateArc();
 
+        // Activation du Trail après son nettoyage.
+        EnableTrail();
 
-        // Orientation au début du saut
-        Vector3 tangent =
-            GetArcTangent(0f);
-
+        Vector3 tangent = GetArcTangent(0f);
 
         SetLookDirection(tangent);
 
-
         state = State.Jumping;
     }
-
 
     // =========================================================
     // CREATION DE L'ARC
@@ -336,41 +314,17 @@ public class SC_arrow_fish : MonoBehaviour
 
     private void CreateArc()
     {
-        /*
-         * On veut un arc qui monte TOUJOURS vers le haut.
-         *
-         * Exemple :
-         *
-         *          X
-         *       .     .
-         *     .         .
-         * START-----------END
-         *
-         * Peu importe si le poisson part :
-         *
-         * START -> END
-         *
-         * ou :
-         *
-         * END -> START
-         *
-         * l'arc monte toujours.
-         */
+        // La hauteur est calculée UNE SEULE FOIS par saut.
+        if (SC_player.instance != null)
+        {
+            arcHeight =
+                (SC_player.instance.transform.position.y + 5f) * 2.5f;
+        }
 
+        Vector3 middle = (jumpStart + jumpTarget) * 0.5f;
 
-        Vector3 middle =
-            (jumpStart + jumpTarget) * 0.5f;
-
-
-        // On force la hauteur vers le HAUT.
-        Vector3 upward =
-            Vector3.up * arcHeight;
-
-
-        arcControl =
-            middle + upward;
+        arcControl = middle + Vector3.up * arcHeight;
     }
-
 
     // =========================================================
     // SAUT
@@ -380,57 +334,24 @@ public class SC_arrow_fish : MonoBehaviour
     {
         jumpTimer += Time.deltaTime;
 
+        float duration = Mathf.Max(jumpDuration, 0.01f);
 
-        float duration =
-            Mathf.Max(jumpDuration, 0.01f);
+        float t = Mathf.Clamp01(jumpTimer / duration);
 
-
-        float t =
-            Mathf.Clamp01(
-                jumpTimer / duration
-            );
-
-
-        // -----------------------------------------------------
-        // POSITION
-        // -----------------------------------------------------
-
-        Vector3 position =
-            CalculateArcPosition(t);
-
-
-        transform.position =
-            position;
-
-
-        // -----------------------------------------------------
-        // ROTATION
-        // -----------------------------------------------------
+        transform.position = CalculateArcPosition(t);
 
         if (rotateTowardsDirection)
         {
-            Vector3 tangent =
-                GetArcTangent(t);
-
-
+            Vector3 tangent = GetArcTangent(t);
             SetLookDirection(tangent);
         }
 
-
-        // -----------------------------------------------------
-        // FIN
-        // -----------------------------------------------------
-
         if (t >= 1f)
         {
-            transform.position =
-                jumpTarget;
-
-
+            transform.position = jumpTarget;
             StartLeaving();
         }
     }
-
 
     // =========================================================
     // POSITION BEZIER
@@ -438,18 +359,13 @@ public class SC_arrow_fish : MonoBehaviour
 
     private Vector3 CalculateArcPosition(float t)
     {
-        float inverse =
-            1f - t;
-
+        float inverse = 1f - t;
 
         return
-            inverse * inverse * jumpStart
-            +
-            2f * inverse * t * arcControl
-            +
+            inverse * inverse * jumpStart +
+            2f * inverse * t * arcControl +
             t * t * jumpTarget;
     }
-
 
     // =========================================================
     // TANGENTE
@@ -457,17 +373,10 @@ public class SC_arrow_fish : MonoBehaviour
 
     private Vector3 GetArcTangent(float t)
     {
-        Vector3 tangent =
-            2f * (1f - t) *
-            (arcControl - jumpStart)
-            +
-            2f * t *
-            (jumpTarget - arcControl);
-
-
-        return tangent;
+        return
+            2f * (1f - t) * (arcControl - jumpStart) +
+            2f * t * (jumpTarget - arcControl);
     }
-
 
     // =========================================================
     // SORTIE
@@ -477,67 +386,41 @@ public class SC_arrow_fish : MonoBehaviour
     {
         if (startedFromStart)
         {
-            // Le poisson vient d'arriver au END.
-            // Il continue vers la droite.
-
             leaveTarget =
                 endPoint.position +
                 Vector3.right * distanceFromPoint;
         }
         else
         {
-            // Le poisson vient d'arriver au START.
-            // Il continue vers la gauche.
-
             leaveTarget =
                 startPoint.position +
                 Vector3.left * distanceFromPoint;
         }
 
-
-        SetLookDirection(
-            leaveTarget - transform.position
-        );
-
+        SetLookDirection(leaveTarget - transform.position);
 
         state = State.Leaving;
     }
 
-
-    // =========================================================
-    // SORTIE
-    // =========================================================
-
     private void Leave()
     {
-        Vector3 direction =
-            leaveTarget -
-            transform.position;
-
+        Vector3 direction = leaveTarget - transform.position;
 
         SetLookDirection(direction);
 
+        transform.position = Vector3.MoveTowards(
+            transform.position,
+            leaveTarget,
+            moveSpeed * Time.deltaTime
+        );
 
-        transform.position =
-            Vector3.MoveTowards(
-                transform.position,
-                leaveTarget,
-                moveSpeed * Time.deltaTime
-            );
-
-
-        if (Vector3.Distance(
-                transform.position,
-                leaveTarget) <= 0.01f)
+        if (Vector3.Distance(transform.position, leaveTarget) <= 0.01f)
         {
-            transform.position =
-                leaveTarget;
-
+            transform.position = leaveTarget;
 
             StartCycleDelay();
         }
     }
-
 
     // =========================================================
     // ORIENTATION
@@ -548,40 +431,25 @@ public class SC_arrow_fish : MonoBehaviour
         if (!rotateTowardsDirection)
             return;
 
-
         direction.z = 0f;
-
 
         if (direction.sqrMagnitude < 0.0001f)
             return;
 
-
         float angle =
-            Mathf.Atan2(
-                direction.y,
-                direction.x
-            ) * Mathf.Rad2Deg;
-
+            Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
 
         angle += rotationOffset;
 
-
         Quaternion targetRotation =
-            Quaternion.Euler(
-                0f,
-                0f,
-                angle
-            );
+            Quaternion.Euler(0f, 0f, angle);
 
-
-        transform.rotation =
-            Quaternion.Lerp(
-                transform.rotation,
-                targetRotation,
-                rotationSpeed * Time.deltaTime
-            );
+        transform.rotation = Quaternion.Lerp(
+            transform.rotation,
+            targetRotation,
+            rotationSpeed * Time.deltaTime
+        );
     }
-
 
     // =========================================================
     // TRAIL
@@ -589,38 +457,31 @@ public class SC_arrow_fish : MonoBehaviour
 
     private void EnableTrail()
     {
+        DisableCollider();
+
         if (trail_ != null)
+        {
             trail_.Clear();
-        trail_.enabled = false;
+            trail_.enabled = true;
+        }
 
         if (trail != null)
             trail.SetActive(true);
-        trail_.enabled = true;
-        Invoke("EnableTrail2",0.5f);
     }
-
-    public void EnableTrail2()
-    {
-        edgeCollider.enabled = true;
-
-    }
-
 
     private void DisableTrail()
     {
-        edgeCollider.enabled = false;
+        DisableCollider();
+
         if (trail_ != null)
         {
             trail_.Clear();
+            trail_.enabled = false;
         }
-
 
         if (trail != null)
-        {
             trail.SetActive(false);
-        }
     }
-
 
     // =========================================================
     // FIN DU CYCLE
@@ -628,11 +489,10 @@ public class SC_arrow_fish : MonoBehaviour
 
     private void StartCycleDelay()
     {
-        cycleTimer =
-            cycleDelay;
+        Invoke("DisableTrail", 3);
 
+        cycleTimer = cycleDelay;
 
-        state =
-            State.CycleDelay;
+        state = State.CycleDelay;
     }
 }

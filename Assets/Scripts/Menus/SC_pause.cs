@@ -7,6 +7,9 @@ using UnityEngine.SceneManagement;
 
 public class SC_pause : MonoBehaviour
 {
+    public GameObject hud;
+    public Transform with_hud_position;
+    public Transform without_hud_position;
     [Header("Input")]
     public InputActionReference moveaction;
     public InputActionReference pauseAction;
@@ -272,7 +275,14 @@ public class SC_pause : MonoBehaviour
     {
         isPaused = true;
         canclose = true;
-
+        if (hud.gameObject.activeInHierarchy)
+        {
+            transform.position = with_hud_position.position;
+        }
+        else
+        {
+            transform.position = without_hud_position.position;
+        }
         if (group != null)
             group.SetFloat("LevelVolume", -1000f);
 

@@ -3,6 +3,11 @@ using UnityEngine;
 
 public class SC_fish_enemy : MonoBehaviour
 {
+    // Registre partagé par tous les poissons : un Starbit ne peut être
+    // réservé que par un seul poisson à la fois.
+    private static readonly Dictionary<SC_starbit, SC_fish_enemy> starbitReservations =
+        new Dictionary<SC_starbit, SC_fish_enemy>();
+
     private enum State
     {
         Swimming,
@@ -24,12 +29,12 @@ public class SC_fish_enemy : MonoBehaviour
 
     public SC_water_physic water;
     public bool big;
-    private bool  caughtStarbit;
+    private bool caughtStarbit;
 
     [Header("Comportement")]
     [SerializeField] private bool once = false;
     [SerializeField] private int starbits_before_leave = 1;
-     private int currentstarbit =0;
+    private int currentstarbit = 0;
 
     [Header("Patrouille")]
     [SerializeField] private Transform leftPoint;
@@ -234,7 +239,7 @@ public class SC_fish_enemy : MonoBehaviour
     private void SetAngryMode()
     {
         angry.PlayJuice();
-        PlayerPrefs.SetInt("angry_fish",1);
+        PlayerPrefs.SetInt("angry_fish", 1);
 
         TriggerAnimation("change_state");
         BoolAnimation("angry", true);
@@ -244,7 +249,7 @@ public class SC_fish_enemy : MonoBehaviour
     {
         SwimBetweenPoints();
 
-        if(targetStarbit == null)
+        if (targetStarbit == null)
         {
             hasChosenStarbit = false;
         }
@@ -260,10 +265,9 @@ public class SC_fish_enemy : MonoBehaviour
             {
                 SC_starbit starbit = FindStarbit();
 
-                if (starbit != null)
+                if (starbit != null && TryReserveStarbit(starbit))
                 {
                     targetStarbit = starbit;
-
                     hasChosenStarbit = true;
                 }
             }
@@ -273,7 +277,7 @@ public class SC_fish_enemy : MonoBehaviour
         {
             if (!IsStarbitValid(targetStarbit))
             {
-                targetStarbit = null;
+                ReleaseTargetStarbit();
 
                 StartChasingChuchu();
                 return;
@@ -365,7 +369,7 @@ public class SC_fish_enemy : MonoBehaviour
 
         foreach (SC_starbit starbit in starbits)
         {
-            if (!IsStarbitValid(starbit))
+            if (!IsStarbitAvailable(starbit))
                 continue;
 
             float distance =
@@ -384,22 +388,81 @@ public class SC_fish_enemy : MonoBehaviour
         return closest;
     }
 
-    private bool IsStarbitValid(SC_starbit starbit)
+    private bool IsStarbitAvailable(SC_starbit starbit)
     {
-        if (starbit == null)
+        CleanStarbitReservations();
+
+        if (starbit == null || !starbit.gameObject.activeInHierarchy)
             return false;
 
-        if (!starbit.gameObject.activeInHierarchy)
-            return false;
+        if (starbitReservations.TryGetValue(starbit, out SC_fish_enemy owner))
+            return owner == this;
 
         return true;
+    }
+
+    private bool IsStarbitValid(SC_starbit starbit)
+    {
+        return IsStarbitAvailable(starbit);
+    }
+
+    private bool TryReserveStarbit(SC_starbit starbit)
+    {
+        CleanStarbitReservations();
+
+        if (starbit == null || !starbit.gameObject.activeInHierarchy)
+            return false;
+
+        if (starbitReservations.TryGetValue(starbit, out SC_fish_enemy owner))
+            return owner == this;
+
+        starbitReservations.Add(starbit, this);
+        return true;
+    }
+
+    // Libère uniquement les réservations appartenant à ce poisson.
+    private void ReleaseTargetStarbit()
+    {
+        if (targetStarbit != null &&
+            starbitReservations.TryGetValue(targetStarbit, out SC_fish_enemy owner) &&
+            owner == this)
+        {
+            starbitReservations.Remove(targetStarbit);
+        }
+
+        targetStarbit = null;
+    }
+
+    private void OnDestroy()
+    {
+        ReleaseTargetStarbit();
+    }
+
+    // Nettoie les entrées laissées par des objets ou poissons détruits.
+    private static void CleanStarbitReservations()
+    {
+        List<SC_starbit> staleStarbits = new List<SC_starbit>();
+
+        foreach (KeyValuePair<SC_starbit, SC_fish_enemy> reservation in starbitReservations)
+        {
+            if (reservation.Key == null || reservation.Value == null)
+                staleStarbits.Add(reservation.Key);
+        }
+
+        foreach (SC_starbit starbit in staleStarbits)
+            starbitReservations.Remove(starbit);
+    }
+
+    private void OnDisable()
+    {
+        ReleaseTargetStarbit();
     }
 
     private void CheckIfUnderTarget()
     {
         if (!IsStarbitValid(targetStarbit))
         {
-            targetStarbit = null;
+            ReleaseTargetStarbit();
 
             StartChasingChuchu();
             return;
@@ -440,7 +503,7 @@ public class SC_fish_enemy : MonoBehaviour
     {
         if (!IsStarbitValid(targetStarbit))
         {
-            targetStarbit = null;
+            ReleaseTargetStarbit();
 
             StartChasingChuchu();
             return;
@@ -466,7 +529,7 @@ public class SC_fish_enemy : MonoBehaviour
     {
         if (!IsStarbitValid(targetStarbit))
         {
-            targetStarbit = null;
+            ReleaseTargetStarbit();
 
             StartChasingChuchu();
             return;
@@ -558,7 +621,7 @@ public class SC_fish_enemy : MonoBehaviour
         {
             if (shouldChaseChuchuAfterJump)
             {
-                targetStarbit = null;
+                ReleaseTargetStarbit();
 
                 StartFalling();
 
@@ -571,7 +634,7 @@ public class SC_fish_enemy : MonoBehaviour
 
     private void EatStarbit()
     {
-         caughtStarbit = false;
+        caughtStarbit = false;
 
         if (IsStarbitValid(targetStarbit))
         {
@@ -590,7 +653,7 @@ public class SC_fish_enemy : MonoBehaviour
             }
         }
 
-        targetStarbit = null;
+        ReleaseTargetStarbit();
 
         isChasingChuchu = false;
         shouldChaseChuchuAfterJump = false;
@@ -607,7 +670,7 @@ public class SC_fish_enemy : MonoBehaviour
 
     private void StartChasingChuchu()
     {
-        targetStarbit = null;
+        ReleaseTargetStarbit();
 
         isChasingChuchu = true;
 
@@ -923,7 +986,7 @@ public class SC_fish_enemy : MonoBehaviour
 
         postJumpTimer =
             postJumpDelay;
-        if(currentstarbit== starbits_before_leave)
+        if (currentstarbit == starbits_before_leave)
         {
             if (once && caughtStarbit)
             {
@@ -951,7 +1014,7 @@ public class SC_fish_enemy : MonoBehaviour
 
         if (postJumpTimer <= 0f)
         {
-            targetStarbit = null;
+            ReleaseTargetStarbit();
 
             if (currentstarbit == starbits_before_leave)
             {
@@ -1019,7 +1082,7 @@ public class SC_fish_enemy : MonoBehaviour
 
         leavingScreen = true;
 
-        targetStarbit = null;
+        ReleaseTargetStarbit();
 
         isChasingChuchu = false;
         shouldChaseChuchuAfterJump = false;
