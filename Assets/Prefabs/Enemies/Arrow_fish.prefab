@@ -245,6 +245,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   damage: 1
   ejection_power: {x: 1, y: 1}
+  destroy_on_damage: 0
 --- !u!114 &6284831618545753272
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -308,6 +309,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   trs: {fileID: 0}
   spriteRenderer: {fileID: 0}
+  spriteRendererList: []
   flashMaterial: {fileID: 2100000, guid: 778865bbd08486043a01aeb31184e581, type: 2}
   rumble: 1
   rumbleLow: 0.1
@@ -525,6 +527,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   trs: {fileID: 0}
   spriteRenderer: {fileID: 0}
+  spriteRendererList: []
   flashMaterial: {fileID: 2100000, guid: 778865bbd08486043a01aeb31184e581, type: 2}
   rumble: 0
   rumbleLow: 0.1
@@ -5751,6 +5754,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   trs: {fileID: 0}
   spriteRenderer: {fileID: 0}
+  spriteRendererList: []
   flashMaterial: {fileID: 2100000, guid: 778865bbd08486043a01aeb31184e581, type: 2}
   rumble: 0
   rumbleLow: 0.1
@@ -5965,6 +5969,7 @@ GameObject:
   - component: {fileID: 3574069979394456430}
   - component: {fileID: 3080689799176463004}
   - component: {fileID: 3635751599326262891}
+  - component: {fileID: 1551268115359784579}
   m_Layer: 0
   m_Name: Arrow_fish
   m_TagString: Untagged
@@ -6055,7 +6060,43 @@ MonoBehaviour:
   isKnockedBack: 0
   isStunned: 0
   die_burn: 0
-  script: {fileID: 0}
+  script: {fileID: 3080689799176463004}
+--- !u!58 &1551268115359784579
+CircleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8089533208194482184}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_CompositeOperation: 0
+  m_CompositeOrder: 0
+  m_Offset: {x: -0.03, y: -0.09}
+  m_Radius: 0.62
 --- !u!1 &8882843381008156606
 GameObject:
   m_ObjectHideFlags: 0
@@ -6066,7 +6107,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1986609297800049689}
   - component: {fileID: 3767033375751100388}
-  - component: {fileID: 2269480796041335752}
   - component: {fileID: 959437310249725215}
   m_Layer: 0
   m_Name: Sprite
@@ -6145,42 +6185,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!58 &2269480796041335752
-CircleCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8882843381008156606}
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_ForceSendLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_ForceReceiveLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_ContactCaptureLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_CallbackLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_IsTrigger: 1
-  m_UsedByEffector: 0
-  m_CompositeOperation: 0
-  m_CompositeOrder: 0
-  m_Offset: {x: 0, y: 0}
-  m_Radius: 0.62
 --- !u!114 &959437310249725215
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6195,3 +6199,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   damage: 1
   ejection_power: {x: 1, y: 1}
+  destroy_on_damage: 0

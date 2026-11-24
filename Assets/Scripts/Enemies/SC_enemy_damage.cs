@@ -105,7 +105,7 @@ public class SC_enemy_damage : MonoBehaviour
     }
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        if (collision.gameObject.CompareTag("Player"))
+        if (collision.gameObject.CompareTag("Player") && SC_icecream_eat_system.instance.isPowerUpActive)
         {
             Knockback();
 
@@ -119,7 +119,7 @@ public class SC_enemy_damage : MonoBehaviour
     }
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.gameObject.CompareTag("Player"))
+        if (collision.gameObject.CompareTag("Player") && SC_icecream_eat_system.instance.isPowerUpActive)
         {
             Knockback();
 

@@ -1869,6 +1869,7 @@ MonoBehaviour:
   currrent_ice_cream: 0
   eat_input: {fileID: -7868807682114652187, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
   mat: {fileID: 2100000, guid: d465e86a57e33f84abb482636275e583, type: 2}
+  mat2: {fileID: 0}
   stomach_fill_per_cream: 0.03
   stomach_fill_speed: 25
   delayBetweenCreams: 0.1
@@ -3307,7 +3308,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 458446795
   m_SortingLayer: 1
-  m_SortingOrder: 11
+  m_SortingOrder: 7
   m_Sprite: {fileID: -766750901, guid: d40d992cafeb414438cc6f3d030f848d, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
