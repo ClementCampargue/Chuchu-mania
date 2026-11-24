@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class SC_dard : MonoBehaviour
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
+    public SC_damage_player damae;
     void Start()
     {
         
@@ -11,15 +11,30 @@ public class SC_dard : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        if (SC_balloon_player.instance.isActive)
+        {
+            damae.enabled = true;
+        }
+        else
+        {
+            damae.enabled = false;
+        }
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.CompareTag("Player"))
         {
-            SC_balloon_player.instance.Activate();
-            Destroy(gameObject);
+
+            if (SC_balloon_player.instance.isActive)
+            {
+            }
+            else
+            {
+                SC_balloon_player.instance.Activate();
+
+                Destroy(gameObject);
+            }
         }
     }
 }

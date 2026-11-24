@@ -7,6 +7,9 @@ using UnityEngine.Rendering;
 
 public class SC_player : MonoBehaviour
 {
+    public Animator hud_;
+
+    public GameObject cosmic_mode;
     private Coroutine invincibilityCoroutine;
     private Coroutine lowHealthCoroutine;
     private Coroutine hitCoroutine;
@@ -163,11 +166,12 @@ public class SC_player : MonoBehaviour
     public SC_juiciness jump;
     public SC_juiciness damage_sfx;
     public SC_juiciness bounce_sfx;
-    public SC_juiciness damage_lava_sfx;
+    public SC_juiciness damage_lava_sfx; 
     public SC_juiciness stun;
     public SC_juiciness transformation;
     public SC_juiciness die;
     public SC_juiciness land;
+    public SC_juiciness punch;
     public SC_juiciness start;
 
     public AudioSource grid;
@@ -1460,22 +1464,33 @@ if (vertical > 0f && nextY >= echelle.TopY)
 
     public void powerup()
     {
+        hud_.SetBool("cosmic", true);
+        SC_music_manager.instance.pause_music();
         anim.ResetTrigger("Punch");
         anim.SetBool("Eat", false);
-
         isInvincible = true;
-
-        if (transformation != null)
-            transformation.PlayJuice();
 
         normal.SetActive(false);
         transformed.SetActive(true);
-
+        Invoke("powerup_trigger", transformFreezeTime);
         StartCoroutine(PowerupFreeze(true));
+    }
+
+    public void powerup_trigger()
+    {
+        cosmic_mode.SetActive(true);
+
+        if (transformation != null)
+            transformation.PlayJuice();
+        SC_music_manager.instance.update_music(eat_system.music);
+
     }
 
     public void end_powerup()
     {
+        cosmic_mode.SetActive(false);
+        hud_.SetBool("cosmic", false);
+
         normal.SetActive(true);
         transformed.SetActive(false);
 
@@ -1813,11 +1828,12 @@ if (vertical > 0f && nextY >= echelle.TopY)
         isInvincible = false;
         burning = false;
         canTakeDamage = true;
-
+        hud_.SetBool("cosmic", false);
         moveSpeed = base_speed;
         PowermoveSpeed = BasePowermoveSpeed;
+        cosmic_mode.SetActive(false);
 
-        canClimb = false;
+            canClimb = false;
         isClimbing = false;
         grillage = null;
 

@@ -36,14 +36,56 @@ MonoBehaviour:
     m_StrikethroughThickness: 0
     m_TabWidth: 0
   m_Material: {fileID: 8427853569094505637}
-  spriteSheet: {fileID: 2800000, guid: bc45bb5bc3e08cd4b943dacf7440f4ae, type: 3}
+  spriteSheet: {fileID: 2800000, guid: 277802f3c1cc1ad41aebe54fae12c063, type: 3}
   m_SpriteCharacterTable:
+  - m_ElementType: 2
+    m_Unicode: 65534
+    m_GlyphIndex: 1
+    m_Scale: 1
+    m_Name: glyph_0
+  - m_ElementType: 2
+    m_Unicode: 65534
+    m_GlyphIndex: 2
+    m_Scale: 1
+    m_Name: glyph_1
   - m_ElementType: 2
     m_Unicode: 65534
     m_GlyphIndex: 0
     m_Scale: 1
     m_Name: small_star
   m_GlyphTable:
+  - m_Index: 1
+    m_Metrics:
+      m_Width: 7
+      m_Height: 7
+      m_HorizontalBearingX: -3.5
+      m_HorizontalBearingY: 3.5
+      m_HorizontalAdvance: 7
+    m_GlyphRect:
+      m_X: 3
+      m_Y: 2
+      m_Width: 7
+      m_Height: 7
+    m_Scale: 1
+    m_AtlasIndex: 0
+    m_ClassDefinitionType: 0
+    sprite: {fileID: -2141358037, guid: 277802f3c1cc1ad41aebe54fae12c063, type: 3}
+  - m_Index: 2
+    m_Metrics:
+      m_Width: 7
+      m_Height: 7
+      m_HorizontalBearingX: 0
+      m_HorizontalBearingY: 7.09
+      m_HorizontalAdvance: 0
+    m_GlyphRect:
+      m_X: 13
+      m_Y: 1
+      m_Width: 7
+      m_Height: 7
+    m_Scale: 1
+    m_AtlasIndex: 0
+    m_ClassDefinitionType: 0
+    sprite: {fileID: 338163974, guid: 277802f3c1cc1ad41aebe54fae12c063, type: 3}
   - m_Index: 0
     m_Metrics:
       m_Width: 7
@@ -86,7 +128,7 @@ Material:
     serializedVersion: 3
     m_TexEnvs:
     - _MainTex:
-        m_Texture: {fileID: 2800000, guid: bc45bb5bc3e08cd4b943dacf7440f4ae, type: 3}
+        m_Texture: {fileID: 2800000, guid: 277802f3c1cc1ad41aebe54fae12c063, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     m_Ints: []

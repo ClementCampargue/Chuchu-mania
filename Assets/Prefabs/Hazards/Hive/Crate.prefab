@@ -48,11 +48,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   trs: {fileID: 3801871748144976642}
   spriteRenderer: {fileID: 9160068342431461309}
+  spriteRendererList: []
   flashMaterial: {fileID: 0}
   rumble: 0
   rumbleLow: 0
   rumbleHigh: 0
   rumbleDuration: 0
+  cameraTransform: {fileID: 0}
   shakeAmplitude: 0
   shakeFrequency: 0
   shakeScreenDuration: 0
@@ -119,6 +121,7 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+  play_onawake: 0
 --- !u!1 &1157333570664718618
 GameObject:
   m_ObjectHideFlags: 0
@@ -5388,11 +5391,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   trs: {fileID: 3801871748144976642}
   spriteRenderer: {fileID: 9160068342431461309}
+  spriteRendererList: []
   flashMaterial: {fileID: 0}
   rumble: 0
   rumbleLow: 0
   rumbleHigh: 0
   rumbleDuration: 0
+  cameraTransform: {fileID: 0}
   shakeAmplitude: 0
   shakeFrequency: 0
   shakeScreenDuration: 0
@@ -5459,6 +5464,7 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+  play_onawake: 0
 --- !u!1 &5465307612538632494
 GameObject:
   m_ObjectHideFlags: 0
@@ -15458,11 +15464,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   trs: {fileID: 3801871748144976642}
   spriteRenderer: {fileID: 9160068342431461309}
+  spriteRendererList: []
   flashMaterial: {fileID: 0}
   rumble: 0
   rumbleLow: 0
   rumbleHigh: 0
   rumbleDuration: 0
+  cameraTransform: {fileID: 0}
   shakeAmplitude: 0
   shakeFrequency: 0
   shakeScreenDuration: 0
@@ -15529,6 +15537,7 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+  play_onawake: 0
 --- !u!1 &7439670641669062729
 GameObject:
   m_ObjectHideFlags: 0

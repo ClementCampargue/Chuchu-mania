@@ -5,6 +5,7 @@ public class SC_damage_player : MonoBehaviour
 
     public int damage = 1;
     public Vector2 ejection_power;
+    public bool destroy_on_damage;
     void Start()
     {
         
@@ -22,8 +23,10 @@ public class SC_damage_player : MonoBehaviour
         {
             if (this.enabled)
             {
-                SC_player.instance.TakeDamage(damage, ejection_power, transform.position);
+                SC_player.instance.TakeDamage(damage, ejection_power, transform.position); 
                 Debug.Log(gameObject.name + "  a fait bobo");
+                if(destroy_on_damage)
+            { Destroy(gameObject); }    
             }
         }
     }

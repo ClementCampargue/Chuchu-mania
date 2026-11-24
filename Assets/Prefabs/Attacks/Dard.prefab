@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 5491873187000102993}
   - component: {fileID: 6335403804741090315}
   - component: {fileID: 4835771459765941662}
+  - component: {fileID: 4523700847333453444}
   m_Layer: 0
   m_Name: Dard
   m_TagString: Dard
@@ -144,6 +145,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1391165057f5b55439187900cae39298, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  damae: {fileID: 4523700847333453444}
+--- !u!114 &4523700847333453444
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3969056154317488276}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3cab93887c1fb5d4a858f0443af4921e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  damage: 1
+  ejection_power: {x: 1, y: 1}
 --- !u!1 &5326431177433557642
 GameObject:
   m_ObjectHideFlags: 0

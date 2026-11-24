@@ -24,7 +24,8 @@ public class SC_fish_enemy : MonoBehaviour
         JumpingAtChuchu,
         WaitingAtChuchuTop
     }
-
+    public Animator anim_aim;
+    public SC_aim_system aim;
     public List<Animator> anims;
 
     public SC_water_physic water;
@@ -264,7 +265,7 @@ public class SC_fish_enemy : MonoBehaviour
             if (targetStarbit == null && !hasChosenStarbit)
             {
                 SC_starbit starbit = FindStarbit();
-
+                aim.targetPoint = starbit.transform.position;
                 if (starbit != null && TryReserveStarbit(starbit))
                 {
                     targetStarbit = starbit;
@@ -493,7 +494,14 @@ public class SC_fish_enemy : MonoBehaviour
     private void StartWaitingBeforeJump()
     {
         preJumpTimer = preJumpDelay;
-
+        if (anim_aim.enabled)
+        {
+            anim_aim.SetTrigger("aim");
+        }
+        else
+        {
+            anim_aim.enabled = true;
+        }
         TriggerAnimation("wait_jump");
 
         state = State.WaitingBeforeJump;
@@ -740,7 +748,15 @@ public class SC_fish_enemy : MonoBehaviour
     private void StartChuchuPreJump()
     {
         TriggerAnimation("wait_jump");
-
+        aim.targetPoint = SC_player.instance.transform.position;
+        if (anim_aim.enabled)
+        {
+            anim_aim.SetTrigger("aim");
+        }
+        else
+        {
+            anim_aim.enabled = true;
+        }
         chuchuPreJumpTimer =
             chuchuPreJumpDelay;
 
@@ -778,10 +794,7 @@ public class SC_fish_enemy : MonoBehaviour
         }
         chuchuJumpX =
             transform.position.x;
-
-        chuchuJumpTargetHeight =
-            chuchuJumpHeight;
-
+        chuchuJumpTargetHeight = SC_player.instance.transform.position.y;
 
         transform.position = new Vector2(
             chuchuJumpX,

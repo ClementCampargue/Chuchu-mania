@@ -70,10 +70,13 @@ public class SC_crate : MonoBehaviour
             if (SC_icecream_eat_system.instance.isPowerUpActive)
             {
                 SC_player.instance.anim.SetTrigger("Punch");
+
+                SC_player.instance.punch.PlayJuice();
                 juice2.PlayJuice();
                 die();
             }
         }
+
         if (collision.gameObject.CompareTag("Ground"))
         {
             land_juice.PlayJuice();
@@ -111,6 +114,19 @@ public class SC_crate : MonoBehaviour
                 juice.PlayJuice();
                 die();
             }
+
+        }
+        if (collision.gameObject.CompareTag("Cage") && SC_icecream_eat_system.instance.isPowerUpActive)
+        {
+            juice.PlayJuice();
+            die();
+
+        }
+        if (collision.gameObject.CompareTag("Player") && SC_icecream_eat_system.instance.isPowerUpActive)
+        {
+            SC_player.instance.anim.SetTrigger("Punch");
+            SC_player.instance.punch.PlayJuice(); juice.PlayJuice();
+            die();
 
         }
 

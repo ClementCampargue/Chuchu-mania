@@ -2,6 +2,10 @@ using UnityEngine;
 
 public class SC_cage : MonoBehaviour
 {
+    public GameObject cage_normal;
+    public GameObject broken;
+    public GameObject broken2;
+    public SC_particle_trail effetc;
     private SC_icecream_eat_system system;
 
     public int Health = 1;
@@ -10,6 +14,7 @@ public class SC_cage : MonoBehaviour
     private SC_win_screen win_screen;
 
     public SC_juiciness juice_damage;
+    public SC_juiciness juice_bump;
     public SC_juiciness juice_death;
 
     public Material player_green;
@@ -146,6 +151,8 @@ public class SC_cage : MonoBehaviour
 
     private void Bounce()
     {
+        juice_bump.PlayJuice();
+
         // Réduit la vitesse à chaque rebond
         currentSpeed *= speedMultiplierOnBounce;
         bounce_juice.PlayJuice();
@@ -184,6 +191,16 @@ public class SC_cage : MonoBehaviour
             Health > 0 &&
             !isInvincible)
         {
+            int playerLayer = LayerMask.NameToLayer("Player");
+
+            if (playerLayer != -1)
+            {
+                gameObject.layer = playerLayer;
+            }
+            else
+            {
+                Debug.LogError("La layer Player n'existe pas !");
+            }
             Debug.Log("Cage frappée !");
 
             SetDirectionFromPlayer();
@@ -194,7 +211,16 @@ public class SC_cage : MonoBehaviour
                 invincibilityCoroutine =
                     StartCoroutine(InvincibilityFrames());
             }
-
+            if (Health == 3)
+            {
+                cage_normal.SetActive(false);
+                broken.SetActive(true);
+            }
+            else if (Health == 2)
+            {
+                broken.SetActive(false);
+                broken2.SetActive(true);
+            }
             die();
 
             if (Health > 0)
@@ -228,7 +254,6 @@ public class SC_cage : MonoBehaviour
 
         // Nouvelle vitesse
         currentSpeed = startSpeed;
-
         // Si aucune direction n'a encore été définie,
         // on crée une direction aléatoire.
         if (direction.sqrMagnitude < 0.01f)
@@ -258,7 +283,7 @@ public class SC_cage : MonoBehaviour
         currentSpeed = 0f;
 
         Health--;
-
+        effetc.enabled = true;
         if (Health <= 0)
         {
             Health = 0;
@@ -280,7 +305,6 @@ public class SC_cage : MonoBehaviour
 
             SC_player.instance.rb.constraints =
                 RigidbodyConstraints2D.FreezeAll;
-
             SC_player.instance.anim .SetTrigger("End");
             SC_player.instance.enabled = false;
 

@@ -226,10 +226,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 276a0cf751390a14ca2a4a2ed1c71cd2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  score_popup: {fileID: 8478617712824187117, guid: 1caafafa654620f41882bdefc4072d2b, type: 3}
   multiplierText: {fileID: 0}
   progressiveEat: 1
   eatSpeed: 0.5
   isEating: 0
+  selectedCreams: []
   creams_points:
   - {fileID: 6899160171033498648}
   - {fileID: 7312589106270476527}
@@ -245,6 +247,7 @@ MonoBehaviour:
   currrent_ice_cream: 0
   eat_input: {fileID: -7868807682114652187, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
   mat: {fileID: 2100000, guid: d465e86a57e33f84abb482636275e583, type: 2}
+  mat2: {fileID: 2100000, guid: 78341a873f89e5e478d47d2d84625195, type: 2}
   stomach_fill_per_cream: 0.03
   stomach_fill_speed: 25
   delayBetweenCreams: 0.1
@@ -253,6 +256,8 @@ MonoBehaviour:
   eat: {fileID: 4251476775065246266}
   eating_sfx: {fileID: 1275778307263400631}
   music: {fileID: 8300000, guid: d83efc43f00eb5545865017d07e8e960, type: 3}
+  caneat: 1
+  canfillup: 1
 --- !u!1 &2063167180171344698
 GameObject:
   m_ObjectHideFlags: 0
@@ -331,11 +336,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   trs: {fileID: 0}
   spriteRenderer: {fileID: 0}
+  spriteRendererList: []
   flashMaterial: {fileID: 2100000, guid: 778865bbd08486043a01aeb31184e581, type: 2}
   rumble: 1
   rumbleLow: 0.1
   rumbleHigh: 0.3
   rumbleDuration: 0.1
+  cameraTransform: {fileID: 0}
   shakeAmplitude: 0
   shakeFrequency: 0
   shakeScreenDuration: 0
@@ -401,6 +408,7 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+  play_onawake: 0
 --- !u!82 &8457756503170461745
 AudioSource:
   m_ObjectHideFlags: 0

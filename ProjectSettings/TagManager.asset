@@ -12,6 +12,7 @@ TagManager:
   - Damage
   - Dard
   - Ladder
+  - Cage
   layers:
   - Default
   - TransparentFX

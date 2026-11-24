@@ -1,4 +1,4 @@
-using System;
+
 using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -7,60 +7,111 @@ public class SC_balloon_player : MonoBehaviour
 {
     [Header("References")]
     public SC_player player;
-
-    [Tooltip("GameObject visuel du ballon")]
     public GameObject balloonVisual;
+    public Animator anim;
+    public Transform ghost;
+    public SC_juiciness bounce;
+
     [Header("Screen Wrap")]
     private Vector2 limit;
 
     [Header("Balloon Movement")]
     public float riseSpeed = 4f;
     public float horizontalSpeed = 5f;
-
-    [Tooltip("Délai avant que le ballon commence à monter")]
     public float riseDelay = 0.5f;
 
-    [Header("Deflate")]
-    [Tooltip("Délai après avoir touché le sol avant de redevenir normal")]
-    public float deflateDelay = 0.5f;
+    [Header("Bounce")]
+    [Tooltip("Vitesse initiale du rebond")]
+    public float bounceForce = 12f;
+
+    [Tooltip("Durée maximale du rebond")]
+    public float bounceDuration = 0.6f;
+
+    [Tooltip("Vitesse de décélération du rebond")]
+    public float bounceDeceleration = 18f;
+
+    [Tooltip("Délai entre deux rebonds")]
+    public float bounceCooldown = 0.15f;
+
+    [Header("Balloon Duration")]
+    public float balloonDuration = 5f;
+
+    [Header("Ground Detection")]
+    public LayerMask groundLayer;
+
     [Header("Ceiling Detection")]
     public Transform ceilingCheck;
     public float ceilingCheckDistance = 0.15f;
     public LayerMask ceilingLayer;
-    private bool isActive;
+
+    [Header("Deflate")]
+    public float deflateDelay = 0.5f;
+
+    public bool isActive;
     private bool isDeflating;
     private bool canRise;
+    private bool isBouncing;
 
     private Rigidbody2D rb;
 
     private Coroutine riseCoroutine;
     private Coroutine deflateCoroutine;
+    private Coroutine durationCoroutine;
+
+    private float lastBounceTime = float.NegativeInfinity;
+    private float bounceTimer;
+
+    // Vitesse vectorielle du rebond
+    private Vector2 bounceVelocity;
 
     public InputActionReference move;
-
     public Vector2 moveInput;
 
     public static SC_balloon_player instance;
 
-    public Animator anim;
-    public Transform ghost;
-
     // =========================================================
     // AWAKE
+    // =========================================================
+
+    private void Awake()
+    {
+        instance = this;
+
+        rb = player.rb;
+
+        if (balloonVisual != null)
+            balloonVisual.SetActive(false);
+    }
+
+    // =========================================================
+    // ENABLE / DISABLE
+    // =========================================================
+
+    private void OnEnable()
+    {
+        if (move != null)
+            move.action.Enable();
+    }
+
+    private void OnDisable()
+    {
+        if (move != null)
+            move.action.Disable();
+    }
+
+    // =========================================================
+    // SCREEN WRAP
     // =========================================================
 
     private void LateUpdate()
     {
         if (!isActive || player == null)
             return;
-        limit = SC_level_master.instance.limits;
 
-        // Récupère les limites du niveau
         limit = SC_level_master.instance.limits;
 
         float x = player.transform.position.x;
 
-        // Affichage du ghost près des bords
         if (ghost != null)
         {
             if (x > limit.y - 0.2f)
@@ -97,7 +148,6 @@ public class SC_balloon_player : MonoBehaviour
             }
         }
 
-        // Passage d'un bord à l'autre
         if (x > limit.y)
         {
             player.transform.position = new Vector3(
@@ -105,14 +155,6 @@ public class SC_balloon_player : MonoBehaviour
                 player.transform.position.y,
                 player.transform.position.z
             );
-
-            if (rb.linearVelocity.x > 0f)
-            {
-                rb.linearVelocity = new Vector2(
-                    -Mathf.Abs(rb.linearVelocity.x),
-                    rb.linearVelocity.y
-                );
-            }
         }
         else if (x < limit.x)
         {
@@ -121,41 +163,7 @@ public class SC_balloon_player : MonoBehaviour
                 player.transform.position.y,
                 player.transform.position.z
             );
-
-            if (rb.linearVelocity.x < 0f)
-            {
-                rb.linearVelocity = new Vector2(
-                    Mathf.Abs(rb.linearVelocity.x),
-                    rb.linearVelocity.y
-                );
-            }
         }
-    }
-
-    private void Awake()
-    {
-        instance = this;
-
-        rb = player.rb;
-
-        if (balloonVisual != null)
-            balloonVisual.SetActive(false);
-    }
-
-    // =========================================================
-    // ENABLE / DISABLE
-    // =========================================================
-
-    private void OnEnable()
-    {
-        if (move != null)
-            move.action.Enable();
-    }
-
-    private void OnDisable()
-    {
-        if (move != null)
-            move.action.Disable();
     }
 
     // =========================================================
@@ -167,48 +175,37 @@ public class SC_balloon_player : MonoBehaviour
         if (player.eat_system.isPowerUpActive)
             return;
 
-        if (isActive)
+        if (isActive || isDeflating)
             return;
 
-        if (isDeflating)
-            return;
-        ghost.gameObject.SetActive(true);
+        if (ghost != null)
+            ghost.gameObject.SetActive(true);
 
         isActive = true;
         canRise = false;
 
-        // Désactive les mouvements normaux
         player.enabled = false;
 
         player.isFrozen = false;
         player.isStunned = false;
 
-        // Stop mouvements précédents
         player.knockbackVelocity = Vector2.zero;
         player.externalVelocity = Vector2.zero;
 
         rb.linearVelocity = Vector2.zero;
-
-        // Pas de gravité :
-        // le ballon contrôlera lui-même sa vitesse verticale
         rb.gravityScale = 0f;
 
-        // Désactive le joueur normal
         if (player.normal != null)
             player.normal.SetActive(false);
 
         if (player.transformed != null)
             player.transformed.SetActive(false);
 
-        // Active le ballon
         if (balloonVisual != null)
             balloonVisual.SetActive(true);
 
-        // Lance le délai avant la montée
-        if (riseCoroutine != null)
-            StopCoroutine(riseCoroutine);
-
         riseCoroutine = StartCoroutine(RiseDelayCoroutine());
+        durationCoroutine = StartCoroutine(BalloonDurationCoroutine());
     }
 
     // =========================================================
@@ -217,25 +214,33 @@ public class SC_balloon_player : MonoBehaviour
 
     private IEnumerator RiseDelayCoroutine()
     {
-        // Le ballon reste complètement immobile
         rb.linearVelocity = Vector2.zero;
 
         yield return new WaitForSeconds(riseDelay);
 
-        // Vérifie que le ballon est toujours actif
         if (!isActive || isDeflating)
-        {
-            riseCoroutine = null;
             yield break;
-        }
 
         canRise = true;
-
         riseCoroutine = null;
     }
 
     // =========================================================
-    // UPDATE
+    // BALLOON DURATION
+    // =========================================================
+
+    private IEnumerator BalloonDurationCoroutine()
+    {
+        yield return new WaitForSeconds(balloonDuration);
+
+        if (isActive && !isDeflating)
+            StartDeflate();
+
+        durationCoroutine = null;
+    }
+
+    // =========================================================
+    // UPDATE - INPUT
     // =========================================================
 
     private void Update()
@@ -243,73 +248,78 @@ public class SC_balloon_player : MonoBehaviour
         if (PlayerPrefs.GetFloat("Cheats") == 0)
         {
             if (Input.GetKeyDown(KeyCode.I))
-            {
                 Activate();
-            }
         }
 
-
-        if (player.eat_system.isPowerUpActive)
-            return;
-        if (!isActive)
+        if (!isActive || isDeflating)
             return;
 
-        if (Time.timeScale == 0)
-            return;
-
-        // Si le ballon est en train de se dégonfler,
-        // il ne peut plus bouger
-        if (isDeflating)
+        if (move != null)
         {
-            rb.linearVelocity = Vector2.zero;
-            return;
-        }
+            Vector2 input = move.action.ReadValue<Vector2>();
 
-        // Pendant le délai de départ
+            moveInput = new Vector2(
+                Mathf.Abs(input.x) > 0.2f
+                    ? Mathf.Sign(input.x)
+                    : 0f,
+                0f
+            );
+        }
+    }
+
+    // =========================================================
+    // FIXED UPDATE - PHYSICS
+    // =========================================================
+
+    private void FixedUpdate()
+    {
+        if (!isActive || isDeflating)
+            return;
+
         if (!canRise)
         {
             rb.linearVelocity = Vector2.zero;
             return;
         }
+
+        // Détection du plafond
         CheckCeiling();
+
+        // Si on rebondit, le rebond prend entièrement
+        // le contrôle de la vitesse.
+        if (isBouncing)
+        {
+            HandleBounce();
+            return;
+        }
+
+        // Sinon, mouvement normal
         HandleMovement();
     }
 
     // =========================================================
-    // MOVEMENT
+    // NORMAL MOVEMENT
     // =========================================================
 
     private void HandleMovement()
     {
-        Vector2 input = Vector2.zero;
-
-        if (move != null)
-            input = move.action.ReadValue<Vector2>();
-
-        // On conserve uniquement gauche / droite
-        moveInput = new Vector2(
-            Mathf.Abs(input.x) > 0.2f
-                ? Mathf.Sign(input.x)
-                : 0f,
-            0f
-        );
-
-        // Le ballon monte toujours
-        float verticalVelocity = riseSpeed;
-
-        // Le joueur contrôle uniquement X
         float horizontalVelocity =
             moveInput.x * horizontalSpeed;
 
         rb.linearVelocity = new Vector2(
             horizontalVelocity,
-            verticalVelocity
+            riseSpeed
         );
 
-        // =====================================================
-        // ORIENTATION
-        // =====================================================
+        UpdateOrientation();
+    }
 
+    // =========================================================
+    // ORIENTATION
+    // =========================================================
+
+    private void UpdateOrientation()
+    {
         if (moveInput.x > 0)
         {
             Vector3 scale = player.transform.localScale;
@@ -336,15 +346,110 @@ public class SC_balloon_player : MonoBehaviour
     // COLLISIONS
     // =========================================================
 
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (!isActive || isDeflating || !canRise)
+            return;
+
+        if (((1 << collision.gameObject.layer) & groundLayer) == 0)
+            return;
+
+        if (Time.time < lastBounceTime + bounceCooldown)
+            return;
+
+        Vector2 normalSum = Vector2.zero;
+
+        for (int i = 0; i < collision.contactCount; i++)
+        {
+            ContactPoint2D contact = collision.GetContact(i);
+
+            normalSum += contact.normal;
+        }
+
+        if (normalSum.sqrMagnitude < 0.001f)
+            return;
+
+        Vector2 bounceDirection = normalSum.normalized;
+
+        StartBounce(bounceDirection);
+    }
+    // =========================================================
+    // START BOUNCE
+    // =========================================================
+
+    private void StartBounce(Vector2 direction)
+    {
+        if (isBouncing || isDeflating)
+            return;
+
+        if (Time.time < lastBounceTime + bounceCooldown)
+            return;
+
+        lastBounceTime = Time.time;
+
+        isBouncing = true;
+
+        bounce.PlayJuice();
+
+        bounceTimer = 0f;
+
+        direction.Normalize();
+
+        bounceVelocity = direction * bounceForce;
+
+        rb.linearVelocity = Vector2.zero;
+    }    // =========================================================
+    // HANDLE BOUNCE
+    // =========================================================
+
+    private void HandleBounce()
+    {
+        // Applique la vitesse actuelle du rebond
+        rb.linearVelocity = bounceVelocity;
+
+        // Décélération uniforme du vecteur complet.
+        // La direction reste identique pendant le ralentissement.
+        bounceVelocity = Vector2.MoveTowards(
+            bounceVelocity,
+            Vector2.zero,
+            bounceDeceleration * Time.fixedDeltaTime
+        );
+
+        bounceTimer += Time.fixedDeltaTime;
+
+        // Fin du rebond
+        if (bounceTimer >= bounceDuration ||
+            bounceVelocity.sqrMagnitude < 0.01f)
+        {
+            EndBounce();
+        }
+    }
+
+    // =========================================================
+    // END BOUNCE
+    // =========================================================
+
+    private void EndBounce()
+    {
+        isBouncing = false;
+
+        bounceVelocity = Vector2.zero;
+
+        rb.linearVelocity = Vector2.zero;
+
+        // Le joueur reprend immédiatement le contrôle.
+        // Le mouvement normal reprend au prochain FixedUpdate.
+    }
+
+    // =========================================================
+    // CEILING DETECTION
+    // =========================================================
+
     private void CheckCeiling()
     {
         if (ceilingCheck == null)
             return;
-        Debug.DrawRay(
-    ceilingCheck.position,
-    Vector2.up * ceilingCheckDistance,
-    Color.red
-);
+
         RaycastHit2D hit = Physics2D.Raycast(
             ceilingCheck.position,
             Vector2.up,
@@ -352,26 +457,31 @@ public class SC_balloon_player : MonoBehaviour
             ceilingLayer
         );
 
+        Debug.DrawRay(
+            ceilingCheck.position,
+            Vector2.up * ceilingCheckDistance,
+            Color.red
+        );
+
         if (hit.collider != null)
         {
-            StartDeflate();
+            if (Time.time >= lastBounceTime + bounceCooldown)
+            {
+                // Utilise la normale réelle du plafond
+                StartBounce(hit.normal);
+            }
         }
     }
+
     // =========================================================
     // DAMAGE
     // =========================================================
 
-    private void BalloonTakeDamage()
+    public void BalloonTakeDamage()
     {
-        if (player.eat_system.isPowerUpActive)
-            return;
-        if (!isActive)
-            return;
 
-        // On quitte immédiatement le mode ballon
         Exit();
 
-        // Le joueur reprend son système de dégâts normal
         player.TakeDamage(
             1,
             Vector2.one,
@@ -385,36 +495,33 @@ public class SC_balloon_player : MonoBehaviour
 
     private void StartDeflate()
     {
-        if (!isActive)
+        if (!isActive || isDeflating)
             return;
 
-        if (isDeflating)
-            return;
+        if (ghost != null)
+            ghost.gameObject.SetActive(false);
 
-        ghost.gameObject.SetActive(false);
         isDeflating = true;
         canRise = false;
+        isBouncing = false;
 
-        // Stoppe le délai de montée s'il est encore en cours
+        bounceVelocity = Vector2.zero;
+
         if (riseCoroutine != null)
         {
             StopCoroutine(riseCoroutine);
             riseCoroutine = null;
         }
 
-        // Le ballon ne bouge plus
         rb.linearVelocity = Vector2.zero;
 
-        // Animation de dégonflage
         if (anim != null)
             anim.SetTrigger("Deflate");
 
-        // Lance le délai avant retour au joueur normal
         if (deflateCoroutine != null)
             StopCoroutine(deflateCoroutine);
 
-        deflateCoroutine =
-            StartCoroutine(DeflateCoroutine());
+        deflateCoroutine = StartCoroutine(DeflateCoroutine());
     }
 
     // =========================================================
@@ -423,12 +530,10 @@ public class SC_balloon_player : MonoBehaviour
 
     private IEnumerator DeflateCoroutine()
     {
-        // Le ballon reste au sol pendant tout le délai
         rb.linearVelocity = Vector2.zero;
 
         yield return new WaitForSeconds(deflateDelay);
 
-        // Retour au joueur normal
         Exit();
 
         deflateCoroutine = null;
@@ -443,36 +548,37 @@ public class SC_balloon_player : MonoBehaviour
         if (!isActive)
             return;
 
-        ghost.gameObject.SetActive(false);
+        if (ghost != null)
+            ghost.gameObject.SetActive(false);
+
         isActive = false;
         canRise = false;
         isDeflating = false;
+        isBouncing = false;
 
-        // Stoppe les coroutines
+        bounceVelocity = Vector2.zero;
+
         if (riseCoroutine != null)
-        {
             StopCoroutine(riseCoroutine);
-            riseCoroutine = null;
-        }
 
         if (deflateCoroutine != null)
-        {
             StopCoroutine(deflateCoroutine);
-            deflateCoroutine = null;
-        }
 
-        // Réactive le joueur
+        if (durationCoroutine != null)
+            StopCoroutine(durationCoroutine);
+
+        riseCoroutine = null;
+        deflateCoroutine = null;
+        durationCoroutine = null;
+
         player.enabled = true;
 
-        // Remet la physique normale
         rb.gravityScale = player.base_gravity;
         rb.linearVelocity = Vector2.zero;
 
-        // Désactive le ballon
         if (balloonVisual != null)
             balloonVisual.SetActive(false);
 
-        // Réactive le joueur normal
         if (player.normal != null)
             player.normal.SetActive(true);
     }

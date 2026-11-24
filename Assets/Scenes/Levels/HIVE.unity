@@ -271,7 +271,6 @@ MonoBehaviour:
   maxX: 0
   minY: 0
   maxY: 0
-  isLadder: 0
   canAttachInAir: 1
   climbAttachPoint: {fileID: 0}
   autoCompute: 1
@@ -1262,7 +1261,6 @@ MonoBehaviour:
   maxX: 0
   minY: 0
   maxY: 0
-  isLadder: 0
   canAttachInAir: 1
   climbAttachPoint: {fileID: 0}
   autoCompute: 1
@@ -2090,7 +2088,6 @@ MonoBehaviour:
   maxX: 0
   minY: 0
   maxY: 0
-  isLadder: 0
   canAttachInAir: 1
   climbAttachPoint: {fileID: 0}
   autoCompute: 1

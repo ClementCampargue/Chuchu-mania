@@ -320,6 +320,7 @@ MonoBehaviour:
   anim: {fileID: 2844305316371007786}
   enemy: {fileID: 0}
   collider: {fileID: 6087730991287567296}
+  effector: {fileID: 3062011860081478611}
 --- !u!61 &6087730991287567296
 BoxCollider2D:
   m_ObjectHideFlags: 0

@@ -31,6 +31,7 @@ public class SC_balloon : MonoBehaviour
     public Animator anim;
     public SC_enemy_damage enemy;
     public Collider2D collider;
+    public PlatformEffector2D effector;
     private void Start()
     {
         // Choisit un skin aléatoire
@@ -45,6 +46,14 @@ public class SC_balloon : MonoBehaviour
 
     private void Update()
     {
+        if(SC_player.instance.enabled)
+        {
+            effector.enabled = true;
+        }
+        else
+        {
+            effector.enabled = false;
+        }
         // Tant que le délai n'est pas terminé, le ballon reste immobile
         if (!canMove)
             return;
@@ -110,10 +119,11 @@ public class SC_balloon : MonoBehaviour
     }
 
     private void PopBalloon()
-    {if(enemy != null)
+    {
+        if(enemy != null)
         {
             enemy.knockbackForce = 0;
-            enemy.Knockback(transform);
+            enemy.Knockback();
             enemy.transform.parent = null;
             enemy.transform.position = transform.position;
         }

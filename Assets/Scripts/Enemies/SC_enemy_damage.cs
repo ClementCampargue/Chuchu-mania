@@ -61,32 +61,13 @@ public class SC_enemy_damage : MonoBehaviour
     void Update()
     {
 
-        DetectPlayerOverlap();
         DetectStun();
 
         if (isKnockedBack)
             HandleKnockback();
     }
 
-    void DetectPlayerOverlap()
-    {
-        if (isKnockedBack) return;
-        Collider2D playerCollider =
-            Physics2D.OverlapCircle(collision.position, detectionRadius, playerLayer);
 
-        if (playerCollider != null && die_burn && player.burning)
-        {
-            SC_SaveManager.instance.AddAchievementProgress(AchievementType.burn_enemy,1);
-            bool playerOnRight = playerCollider.transform.position.x > trs.position.x;
-            Knockback(playerOnRight);
-        }
-        if (playerCollider != null && eat.isPowerUpActive)
-        {
-
-            bool playerOnRight = playerCollider.transform.position.x > trs.position.x;
-            Knockback(playerOnRight);
-        }
-    }
 
     void DetectStun()
     {
@@ -98,6 +79,7 @@ public class SC_enemy_damage : MonoBehaviour
         if (stunCollider != null)
             StartCoroutine(Stun());
     }
+
 
     IEnumerator Stun()
     {
@@ -121,14 +103,42 @@ public class SC_enemy_damage : MonoBehaviour
         isStunned = false;
 
     }
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.gameObject.CompareTag("Player"))
+        {
+            Knockback();
 
-    public void Knockback(bool playerOnRight)
+        }
+        if (collision.gameObject.CompareTag("Cage") && SC_icecream_eat_system.instance.isPowerUpActive)
+        {
+            Knockback2();
+
+        }
+
+    }
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.gameObject.CompareTag("Player"))
+        {
+            Knockback();
+
+        }
+        if (collision.gameObject.CompareTag("Cage") && SC_icecream_eat_system.instance.isPowerUpActive)
+        {
+            Knockback2();
+
+        }
+
+    }
+
+    public void Knockback2()
     {
         if (isKnockedBack) return;
         if (script != null) { script.enabled = false; }
         isStunned = false;
         isKnockedBack = true;
-        player.anim.SetTrigger("Punch");
+   
         if (animator != null)
         {
             animator.enabled = true;
@@ -138,7 +148,7 @@ public class SC_enemy_damage : MonoBehaviour
         {
             ps.Play();
         }
-        
+
         if (juice != null)
         {
             juice.PlayJuice();
@@ -147,16 +157,48 @@ public class SC_enemy_damage : MonoBehaviour
         Collider2D col = GetComponent<Collider2D>();
         if (col != null) col.enabled = false;
 
-        float dir = playerOnRight ? -1f : 1f;
 
         knockbackVelocity = new Vector2(
-            dir * knockbackForce,
+            1 * knockbackForce,
             knockbackVerticalForce
         );
 
         StartCoroutine(FlickerAndDestroy());
     }
+    public void Knockback()
+    {
+        if (isKnockedBack) return;
+        if (script != null) { script.enabled = false; }
+        isStunned = false;
+        isKnockedBack = true;
+        player.anim.SetTrigger("Punch");
+        player.punch.PlayJuice();
+        if (animator != null)
+        {
+            animator.enabled = true;
+            animator.SetTrigger("Death");
+        }
+        if (ps != null)
+        {
+            ps.Play();
+        }
 
+        if (juice != null)
+        {
+            juice.PlayJuice();
+        }
+
+        Collider2D col = GetComponent<Collider2D>();
+        if (col != null) col.enabled = false;
+
+
+        knockbackVelocity = new Vector2(
+            1 * knockbackForce,
+            knockbackVerticalForce
+        );
+
+        StartCoroutine(FlickerAndDestroy());
+    }
     void HandleKnockback()
     {
         knockbackVelocity.y -= gravity * Time.deltaTime;

@@ -8,6 +8,7 @@ public class SC_juiciness : MonoBehaviour
 
     [Header("Renderer")]
     public SpriteRenderer spriteRenderer;
+    public List<SpriteRenderer> spriteRendererList;
     public Material flashMaterial;
     private Material defaultMaterial;
 
@@ -69,7 +70,18 @@ public class SC_juiciness : MonoBehaviour
     {
         ResetState();
     }
+    public void StartScreenShake()
+    {
+        if (screenShakeCoroutine != null)
+            StopCoroutine(screenShakeCoroutine);
 
+        if (cameraTransform == null)
+            return;
+
+        cameraTransform.localPosition = cameraOriginalPosition;
+
+        screenShakeCoroutine = StartCoroutine(ScreenShake());
+    }
     private void Start()
     {
         if (trs == null)
@@ -157,10 +169,7 @@ public class SC_juiciness : MonoBehaviour
 
         if (shakeScreenDuration > 0f && shakeAmplitude > 0f)
         {
-            if (screenShakeCoroutine != null)
-                StopCoroutine(screenShakeCoroutine);
-
-            screenShakeCoroutine = StartCoroutine(ScreenShake());
+            StartScreenShake();
         }
         // =====================================================
         // SQUASH & STRETCH
@@ -199,7 +208,6 @@ public class SC_juiciness : MonoBehaviour
     // =========================================================
     // FLASH
     // =========================================================
-
     private IEnumerator Flash()
     {
         isFlashing = true;
@@ -207,14 +215,31 @@ public class SC_juiciness : MonoBehaviour
         if (spriteRenderer != null && flashMaterial != null)
             spriteRenderer.material = flashMaterial;
 
+        if (spriteRendererList != null)
+        {
+            foreach (SpriteRenderer spr in spriteRendererList)
+            {
+                if (spr != null && flashMaterial != null)
+                    spr.material = flashMaterial;
+            }
+        }
+
         yield return new WaitForSecondsRealtime(flashDuration);
 
         if (spriteRenderer != null)
             spriteRenderer.material = defaultMaterial;
 
+        if (spriteRendererList != null)
+        {
+            foreach (SpriteRenderer spr in spriteRendererList)
+            {
+                if (spr != null)
+                    spr.material = defaultMaterial;
+            }
+        }
+
         isFlashing = false;
     }
-
     // =========================================================
     // SQUASH & STRETCH
     // =========================================================
@@ -226,10 +251,12 @@ public class SC_juiciness : MonoBehaviour
     {
         if (cameraTransform == null)
             yield break;
+
         if (PlayerPrefs.GetFloat("Tremblement") == 1)
             yield break;
 
-        Vector3 startPosition = cameraTransform.localPosition;
+        cameraOriginalPosition = cameraTransform.localPosition;
+
         float elapsed = 0f;
 
         while (elapsed < shakeScreenDuration)
@@ -240,10 +267,8 @@ public class SC_juiciness : MonoBehaviour
                 elapsed / shakeScreenDuration
             );
 
-            // Réduction progressive de l'intensité
             float intensity = shakeAmplitude * (1f - progress);
 
-            // Mouvement aléatoire contrôlé par la fréquence
             float offsetX = Mathf.Sin(
                 elapsed * shakeFrequency * Mathf.PI * 2f
             ) * intensity;
@@ -252,13 +277,14 @@ public class SC_juiciness : MonoBehaviour
                 elapsed * shakeFrequency * Mathf.PI * 2f
             ) * intensity;
 
-            cameraTransform.localPosition = startPosition +
+            cameraTransform.localPosition = cameraOriginalPosition +
                 new Vector3(offsetX, offsetY, 0f);
 
             yield return null;
         }
 
-        cameraTransform.localPosition = startPosition;
+        cameraTransform.localPosition = cameraOriginalPosition;
+
         screenShakeCoroutine = null;
     }
     private IEnumerator SquashAndStretch()

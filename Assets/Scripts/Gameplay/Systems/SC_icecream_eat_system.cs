@@ -8,6 +8,7 @@ using UnityEngine.SceneManagement;
 
 public class SC_icecream_eat_system : MonoBehaviour
 {
+    public SC_score_popup score_popup;
     [Header("Multiplier UI")]
     public TextMeshPro multiplierText;
     private int multiplier = 0;
@@ -40,6 +41,7 @@ public class SC_icecream_eat_system : MonoBehaviour
 
     [Header("Fill System")]
     public Material mat;
+    public Material mat2;
 
     private float displayedFill = 0f;
 
@@ -56,6 +58,7 @@ public class SC_icecream_eat_system : MonoBehaviour
     [Header("Phase System")]
     private bool phase1Triggered = false;
     private bool phase2Triggered = false;
+    private bool phase3Triggered = false;
 
     public static SC_icecream_eat_system instance;
 
@@ -229,6 +232,12 @@ public void CancelEat()
         {
             phase2Triggered = true;
             SC_phases.instance.NextPhase();
+        }
+
+        if (!phase3Triggered && displayedFill >= 1)
+        {
+            phase3Triggered = true;
+            SC_phases.instance.cosmic();
         }
     }
 
@@ -475,6 +484,11 @@ public void CancelEat()
                             displayedFill
                         );
 
+                        mat2.SetFloat(
+                            "_Fill_amount",
+                            displayedFill
+                        );
+
                         CheckPhases();
                         CheckPowerUp();
 
@@ -490,6 +504,10 @@ public void CancelEat()
                     displayedFill = targetFill;
 
                     mat.SetFloat(
+                        "_Fill_amount",
+                        displayedFill
+                    );
+                    mat2.SetFloat(
                         "_Fill_amount",
                         displayedFill
                     );
@@ -591,6 +609,11 @@ public void CancelEat()
             displayedFill
         );
 
+        mat2.SetFloat(
+            "_Fill_amount",
+            displayedFill
+        );
+
         CheckPhases();
 
         if (!isPowerUpActive)
@@ -680,6 +703,16 @@ public void CancelEat()
             " | Score : " +
             score
         );
+      SC_score_popup  score_popup_ = Instantiate(score_popup,player.transform.position + Vector3.up/2,Quaternion.identity);
+        if (eaten_cream == 10) 
+        {
+            score_popup_.display_text(true, score, eaten_cream);
+        }
+        else
+        {
+            score_popup_.display_text(false, score, eaten_cream);
+
+        }
     }
 
     // =========================================================
@@ -694,6 +727,11 @@ public void CancelEat()
         displayedFill = Mathf.Clamp01(displayedFill);
 
         mat.SetFloat(
+            "_Fill_amount",
+            displayedFill
+        );
+
+        mat2.SetFloat(
             "_Fill_amount",
             displayedFill
         );
@@ -743,6 +781,11 @@ public void CancelEat()
         displayedFill = 0f;
 
         mat.SetFloat(
+            "_Fill_amount",
+            0f
+        );
+
+        mat2.SetFloat(
             "_Fill_amount",
             0f
         );
