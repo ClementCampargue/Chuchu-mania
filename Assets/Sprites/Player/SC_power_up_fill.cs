@@ -4,8 +4,8 @@ using System.Collections;
 
 public class SC_power_up_fill : MonoBehaviour
 {
-    [SerializeField] private float duration = 2f;
-    [SerializeField] private float delay = 1f;
+    public float duration = 2f;
+    public float delay = 1f;
 
     private Vector3 initialScale;
     private Coroutine scaleCoroutine;

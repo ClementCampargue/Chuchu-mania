@@ -42371,6 +42371,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6da0dc6541a50284ea16d0f836bba4c2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  fill: {fileID: 5959349835333387453}
   player: {fileID: 1939792554238048137}
   balloonVisual: {fileID: 1787378971906217586}
   anim: {fileID: 4191675913962948792}
@@ -43079,6 +43080,17 @@ Animator:
   m_CorrespondingSourceObject: {fileID: 3243311732136062355, guid: 91e5a3e7abd94ee47b3d909e75c82ba6, type: 3}
   m_PrefabInstance: {fileID: 1668968349821904171}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &5959349835333387453 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5015462726342107542, guid: 91e5a3e7abd94ee47b3d909e75c82ba6, type: 3}
+  m_PrefabInstance: {fileID: 1668968349821904171}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ad5c2056bebbf514981bcf872d69b9de, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!4 &6293658348941271388 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4647377486346306679, guid: 91e5a3e7abd94ee47b3d909e75c82ba6, type: 3}
