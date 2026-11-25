@@ -243,6 +243,8 @@ MonoBehaviour:
   connections:
   - {fileID: 1467618208}
   - {fileID: 1762074867}
+  floorId: 0
+  isFloorReference: 0
   pointSize: 0.15
   pointColor: {r: 1, g: 1, b: 1, a: 1}
   connectionColor: {r: 0, g: 1, b: 1, a: 1}
@@ -293,6 +295,8 @@ MonoBehaviour:
   connections:
   - {fileID: 1762074867}
   - {fileID: 883157290}
+  floorId: 0
+  isFloorReference: 1
   pointSize: 0.15
   pointColor: {r: 1, g: 1, b: 1, a: 1}
   connectionColor: {r: 0, g: 1, b: 1, a: 1}
@@ -327,12 +331,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   moveSpeed: 3
-  pointReachDistance: 0.15
-  floorDetectionTolerance: 0.4
-  floorPriority: 100
+  reachDistance: 0.08
+  maxSegmentDistance: 3
   repathInterval: 0.25
-  segmentSearchDistance: 100
+  floorHeightTolerance: 0.6
+  verticalTolerance: 0.08
   drawPath: 1
+  showLogs: 1
 --- !u!212 &217621489
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -1312,6 +1317,8 @@ MonoBehaviour:
   - {fileID: 1927593092}
   - {fileID: 1467618208}
   - {fileID: 2092653298}
+  floorId: 2
+  isFloorReference: 1
   pointSize: 0.15
   pointColor: {r: 1, g: 1, b: 1, a: 1}
   connectionColor: {r: 0, g: 1, b: 1, a: 1}
@@ -1849,6 +1856,8 @@ MonoBehaviour:
   connections:
   - {fileID: 883157290}
   - {fileID: 1467618208}
+  floorId: 0
+  isFloorReference: 0
   pointSize: 0.15
   pointColor: {r: 1, g: 1, b: 1, a: 1}
   connectionColor: {r: 0, g: 1, b: 1, a: 1}
@@ -2097,6 +2106,8 @@ MonoBehaviour:
   connections:
   - {fileID: 150354143}
   - {fileID: 819830757}
+  floorId: 0
+  isFloorReference: 0
   pointSize: 0.15
   pointColor: {r: 1, g: 1, b: 1, a: 1}
   connectionColor: {r: 0, g: 1, b: 1, a: 1}
@@ -2340,7 +2351,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5541224540911051492, guid: 894c74b520a88a24e88966d64bc5ea3e, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 9042987386885964439, guid: 894c74b520a88a24e88966d64bc5ea3e, type: 3}
       propertyPath: orthographic size
@@ -2349,7 +2360,106 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 7576126873063559618, guid: 894c74b520a88a24e88966d64bc5ea3e, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 0}
+    - targetCorrespondingSourceObject: {fileID: 2441195991485045413, guid: 894c74b520a88a24e88966d64bc5ea3e, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 0}
+    - targetCorrespondingSourceObject: {fileID: 2694872167979091075, guid: 894c74b520a88a24e88966d64bc5ea3e, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 0}
+    - targetCorrespondingSourceObject: {fileID: 3952491418539166278, guid: 894c74b520a88a24e88966d64bc5ea3e, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 0}
+    - targetCorrespondingSourceObject: {fileID: 2968380246767077983, guid: 894c74b520a88a24e88966d64bc5ea3e, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 0}
+    - targetCorrespondingSourceObject: {fileID: 8719190939782051295, guid: 894c74b520a88a24e88966d64bc5ea3e, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 0}
+    - targetCorrespondingSourceObject: {fileID: 8785549109924340321, guid: 894c74b520a88a24e88966d64bc5ea3e, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 0}
+    - targetCorrespondingSourceObject: {fileID: 5159038368914644008, guid: 894c74b520a88a24e88966d64bc5ea3e, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 0}
+    - targetCorrespondingSourceObject: {fileID: 5027464781749654627, guid: 894c74b520a88a24e88966d64bc5ea3e, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 0}
+    - targetCorrespondingSourceObject: {fileID: 5089374784191549081, guid: 894c74b520a88a24e88966d64bc5ea3e, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 0}
+    - targetCorrespondingSourceObject: {fileID: 3113695291300966788, guid: 894c74b520a88a24e88966d64bc5ea3e, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 0}
+    - targetCorrespondingSourceObject: {fileID: 8358441322421593467, guid: 894c74b520a88a24e88966d64bc5ea3e, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 0}
+    - targetCorrespondingSourceObject: {fileID: 6087007278963005602, guid: 894c74b520a88a24e88966d64bc5ea3e, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 0}
+    - targetCorrespondingSourceObject: {fileID: 3813738116016116488, guid: 894c74b520a88a24e88966d64bc5ea3e, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 0}
+    - targetCorrespondingSourceObject: {fileID: 5476042514286978428, guid: 894c74b520a88a24e88966d64bc5ea3e, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 0}
+    - targetCorrespondingSourceObject: {fileID: 6750300599893968424, guid: 894c74b520a88a24e88966d64bc5ea3e, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 0}
+    - targetCorrespondingSourceObject: {fileID: 7460239198715957820, guid: 894c74b520a88a24e88966d64bc5ea3e, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 0}
+    - targetCorrespondingSourceObject: {fileID: 6793594548897495530, guid: 894c74b520a88a24e88966d64bc5ea3e, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 0}
+    - targetCorrespondingSourceObject: {fileID: 5186877951153853377, guid: 894c74b520a88a24e88966d64bc5ea3e, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 0}
+    - targetCorrespondingSourceObject: {fileID: 8503031452526163422, guid: 894c74b520a88a24e88966d64bc5ea3e, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 0}
+    - targetCorrespondingSourceObject: {fileID: 8916387577953552956, guid: 894c74b520a88a24e88966d64bc5ea3e, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 0}
+    - targetCorrespondingSourceObject: {fileID: 6449439031829357080, guid: 894c74b520a88a24e88966d64bc5ea3e, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 0}
+    - targetCorrespondingSourceObject: {fileID: 1373018727745135462, guid: 894c74b520a88a24e88966d64bc5ea3e, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 0}
+    - targetCorrespondingSourceObject: {fileID: 4940202262875976680, guid: 894c74b520a88a24e88966d64bc5ea3e, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 0}
+    - targetCorrespondingSourceObject: {fileID: 2893600611274488531, guid: 894c74b520a88a24e88966d64bc5ea3e, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 0}
+    - targetCorrespondingSourceObject: {fileID: 1077144398693839561, guid: 894c74b520a88a24e88966d64bc5ea3e, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 0}
+    - targetCorrespondingSourceObject: {fileID: 5370311776838831958, guid: 894c74b520a88a24e88966d64bc5ea3e, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 0}
+    - targetCorrespondingSourceObject: {fileID: 1078532428888744043, guid: 894c74b520a88a24e88966d64bc5ea3e, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 0}
+    - targetCorrespondingSourceObject: {fileID: 8639944550070907281, guid: 894c74b520a88a24e88966d64bc5ea3e, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 0}
+    - targetCorrespondingSourceObject: {fileID: 3965467174580317392, guid: 894c74b520a88a24e88966d64bc5ea3e, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 0}
+    - targetCorrespondingSourceObject: {fileID: 7928316746876315565, guid: 894c74b520a88a24e88966d64bc5ea3e, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 0}
+    - targetCorrespondingSourceObject: {fileID: 6428017958080635280, guid: 894c74b520a88a24e88966d64bc5ea3e, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 0}
+    - targetCorrespondingSourceObject: {fileID: 4651744461329540810, guid: 894c74b520a88a24e88966d64bc5ea3e, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 0}
   m_SourcePrefab: {fileID: 100100000, guid: 894c74b520a88a24e88966d64bc5ea3e, type: 3}
 --- !u!4 &1175791816 stripped
 Transform:
@@ -2701,6 +2811,8 @@ MonoBehaviour:
   - {fileID: 120240932}
   - {fileID: 541454341}
   - {fileID: 819830757}
+  floorId: 1
+  isFloorReference: 1
   pointSize: 0.15
   pointColor: {r: 1, g: 1, b: 1, a: 1}
   connectionColor: {r: 0, g: 1, b: 1, a: 1}
@@ -3279,6 +3391,8 @@ MonoBehaviour:
   connections:
   - {fileID: 120240932}
   - {fileID: 150354143}
+  floorId: 0
+  isFloorReference: 0
   pointSize: 0.15
   pointColor: {r: 1, g: 1, b: 1, a: 1}
   connectionColor: {r: 0, g: 1, b: 1, a: 1}
@@ -3534,6 +3648,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   connections:
   - {fileID: 541454341}
+  floorId: 0
+  isFloorReference: 0
   pointSize: 0.15
   pointColor: {r: 1, g: 1, b: 1, a: 1}
   connectionColor: {r: 0, g: 1, b: 1, a: 1}
@@ -3996,6 +4112,8 @@ MonoBehaviour:
   connections:
   - {fileID: 2092653298}
   - {fileID: 541454341}
+  floorId: 0
+  isFloorReference: 0
   pointSize: 0.15
   pointColor: {r: 1, g: 1, b: 1, a: 1}
   connectionColor: {r: 0, g: 1, b: 1, a: 1}
