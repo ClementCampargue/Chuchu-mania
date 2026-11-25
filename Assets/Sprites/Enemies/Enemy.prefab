@@ -5147,11 +5147,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   trs: {fileID: 0}
   spriteRenderer: {fileID: 8178178168088807887}
+  spriteRendererList: []
   flashMaterial: {fileID: 2100000, guid: 778865bbd08486043a01aeb31184e581, type: 2}
   rumble: 1
   rumbleLow: 0.1
   rumbleHigh: 0.3
   rumbleDuration: 0.1
+  cameraTransform: {fileID: 0}
   shakeAmplitude: 0
   shakeFrequency: 0
   shakeScreenDuration: 0
@@ -5219,6 +5221,7 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+  play_onawake: 0
 --- !u!82 &7741383259576045181
 AudioSource:
   m_ObjectHideFlags: 0
@@ -5327,6 +5330,7 @@ GameObject:
   - component: {fileID: 3184147318508318437}
   - component: {fileID: 5676688543263674303}
   - component: {fileID: 976082691875901342}
+  - component: {fileID: 8294617790454294950}
   m_Layer: 8
   m_Name: Collision
   m_TagString: Enemy
@@ -5409,6 +5413,48 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   damage: 1
   ejection_power: {x: 1, y: 1}
+  destroy_on_damage: 0
+--- !u!114 &8294617790454294950
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1598240806350090914}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ca40273a996d68f4d843cc040c3bd10d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  spriteRenderer: {fileID: 8178178168088807887}
+  animator: {fileID: 8652064909510127099}
+  ps: {fileID: 4752508073273262270}
+  visuals: {fileID: 8636599317760690865}
+  trs: {fileID: 8636599317760690865}
+  collision: {fileID: 3184147318508318437}
+  stunDetection: {fileID: 3184147318508318437}
+  playerLayer:
+    serializedVersion: 2
+    m_Bits: 64
+  stunLayer:
+    serializedVersion: 2
+    m_Bits: 2048
+  detectionRadius: 0.5
+  stunRadius: 0.23
+  knockbackForce: 2
+  knockbackVerticalForce: 5
+  spinSpeed: 720
+  gravity: 9.8
+  stunDuration: 2
+  flickerDuration: 2
+  flickerInterval: 0.1
+  juice: {fileID: 6963163092383756457}
+  juice_stun: {fileID: 8006942828086938426}
+  isKnockedBack: 0
+  isStunned: 0
+  die_burn: 1
+  script: {fileID: 1117725058429507512}
+  scripts: []
 --- !u!1 &3092784984651168754
 GameObject:
   m_ObjectHideFlags: 0
@@ -5548,7 +5594,6 @@ GameObject:
   m_Component:
   - component: {fileID: 5970181971369506332}
   - component: {fileID: 1117725058429507512}
-  - component: {fileID: 6162067483996259934}
   - component: {fileID: 3255610440191343998}
   m_Layer: 8
   m_Name: Enemy
@@ -5602,46 +5647,8 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 8
   CanMove: 1
-  damage: {fileID: 6162067483996259934}
+  damage: {fileID: 0}
   ownCollider: {fileID: 5676688543263674303}
---- !u!114 &6162067483996259934
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3366398786417948820}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ca40273a996d68f4d843cc040c3bd10d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  spriteRenderer: {fileID: 8178178168088807887}
-  animator: {fileID: 8652064909510127099}
-  ps: {fileID: 4752508073273262270}
-  visuals: {fileID: 8636599317760690865}
-  collision: {fileID: 3184147318508318437}
-  stunDetection: {fileID: 3184147318508318437}
-  playerLayer:
-    serializedVersion: 2
-    m_Bits: 64
-  stunLayer:
-    serializedVersion: 2
-    m_Bits: 2048
-  detectionRadius: 0.5
-  stunRadius: 0.23
-  knockbackForce: 2
-  knockbackVerticalForce: 5
-  spinSpeed: 720
-  gravity: 9.8
-  stunDuration: 2
-  flickerDuration: 2
-  flickerInterval: 0.1
-  juice: {fileID: 6963163092383756457}
-  juice_stun: {fileID: 8006942828086938426}
-  isKnockedBack: 0
-  isStunned: 0
-  die_burn: 1
 --- !u!114 &3255610440191343998
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10571,11 +10578,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   trs: {fileID: 0}
   spriteRenderer: {fileID: 8178178168088807887}
+  spriteRendererList: []
   flashMaterial: {fileID: 2100000, guid: 778865bbd08486043a01aeb31184e581, type: 2}
   rumble: 1
   rumbleLow: 0.1
   rumbleHigh: 0.3
   rumbleDuration: 0.1
+  cameraTransform: {fileID: 0}
   shakeAmplitude: 0
   shakeFrequency: 0
   shakeScreenDuration: 0
@@ -10642,6 +10651,7 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+  play_onawake: 0
 --- !u!82 &3275492483490455431
 AudioSource:
   m_ObjectHideFlags: 0
