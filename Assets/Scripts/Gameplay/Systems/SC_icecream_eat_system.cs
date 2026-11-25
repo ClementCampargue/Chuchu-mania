@@ -926,4 +926,25 @@ public void destroy_all_cream()
         if (multiplierText != null)
             multiplierText.gameObject.SetActive(false);
     }
+    public void DebugEat5Creams()
+    {
+        int creamCount = 5;
+
+        if (!canfillup)
+        {
+            Debug.Log("DEBUG: Cannot fill stomach.");
+            return;
+        }
+
+        displayedFill += stomach_fill_per_cream * creamCount;
+        displayedFill = Mathf.Clamp01(displayedFill);
+
+        mat.SetFloat("_Fill_amount", displayedFill);
+        mat2.SetFloat("_Fill_amount", displayedFill);
+
+        CheckPhases();
+        CheckPowerUp();
+
+        Debug.Log("DEBUG: 5 creams eaten. Stomach fill: " + displayedFill);
+    }
 }

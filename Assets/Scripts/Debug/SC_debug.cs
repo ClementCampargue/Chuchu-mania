@@ -28,6 +28,10 @@ public class SC_debug : MonoBehaviour
             {
                 SC_SaveManager.instance.Addmoney(100);
             }
+            if (Input.GetKeyDown(KeyCode.O))
+            {
+                SC_icecream_eat_system.instance.DebugEat5Creams();
+            }
 
             if (Input.GetKeyDown(KeyCode.R))
             {

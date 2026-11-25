@@ -30,11 +30,12 @@ public class SC_phases : MonoBehaviour
             return;
         }
         int previousPhase = currentPhaseIndex;
-        audio_.Play();
         currentPhaseIndex++;
 
         if (currentPhaseIndex < phases.Length)
         {
+            audio_.Play();
+
             phases[currentPhaseIndex].SetActive(true);
             OnPhaseChanged?.Invoke(currentPhaseIndex);
             SC_player.instance.hud_.SetTrigger("new");

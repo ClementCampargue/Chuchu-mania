@@ -799,4 +799,110 @@ public class SC_guard_ai : MonoBehaviour
             );
         }
     }
+    // ============================================================
+    // CALCUL DU CHEMIN DE RETOUR VERS LA BASE
+    // ============================================================
+
+    public bool TryCalculateReturnPath(
+        Vector3 startPosition,
+        SC_guard_point baseNode,
+        out List<Vector3> returnPath)
+    {
+        returnPath = new List<Vector3>();
+
+        if (baseNode == null)
+            return false;
+
+        RefreshPoints();
+
+        if (!FindClosestSegment(
+            startPosition,
+            out Segment startSegment))
+        {
+            Debug.LogWarning(
+                "SC_guard_ai : impossible de trouver le segment actuel du garde."
+            );
+
+            return false;
+        }
+
+        if (!allPoints.Contains(baseNode))
+            return false;
+
+        SC_guard_point[] startNodes =
+        {
+            startSegment.a,
+            startSegment.b
+        };
+
+        float bestCost = float.MaxValue;
+        List<Vector3> bestPath = null;
+
+        foreach (SC_guard_point startNode in startNodes)
+        {
+            if (startNode == null)
+                continue;
+
+            if (!FindPath(
+                startNode,
+                baseNode,
+                0,
+                out List<SC_guard_point> nodes,
+                out float graphCost))
+                continue;
+
+            float totalCost =
+                Vector3.Distance(
+                    startSegment.closest,
+                    startNode.transform.position
+                ) + graphCost;
+
+            if (totalCost >= bestCost)
+                continue;
+
+            List<Vector3> candidate = new List<Vector3>();
+
+            // Départ sur le segment le plus proche du garde.
+            candidate.Add(startSegment.closest);
+
+            // Points du réseau jusqu'à la base.
+            foreach (SC_guard_point node in nodes)
+            {
+                Vector3 nodePosition = node.transform.position;
+
+                if (Vector3.Distance(
+                    candidate[candidate.Count - 1],
+                    nodePosition) > 0.001f)
+                {
+                    candidate.Add(nodePosition);
+                }
+            }
+
+            bestCost = totalCost;
+            bestPath = candidate;
+        }
+
+        if (bestPath == null || bestPath.Count == 0)
+        {
+            Debug.LogWarning(
+                "SC_guard_ai : aucun chemin de retour vers la base."
+            );
+
+            return false;
+        }
+
+        // On conserve le chemin calculé.
+        returnPath = bestPath;
+
+        if (showLogs)
+        {
+            Debug.Log(
+                "SC_guard_ai : chemin de retour calculé. " +
+                returnPath.Count + " points."
+            );
+        }
+
+        return true;
+    }
+
 }

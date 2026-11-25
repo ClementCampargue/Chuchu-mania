@@ -584,8 +584,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5f4d6cb35df70f941a9debe5f26e5150, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  floorDetectionDelay: 0.25
+  floorDetectionDelay: 1.71
   floorConfirmationTolerance: 0.01
+  floorChangeDecisionDelay: 3
   moveSpeed: 3
   reachDistance: 0.08
   maxSegmentDistance: 3
