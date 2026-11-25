@@ -123,7 +123,7 @@ public class SC_balloon : MonoBehaviour
         if(enemy != null)
         {
             enemy.knockbackForce = 0;
-            enemy.Knockback();
+            enemy.Knockback2();
             enemy.transform.parent = null;
             enemy.transform.position = transform.position;
         }

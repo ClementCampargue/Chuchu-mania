@@ -14,7 +14,7 @@ public class SC_loose_screen : MonoBehaviour
     {
         SC_scursorManager.instance.disable_cursor();
 
-        Time.timeScale = 1.0f;
+        SC_time_manager.instance.Resume();
 
         // Récupère le nom de la scène actuelle
         Scene currentScene = SceneManager.GetActiveScene();
@@ -27,6 +27,7 @@ public class SC_loose_screen : MonoBehaviour
     {
         SC_scursorManager.instance.disable_cursor();
         int index = Mathf.Min(number_of_death, score_losses.Count - 1);
+        SC_time_manager.instance.Resume();
 
         SC_score.Instance.score -= score_losses[index];
         if (SC_score.Instance.score < 0)
@@ -46,6 +47,7 @@ public class SC_loose_screen : MonoBehaviour
     public void give_up()
     {
         SC_scursorManager.instance.disable_cursor();
+        SC_time_manager.instance.Resume();
 
         if (PlayerPrefs.GetInt("Score") == 0)
         {

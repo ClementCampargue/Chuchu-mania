@@ -1782,7 +1782,7 @@ if (vertical > 0f && nextY >= echelle.TopY)
         knockbackVelocity = Vector2.zero;
         externalVelocity = Vector2.zero;
 
-        Time.timeScale = 0f;
+        SC_time_manager.instance.Pause();
     }
 
     // =========================================================

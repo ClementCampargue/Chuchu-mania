@@ -15296,6 +15296,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   animationName: Power_up_start
+  triggerBeforeEnd: 0.2
   onAnimationFinished:
     m_PersistentCalls:
       m_Calls:
@@ -42591,7 +42592,7 @@ MonoBehaviour:
   verticalStretch: 1
   shakeDuration: 0.15
   shakeIntensity: 0.1
-  freeze: 1
+  freeze: 0
   freezeDuration: 1
   slowMoScale: 0
   fovCurve:

@@ -52,7 +52,6 @@ public class SC_fish_enemy : MonoBehaviour
     [SerializeField] private float maxStarbitDistance = 15f;
 
     [Header("Avant le saut Starbit")]
-    [SerializeField] private float preJumpDelay = 0.5f;
 
     [Header("Saut Starbit")]
     [SerializeField] private float jumpDuration = 1.2f;
@@ -73,9 +72,6 @@ public class SC_fish_enemy : MonoBehaviour
     [SerializeField] private float chaseSpeed = 2f;
 
     [SerializeField] private float chuchuCatchDistance = 0.5f;
-
-    [Header("Préparation du saut sur le joueur")]
-    [SerializeField] private float chuchuPreJumpDelay = 0.5f;
 
     [Header("Saut sur le joueur")]
     [SerializeField] private float chuchuJumpDuration = 1.2f;
@@ -493,7 +489,6 @@ public class SC_fish_enemy : MonoBehaviour
 
     private void StartWaitingBeforeJump()
     {
-        preJumpTimer = preJumpDelay;
         if (anim_aim.enabled)
         {
             anim_aim.SetTrigger("aim");
@@ -525,15 +520,9 @@ public class SC_fish_enemy : MonoBehaviour
             originalSwimHeight
         );
 
-        preJumpTimer -= Time.deltaTime;
-
-        if (preJumpTimer <= 0f)
-        {
-            StartJump();
-        }
     }
 
-    private void StartJump()
+    public void StartJump()
     {
         if (!IsStarbitValid(targetStarbit))
         {
@@ -757,8 +746,6 @@ public class SC_fish_enemy : MonoBehaviour
         {
             anim_aim.enabled = true;
         }
-        chuchuPreJumpTimer =
-            chuchuPreJumpDelay;
 
         transform.position = new Vector2(
             transform.position.x,
@@ -769,21 +756,16 @@ public class SC_fish_enemy : MonoBehaviour
     }
     private void UpdateWaitingBeforeChuchuJump()
     {
+        aim.targetPoint = new Vector2(transform.position.x, SC_player.instance.transform.position.y);
 
         transform.position = new Vector2(
             transform.position.x,
             originalSwimHeight
         );
 
-        chuchuPreJumpTimer -= Time.deltaTime;
-
-        if (chuchuPreJumpTimer <= 0f)
-        {
-            StartChuchuJump();
-        }
     }
 
-    private void StartChuchuJump()
+    public void StartChuchuJump()
     {
         TriggerAnimation("jump");
 
