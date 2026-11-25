@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class SC_fish_enemy : MonoBehaviour
@@ -123,6 +124,7 @@ public class SC_fish_enemy : MonoBehaviour
     private bool hasChosenStarbit = false;
 
     private bool sequenceFinished = false;
+    private bool canmove = true;
     private bool leavingScreen = false;
     private Vector3 leaveStartPosition;
 
@@ -241,7 +243,7 @@ public class SC_fish_enemy : MonoBehaviour
         TriggerAnimation("change_state");
         BoolAnimation("angry", true);
     }
-
+    private Vector2 lastStarbitPosition;
     private void UpdateSwimming()
     {
         SwimBetweenPoints();
@@ -258,15 +260,17 @@ public class SC_fish_enemy : MonoBehaviour
         if (searchTimer <= 0f)
         {
             searchTimer = searchInterval;
-            if (targetStarbit == null && !hasChosenStarbit)
+            SC_starbit starbit = FindStarbit();
+
+            if (starbit != null && TryReserveStarbit(starbit))
             {
-                SC_starbit starbit = FindStarbit();
-                aim.targetPoint = starbit.transform.position;
-                if (starbit != null && TryReserveStarbit(starbit))
-                {
-                    targetStarbit = starbit;
-                    hasChosenStarbit = true;
-                }
+                targetStarbit = starbit;
+                hasChosenStarbit = true;
+
+                lastStarbitPosition = starbit.transform.position;
+
+                if (aim != null)
+                    aim.targetPoint = lastStarbitPosition;
             }
         }
 
@@ -276,7 +280,6 @@ public class SC_fish_enemy : MonoBehaviour
             {
                 ReleaseTargetStarbit();
 
-                StartChasingChuchu();
                 return;
             }
 
@@ -461,7 +464,6 @@ public class SC_fish_enemy : MonoBehaviour
         {
             ReleaseTargetStarbit();
 
-            StartChasingChuchu();
             return;
         }
 
@@ -504,41 +506,37 @@ public class SC_fish_enemy : MonoBehaviour
 
     private void UpdateWaitingBeforeJump()
     {
-        if (!IsStarbitValid(targetStarbit))
+        if (IsStarbitValid(targetStarbit))
+        {
+            lastStarbitPosition = targetStarbit.transform.position;
+        }
+        else
         {
             ReleaseTargetStarbit();
-
-            StartChasingChuchu();
-            return;
         }
 
-        jumpX =
-            targetStarbit.transform.position.x;
+        jumpX = lastStarbitPosition.x;
+        jumpTargetHeight = lastStarbitPosition.y;
 
         transform.position = new Vector2(
             jumpX,
             originalSwimHeight
         );
-
     }
-
     public void StartJump()
     {
-        if (!IsStarbitValid(targetStarbit))
-        {
-            ReleaseTargetStarbit();
-
-            StartChasingChuchu();
-            return;
-        }
         jump.PlayJuice();
         TriggerAnimation("jump");
 
-        jumpX =
-            targetStarbit.transform.position.x;
+        if (IsStarbitValid(targetStarbit))
+        {
+            lastStarbitPosition = targetStarbit.transform.position;
+        }
 
-        jumpTargetHeight =
-            targetStarbit.transform.position.y;
+        jumpX = lastStarbitPosition.x;
+        jumpTargetHeight = lastStarbitPosition.y;
+
+        ReleaseTargetStarbit();
 
         jumpTimer = 0f;
 
@@ -552,8 +550,6 @@ public class SC_fish_enemy : MonoBehaviour
 
         state = State.JumpingUp;
     }
-
-
     private void UpdateJumpingUp()
     {
         if (!IsStarbitValid(targetStarbit))
@@ -668,7 +664,7 @@ public class SC_fish_enemy : MonoBehaviour
     private void StartChasingChuchu()
     {
         ReleaseTargetStarbit();
-
+        canmove = false;
         isChasingChuchu = true;
 
         chaseTimer = chaseDuration;
@@ -684,13 +680,22 @@ public class SC_fish_enemy : MonoBehaviour
 
         state = State.ChasingChuchu;
     }
-
+    public void delay_chase()
+    {
+        canmove = true;
+    }
 
     private void UpdateChasingChuchu()
     {
         if (SC_player.instance == null)
         {
             StopChasingChuchu();
+            return;
+        }
+        
+        if (!canmove)
+        {
+           
             return;
         }
 

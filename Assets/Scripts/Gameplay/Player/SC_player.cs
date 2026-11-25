@@ -1442,7 +1442,6 @@ if (vertical > 0f && nextY >= echelle.TopY)
 
     public void powerup()
     {
-        hud_.SetBool("cosmic", true);
         SC_music_manager.instance.pause_music();
         anim.ResetTrigger("Punch");
         anim.SetBool("Eat", false);
@@ -1463,6 +1462,8 @@ if (vertical > 0f && nextY >= echelle.TopY)
 
     public void powerup_end()
     {
+        hud_.SetBool("cosmic", true);
+
         Time.timeScale = 1;
         rb.bodyType = RigidbodyType2D.Dynamic;
         isFrozen = false;

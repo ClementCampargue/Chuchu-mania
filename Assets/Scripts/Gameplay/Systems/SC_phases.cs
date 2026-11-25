@@ -25,7 +25,10 @@ public class SC_phases : MonoBehaviour
 
     public void NextPhase()
     {
-        SC_player.instance.hud_.SetTrigger("new");
+        if (SC_icecream_eat_system.instance.isPowerUpActive)
+        {
+            return;
+        }
         int previousPhase = currentPhaseIndex;
         audio_.Play();
         currentPhaseIndex++;
@@ -34,6 +37,7 @@ public class SC_phases : MonoBehaviour
         {
             phases[currentPhaseIndex].SetActive(true);
             OnPhaseChanged?.Invoke(currentPhaseIndex);
+            SC_player.instance.hud_.SetTrigger("new");
         }
         else
         {

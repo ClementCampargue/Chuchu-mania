@@ -222,23 +222,23 @@ public void CancelEat()
 
     private void CheckPhases()
     {
-        if (!phase1Triggered && displayedFill >= 0.33f)
+        if (!phase3Triggered && displayedFill >= 1)
+        {
+            phase3Triggered = true;
+        }
+        else if (!phase1Triggered && displayedFill >= 0.33f)
         {
             phase1Triggered = true;
             SC_phases.instance.NextPhase();
         }
 
-        if (!phase2Triggered && displayedFill >= 0.66f)
+        else if (!phase2Triggered && displayedFill >= 0.66f)
         {
             phase2Triggered = true;
             SC_phases.instance.NextPhase();
         }
 
-        if (!phase3Triggered && displayedFill >= 1)
-        {
-            phase3Triggered = true;
-            SC_phases.instance.cosmic();
-        }
+     
     }
 
     // =========================================================
@@ -604,20 +604,16 @@ public void CancelEat()
     {
         displayedFill = 1f;
 
-        mat.SetFloat(
-            "_Fill_amount",
-            displayedFill
-        );
-
-        mat2.SetFloat(
-            "_Fill_amount",
-            displayedFill
-        );
+        mat.SetFloat("_Fill_amount", 1f);
+        mat2.SetFloat("_Fill_amount", 1f);
 
         CheckPhases();
 
         if (!isPowerUpActive)
         {
+            // Manger toutes les glaces du stock instantanément
+            EatAllCreamsInstant();
+
             SC_music_manager.instance.update_music(music);
 
             player.powerup();
@@ -625,7 +621,6 @@ public void CancelEat()
             isPowerUpActive = true;
         }
     }
-
     // =========================================================
     // UI
     // =========================================================
@@ -882,5 +877,53 @@ public void destroy_all_cream()
         currrent_ice_cream = 0;
         multiplier = 0;
         eaten_cream = 0;
+    }
+    private void EatAllCreamsInstant()
+    {
+        if (creams.Count == 0)
+            return;
+
+        eaten_cream = creams.Count;
+
+        // Réinitialiser le combo
+        SC_combo_system.Instance.ResetCombo();
+
+        foreach (SC_icecream_fall cream in creams)
+        {
+            if (cream == null)
+                continue;
+
+            SC_combo_system.Instance.AddToCombo(cream.type);
+
+            cream.Eat();
+        }
+
+        // Vider le stock
+        creams.Clear();
+        selectedCreams.Clear();
+
+        currrent_ice_cream = 0;
+
+        // Remplir instantanément l'estomac
+        if (canfillup)
+        {
+            displayedFill = 1f;
+
+            mat.SetFloat("_Fill_amount", 1f);
+            mat2.SetFloat("_Fill_amount", 1f);
+        }
+
+        // Mettre à jour les phases
+        CheckPhases();
+
+        // Calculer le score de toutes les glaces mangées
+        calculate_score();
+
+        eaten_cream = 0;
+
+        multiplier = 0;
+
+        if (multiplierText != null)
+            multiplierText.gameObject.SetActive(false);
     }
 }

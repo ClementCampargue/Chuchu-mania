@@ -103,6 +103,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   damage: 0
   ejection_power: {x: 1, y: 4}
+  destroy_on_damage: 0
 --- !u!60 &5350716766891445879
 PolygonCollider2D:
   m_ObjectHideFlags: 0
@@ -229,6 +230,14 @@ PrefabInstance:
       propertyPath: OutputAudioMixerGroup
       value: 
       objectReference: {fileID: -5972833017200364601, guid: 9284900b67a66ab4e888b9bb58563f0e, type: 2}
+    - target: {fileID: 3963724306506622572, guid: 21b16fed6f152f94ca75d3f4e11ab55e, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -2.155
+      objectReference: {fileID: 0}
+    - target: {fileID: 4134221410165544342, guid: 21b16fed6f152f94ca75d3f4e11ab55e, type: 3}
+      propertyPath: m_Size.x
+      value: 7.441811
+      objectReference: {fileID: 0}
     - target: {fileID: 4286570561266020812, guid: 21b16fed6f152f94ca75d3f4e11ab55e, type: 3}
       propertyPath: big
       value: 1
@@ -252,6 +261,10 @@ PrefabInstance:
     - target: {fileID: 7947262204105260129, guid: 21b16fed6f152f94ca75d3f4e11ab55e, type: 3}
       propertyPath: m_Name
       value: Big_fish Variant
+      objectReference: {fileID: 0}
+    - target: {fileID: 8258316826033004741, guid: 21b16fed6f152f94ca75d3f4e11ab55e, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -2.155
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

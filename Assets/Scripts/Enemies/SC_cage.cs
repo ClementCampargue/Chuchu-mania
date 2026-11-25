@@ -191,16 +191,7 @@ public class SC_cage : MonoBehaviour
             Health > 0 &&
             !isInvincible)
         {
-            int playerLayer = LayerMask.NameToLayer("Player");
-
-            if (playerLayer != -1)
-            {
-                gameObject.layer = playerLayer;
-            }
-            else
-            {
-                Debug.LogError("La layer Player n'existe pas !");
-            }
+       
             Debug.Log("Cage frappée !");
 
             SetDirectionFromPlayer();
