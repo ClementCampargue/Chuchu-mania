@@ -20,15 +20,15 @@ public class SC_guard_ai : MonoBehaviour
     public bool drawPath = true;
     public bool showLogs = true;
 
-    private List<SC_guard_point> allPoints = new List<SC_guard_point>();
+    private List<SC_guard_point> allPoints =
+        new List<SC_guard_point>();
 
-    private List<Vector3> currentPath = new List<Vector3>();
-    private int pathIndex = 0;
+    private List<Vector3> currentPath =
+        new List<Vector3>();
 
-    private float repathTimer = 0f;
-
-    private SC_guard_point lastTargetA;
-    private SC_guard_point lastTargetB;
+    private int pathIndex;
+    private float repathTimer;
+    private bool chaseActive;
 
     private struct Segment
     {
@@ -50,18 +50,31 @@ public class SC_guard_ai : MonoBehaviour
         }
     }
 
+    // ============================================================
+    // START
+    // ============================================================
+
     private void Start()
     {
         RefreshPoints();
 
         if (allPoints.Count == 0)
         {
-            Debug.LogError("SC_guard_ai : aucun SC_guard_point trouvé.");
+            Debug.LogError(
+                "SC_guard_ai : aucun SC_guard_point trouvé."
+            );
         }
     }
 
+    // ============================================================
+    // UPDATE
+    // ============================================================
+
     private void Update()
     {
+        if (!chaseActive)
+            return;
+
         if (SC_player.instance == null)
             return;
 
@@ -69,28 +82,83 @@ public class SC_guard_ai : MonoBehaviour
 
         if (repathTimer <= 0f)
         {
-            repathTimer = repathInterval;
+            repathTimer = Mathf.Max(0.01f, repathInterval);
             CalculatePath();
         }
 
         MoveAlongPath();
     }
 
+    // ============================================================
+    // ACTIVATION DE LA TRAQUE
+    // ============================================================
+
+    public void SetChaseActive(bool active)
+    {
+        chaseActive = active;
+
+        if (active)
+        {
+            RefreshPoints();
+
+            currentPath.Clear();
+            pathIndex = 0;
+            repathTimer = 0f;
+
+            CalculatePath();
+        }
+        else
+        {
+            currentPath.Clear();
+            pathIndex = 0;
+        }
+    }
+
+    public bool IsChaseActive()
+    {
+        return chaseActive;
+    }
+
+    public bool TryGetMovementTarget(out Vector3 target)
+    {
+        target = transform.position;
+
+        if (!chaseActive ||
+            currentPath == null ||
+            currentPath.Count == 0 ||
+            pathIndex >= currentPath.Count)
+        {
+            return false;
+        }
+
+        target = currentPath[pathIndex];
+        return true;
+    }
+
+    // ============================================================
+    // POINTS
+    // ============================================================
+
     private void RefreshPoints()
     {
         allPoints.Clear();
 
         SC_guard_point[] found =
-            FindObjectsByType<SC_guard_point>(FindObjectsSortMode.None);
+            FindObjectsByType<SC_guard_point>(
+                FindObjectsSortMode.None
+            );
 
         allPoints.AddRange(found);
     }
 
-    // -------------------------------------------------
-    // ÉTAGES
-    // -------------------------------------------------
+    // ============================================================
+    // ETAGES
+    // ============================================================
 
-    private bool TryGetFloor(float y, out int floorId, out float floorY)
+    private bool TryGetFloor(
+        Vector3 position,
+        out int floorId,
+        out float floorY)
     {
         floorId = -1;
         floorY = 0f;
@@ -102,32 +170,59 @@ public class SC_guard_ai : MonoBehaviour
             if (point == null || !point.isFloorReference)
                 continue;
 
-            float distance = Mathf.Abs(
-                point.transform.position.y - y
+            Vector3 pointPosition = point.transform.position;
+
+            float verticalDistance = Mathf.Abs(
+                position.y - pointPosition.y
             );
 
-            if (distance < bestDistance)
+            if (verticalDistance > 0.1f)
+                continue;
+
+            float horizontalDistance = Vector2.Distance(
+                new Vector2(position.x, position.z),
+                new Vector2(pointPosition.x, pointPosition.z)
+            );
+
+            if (horizontalDistance < bestDistance)
             {
-                bestDistance = distance;
+                bestDistance = horizontalDistance;
                 floorId = point.floorId;
-                floorY = point.transform.position.y;
+                floorY = pointPosition.y;
             }
         }
 
-        return bestDistance <= floorHeightTolerance;
+        return floorId != -1;
     }
 
-    // -1 : descendre
-    //  0 : aucune priorité verticale
-    //  1 : monter
-
-    private int GetVerticalDirection(float enemyY, float playerY)
+    private int GetVerticalDirection(
+        int enemyFloor,
+        int playerFloor,
+        float enemyFloorY,
+        float playerFloorY)
     {
-        if (playerY < enemyY - floorHeightTolerance)
-            return -1;
+        // IMPORTANT :
+        // Pendant le saut, on ignore les différences d'étage.
+        if (SC_player.instance != null &&
+            SC_player.instance.isJumping)
+        {
+            return 0;
+        }
 
-        if (playerY > enemyY + floorHeightTolerance)
-            return 1;
+        // Si les deux étages sont identifiés.
+        if (enemyFloor != -1 && playerFloor != -1)
+        {
+            if (enemyFloor == playerFloor)
+                return 0;
+
+            if (playerFloorY < enemyFloorY - floorHeightTolerance)
+                return -1;
+
+            if (playerFloorY > enemyFloorY + floorHeightTolerance)
+                return 1;
+
+            return 0;
+        }
 
         return 0;
     }
@@ -142,18 +237,20 @@ public class SC_guard_ai : MonoBehaviour
 
         float deltaY = to.y - from.y;
 
-        if (verticalDirection == -1 && deltaY > verticalTolerance)
+        if (verticalDirection == -1 &&
+            deltaY > verticalTolerance)
             return false;
 
-        if (verticalDirection == 1 && deltaY < -verticalTolerance)
+        if (verticalDirection == 1 &&
+            deltaY < -verticalTolerance)
             return false;
 
         return true;
     }
 
-    // -------------------------------------------------
-    // RECHERCHE DU SEGMENT LE PLUS PROCHE
-    // -------------------------------------------------
+    // ============================================================
+    // SEGMENT LE PLUS PROCHE
+    // ============================================================
 
     private bool FindClosestSegment(
         Vector3 position,
@@ -168,7 +265,7 @@ public class SC_guard_ai : MonoBehaviour
 
         foreach (SC_guard_point point in allPoints)
         {
-            if (point == null)
+            if (point == null || point.connections == null)
                 continue;
 
             foreach (SC_guard_point connected in point.connections)
@@ -240,9 +337,9 @@ public class SC_guard_ai : MonoBehaviour
         return a + ab * t;
     }
 
-    // -------------------------------------------------
+    // ============================================================
     // DIJKSTRA
-    // -------------------------------------------------
+    // ============================================================
 
     private bool FindPath(
         SC_guard_point start,
@@ -268,9 +365,16 @@ public class SC_guard_ai : MonoBehaviour
 
         foreach (SC_guard_point point in allPoints)
         {
+            if (point == null)
+                continue;
+
             distances[point] = float.MaxValue;
             unvisited.Add(point);
         }
+
+        if (!distances.ContainsKey(start) ||
+            !distances.ContainsKey(target))
+            return false;
 
         distances[start] = 0f;
 
@@ -296,9 +400,13 @@ public class SC_guard_ai : MonoBehaviour
 
             unvisited.Remove(current);
 
+            if (current.connections == null)
+                continue;
+
             foreach (SC_guard_point neighbor in current.connections)
             {
-                if (neighbor == null || !unvisited.Contains(neighbor))
+                if (neighbor == null ||
+                    !unvisited.Contains(neighbor))
                     continue;
 
                 Vector3 from = current.transform.position;
@@ -343,63 +451,78 @@ public class SC_guard_ai : MonoBehaviour
         return true;
     }
 
-    // -------------------------------------------------
+    // ============================================================
     // CONSTRUCTION DU TRAJET
-    // -------------------------------------------------
+    // ============================================================
 
     private void CalculatePath()
     {
+        if (!chaseActive || SC_player.instance == null)
+            return;
+
         if (allPoints.Count == 0)
             RefreshPoints();
 
-        if (!FindClosestSegment(transform.position, out Segment enemySegment))
+        if (!FindClosestSegment(
+            transform.position,
+            out Segment enemySegment))
         {
             if (showLogs)
-                Debug.LogWarning("Ennemi trop éloigné du réseau de segments.");
+                Debug.LogWarning(
+                    "SC_guard_ai : ennemi trop éloigné du réseau."
+                );
 
             currentPath.Clear();
+            pathIndex = 0;
             return;
         }
 
-        Vector3 playerPosition = SC_player.instance.transform.position;
+        Vector3 playerPosition =
+            SC_player.instance.transform.position;
 
-        if (!FindClosestSegment(playerPosition, out Segment playerSegment))
+        if (!FindClosestSegment(
+            playerPosition,
+            out Segment playerSegment))
         {
             if (showLogs)
-                Debug.LogWarning("Joueur trop éloigné du réseau de segments.");
+                Debug.LogWarning(
+                    "SC_guard_ai : joueur trop éloigné du réseau."
+                );
 
             currentPath.Clear();
+            pathIndex = 0;
             return;
         }
 
-        int verticalDirection = GetVerticalDirection(
-            enemySegment.closest.y,
-            playerSegment.closest.y
+        // Identification des étages à partir des segments.
+        int enemyFloor;
+        int playerFloor;
+
+        float enemyFloorY;
+        float playerFloorY;
+
+        TryGetFloor(
+            enemySegment.closest,
+            out enemyFloor,
+            out enemyFloorY
         );
 
-        if (TryGetFloor(playerSegment.closest.y, out int playerFloor, out float playerFloorY))
-        {
-            if (TryGetFloor(enemySegment.closest.y, out int enemyFloor, out float enemyFloorY))
-            {
-                if (playerFloor != enemyFloor)
-                {
-                    verticalDirection = GetVerticalDirection(
-                        enemyFloorY,
-                        playerFloorY
-                    );
-                }
-                else
-                {
-                    verticalDirection = 0;
-                }
-            }
-        }
+        TryGetFloor(
+            playerSegment.closest,
+            out playerFloor,
+            out playerFloorY
+        );
+
+        // Pendant le saut, GetVerticalDirection renvoie toujours 0.
+        int verticalDirection = GetVerticalDirection(
+            enemyFloor,
+            playerFloor,
+            enemyFloorY,
+            playerFloorY
+        );
 
         List<Vector3> bestPath = null;
         float bestCost = float.MaxValue;
-
-        // Les deux sens de sortie du segment ennemi.
-        // Les deux sens d'entrée sur le segment du joueur.
 
         SC_guard_point[] starts =
         {
@@ -457,11 +580,10 @@ public class SC_guard_ai : MonoBehaviour
 
                 foreach (SC_guard_point node in nodes)
                 {
-                    if (candidate.Count == 0 ||
-                        Vector3.Distance(
-                            candidate[candidate.Count - 1],
-                            node.transform.position
-                        ) > 0.01f)
+                    if (Vector3.Distance(
+                        candidate[candidate.Count - 1],
+                        node.transform.position
+                    ) > 0.01f)
                     {
                         candidate.Add(node.transform.position);
                     }
@@ -480,30 +602,31 @@ public class SC_guard_ai : MonoBehaviour
             }
         }
 
-        // Cas particulier : ennemi et joueur sur le même segment.
-        if (enemySegment.a == playerSegment.a &&
-            enemySegment.b == playerSegment.b ||
-            enemySegment.a == playerSegment.b &&
-            enemySegment.b == playerSegment.a)
-        {
-            if (CanMoveInDirection(
+        // Même segment : trajet direct.
+        bool sameSegment =
+            (enemySegment.a == playerSegment.a &&
+             enemySegment.b == playerSegment.b) ||
+            (enemySegment.a == playerSegment.b &&
+             enemySegment.b == playerSegment.a);
+
+        if (sameSegment &&
+            CanMoveInDirection(
                 enemySegment.closest,
                 playerSegment.closest,
                 verticalDirection))
+        {
+            float directCost = Vector3.Distance(
+                enemySegment.closest,
+                playerSegment.closest
+            );
+
+            if (directCost < bestCost)
             {
-                float directCost = Vector3.Distance(
+                bestPath = new List<Vector3>
+                {
                     enemySegment.closest,
                     playerSegment.closest
-                );
-
-                if (directCost < bestCost)
-                {
-                    bestPath = new List<Vector3>
-                    {
-                        enemySegment.closest,
-                        playerSegment.closest
-                    };
-                }
+                };
             }
         }
 
@@ -515,26 +638,23 @@ public class SC_guard_ai : MonoBehaviour
                 );
 
             currentPath.Clear();
+            pathIndex = 0;
             return;
         }
 
         currentPath = bestPath;
         pathIndex = 0;
-
-        lastTargetA = playerSegment.a;
-        lastTargetB = playerSegment.b;
     }
 
-    // -------------------------------------------------
-    // DÉPLACEMENT
-    // -------------------------------------------------
+    // ============================================================
+    // DEPLACEMENT
+    // ============================================================
 
     private void MoveAlongPath()
     {
-        if (currentPath == null || currentPath.Count == 0)
-            return;
-
-        if (pathIndex >= currentPath.Count)
+        if (currentPath == null ||
+            currentPath.Count == 0 ||
+            pathIndex >= currentPath.Count)
             return;
 
         Vector3 target = currentPath[pathIndex];
@@ -545,7 +665,9 @@ public class SC_guard_ai : MonoBehaviour
             moveSpeed * Time.deltaTime
         );
 
-        if (Vector3.Distance(transform.position, target) <= reachDistance)
+        if (Vector3.Distance(
+            transform.position,
+            target) <= reachDistance)
         {
             pathIndex++;
 
@@ -557,9 +679,9 @@ public class SC_guard_ai : MonoBehaviour
         }
     }
 
-    // -------------------------------------------------
+    // ============================================================
     // GIZMOS
-    // -------------------------------------------------
+    // ============================================================
 
     private void OnDrawGizmos()
     {

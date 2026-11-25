@@ -45,7 +45,7 @@ public class SC_player : MonoBehaviour
     [HideInInspector] public float jumpBufferCounter;
 
     private float jumpTimeCounter;
-    private bool isJumping;
+    public bool isJumping;
     private bool jumpHeld;
 
     public bool canJump = true;

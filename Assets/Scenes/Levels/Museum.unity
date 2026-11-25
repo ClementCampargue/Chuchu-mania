@@ -317,7 +317,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &217621488
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -334,8 +334,8 @@ MonoBehaviour:
   reachDistance: 0.08
   maxSegmentDistance: 3
   repathInterval: 0.25
-  floorHeightTolerance: 0.6
-  verticalTolerance: 0.08
+  floorHeightTolerance: 0.11
+  verticalTolerance: 4.05
   drawPath: 1
   showLogs: 1
 --- !u!212 &217621489

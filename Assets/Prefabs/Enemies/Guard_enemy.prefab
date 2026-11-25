@@ -140,6 +140,7 @@ GameObject:
   - component: {fileID: 1752671880555459536}
   - component: {fileID: 2519460489625166877}
   - component: {fileID: 8650354465331186479}
+  - component: {fileID: 2218076081841742635}
   m_Layer: 8
   m_Name: Visual
   m_TagString: Untagged
@@ -200,6 +201,35 @@ SortingGroup:
   m_SortingLayer: 0
   m_SortingOrder: 5
   m_SortAtRoot: 0
+--- !u!114 &2218076081841742635
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 736061607559405491}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1cdfe354424f56b4ca47e224e77d11ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  animationName: Rabbit_ChaseStart
+  triggerBeforeEnd: 0.2
+  onAnimationFinished:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 4239849883444337517}
+        m_TargetAssemblyTypeName: SC_guard_movement, Assembly-CSharp
+        m_MethodName: StartChaseMovement
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &876343942460477321
 GameObject:
   m_ObjectHideFlags: 0
@@ -248,6 +278,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   trs: {fileID: 0}
   spriteRenderer: {fileID: 2257961881246306323}
+  spriteRendererList: []
   flashMaterial: {fileID: 2100000, guid: 778865bbd08486043a01aeb31184e581, type: 2}
   rumble: 1
   rumbleLow: 0.1
@@ -430,6 +461,7 @@ GameObject:
   - component: {fileID: 4239849883444337517}
   - component: {fileID: 1601778833296915909}
   - component: {fileID: 6484877146698918740}
+  - component: {fileID: 157420288762404333}
   m_Layer: 8
   m_Name: Guard_enemy
   m_TagString: Enemy
@@ -472,14 +504,15 @@ MonoBehaviour:
   exclamation: {fileID: 4181699033222870022, guid: 2c642d6e40fb2624287c03f9ace97d33, type: 3}
   exclamation_point: {fileID: 4326461346714959402}
   damage: {fileID: 2680671972605215812}
-  chaseMaxSpeed: 3
-  chaseAccelerationTime: 0.8
-  chaseDecelerationTime: 0.5
   sleepDuration: 3.61
   flashlight: {fileID: 2380945124946967503}
   animator: {fileID: 2519460489625166877}
+  guardAI: {fileID: 0}
   moveSpeed: 1.8
+  ladderSpeed: 1.5
+  ladderAlignmentTolerance: 0.025
   movementMode: 0
+  chaseStartTrigger: ChaseStart
   currentNode: {fileID: 0}
   baseNode: {fileID: 0}
   patrolPoints: []
@@ -491,23 +524,6 @@ MonoBehaviour:
   minSleepDuration: 2
   maxSleepDuration: 5
   canSleepWhileMoving: 1
-  chaseRefreshRate: 0.15
-  floorDetectionTolerance: 0.35
-  floorSwitchTolerance: 0.2
-  floorSwitchCooldown: 0.6
-  verticalNodeHorizontalWeight: 0.35
-  floorSearchDistance: 29.36
-  floorConfirmationTime: 0.2
-  useNearestLadder: 1
-  ladderDecisionDistance: 8
-  allowMidSegmentTurn: 1
-  ladderSpeed: 1
-  ladderAlignmentTolerance: 0.025
-  chaseHopHeight: 0.28
-  chaseHopDuration: 0.32
-  hopSquash: 0.12
-  hopStretch: 0.08
-  hopWobble: 0.025
   sleepParameter: Sleep
   walkParameter: Walk
   ladderUpParameter: LadderUp
@@ -556,6 +572,26 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 4
+--- !u!114 &157420288762404333
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1045150639807134746}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5f4d6cb35df70f941a9debe5f26e5150, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  moveSpeed: 3
+  reachDistance: 0.08
+  maxSegmentDistance: 3
+  repathInterval: 0.35
+  floorHeightTolerance: 3.06
+  verticalTolerance: 3.95
+  drawPath: 1
+  showLogs: 1
 --- !u!1 &1829277503149773672
 GameObject:
   m_ObjectHideFlags: 0
@@ -5600,6 +5636,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   damage: 1
   ejection_power: {x: 1, y: 1}
+  destroy_on_damage: 0
 --- !u!114 &7481250865495590983
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5688,6 +5725,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   trs: {fileID: 0}
   spriteRenderer: {fileID: 2257961881246306323}
+  spriteRendererList: []
   flashMaterial: {fileID: 2100000, guid: 778865bbd08486043a01aeb31184e581, type: 2}
   rumble: 1
   rumbleLow: 0.1
