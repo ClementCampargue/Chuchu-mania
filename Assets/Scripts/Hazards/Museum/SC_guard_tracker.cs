@@ -1,570 +1,481 @@
+
 using UnityEngine;
 using System.Collections.Generic;
 
-public class SC_guard_tracker : MonoBehaviour
+public class SC_guard_chaser : MonoBehaviour
 {
-    [Header("Cible")]
-    public Transform target;
+    [Header("Déplacement")]
+    public float moveSpeed = 3f;
+    public float pointReachDistance = 0.15f;
 
-    [Header("Graphe")]
-    public List<SC_guard_point> allPoints =
-        new List<SC_guard_point>();
+    [Header("Détection des étages")]
+    [Tooltip("Distance verticale maximale pour considérer un étage.")]
+    public float floorDetectionTolerance = 0.4f;
 
-    [Header("Détection d'étage")]
-    public float verticalTolerance = 1.5f;
+    [Tooltip("Priorité donnée au changement d'étage.")]
+    public float floorPriority = 100f;
 
-    [Header("Connexions")]
-    [Tooltip("Tolérance utilisée pour reconnaître une ligne horizontale/verticale.")]
-    public float axisTolerance = 0.05f;
-
-    [Header("Recalcul")]
+    [Header("Traque")]
     public float repathInterval = 0.25f;
-
-    public bool repathWhenSegmentChanges = true;
+    public float segmentSearchDistance = 100f;
 
     [Header("Debug")]
     public bool drawPath = true;
-    public Color pathColor = Color.red;
 
-    private List<SC_guard_point> currentPath =
-        new List<SC_guard_point>();
+    private SC_player player;
 
-    private int currentPathIndex;
+    private List<SC_guard_point> path = new();
+    private SC_guard_point currentNode;
 
-    private SC_guard_point currentPlayerPoint;
+    private Vector3 targetOnGraph;
+    private bool hasTarget;
 
     private float repathTimer;
 
-    public IReadOnlyList<SC_guard_point> CurrentPath
+    private int playerFloor = -1;
+
+    private class Segment
     {
-        get { return currentPath; }
-    }
-
-    public SC_guard_point CurrentDestination
-    {
-        get
-        {
-            if (currentPath == null ||
-                currentPath.Count == 0)
-            {
-                return null;
-            }
-
-            if (currentPathIndex < 0 ||
-                currentPathIndex >= currentPath.Count)
-            {
-                return null;
-            }
-
-            return currentPath[currentPathIndex];
-        }
-    }
-
-    public SC_guard_point CurrentSegmentStart
-    {
-        get
-        {
-            if (!HasPath())
-                return null;
-
-            if (currentPathIndex == 0)
-                return currentPath[0];
-
-            return currentPath[currentPathIndex - 1];
-        }
-    }
-
-    public SC_guard_point CurrentSegmentEnd
-    {
-        get
-        {
-            return CurrentDestination;
-        }
+        public SC_guard_point a;
+        public SC_guard_point b;
+        public Vector3 closest;
+        public float distance;
     }
 
     private void Start()
     {
-        if (target == null &&
-            SC_player.instance != null)
-        {
-            target =
-                SC_player.instance.transform;
-        }
+        player = SC_player.instance;
 
-        if (allPoints.Count == 0)
-            FindAllPoints();
-
-        currentPlayerPoint =
-            FindPlayerPoint();
-
-        RecalculatePath();
+        FindClosestStartingNode();
+        CalculatePath();
     }
 
     private void Update()
     {
-        if (target == null)
-            return;
-
-        repathTimer -= Time.deltaTime;
-
-        SC_guard_point newPoint =
-            FindPlayerPoint();
-
-        bool changed =
-            newPoint != currentPlayerPoint;
-
-        currentPlayerPoint =
-            newPoint;
-
-        if (changed &&
-            repathWhenSegmentChanges)
+        if (player == null)
         {
-            RecalculatePath();
+            player = SC_player.instance;
+            if (player == null)
+                return;
         }
-        else if (repathTimer <= 0f)
+
+        repathTimer += Time.deltaTime;
+
+        if (repathTimer >= repathInterval)
         {
-            RecalculatePath();
+            repathTimer = 0f;
+            CalculatePath();
         }
+
+        MoveAlongPath();
     }
 
-    private void FindAllPoints()
+    // --------------------------------------------------
+    // ETAGES
+    // --------------------------------------------------
+
+    private List<float> GetFloors()
     {
+        HashSet<float> heights = new();
+
         SC_guard_point[] points =
             FindObjectsByType<SC_guard_point>(
                 FindObjectsSortMode.None
             );
 
-        allPoints.Clear();
-        allPoints.AddRange(points);
+        foreach (var p in points)
+        {
+            heights.Add(p.transform.position.y);
+        }
+
+        List<float> floors = new(heights);
+        floors.Sort();
+
+        return floors;
     }
 
-    /*
-     * ============================================================
-     * POINT DU JOUEUR
-     * ============================================================
-     *
-     * Même étage :
-     * on choisit le point selon le X du joueur.
-     */
-    private SC_guard_point FindPlayerPoint()
+    private int GetFloorIndex(float y)
     {
-        if (target == null)
-            return null;
+        List<float> floors = GetFloors();
 
-        SC_guard_point best = null;
-        float bestX = Mathf.Infinity;
+        int bestFloor = -1;
+        float bestDistance = float.MaxValue;
 
-        foreach (SC_guard_point point in allPoints)
+        for (int i = 0; i < floors.Count; i++)
         {
-            if (point == null)
-                continue;
+            float distance = Mathf.Abs(y - floors[i]);
 
-            float yDifference =
-                Mathf.Abs(
-                    target.position.y -
-                    point.transform.position.y
-                );
-
-            if (yDifference > verticalTolerance)
-                continue;
-
-            float xDifference =
-                Mathf.Abs(
-                    target.position.x -
-                    point.transform.position.x
-                );
-
-            if (xDifference < bestX)
+            if (distance < bestDistance &&
+                distance <= floorDetectionTolerance)
             {
-                bestX = xDifference;
-                best = point;
+                bestDistance = distance;
+                bestFloor = i;
+            }
+        }
+
+        return bestFloor;
+    }
+
+    // --------------------------------------------------
+    // RECHERCHE DE SEGMENT
+    // --------------------------------------------------
+
+    private Segment FindClosestSegment(Vector3 position)
+    {
+        Segment best = null;
+        float bestDistance = segmentSearchDistance;
+
+        SC_guard_point[] points =
+            FindObjectsByType<SC_guard_point>(
+                FindObjectsSortMode.None
+            );
+
+        foreach (var node in points)
+        {
+            foreach (var connected in node.connections)
+            {
+                if (connected == null)
+                    continue;
+
+                Vector3 closest = ClosestPointOnSegment(
+                    position,
+                    node.transform.position,
+                    connected.transform.position
+                );
+
+                float distance = Vector3.Distance(
+                    position,
+                    closest
+                );
+
+                if (distance < bestDistance)
+                {
+                    bestDistance = distance;
+
+                    best = new Segment
+                    {
+                        a = node,
+                        b = connected,
+                        closest = closest,
+                        distance = distance
+                    };
+                }
             }
         }
 
         return best;
     }
 
-    /*
-     * ============================================================
-     * RECALCUL
-     * ============================================================
-     */
-    private void RecalculatePath()
+    private Vector3 ClosestPointOnSegment(
+        Vector3 point,
+        Vector3 a,
+        Vector3 b)
     {
-        repathTimer = repathInterval;
+        Vector3 ab = b - a;
 
-        if (currentPlayerPoint == null)
+        float t = Vector3.Dot(point - a, ab) /
+                  Mathf.Max(ab.sqrMagnitude, 0.0001f);
+
+        t = Mathf.Clamp01(t);
+
+        return a + ab * t;
+    }
+
+    // --------------------------------------------------
+    // CALCUL DU CHEMIN A*
+    // --------------------------------------------------
+
+    private void CalculatePath()
+    {
+        if (player == null)
             return;
 
-        SC_guard_point start =
-            FindClosestPointToGuard();
+        Segment playerSegment = FindClosestSegment(
+            player.transform.position
+        );
 
-        if (start == null)
+        if (playerSegment == null)
             return;
 
-        List<SC_guard_point> newPath =
-            FindShortestPath(
-                start,
-                currentPlayerPoint
-            );
+        Segment enemySegment = FindClosestSegment(
+            transform.position
+        );
 
-        if (newPath == null ||
-            newPath.Count == 0)
-        {
+        if (enemySegment == null)
             return;
-        }
 
-        /*
-         * On conserve le segment actuel si possible.
-         * Cela évite que le garde reparte constamment
-         * du début du nouveau chemin.
-         */
-        SC_guard_point oldDestination =
-            CurrentDestination;
+        playerFloor = GetFloorIndex(
+            player.transform.position.y
+        );
 
-        currentPath = newPath;
+        SC_guard_point start = enemySegment.a;
+        SC_guard_point endA = playerSegment.a;
+        SC_guard_point endB = playerSegment.b;
 
-        int preservedIndex = -1;
+        List<SC_guard_point> pathA = FindPath(start, endA);
+        List<SC_guard_point> pathB = FindPath(start, endB);
 
-        if (oldDestination != null)
+        float costA = CalculatePathCost(pathA);
+        float costB = CalculatePathCost(pathB);
+
+        // On prend le meilleur des deux itinéraires.
+        if (costA <= costB)
         {
-            for (int i = 0; i < currentPath.Count; i++)
-            {
-                if (currentPath[i] == oldDestination)
-                {
-                    preservedIndex = i;
-                    break;
-                }
-            }
-        }
-
-        if (preservedIndex > 0)
-        {
-            currentPathIndex =
-                preservedIndex;
-        }
-        else if (currentPath.Count > 1)
-        {
-            currentPathIndex = 1;
+            path = pathA;
+            currentNode = start;
+            targetOnGraph = playerSegment.closest;
         }
         else
         {
-            currentPathIndex = 0;
+            path = pathB;
+            currentNode = start;
+            targetOnGraph = playerSegment.closest;
         }
+
+        hasTarget = path.Count > 0;
+        pathIndex = 0;
+        // On ne force pas l'ennemi à rejoindre le premier point :
+        // il rejoint directement le chemin depuis sa position.
     }
 
-    private SC_guard_point FindClosestPointToGuard()
+    private float CalculatePathCost(List<SC_guard_point> p)
     {
-        SC_guard_point closest = null;
-        float closestDistance = Mathf.Infinity;
+        if (p == null || p.Count == 0)
+            return float.MaxValue;
 
-        foreach (SC_guard_point point in allPoints)
+        float cost = 0f;
+
+        for (int i = 0; i < p.Count - 1; i++)
         {
-            if (point == null)
-                continue;
-
-            float distance =
-                Vector2.Distance(
-                    transform.position,
-                    point.transform.position
-                );
-
-            if (distance < closestDistance)
-            {
-                closestDistance = distance;
-                closest = point;
-            }
+            cost += Vector3.Distance(
+                p[i].transform.position,
+                p[i + 1].transform.position
+            );
         }
 
-        return closest;
+        return cost;
     }
 
-    /*
-     * ============================================================
-     * A*
-     * ============================================================
-     *
-     * UNIQUEMENT les connexions horizontales
-     * et verticales.
-     */
-    private List<SC_guard_point> FindShortestPath(
+    private List<SC_guard_point> FindPath(
         SC_guard_point start,
-        SC_guard_point goal)
+        SC_guard_point target)
     {
-        if (start == null || goal == null)
-            return null;
+        List<SC_guard_point> open = new() { start };
 
-        List<SC_guard_point> openSet =
-            new List<SC_guard_point>();
+        Dictionary<SC_guard_point, float> gScore = new();
+        Dictionary<SC_guard_point, float> fScore = new();
 
-        HashSet<SC_guard_point> closedSet =
-            new HashSet<SC_guard_point>();
-
-        Dictionary<
-            SC_guard_point,
-            SC_guard_point
-        > cameFrom =
-            new Dictionary<
-                SC_guard_point,
-                SC_guard_point
-            >();
-
-        Dictionary<
-            SC_guard_point,
-            float
-        > gScore =
-            new Dictionary<
-                SC_guard_point,
-                float
-            >();
-
-        Dictionary<
-            SC_guard_point,
-            float
-        > fScore =
-            new Dictionary<
-                SC_guard_point,
-                float
-            >();
-
-        foreach (SC_guard_point point in allPoints)
-        {
-            if (point == null)
-                continue;
-
-            gScore[point] = Mathf.Infinity;
-            fScore[point] = Mathf.Infinity;
-        }
+        Dictionary<SC_guard_point, SC_guard_point> cameFrom = new();
 
         gScore[start] = 0f;
-        fScore[start] =
-            Heuristic(start, goal);
 
-        openSet.Add(start);
+        fScore[start] = Heuristic(start, target);
 
-        while (openSet.Count > 0)
+        while (open.Count > 0)
         {
-            SC_guard_point current =
-                GetLowestFScore(
-                    openSet,
-                    fScore
-                );
+            SC_guard_point current = open[0];
 
-            if (current == goal)
+            foreach (var node in open)
             {
-                return ReconstructPath(
-                    cameFrom,
-                    current
-                );
+                if (fScore[node] < fScore[current])
+                    current = node;
             }
 
-            openSet.Remove(current);
-            closedSet.Add(current);
+            if (current == target)
+                return ReconstructPath(cameFrom, current);
 
-            foreach (SC_guard_point neighbour
-                     in current.connections)
+            open.Remove(current);
+
+            foreach (var neighbor in current.connections)
             {
-                if (neighbour == null)
+                if (neighbor == null)
                     continue;
-
-                if (closedSet.Contains(neighbour))
-                    continue;
-
-                Vector2 delta =
-                    neighbour.transform.position -
-                    current.transform.position;
-
-                bool horizontal =
-                    Mathf.Abs(delta.y) <= axisTolerance &&
-                    Mathf.Abs(delta.x) > axisTolerance;
-
-                bool vertical =
-                    Mathf.Abs(delta.x) <= axisTolerance &&
-                    Mathf.Abs(delta.y) > axisTolerance;
-
-                /*
-                 * Toute connexion qui n'est pas
-                 * strictement H ou V est ignorée.
-                 */
-                if (!horizontal && !vertical)
-                    continue;
-
-                float distance =
-                    Mathf.Abs(delta.x) +
-                    Mathf.Abs(delta.y);
 
                 float tentativeG =
                     gScore[current] +
-                    distance;
+                    Vector3.Distance(
+                        current.transform.position,
+                        neighbor.transform.position
+                    );
 
-                if (!openSet.Contains(neighbour))
-                    openSet.Add(neighbour);
-
-                if (tentativeG <
-                    gScore[neighbour])
+                if (!gScore.ContainsKey(neighbor) ||
+                    tentativeG < gScore[neighbor])
                 {
-                    cameFrom[neighbour] =
-                        current;
+                    cameFrom[neighbor] = current;
+                    gScore[neighbor] = tentativeG;
 
-                    gScore[neighbour] =
-                        tentativeG;
+                    fScore[neighbor] =
+                        tentativeG + Heuristic(neighbor, target);
 
-                    fScore[neighbour] =
-                        tentativeG +
-                        Heuristic(
-                            neighbour,
-                            goal
-                        );
+                    if (!open.Contains(neighbor))
+                        open.Add(neighbor);
                 }
             }
         }
 
-        return null;
+        return new List<SC_guard_point>();
     }
 
     private float Heuristic(
         SC_guard_point a,
         SC_guard_point b)
     {
-        return
-            Mathf.Abs(
-                a.transform.position.x -
-                b.transform.position.x
-            )
-            +
-            Mathf.Abs(
-                a.transform.position.y -
-                b.transform.position.y
-            );
-    }
-
-    private SC_guard_point GetLowestFScore(
-        List<SC_guard_point> list,
-        Dictionary<
-            SC_guard_point,
-            float
-        > scores)
-    {
-        SC_guard_point best = list[0];
-
-        for (int i = 1; i < list.Count; i++)
-        {
-            if (scores[list[i]] <
-                scores[best])
-            {
-                best = list[i];
-            }
-        }
-
-        return best;
-    }
-
-    private List<SC_guard_point> ReconstructPath(
-        Dictionary<
-            SC_guard_point,
-            SC_guard_point
-        > cameFrom,
-        SC_guard_point current)
-    {
-        List<SC_guard_point> path =
-            new List<SC_guard_point>();
-
-        path.Add(current);
-
-        while (cameFrom.ContainsKey(current))
-        {
-            current =
-                cameFrom[current];
-
-            path.Add(current);
-        }
-
-        path.Reverse();
-
-        return path;
-    }
-
-    /*
-     * ============================================================
-     * API POUR LE MOVEMENT
-     * ============================================================
-     */
-
-    public bool HasPath()
-    {
-        return
-            currentPath != null &&
-            currentPath.Count > 0 &&
-            currentPathIndex <
-            currentPath.Count;
-    }
-
-    public void AdvanceToNextPoint()
-    {
-        if (!HasPath())
-            return;
-
-        currentPathIndex++;
-
-        if (currentPathIndex >=
-            currentPath.Count)
-        {
-            currentPathIndex =
-                currentPath.Count - 1;
-        }
-    }
-
-    public Vector3 GetCurrentDestination()
-    {
-        if (CurrentDestination == null)
-            return transform.position;
-
-        return CurrentDestination.transform.position;
-    }
-
-    public float DistanceToCurrentDestination()
-    {
-        if (!HasPath())
-            return Mathf.Infinity;
-
-        return Vector2.Distance(
-            transform.position,
-            CurrentDestination.transform.position
+        return Vector3.Distance(
+            a.transform.position,
+            b.transform.position
         );
     }
 
-    private void OnDrawGizmosSelected()
+    private List<SC_guard_point> ReconstructPath(
+        Dictionary<SC_guard_point, SC_guard_point> cameFrom,
+        SC_guard_point current)
     {
-        if (!drawPath ||
-            currentPath == null)
+        List<SC_guard_point> result = new() { current };
+
+        while (cameFrom.ContainsKey(current))
         {
+            current = cameFrom[current];
+            result.Insert(0, current);
+        }
+
+        return result;
+    }
+
+    // --------------------------------------------------
+    // DEPLACEMENT
+    // --------------------------------------------------
+
+
+    private int pathIndex = 0;
+
+    private void MoveAlongPath()
+    {
+        if (!hasTarget || path == null || path.Count == 0)
+            return;
+
+        // Cas où le chemin ne contient qu'un point.
+        if (path.Count == 1)
+        {
+            MoveOnSegment(
+                path[0].transform.position,
+                targetOnGraph
+            );
+
             return;
         }
 
-        Gizmos.color = pathColor;
+        // Segment actuel du chemin.
+        Vector3 a = path[pathIndex].transform.position;
+        Vector3 b;
 
-        for (int i = 0;
-             i < currentPath.Count - 1;
-             i++)
+        if (pathIndex < path.Count - 1)
         {
-            if (currentPath[i] == null ||
-                currentPath[i + 1] == null)
-            {
-                continue;
-            }
+            b = path[pathIndex + 1].transform.position;
+        }
+        else
+        {
+            b = targetOnGraph;
+        }
 
+        MoveOnSegment(a, b);
+
+        // Vérification de l'arrivée au prochain point.
+        Vector3 destination = b;
+
+        if (Vector3.Distance(transform.position, destination)
+            <= pointReachDistance)
+        {
+            if (pathIndex < path.Count - 1)
+            {
+                pathIndex++;
+            }
+            else
+            {
+                hasTarget = false;
+            }
+        }
+    }
+
+    private void MoveOnSegment(Vector3 a, Vector3 b)
+    {
+        Vector3 segment = b - a;
+
+        float length = segment.magnitude;
+
+        if (length < 0.001f)
+            return;
+
+        Vector3 direction = segment / length;
+
+        // Projection de l'ennemi sur le segment.
+        float progress = Vector3.Dot(
+            transform.position - a,
+            direction
+        );
+
+        // On avance uniquement dans la direction du segment.
+        progress += moveSpeed * Time.deltaTime;
+
+        progress = Mathf.Clamp(progress, 0f, length);
+
+        // Position strictement sur le tracé.
+        transform.position = a + direction * progress;
+
+        // Orientation.
+        if (direction.sqrMagnitude > 0.001f)
+        {
+            transform.rotation = Quaternion.LookRotation(direction);
+        }
+    }
+
+    // --------------------------------------------------
+    // DEPART
+    // --------------------------------------------------
+
+    private void FindClosestStartingNode()
+    {
+        SC_guard_point[] points =
+            FindObjectsByType<SC_guard_point>(
+                FindObjectsSortMode.None
+            );
+
+        float best = float.MaxValue;
+
+        foreach (var p in points)
+        {
+            float d = Vector3.Distance(
+                transform.position,
+                p.transform.position
+            );
+
+            if (d < best)
+            {
+                best = d;
+                currentNode = p;
+            }
+        }
+    }
+
+    private void OnDrawGizmos()
+    {
+        if (!drawPath || path == null)
+            return;
+
+        Gizmos.color = Color.red;
+
+        for (int i = 0; i < path.Count - 1; i++)
+        {
             Gizmos.DrawLine(
-                currentPath[i].transform.position,
-                currentPath[i + 1].transform.position
+                path[i].transform.position,
+                path[i + 1].transform.position
             );
         }
 
-        if (CurrentDestination != null)
+        if (hasTarget)
         {
-            Gizmos.DrawSphere(
-                CurrentDestination.transform.position,
-                0.25f
-            );
+            Gizmos.color = Color.yellow;
+
+            Gizmos.DrawSphere(targetOnGraph, 0.2f);
         }
     }
 }

@@ -1,11 +1,10 @@
+
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class SC_fish_enemy : MonoBehaviour
 {
-    // Registre partagé par tous les poissons : un Starbit ne peut être
-    // réservé que par un seul poisson à la fois.
+    // Réservation partagée des Starbits.
     private static readonly Dictionary<SC_starbit, SC_fish_enemy> starbitReservations =
         new Dictionary<SC_starbit, SC_fish_enemy>();
 
@@ -25,43 +24,39 @@ public class SC_fish_enemy : MonoBehaviour
         JumpingAtChuchu,
         WaitingAtChuchuTop
     }
+
     public Animator anim_aim;
     public SC_aim_system aim;
     public List<Animator> anims;
 
     public SC_water_physic water;
     public bool big;
+
     private bool caughtStarbit;
 
     [Header("Comportement")]
     [SerializeField] private bool once = false;
     [SerializeField] private int starbits_before_leave = 1;
+
     private int currentstarbit = 0;
 
     [Header("Patrouille")]
     [SerializeField] private Transform leftPoint;
-
     [SerializeField] private Transform rightPoint;
 
     [SerializeField] private float swimSpeed = 2f;
-
     [SerializeField] private float horizontalTolerance = 0.05f;
 
     [Header("Recherche Starbit")]
     [SerializeField] private float searchInterval = 0.25f;
-
     [SerializeField] private float maxStarbitDistance = 15f;
-
-    [Header("Avant le saut Starbit")]
 
     [Header("Saut Starbit")]
     [SerializeField] private float jumpDuration = 1.2f;
-
     [SerializeField] private float apexDelay = 0.15f;
 
     [Header("Retour")]
     [SerializeField] private float fallDuration = 0.5f;
-
     [SerializeField] private float postJumpDelay = 0.5f;
 
     [Header("Starbit")]
@@ -69,16 +64,12 @@ public class SC_fish_enemy : MonoBehaviour
 
     [Header("Traque du joueur")]
     [SerializeField] private float chaseDuration = 5f;
-
     [SerializeField] private float chaseSpeed = 2f;
-
     [SerializeField] private float chuchuCatchDistance = 0.5f;
 
     [Header("Saut sur le joueur")]
     [SerializeField] private float chuchuJumpDuration = 1.2f;
-
     [SerializeField] private float chuchuJumpHeight = 3f;
-
     [SerializeField] private float chuchuApexDelay = 0.15f;
 
     [Header("Sortie de l'écran")]
@@ -89,14 +80,9 @@ public class SC_fish_enemy : MonoBehaviour
     private SC_starbit targetStarbit;
 
     private float searchTimer;
-
-    private float preJumpTimer;
-
     private float jumpTimer;
     private float apexTimer;
-
     private float fallTimer;
-
     private float postJumpTimer;
 
     private float chaseTimer;
@@ -110,7 +96,6 @@ public class SC_fish_enemy : MonoBehaviour
     private float jumpX;
     private float jumpTargetHeight;
 
-
     private float chuchuJumpX;
     private float chuchuJumpTargetHeight;
 
@@ -118,26 +103,43 @@ public class SC_fish_enemy : MonoBehaviour
 
     private bool isFacingRight = true;
     private bool isChasingChuchu = false;
-
     private bool shouldChaseChuchuAfterJump = false;
 
     private bool hasChosenStarbit = false;
-
     private bool sequenceFinished = false;
+
     private bool canmove = true;
     private bool leavingScreen = false;
+
     private Vector3 leaveStartPosition;
+
+    private Vector2 lastStarbitPosition;
 
     public SC_juiciness jump;
     public SC_juiciness angry;
+
+
+    // =========================================================
+    // INITIALISATION
+    // =========================================================
+
     private void Start()
     {
         water = SC_water_physic.instance;
+
         originalSwimHeight = transform.position.y;
 
         searchTimer = 0f;
-        leftPoint = GameObject.Find("Fish_L").transform;
-        rightPoint = GameObject.Find("Fish_R").transform;
+
+        GameObject left = GameObject.Find("Fish_L");
+        GameObject right = GameObject.Find("Fish_R");
+
+        if (left != null)
+            leftPoint = left.transform;
+
+        if (right != null)
+            rightPoint = right.transform;
+
         InitializeSwimDirection();
     }
 
@@ -195,39 +197,35 @@ public class SC_fish_enemy : MonoBehaviour
     }
 
 
+    // =========================================================
+    // ANIMATIONS
+    // =========================================================
+
     private void TriggerAnimation(string triggerName)
     {
-        if (string.IsNullOrEmpty(triggerName))
-            return;
-
-        if (anims == null)
+        if (string.IsNullOrEmpty(triggerName) || anims == null)
             return;
 
         foreach (Animator animator in anims)
         {
-            if (animator == null)
-                continue;
-
-            animator.SetTrigger(triggerName);
+            if (animator != null)
+                animator.SetTrigger(triggerName);
         }
     }
 
-    private void BoolAnimation(string triggerName, bool st)
+
+    private void BoolAnimation(string triggerName, bool value)
     {
-        if (string.IsNullOrEmpty(triggerName))
-            return;
-
-        if (anims == null)
+        if (string.IsNullOrEmpty(triggerName) || anims == null)
             return;
 
         foreach (Animator animator in anims)
         {
-            if (animator == null)
-                continue;
-
-            animator.SetBool(triggerName, st);
+            if (animator != null)
+                animator.SetBool(triggerName, value);
         }
     }
+
 
     private void SetNormalMode()
     {
@@ -235,23 +233,30 @@ public class SC_fish_enemy : MonoBehaviour
         BoolAnimation("angry", false);
     }
 
+
     private void SetAngryMode()
     {
-        angry.PlayJuice();
+        if (angry != null)
+            angry.PlayJuice();
+
         PlayerPrefs.SetInt("angry_fish", 1);
 
         TriggerAnimation("change_state");
         BoolAnimation("angry", true);
     }
-    private Vector2 lastStarbitPosition;
+
+
+    // =========================================================
+    // NAGE ET RECHERCHE STARBIT
+    // =========================================================
+
     private void UpdateSwimming()
     {
         SwimBetweenPoints();
 
         if (targetStarbit == null)
-        {
             hasChosenStarbit = false;
-        }
+
         if (once && sequenceFinished)
             return;
 
@@ -260,6 +265,7 @@ public class SC_fish_enemy : MonoBehaviour
         if (searchTimer <= 0f)
         {
             searchTimer = searchInterval;
+
             SC_starbit starbit = FindStarbit();
 
             if (starbit != null && TryReserveStarbit(starbit))
@@ -279,13 +285,13 @@ public class SC_fish_enemy : MonoBehaviour
             if (!IsStarbitValid(targetStarbit))
             {
                 ReleaseTargetStarbit();
-
                 return;
             }
 
             CheckIfUnderTarget();
         }
     }
+
 
     private void SwimBetweenPoints()
     {
@@ -306,27 +312,16 @@ public class SC_fish_enemy : MonoBehaviour
 
         if (swimDirection > 0 && currentX >= rightX)
         {
-            transform.position = new Vector2(
-                rightX,
-                originalSwimHeight
-            );
-
+            transform.position = new Vector2(rightX, originalSwimHeight);
             swimDirection = -1;
         }
         else if (swimDirection < 0 && currentX <= leftX)
         {
-            transform.position = new Vector2(
-                leftX,
-                originalSwimHeight
-            );
-
+            transform.position = new Vector2(leftX, originalSwimHeight);
             swimDirection = 1;
         }
 
-        float movement =
-            swimDirection *
-            swimSpeed *
-            Time.deltaTime;
+        float movement = swimDirection * swimSpeed * Time.deltaTime;
 
         transform.position += Vector3.right * movement;
 
@@ -334,20 +329,12 @@ public class SC_fish_enemy : MonoBehaviour
 
         if (swimDirection > 0 && currentX > rightX)
         {
-            transform.position = new Vector2(
-                rightX,
-                originalSwimHeight
-            );
-
+            transform.position = new Vector2(rightX, originalSwimHeight);
             swimDirection = -1;
         }
         else if (swimDirection < 0 && currentX < leftX)
         {
-            transform.position = new Vector2(
-                leftX,
-                originalSwimHeight
-            );
-
+            transform.position = new Vector2(leftX, originalSwimHeight);
             swimDirection = 1;
         }
 
@@ -355,28 +342,28 @@ public class SC_fish_enemy : MonoBehaviour
     }
 
 
+    // =========================================================
+    // GESTION DES RESERVATIONS STARBIT
+    // =========================================================
+
     private SC_starbit FindStarbit()
     {
         SC_starbit[] starbits =
-            FindObjectsByType<SC_starbit>(
-                FindObjectsSortMode.None
-            );
+            FindObjectsByType<SC_starbit>(FindObjectsSortMode.None);
 
         SC_starbit closest = null;
 
-        float closestDistance =
-            maxStarbitDistance;
+        float closestDistance = maxStarbitDistance;
 
         foreach (SC_starbit starbit in starbits)
         {
             if (!IsStarbitAvailable(starbit))
                 continue;
 
-            float distance =
-                Vector2.Distance(
-                    transform.position,
-                    starbit.transform.position
-                );
+            float distance = Vector2.Distance(
+                transform.position,
+                starbit.transform.position
+            );
 
             if (distance < closestDistance)
             {
@@ -387,6 +374,7 @@ public class SC_fish_enemy : MonoBehaviour
 
         return closest;
     }
+
 
     private bool IsStarbitAvailable(SC_starbit starbit)
     {
@@ -401,10 +389,19 @@ public class SC_fish_enemy : MonoBehaviour
         return true;
     }
 
+
+    // Un Starbit valide doit toujours être réservé par ce poisson.
     private bool IsStarbitValid(SC_starbit starbit)
     {
-        return IsStarbitAvailable(starbit);
+        if (starbit == null || !starbit.gameObject.activeInHierarchy)
+            return false;
+
+        if (!starbitReservations.TryGetValue(starbit, out SC_fish_enemy owner))
+            return false;
+
+        return owner == this;
     }
+
 
     private bool TryReserveStarbit(SC_starbit starbit)
     {
@@ -417,10 +414,11 @@ public class SC_fish_enemy : MonoBehaviour
             return owner == this;
 
         starbitReservations.Add(starbit, this);
+
         return true;
     }
 
-    // Libère uniquement les réservations appartenant à ce poisson.
+
     private void ReleaseTargetStarbit()
     {
         if (targetStarbit != null &&
@@ -433,12 +431,7 @@ public class SC_fish_enemy : MonoBehaviour
         targetStarbit = null;
     }
 
-    private void OnDestroy()
-    {
-        ReleaseTargetStarbit();
-    }
 
-    // Nettoie les entrées laissées par des objets ou poissons détruits.
     private static void CleanStarbitReservations()
     {
         List<SC_starbit> staleStarbits = new List<SC_starbit>();
@@ -453,28 +446,35 @@ public class SC_fish_enemy : MonoBehaviour
             starbitReservations.Remove(starbit);
     }
 
+
+    private void OnDestroy()
+    {
+        ReleaseTargetStarbit();
+    }
+
+
     private void OnDisable()
     {
         ReleaseTargetStarbit();
     }
+
+
+    // =========================================================
+    // PREPARATION DU SAUT STARBIT
+    // =========================================================
 
     private void CheckIfUnderTarget()
     {
         if (!IsStarbitValid(targetStarbit))
         {
             ReleaseTargetStarbit();
-
             return;
         }
 
-        float targetX =
-            targetStarbit.transform.position.x;
+        float targetX = targetStarbit.transform.position.x;
+        float currentX = transform.position.x;
 
-        float currentX =
-            transform.position.x;
-
-        float distanceX =
-            targetX - currentX;
+        float distanceX = targetX - currentX;
 
         if (Mathf.Abs(distanceX) <= horizontalTolerance)
         {
@@ -489,20 +489,22 @@ public class SC_fish_enemy : MonoBehaviour
         }
     }
 
+
     private void StartWaitingBeforeJump()
     {
-        if (anim_aim.enabled)
+        if (anim_aim != null)
         {
-            anim_aim.SetTrigger("aim");
+            if (anim_aim.enabled)
+                anim_aim.SetTrigger("aim");
+            else
+                anim_aim.enabled = true;
         }
-        else
-        {
-            anim_aim.enabled = true;
-        }
+
         TriggerAnimation("wait_jump");
 
         state = State.WaitingBeforeJump;
     }
+
 
     private void UpdateWaitingBeforeJump()
     {
@@ -512,7 +514,9 @@ public class SC_fish_enemy : MonoBehaviour
         }
         else
         {
+            // Le Starbit a réellement disparu.
             ReleaseTargetStarbit();
+            shouldChaseChuchuAfterJump = true;
         }
 
         jumpX = lastStarbitPosition.x;
@@ -523,20 +527,35 @@ public class SC_fish_enemy : MonoBehaviour
             originalSwimHeight
         );
     }
+
+
+    // =========================================================
+    // SAUT STARBIT
+    // =========================================================
+
+    // Appelé par l'Animation Event.
     public void StartJump()
     {
-        jump.PlayJuice();
+        if (jump != null)
+            jump.PlayJuice();
+
         TriggerAnimation("jump");
 
         if (IsStarbitValid(targetStarbit))
         {
             lastStarbitPosition = targetStarbit.transform.position;
         }
+        else
+        {
+            shouldChaseChuchuAfterJump = true;
+        }
 
         jumpX = lastStarbitPosition.x;
         jumpTargetHeight = lastStarbitPosition.y;
 
-        ReleaseTargetStarbit();
+        // IMPORTANT :
+        // On NE libère PAS la réservation ici.
+        // Le poisson doit conserver son Starbit pendant tout le saut.
 
         jumpTimer = 0f;
 
@@ -546,10 +565,11 @@ public class SC_fish_enemy : MonoBehaviour
         );
 
         isChasingChuchu = false;
-        shouldChaseChuchuAfterJump = false;
 
         state = State.JumpingUp;
     }
+
+
     private void UpdateJumpingUp()
     {
         if (!IsStarbitValid(targetStarbit))
@@ -559,8 +579,7 @@ public class SC_fish_enemy : MonoBehaviour
 
         jumpTimer += Time.deltaTime;
 
-        float t =
-            jumpTimer / jumpDuration;
+        float t = jumpTimer / jumpDuration;
 
         if (t >= 1f)
         {
@@ -578,23 +597,20 @@ public class SC_fish_enemy : MonoBehaviour
 
         t = Mathf.Clamp01(t);
 
-        float movement =
-            Mathf.Sin(
-                t * Mathf.PI * 0.5f
-            );
+        float movement = Mathf.Sin(t * Mathf.PI * 0.5f);
 
-        float currentY =
-            Mathf.Lerp(
-                originalSwimHeight,
-                jumpTargetHeight,
-                movement
-            );
+        float currentY = Mathf.Lerp(
+            originalSwimHeight,
+            jumpTargetHeight,
+            movement
+        );
 
         transform.position = new Vector2(
             jumpX,
             currentY
         );
     }
+
 
     private void UpdateWaitingAtTop()
     {
@@ -625,21 +641,27 @@ public class SC_fish_enemy : MonoBehaviour
         }
     }
 
+
+    // =========================================================
+    // MANGER LE STARBIT
+    // =========================================================
+
+
     private void EatStarbit()
     {
         caughtStarbit = false;
 
         if (IsStarbitValid(targetStarbit))
         {
-            float distance =
-                Vector2.Distance(
-                    transform.position,
-                    targetStarbit.transform.position
-                );
+            float distance = Vector2.Distance(
+                transform.position,
+                targetStarbit.transform.position
+            );
 
             if (distance <= eatDistance)
             {
                 targetStarbit.Destroy_();
+
                 PlayerPrefs.SetInt("fish_no_eat", 1);
 
                 caughtStarbit = true;
@@ -648,22 +670,34 @@ public class SC_fish_enemy : MonoBehaviour
 
         ReleaseTargetStarbit();
 
-        isChasingChuchu = false;
-        shouldChaseChuchuAfterJump = false;
-
-        if (!caughtStarbit)
+        if (caughtStarbit)
         {
-            StartChasingChuchu();
+            // Le Starbit a été mangé :
+            // aucune poursuite et aucun mode énervé.
+            shouldChaseChuchuAfterJump = false;
+            isChasingChuchu = false;
+
+            hasChosenStarbit = false;
+
+            StartFalling();
             return;
         }
-        hasChosenStarbit = false;
 
-        StartFalling();
+        // Le Starbit a réellement disparu ou n'a pas été attrapé.
+        shouldChaseChuchuAfterJump = false;
+
+        StartChasingChuchu();
     }
+
+
+    // =========================================================
+    // TRAQUE DE CHUCHU
+    // =========================================================
 
     private void StartChasingChuchu()
     {
         ReleaseTargetStarbit();
+
         canmove = false;
         isChasingChuchu = true;
 
@@ -680,10 +714,14 @@ public class SC_fish_enemy : MonoBehaviour
 
         state = State.ChasingChuchu;
     }
+
+
+    // Appelé par l'Animation Event.
     public void delay_chase()
     {
         canmove = true;
     }
+
 
     private void UpdateChasingChuchu()
     {
@@ -692,12 +730,9 @@ public class SC_fish_enemy : MonoBehaviour
             StopChasingChuchu();
             return;
         }
-        
+
         if (!canmove)
-        {
-           
             return;
-        }
 
         chaseTimer -= Time.deltaTime;
 
@@ -707,12 +742,10 @@ public class SC_fish_enemy : MonoBehaviour
             return;
         }
 
-        Transform chuchu =
-            SC_player.instance.transform;
+        Transform chuchu = SC_player.instance.transform;
 
         float distanceX =
-            chuchu.position.x -
-            transform.position.x;
+            chuchu.position.x - transform.position.x;
 
         if (Mathf.Abs(distanceX) <= horizontalTolerance)
         {
@@ -720,36 +753,43 @@ public class SC_fish_enemy : MonoBehaviour
             return;
         }
 
-        float direction =
-            Mathf.Sign(distanceX);
+        float direction = Mathf.Sign(distanceX);
 
         transform.position +=
-            Vector3.right *
-            direction *
-            chaseSpeed *
-            Time.deltaTime;
+            Vector3.right * direction * chaseSpeed * Time.deltaTime;
 
         transform.position = new Vector2(
             transform.position.x,
             originalSwimHeight
         );
 
-        UpdateFacingDirection(
-            direction > 0f
-        );
+        UpdateFacingDirection(direction > 0f);
     }
+
+
+    // =========================================================
+    // PREPARATION DU SAUT SUR CHUCHU
+    // =========================================================
 
     private void StartChuchuPreJump()
     {
         TriggerAnimation("wait_jump");
-        aim.targetPoint = SC_player.instance.transform.position;
-        if (anim_aim.enabled)
+
+        if (SC_player.instance == null)
         {
-            anim_aim.SetTrigger("aim");
+            StopChasingChuchu();
+            return;
         }
-        else
+
+        if (aim != null)
+            aim.targetPoint = SC_player.instance.transform.position;
+
+        if (anim_aim != null)
         {
-            anim_aim.enabled = true;
+            if (anim_aim.enabled)
+                anim_aim.SetTrigger("aim");
+            else
+                anim_aim.enabled = true;
         }
 
         transform.position = new Vector2(
@@ -759,17 +799,36 @@ public class SC_fish_enemy : MonoBehaviour
 
         state = State.WaitingBeforeChuchuJump;
     }
+
+
     private void UpdateWaitingBeforeChuchuJump()
     {
-        aim.targetPoint = new Vector2(transform.position.x, SC_player.instance.transform.position.y);
+        if (SC_player.instance == null)
+        {
+            StopChasingChuchu();
+            return;
+        }
+
+        if (aim != null)
+        {
+            aim.targetPoint = new Vector2(
+                transform.position.x,
+                SC_player.instance.transform.position.y
+            );
+        }
 
         transform.position = new Vector2(
             transform.position.x,
             originalSwimHeight
         );
-
     }
 
+
+    // =========================================================
+    // SAUT SUR CHUCHU
+    // =========================================================
+
+    // Appelé par l'Animation Event.
     public void StartChuchuJump()
     {
         TriggerAnimation("jump");
@@ -779,9 +838,11 @@ public class SC_fish_enemy : MonoBehaviour
             StopChasingChuchu();
             return;
         }
-        chuchuJumpX =
-            transform.position.x;
-        chuchuJumpTargetHeight = SC_player.instance.transform.position.y;
+
+        chuchuJumpX = transform.position.x;
+
+        chuchuJumpTargetHeight =
+            SC_player.instance.transform.position.y;
 
         transform.position = new Vector2(
             chuchuJumpX,
@@ -795,14 +856,12 @@ public class SC_fish_enemy : MonoBehaviour
         state = State.JumpingAtChuchu;
     }
 
+
     private void UpdateJumpingAtChuchu()
     {
-
         chuchuJumpTimer += Time.deltaTime;
 
-        float t =
-            chuchuJumpTimer /
-            chuchuJumpDuration;
+        float t = chuchuJumpTimer / chuchuJumpDuration;
 
         if (t >= 1f)
         {
@@ -811,8 +870,7 @@ public class SC_fish_enemy : MonoBehaviour
                 chuchuJumpTargetHeight
             );
 
-            chuchuApexTimer =
-                chuchuApexDelay;
+            chuchuApexTimer = chuchuApexDelay;
 
             state = State.WaitingAtChuchuTop;
 
@@ -821,23 +879,20 @@ public class SC_fish_enemy : MonoBehaviour
 
         t = Mathf.Clamp01(t);
 
-        float movement =
-            Mathf.Sin(
-                t * Mathf.PI * 0.5f
-            );
+        float movement = Mathf.Sin(t * Mathf.PI * 0.5f);
 
-        float currentY =
-            Mathf.Lerp(
-                originalSwimHeight,
-                chuchuJumpTargetHeight,
-                movement
-            );
+        float currentY = Mathf.Lerp(
+            originalSwimHeight,
+            chuchuJumpTargetHeight,
+            movement
+        );
 
         transform.position = new Vector2(
             chuchuJumpX,
             currentY
         );
     }
+
 
     private void UpdateWaitingAtChuchuTop()
     {
@@ -853,6 +908,12 @@ public class SC_fish_enemy : MonoBehaviour
             TryCatchChuchu();
         }
     }
+
+
+    // =========================================================
+    // CAPTURE DE CHUCHU
+    // =========================================================
+
     private void TryCatchChuchu()
     {
         if (SC_player.instance == null)
@@ -861,11 +922,10 @@ public class SC_fish_enemy : MonoBehaviour
             return;
         }
 
-        float distance =
-            Vector2.Distance(
-                transform.position,
-                SC_player.instance.transform.position
-            );
+        float distance = Vector2.Distance(
+            transform.position,
+            SC_player.instance.transform.position
+        );
 
         if (distance <= chuchuCatchDistance)
         {
@@ -876,28 +936,33 @@ public class SC_fish_enemy : MonoBehaviour
         StartFallingFromChuchu();
     }
 
+
     private void CatchChuchu()
     {
         Debug.Log("Le poisson a attrapé Chuchu !");
 
         StopChasingChuchu();
     }
+
+
+    // =========================================================
+    // CHUTE
+    // =========================================================
+
     private void StartFallingFromChuchu()
     {
         TriggerAnimation("fall");
 
         fallTimer = 0f;
 
-        jumpX =
-            chuchuJumpX;
-
-        jumpTargetHeight =
-            chuchuJumpTargetHeight;
+        jumpX = chuchuJumpX;
+        jumpTargetHeight = chuchuJumpTargetHeight;
 
         isChasingChuchu = true;
 
         state = State.Falling;
     }
+
 
     private void StartFalling()
     {
@@ -907,13 +972,13 @@ public class SC_fish_enemy : MonoBehaviour
 
         state = State.Falling;
     }
+
+
     private void UpdateFalling()
     {
         fallTimer += Time.deltaTime;
 
-        float t =
-            fallTimer /
-            fallDuration;
+        float t = fallTimer / fallDuration;
 
         if (t >= 1f)
         {
@@ -925,9 +990,7 @@ public class SC_fish_enemy : MonoBehaviour
             if (isChasingChuchu)
             {
                 if (big && water != null)
-                {
                     water.BigSplashAt(transform.position);
-                }
 
                 TriggerAnimation("swim");
 
@@ -964,12 +1027,11 @@ public class SC_fish_enemy : MonoBehaviour
 
         t = Mathf.Clamp01(t);
 
-        float currentY =
-            Mathf.Lerp(
-                jumpTargetHeight,
-                originalSwimHeight,
-                t
-            );
+        float currentY = Mathf.Lerp(
+            jumpTargetHeight,
+            originalSwimHeight,
+            t
+        );
 
         transform.position = new Vector2(
             jumpX,
@@ -977,31 +1039,35 @@ public class SC_fish_enemy : MonoBehaviour
         );
     }
 
+
+    // =========================================================
+    // ATTENTE APRES LE SAUT
+    // =========================================================
+
     private void StartWaitingAfterJump()
     {
         if (big && water != null)
-        {
             water.BigSplashAt(transform.position);
-        }
 
-        postJumpTimer =
-            postJumpDelay;
+        postJumpTimer = postJumpDelay;
+
         if (currentstarbit == starbits_before_leave)
         {
             if (once && caughtStarbit)
             {
                 sequenceFinished = true;
                 LeaveScreen();
-
                 return;
             }
         }
+
         currentstarbit++;
 
         TriggerAnimation("swim");
 
         state = State.WaitingAfterJump;
     }
+
 
     private void UpdateWaitingAfterJump()
     {
@@ -1027,6 +1093,7 @@ public class SC_fish_enemy : MonoBehaviour
                     return;
                 }
             }
+
             currentstarbit++;
 
             hasChosenStarbit = false;
@@ -1038,6 +1105,11 @@ public class SC_fish_enemy : MonoBehaviour
 
         TriggerAnimation("swim");
     }
+
+
+    // =========================================================
+    // FIN DE LA TRAQUE
+    // =========================================================
 
     private void StopChasingChuchu()
     {
@@ -1055,6 +1127,7 @@ public class SC_fish_enemy : MonoBehaviour
         );
 
         SetNormalMode();
+
         if (currentstarbit == starbits_before_leave)
         {
             if (once)
@@ -1066,6 +1139,7 @@ public class SC_fish_enemy : MonoBehaviour
                 return;
             }
         }
+
         currentstarbit++;
 
         hasChosenStarbit = false;
@@ -1074,6 +1148,11 @@ public class SC_fish_enemy : MonoBehaviour
 
         state = State.Swimming;
     }
+
+
+    // =========================================================
+    // SORTIE DE L'ECRAN
+    // =========================================================
 
     private void LeaveScreen()
     {
@@ -1096,27 +1175,28 @@ public class SC_fish_enemy : MonoBehaviour
         leaveStartPosition = transform.position;
     }
 
+
     private void UpdateLeavingScreen()
     {
         transform.position +=
-            Vector3.right *
-            swimDirection *
-            swimSpeed *
-            Time.deltaTime;
+            Vector3.right * swimDirection * swimSpeed * Time.deltaTime;
 
         UpdateFacingDirection();
 
-        float distanceTravelled =
-            Mathf.Abs(
-                transform.position.x -
-                leaveStartPosition.x
-            );
+        float distanceTravelled = Mathf.Abs(
+            transform.position.x - leaveStartPosition.x
+        );
 
         if (distanceTravelled >= leaveScreenDistance)
         {
             gameObject.SetActive(false);
         }
     }
+
+
+    // =========================================================
+    // DIRECTION ET ORIENTATION
+    // =========================================================
 
     private void InitializeSwimDirection()
     {
@@ -1127,9 +1207,7 @@ public class SC_fish_enemy : MonoBehaviour
         }
 
         float middleX =
-            (leftPoint.position.x +
-             rightPoint.position.x) *
-            0.5f;
+            (leftPoint.position.x + rightPoint.position.x) * 0.5f;
 
         if (transform.position.x < middleX)
             swimDirection = 1;
@@ -1138,34 +1216,35 @@ public class SC_fish_enemy : MonoBehaviour
 
         UpdateFacingDirection();
     }
+
+
     private void UpdateFacingDirection()
     {
-        bool shouldFaceRight =
-            swimDirection > 0;
+        bool shouldFaceRight = swimDirection > 0;
 
-        UpdateFacingDirection(
-            shouldFaceRight
-        );
+        UpdateFacingDirection(shouldFaceRight);
     }
 
-    private void UpdateFacingDirection(
-        bool shouldFaceRight
-    )
+
+    private void UpdateFacingDirection(bool shouldFaceRight)
     {
         if (shouldFaceRight != isFacingRight)
         {
             isFacingRight = shouldFaceRight;
 
-            Vector3 scale =
-                transform.localScale;
+            Vector3 scale = transform.localScale;
 
-            scale.x =
-                Mathf.Abs(scale.x) *
+            scale.x = Mathf.Abs(scale.x) *
                 (isFacingRight ? 1f : -1f);
 
             transform.localScale = scale;
         }
     }
+
+
+    // =========================================================
+    // GIZMOS
+    // =========================================================
 
     private void OnDrawGizmosSelected()
     {
@@ -1173,6 +1252,7 @@ public class SC_fish_enemy : MonoBehaviour
             transform.position,
             maxStarbitDistance
         );
+
         if (targetStarbit != null)
         {
             Gizmos.DrawLine(
@@ -1181,8 +1261,7 @@ public class SC_fish_enemy : MonoBehaviour
             );
         }
 
-        if (SC_player.instance != null &&
-            isChasingChuchu)
+        if (SC_player.instance != null && isChasingChuchu)
         {
             Gizmos.DrawLine(
                 transform.position,
@@ -1195,37 +1274,24 @@ public class SC_fish_enemy : MonoBehaviour
             );
         }
 
-        if (leftPoint != null &&
-            rightPoint != null)
+        if (leftPoint != null && rightPoint != null)
         {
-            Vector3 left =
-                new Vector3(
-                    leftPoint.position.x,
-                    transform.position.y,
-                    transform.position.z
-                );
-
-            Vector3 right =
-                new Vector3(
-                    rightPoint.position.x,
-                    transform.position.y,
-                    transform.position.z
-                );
-
-            Gizmos.DrawLine(
-                left,
-                right
+            Vector3 left = new Vector3(
+                leftPoint.position.x,
+                transform.position.y,
+                transform.position.z
             );
 
-            Gizmos.DrawWireSphere(
-                left,
-                0.12f
+            Vector3 right = new Vector3(
+                rightPoint.position.x,
+                transform.position.y,
+                transform.position.z
             );
 
-            Gizmos.DrawWireSphere(
-                right,
-                0.12f
-            );
+            Gizmos.DrawLine(left, right);
+
+            Gizmos.DrawWireSphere(left, 0.12f);
+            Gizmos.DrawWireSphere(right, 0.12f);
         }
     }
 }
