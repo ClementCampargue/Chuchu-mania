@@ -130,7 +130,6 @@ public class SC_player : MonoBehaviour
     [Header("Transformation")]
     public GameObject normal;
     public GameObject transformed;
-    public float transformFreezeTime = 0.5f;
     public string transformAnimTrigger = "Transform";
     public string detransformAnimTrigger = "DeTransform";
 
@@ -1440,27 +1439,6 @@ if (vertical > 0f && nextY >= echelle.TopY)
     // POWERUP
     // =========================================================
 
-    private IEnumerator PowerupFreeze(bool isActivating)
-    {
-        isFrozen = true;
-        rb.linearVelocity = Vector2.zero;
-        rb.bodyType = RigidbodyType2D.Kinematic;
-
-        string trigger = isActivating
-            ? transformAnimTrigger
-            : detransformAnimTrigger;
-
-        anim.SetTrigger(trigger);
-
-        float originalTimeScale = Time.timeScale;
-        Time.timeScale = 0f;
-
-        yield return new WaitForSecondsRealtime(transformFreezeTime);
-
-        Time.timeScale = originalTimeScale;
-        rb.bodyType = RigidbodyType2D.Dynamic;
-        isFrozen = false;
-    }
 
     public void powerup()
     {
@@ -1469,17 +1447,27 @@ if (vertical > 0f && nextY >= echelle.TopY)
         anim.ResetTrigger("Punch");
         anim.SetBool("Eat", false);
         isInvincible = true;
+        isFrozen = true;
+        rb.linearVelocity = Vector2.zero;
+        rb.bodyType = RigidbodyType2D.Kinematic;
+
+
+        anim.SetTrigger(transformAnimTrigger);
+
+        float originalTimeScale = Time.timeScale;
+        Time.timeScale = 0f;
 
         normal.SetActive(false);
         transformed.SetActive(true);
-        Invoke("powerup_trigger", transformFreezeTime);
-        StartCoroutine(PowerupFreeze(true));
     }
 
-    public void powerup_trigger()
+    public void powerup_end()
     {
+        Time.timeScale = 1;
+        rb.bodyType = RigidbodyType2D.Dynamic;
+        isFrozen = false;
         cosmic_mode.SetActive(true);
-
+        SC_phases.instance.cosmic();
         if (transformation != null)
             transformation.PlayJuice();
         SC_music_manager.instance.update_music(eat_system.music);
@@ -1493,8 +1481,6 @@ if (vertical > 0f && nextY >= echelle.TopY)
 
         normal.SetActive(true);
         transformed.SetActive(false);
-
-        StartCoroutine(PowerupFreeze(false));
     }
 
     // =========================================================

@@ -15232,6 +15232,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4597529530162839280}
   - component: {fileID: 8603257414306407405}
+  - component: {fileID: 720630503492558858}
   m_Layer: 6
   m_Name: Visuals
   m_TagString: Untagged
@@ -15282,6 +15283,34 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &720630503492558858
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2399851105100533631}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1cdfe354424f56b4ca47e224e77d11ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  animationName: Power_up_start
+  onAnimationFinished:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1939792554238048137}
+        m_TargetAssemblyTypeName: SC_player, Assembly-CSharp
+        m_MethodName: powerup_end
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &2462114146841662089
 GameObject:
   m_ObjectHideFlags: 0
@@ -42195,7 +42224,6 @@ MonoBehaviour:
   isInvincible: 0
   normal: {fileID: 1783581864057650519}
   transformed: {fileID: 423602839044829748}
-  transformFreezeTime: 1
   transformAnimTrigger: Transform
   detransformAnimTrigger: DeTransform
   rb: {fileID: 70515771043777974}

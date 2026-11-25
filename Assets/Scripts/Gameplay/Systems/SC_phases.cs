@@ -42,13 +42,9 @@ public class SC_phases : MonoBehaviour
     }
     public void cosmic()
     {
-        Invoke("delay_cosmic", SC_player.instance.transformFreezeTime);
-    }
-    void delay_cosmic()
-    {
         cosmicmode.SetActive(true);
-
     }
+
     private void ActivateOnlyCurrentPhase()
     {
         for (int i = 0; i < phases.Length; i++)
