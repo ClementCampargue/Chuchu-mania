@@ -1681,6 +1681,10 @@ PrefabInstance:
       propertyPath: m_LocalPosition.y
       value: -1.0915636
       objectReference: {fileID: 0}
+    - target: {fileID: 5699712924724418744, guid: fc0a4bc2aae082741b1aa749cf6a68ed, type: 3}
+      propertyPath: phases.Array.size
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 5997774080432361552, guid: fc0a4bc2aae082741b1aa749cf6a68ed, type: 3}
       propertyPath: m_Name
       value: LEVEL MASTER
@@ -1746,7 +1750,8 @@ PrefabInstance:
       value: -1.6582303
       objectReference: {fileID: 0}
     m_RemovedComponents: []
-    m_RemovedGameObjects: []
+    m_RemovedGameObjects:
+    - {fileID: 6024660918130890506, guid: fc0a4bc2aae082741b1aa749cf6a68ed, type: 3}
     m_AddedGameObjects:
     - targetCorrespondingSourceObject: {fileID: 7383776612758178522, guid: fc0a4bc2aae082741b1aa749cf6a68ed, type: 3}
       insertIndex: -1
