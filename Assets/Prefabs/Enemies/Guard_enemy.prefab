@@ -586,9 +586,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   floorDetectionDelay: 1.71
   floorConfirmationTolerance: 0.01
-  floorChangeDecisionDelay: 3
   moveSpeed: 3
   reachDistance: 0.08
+  directionLockDuration: 1
+  directionChangeThreshold: 1.5
+  directionDetectionDistance: 0.15
   maxSegmentDistance: 3
   repathInterval: 0.11
   floorHeightTolerance: 0.28
@@ -5556,7 +5558,7 @@ GameObject:
   - component: {fileID: 468162753760340700}
   - component: {fileID: 5016170139919271745}
   - component: {fileID: 2680671972605215812}
-  - component: {fileID: 7481250865495590983}
+  - component: {fileID: 6136234882212890256}
   m_Layer: 8
   m_Name: Collision
   m_TagString: Enemy
@@ -5640,7 +5642,7 @@ MonoBehaviour:
   damage: 1
   ejection_power: {x: 1, y: 1}
   destroy_on_damage: 0
---- !u!114 &7481250865495590983
+--- !u!114 &6136234882212890256
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -5680,6 +5682,9 @@ MonoBehaviour:
   isStunned: 0
   die_burn: 1
   script: {fileID: 4239849883444337517}
+  scripts:
+  - {fileID: 4239849883444337517}
+  - {fileID: 157420288762404333}
 --- !u!1 &5359757031228057345
 GameObject:
   m_ObjectHideFlags: 0

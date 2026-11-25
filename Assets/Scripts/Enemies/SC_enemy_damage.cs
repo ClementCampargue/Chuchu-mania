@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 
@@ -49,6 +50,7 @@ public class SC_enemy_damage : MonoBehaviour
     private SC_player player;
     public bool die_burn;
     public MonoBehaviour script;
+    public List<MonoBehaviour> scripts;
     void Start()
     {if(trs == null)
         {
@@ -164,6 +166,14 @@ public class SC_enemy_damage : MonoBehaviour
         );
 
         StartCoroutine(FlickerAndDestroy());
+        if(scripts  != null)
+        {
+            foreach (MonoBehaviour scr in scripts)
+            {
+                scr.enabled = false;
+            }
+        }
+     
     }
     public void Knockback()
     {
@@ -195,7 +205,13 @@ public class SC_enemy_damage : MonoBehaviour
         knockbackVelocity = new Vector2(
             1 * knockbackForce,
             knockbackVerticalForce
-        );
+        ); if (scripts != null)
+        {
+            foreach (MonoBehaviour scr in scripts)
+            {
+                scr.enabled = false;
+            }
+        }
 
         StartCoroutine(FlickerAndDestroy());
     }
