@@ -507,7 +507,7 @@ MonoBehaviour:
   sleepDuration: 3.61
   flashlight: {fileID: 2380945124946967503}
   animator: {fileID: 2519460489625166877}
-  guardAI: {fileID: 0}
+  guardAI: {fileID: 157420288762404333}
   moveSpeed: 1.8
   ladderSpeed: 1.5
   ladderAlignmentTolerance: 0.025
@@ -584,12 +584,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5f4d6cb35df70f941a9debe5f26e5150, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  floorDetectionDelay: 0.25
+  floorConfirmationTolerance: 0.01
   moveSpeed: 3
   reachDistance: 0.08
   maxSegmentDistance: 3
-  repathInterval: 0.35
-  floorHeightTolerance: 3.06
-  verticalTolerance: 3.95
+  repathInterval: 0.11
+  floorHeightTolerance: 0.28
+  verticalTolerance: 10
   drawPath: 1
   showLogs: 1
 --- !u!1 &1829277503149773672

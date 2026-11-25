@@ -11,21 +11,21 @@ public class SC_guard_movement : MonoBehaviour
     public Transform exclamation_point;
     public SC_damage_player damage;
 
-    [Header("Sommeil après traque")]
+    [Header("Sommeil aprÃ¨s traque")]
     [SerializeField] private float sleepDuration = 3f;
 
-    [Header("Références")]
+    [Header("RÃ©fÃ©rences")]
     [SerializeField] private Animator flashlight;
     [SerializeField] private Animator animator;
     [SerializeField] private SC_guard_ai guardAI;
 
-    [Header("Déplacement")]
+    [Header("DÃ©placement")]
     [SerializeField] private float moveSpeed = 3f;
     [SerializeField] private float ladderSpeed = 3f;
     [SerializeField] private float ladderAlignmentTolerance = 0.025f;
     [SerializeField] private MovementMode movementMode = MovementMode.Patrol;
 
-    [Header("Animation de début de traque")]
+    [Header("Animation de dÃ©but de traque")]
     [SerializeField] private string chaseStartTrigger = "ChaseStart";
 
     private bool chaseMovementAuthorized;
@@ -47,7 +47,7 @@ public class SC_guard_movement : MonoBehaviour
     private int currentPatrolIndex = -1;
     private int patrolDirection = 1;
 
-    [Header("Sommeil aléatoire")]
+    [Header("Sommeil alÃ©atoire")]
     [SerializeField] private bool allowRandomSleep = true;
     [SerializeField] private float minSleepInterval = 8f;
     [SerializeField] private float maxSleepInterval = 20f;
@@ -165,7 +165,7 @@ public class SC_guard_movement : MonoBehaviour
 
     private void UpdateChaseAnimation()
     {
-        // Tant que l'Animation Event n'a pas été déclenché,
+        // Tant que l'Animation Event n'a pas Ã©tÃ© dÃ©clenchÃ©,
         // le garde reste immobile.
 
         if (!chaseMovementAuthorized || guardAI == null)
@@ -382,19 +382,19 @@ public class SC_guard_movement : MonoBehaviour
 
             isWaitingAtPatrolPoint = false;
 
-            // Interrompt immédiatement la patrouille.
+            // Interrompt immÃ©diatement la patrouille.
             FinishPath();
 
-            // La traque commence sans autoriser le déplacement.
+            // La traque commence sans autoriser le dÃ©placement.
             chaseMovementAuthorized = false;
 
             SetFlashlight(false);
 
-            // Le système de poursuite reste désactivé.
+            // Le systÃ¨me de poursuite reste dÃ©sactivÃ©.
             if (guardAI != null)
                 guardAI.SetChaseActive(false);
 
-            // Déclenche l'animation de début de traque.
+            // DÃ©clenche l'animation de dÃ©but de traque.
             if (animator != null)
                 animator.SetTrigger(chaseStartTrigger);
 

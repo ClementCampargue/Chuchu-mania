@@ -1,18 +1,25 @@
-
 using UnityEngine;
 using System.Collections.Generic;
 
 public class SC_guard_ai : MonoBehaviour
 {
-    [Header("Déplacement")]
+    [Header("Validation du changement d'Ã©tage")]
+    public float floorDetectionDelay = 0.25f;
+    public float floorConfirmationTolerance = 0.2f;
+
+    private float groundedTimer;
+    private int confirmedPlayerFloor = -1;
+    private float confirmedPlayerFloorY;
+
+    [Header("DÃ©placement")]
     public float moveSpeed = 3f;
     public float reachDistance = 0.08f;
 
-    [Header("Détection des segments")]
+    [Header("DÃ©tection des segments")]
     public float maxSegmentDistance = 3f;
     public float repathInterval = 0.35f;
 
-    [Header("Gestion des étages")]
+    [Header("Gestion des Ã©tages")]
     public float floorHeightTolerance = 0.6f;
     public float verticalTolerance = 0.08f;
 
@@ -61,7 +68,7 @@ public class SC_guard_ai : MonoBehaviour
         if (allPoints.Count == 0)
         {
             Debug.LogError(
-                "SC_guard_ai : aucun SC_guard_point trouvé."
+                "SC_guard_ai : aucun SC_guard_point trouvÃ©."
             );
         }
     }
@@ -104,6 +111,7 @@ public class SC_guard_ai : MonoBehaviour
             currentPath.Clear();
             pathIndex = 0;
             repathTimer = 0f;
+            groundedTimer = 0f;
 
             CalculatePath();
         }
@@ -111,6 +119,7 @@ public class SC_guard_ai : MonoBehaviour
         {
             currentPath.Clear();
             pathIndex = 0;
+            groundedTimer = 0f;
         }
     }
 
@@ -195,37 +204,116 @@ public class SC_guard_ai : MonoBehaviour
         return floorId != -1;
     }
 
+    // ============================================================
+    // DETECTION D'UN TRACE VERTICAL
+    // ============================================================
+
+    private bool IsNearVerticalSegment(Vector3 position)
+    {
+        foreach (SC_guard_point point in allPoints)
+        {
+            if (point == null || point.connections == null)
+                continue;
+
+            foreach (SC_guard_point connected in point.connections)
+            {
+                if (connected == null)
+                    continue;
+
+                Vector3 a = point.transform.position;
+                Vector3 b = connected.transform.position;
+
+                // Ignore les segments horizontaux.
+                if (Mathf.Abs(b.y - a.y) <= floorHeightTolerance)
+                    continue;
+
+                Vector3 closest = ClosestPointOnSegment(
+                    position,
+                    a,
+                    b
+                );
+
+                float horizontalDistance = Vector2.Distance(
+                    new Vector2(position.x, position.z),
+                    new Vector2(closest.x, closest.z)
+                );
+
+                if (horizontalDistance <= maxSegmentDistance &&
+                    Vector3.Distance(position, closest) <= maxSegmentDistance)
+                {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
+    // ============================================================
+    // DIRECTION VERTICALE
+    // ============================================================
+
     private int GetVerticalDirection(
         int enemyFloor,
         int playerFloor,
         float enemyFloorY,
         float playerFloorY)
     {
-        // IMPORTANT :
-        // Pendant le saut, on ignore les différences d'étage.
-        if (SC_player.instance != null &&
-            SC_player.instance.isJumping)
+        if (SC_player.instance == null)
+            return 0;
+
+        // Pendant le saut, aucune dÃ©tection verticale.
+        if (SC_player.instance.isJumping)
+        {
+            groundedTimer = 0f;
+            return 0;
+        }
+
+        // Attendre que le joueur soit stabilisÃ©.
+        groundedTimer += Time.deltaTime;
+
+        if (groundedTimer < floorDetectionDelay)
+            return 0;
+
+        // Aucun Ã©tage identifiÃ©.
+        if (enemyFloor == -1 || playerFloor == -1)
+            return 0;
+
+        // Le joueur doit Ãªtre proche d'un tracÃ© vertical.
+        if (!IsNearVerticalSegment(
+            SC_player.instance.transform.position))
         {
             return 0;
         }
 
-        // Si les deux étages sont identifiés.
-        if (enemyFloor != -1 && playerFloor != -1)
+        // VÃ©rifier la diffÃ©rence rÃ©elle de hauteur.
+        float heightDifference = playerFloorY - enemyFloorY;
+
+        // MÃªme niveau : aucune montÃ©e ou descente.
+        if (Mathf.Abs(heightDifference) <= floorHeightTolerance)
+            return 0;
+
+        // VÃ©rifier que le joueur est proche de la hauteur
+        // de son Ã©tage avant de confirmer le changement.
+        if (Mathf.Abs(
+            SC_player.instance.transform.position.y - playerFloorY
+        ) > floorConfirmationTolerance)
         {
-            if (enemyFloor == playerFloor)
-                return 0;
-
-            if (playerFloorY < enemyFloorY - floorHeightTolerance)
-                return -1;
-
-            if (playerFloorY > enemyFloorY + floorHeightTolerance)
-                return 1;
-
             return 0;
         }
 
-        return 0;
+        confirmedPlayerFloor = playerFloor;
+        confirmedPlayerFloorY = playerFloorY;
+
+        if (heightDifference < 0f)
+            return -1;
+
+        return 1;
     }
+
+    // ============================================================
+    // VALIDATION DU SENS DE DEPLACEMENT
+    // ============================================================
 
     private bool CanMoveInDirection(
         Vector3 from,
@@ -469,7 +557,7 @@ public class SC_guard_ai : MonoBehaviour
         {
             if (showLogs)
                 Debug.LogWarning(
-                    "SC_guard_ai : ennemi trop éloigné du réseau."
+                    "SC_guard_ai : ennemi trop Ã©loignÃ© du rÃ©seau."
                 );
 
             currentPath.Clear();
@@ -480,13 +568,16 @@ public class SC_guard_ai : MonoBehaviour
         Vector3 playerPosition =
             SC_player.instance.transform.position;
 
+        if (SC_player.instance.isJumping)
+            groundedTimer = 0f;
+
         if (!FindClosestSegment(
             playerPosition,
             out Segment playerSegment))
         {
             if (showLogs)
                 Debug.LogWarning(
-                    "SC_guard_ai : joueur trop éloigné du réseau."
+                    "SC_guard_ai : joueur trop Ã©loignÃ© du rÃ©seau."
                 );
 
             currentPath.Clear();
@@ -494,7 +585,7 @@ public class SC_guard_ai : MonoBehaviour
             return;
         }
 
-        // Identification des étages à partir des segments.
+        // Identification des Ã©tages.
         int enemyFloor;
         int playerFloor;
 
@@ -513,7 +604,7 @@ public class SC_guard_ai : MonoBehaviour
             out playerFloorY
         );
 
-        // Pendant le saut, GetVerticalDirection renvoie toujours 0.
+        // DÃ©termination de la direction verticale.
         int verticalDirection = GetVerticalDirection(
             enemyFloor,
             playerFloor,
@@ -602,7 +693,7 @@ public class SC_guard_ai : MonoBehaviour
             }
         }
 
-        // Même segment : trajet direct.
+        // MÃªme segment : trajet direct.
         bool sameSegment =
             (enemySegment.a == playerSegment.a &&
              enemySegment.b == playerSegment.b) ||

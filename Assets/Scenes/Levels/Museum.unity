@@ -311,6 +311,7 @@ GameObject:
   - component: {fileID: 217621490}
   - component: {fileID: 217621489}
   - component: {fileID: 217621488}
+  - component: {fileID: 217621491}
   m_Layer: 0
   m_Name: Square (1)
   m_TagString: Untagged
@@ -332,6 +333,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   moveSpeed: 3
   reachDistance: 0.08
+  steeringResponse: 0.35
+  maxSteeringAcceleration: 20
+  useGravity: 0
+  freezeRotation: 1
   maxSegmentDistance: 3
   repathInterval: 0.25
   floorHeightTolerance: 0.11
@@ -408,6 +413,33 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!50 &217621491
+Rigidbody2D:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 217621487}
+  m_BodyType: 0
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDamping: 0
+  m_AngularDamping: 0.05
+  m_GravityScale: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 0
 --- !u!212 &219697653 stripped
 SpriteRenderer:
   m_CorrespondingSourceObject: {fileID: 2257961881246306323, guid: 861f2e20df3d6b149801340216555e4b, type: 3}

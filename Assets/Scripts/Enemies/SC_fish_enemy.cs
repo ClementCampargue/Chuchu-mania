@@ -69,7 +69,6 @@ public class SC_fish_enemy : MonoBehaviour
 
     [Header("Saut sur le joueur")]
     [SerializeField] private float chuchuJumpDuration = 1.2f;
-    [SerializeField] private float chuchuJumpHeight = 3f;
     [SerializeField] private float chuchuApexDelay = 0.15f;
 
     [Header("Sortie de l'écran")]
@@ -781,9 +780,9 @@ public class SC_fish_enemy : MonoBehaviour
             return;
         }
 
+
         if (aim != null)
             aim.targetPoint = SC_player.instance.transform.position;
-
         if (anim_aim != null)
         {
             if (anim_aim.enabled)
@@ -791,6 +790,8 @@ public class SC_fish_enemy : MonoBehaviour
             else
                 anim_aim.enabled = true;
         }
+        chuchuJumpTargetHeight =
+            SC_player.instance.transform.position.y;
 
         transform.position = new Vector2(
             transform.position.x,
@@ -807,14 +808,6 @@ public class SC_fish_enemy : MonoBehaviour
         {
             StopChasingChuchu();
             return;
-        }
-
-        if (aim != null)
-        {
-            aim.targetPoint = new Vector2(
-                transform.position.x,
-                SC_player.instance.transform.position.y
-            );
         }
 
         transform.position = new Vector2(
@@ -841,8 +834,7 @@ public class SC_fish_enemy : MonoBehaviour
 
         chuchuJumpX = transform.position.x;
 
-        chuchuJumpTargetHeight =
-            SC_player.instance.transform.position.y;
+    
 
         transform.position = new Vector2(
             chuchuJumpX,
