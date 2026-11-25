@@ -1,3 +1,4 @@
+
 using UnityEngine;
 using System.Collections.Generic;
 
@@ -14,6 +15,15 @@ public class SC_guard_ai : MonoBehaviour
     [Header("Déplacement")]
     public float moveSpeed = 3f;
     public float reachDistance = 0.08f;
+
+    [Header("Anti changement de direction")]
+    public float directionLockDuration = 1f;
+    public float directionChangeThreshold = 1.5f;
+    public float directionDetectionDistance = 0.15f;
+
+    private float directionLockTimer;
+    private Vector3 lastMovementDirection;
+    private bool hasMovementDirection;
 
     [Header("Détection des segments")]
     public float maxSegmentDistance = 3f;
@@ -36,6 +46,10 @@ public class SC_guard_ai : MonoBehaviour
     private int pathIndex;
     private float repathTimer;
     private bool chaseActive;
+
+    // Mémorise le dernier étage connu lorsque le joueur saute.
+    private int lastGroundedPlayerFloor = -1;
+    private float lastGroundedPlayerFloorY;
 
     private struct Segment
     {
@@ -77,6 +91,7 @@ public class SC_guard_ai : MonoBehaviour
     // UPDATE
     // ============================================================
 
+
     private void Update()
     {
         if (!chaseActive)
@@ -85,6 +100,12 @@ public class SC_guard_ai : MonoBehaviour
         if (SC_player.instance == null)
             return;
 
+        if (directionLockTimer > 0f)
+        {
+            directionLockTimer -= Time.deltaTime;
+        }
+
+        // Recalcul permanent du chemin, même pendant un saut.
         repathTimer -= Time.deltaTime;
 
         if (repathTimer <= 0f)
@@ -113,6 +134,13 @@ public class SC_guard_ai : MonoBehaviour
             repathTimer = 0f;
             groundedTimer = 0f;
 
+            directionLockTimer = 0f;
+            hasMovementDirection = false;
+            lastMovementDirection = Vector3.zero;
+
+            lastGroundedPlayerFloor = -1;
+            lastGroundedPlayerFloorY = 0f;
+
             CalculatePath();
         }
         else
@@ -120,6 +148,10 @@ public class SC_guard_ai : MonoBehaviour
             currentPath.Clear();
             pathIndex = 0;
             groundedTimer = 0f;
+
+            directionLockTimer = 0f;
+            hasMovementDirection = false;
+            lastMovementDirection = Vector3.zero;
         }
     }
 
@@ -223,7 +255,6 @@ public class SC_guard_ai : MonoBehaviour
                 Vector3 a = point.transform.position;
                 Vector3 b = connected.transform.position;
 
-                // Ignore les segments horizontaux.
                 if (Mathf.Abs(b.y - a.y) <= floorHeightTolerance)
                     continue;
 
@@ -262,39 +293,34 @@ public class SC_guard_ai : MonoBehaviour
         if (SC_player.instance == null)
             return 0;
 
-        // Pendant le saut, aucune détection verticale.
-        if (SC_player.instance.isJumping)
+        // IMPORTANT :
+        // Tant que le joueur n'est pas au sol,
+        // aucune décision de changement d'étage.
+        if (!SC_player.instance.isGrounded)
         {
             groundedTimer = 0f;
             return 0;
         }
 
-        // Attendre que le joueur soit stabilisé.
         groundedTimer += Time.deltaTime;
 
         if (groundedTimer < floorDetectionDelay)
             return 0;
 
-        // Aucun étage identifié.
         if (enemyFloor == -1 || playerFloor == -1)
             return 0;
 
-        // Le joueur doit être proche d'un tracé vertical.
         if (!IsNearVerticalSegment(
             SC_player.instance.transform.position))
         {
             return 0;
         }
 
-        // Vérifier la différence réelle de hauteur.
         float heightDifference = playerFloorY - enemyFloorY;
 
-        // Même niveau : aucune montée ou descente.
         if (Mathf.Abs(heightDifference) <= floorHeightTolerance)
             return 0;
 
-        // Vérifier que le joueur est proche de la hauteur
-        // de son étage avant de confirmer le changement.
         if (Mathf.Abs(
             SC_player.instance.transform.position.y - playerFloorY
         ) > floorConfirmationTolerance)
@@ -304,6 +330,9 @@ public class SC_guard_ai : MonoBehaviour
 
         confirmedPlayerFloor = playerFloor;
         confirmedPlayerFloorY = playerFloorY;
+
+        lastGroundedPlayerFloor = playerFloor;
+        lastGroundedPlayerFloorY = playerFloorY;
 
         if (heightDifference < 0f)
             return -1;
@@ -332,6 +361,52 @@ public class SC_guard_ai : MonoBehaviour
         if (verticalDirection == 1 &&
             deltaY < -verticalTolerance)
             return false;
+
+        return true;
+    }
+
+    // ============================================================
+    // ANTI CHANGEMENT DE DIRECTION
+    // ============================================================
+
+    private bool ShouldAcceptNewPath(List<Vector3> newPath)
+    {
+        if (newPath == null || newPath.Count < 2)
+            return true;
+
+        if (!hasMovementDirection)
+            return true;
+
+        Vector3 newDirection = Vector3.zero;
+
+        for (int i = 1; i < newPath.Count; i++)
+        {
+            Vector3 difference =
+                newPath[i] - transform.position;
+
+            if (difference.magnitude > directionDetectionDistance)
+            {
+                newDirection = difference.normalized;
+                break;
+            }
+        }
+
+        if (newDirection == Vector3.zero)
+            return true;
+
+        Vector3 oldDirection =
+            lastMovementDirection.normalized;
+
+        float directionDot = Vector3.Dot(
+            oldDirection,
+            newDirection
+        );
+
+        if (directionDot < -0.5f)
+        {
+            if (directionLockTimer > 0f)
+                return false;
+        }
 
         return true;
     }
@@ -548,6 +623,10 @@ public class SC_guard_ai : MonoBehaviour
         if (!chaseActive || SC_player.instance == null)
             return;
 
+        // Ne jamais recalculer vers la hauteur temporaire du joueur.
+        //  if (!SC_player.instance.isGrounded)
+        //  return;
+
         if (allPoints.Count == 0)
             RefreshPoints();
 
@@ -568,9 +647,6 @@ public class SC_guard_ai : MonoBehaviour
         Vector3 playerPosition =
             SC_player.instance.transform.position;
 
-        if (SC_player.instance.isJumping)
-            groundedTimer = 0f;
-
         if (!FindClosestSegment(
             playerPosition,
             out Segment playerSegment))
@@ -585,7 +661,6 @@ public class SC_guard_ai : MonoBehaviour
             return;
         }
 
-        // Identification des étages.
         int enemyFloor;
         int playerFloor;
 
@@ -604,7 +679,6 @@ public class SC_guard_ai : MonoBehaviour
             out playerFloorY
         );
 
-        // Détermination de la direction verticale.
         int verticalDirection = GetVerticalDirection(
             enemyFloor,
             playerFloor,
@@ -718,6 +792,8 @@ public class SC_guard_ai : MonoBehaviour
                     enemySegment.closest,
                     playerSegment.closest
                 };
+
+                bestCost = directCost;
             }
         }
 
@@ -732,6 +808,10 @@ public class SC_guard_ai : MonoBehaviour
             pathIndex = 0;
             return;
         }
+
+        // Anti retournement.
+        if (!ShouldAcceptNewPath(bestPath))
+            return;
 
         currentPath = bestPath;
         pathIndex = 0;
@@ -749,6 +829,41 @@ public class SC_guard_ai : MonoBehaviour
             return;
 
         Vector3 target = currentPath[pathIndex];
+
+        Vector3 movement = target - transform.position;
+
+        if (movement.magnitude > directionDetectionDistance)
+        {
+            Vector3 newDirection = movement.normalized;
+
+            if (!hasMovementDirection)
+            {
+                lastMovementDirection = newDirection;
+                hasMovementDirection = true;
+
+                directionLockTimer = directionLockDuration;
+            }
+            else
+            {
+                float dot = Vector3.Dot(
+                    lastMovementDirection.normalized,
+                    newDirection
+                );
+
+                if (dot < -0.5f)
+                {
+                    if (directionLockTimer > 0f)
+                        return;
+
+                    lastMovementDirection = newDirection;
+                    directionLockTimer = directionLockDuration;
+                }
+                else
+                {
+                    lastMovementDirection = newDirection;
+                }
+            }
+        }
 
         transform.position = Vector3.MoveTowards(
             transform.position,
@@ -799,6 +914,7 @@ public class SC_guard_ai : MonoBehaviour
             );
         }
     }
+
     // ============================================================
     // CALCUL DU CHEMIN DE RETOUR VERS LA BASE
     // ============================================================
@@ -862,10 +978,8 @@ public class SC_guard_ai : MonoBehaviour
 
             List<Vector3> candidate = new List<Vector3>();
 
-            // Départ sur le segment le plus proche du garde.
             candidate.Add(startSegment.closest);
 
-            // Points du réseau jusqu'à la base.
             foreach (SC_guard_point node in nodes)
             {
                 Vector3 nodePosition = node.transform.position;
@@ -891,7 +1005,6 @@ public class SC_guard_ai : MonoBehaviour
             return false;
         }
 
-        // On conserve le chemin calculé.
         returnPath = bestPath;
 
         if (showLogs)
@@ -904,5 +1017,4 @@ public class SC_guard_ai : MonoBehaviour
 
         return true;
     }
-
 }

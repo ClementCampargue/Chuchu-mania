@@ -16,7 +16,7 @@ public class SC_player : MonoBehaviour
     private Coroutine dropThroughCoroutine;
     private Coroutine knockbackInvincibilityCoroutine;
     private SC_ladder echelle;
-    private bool isOnLadder;
+    public bool isOnLadder;
     public bool climb_delay = true;
 
     [Header("Power Up Stats")]
@@ -62,7 +62,7 @@ public class SC_player : MonoBehaviour
     public float climbReattachDelay = 0.2f;
 
     private float climbReattachTimer;
-    private bool isClimbing;
+    public bool isClimbing;
     private bool canClimb;
     private SC_grillage grillage;
 
