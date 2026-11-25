@@ -174,7 +174,7 @@ public class SC_balloon_player : MonoBehaviour
     public void Activate()
     {
         fill.delay = riseDelay;
-        fill.duration = balloonDuration - deflateDelay;
+        fill.duration = balloonDuration -riseDelay;
         if (player.eat_system.isPowerUpActive)
             return;
 
