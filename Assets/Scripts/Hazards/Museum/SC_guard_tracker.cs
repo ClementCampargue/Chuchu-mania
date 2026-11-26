@@ -890,11 +890,23 @@ public class SC_guard_ai : MonoBehaviour
             moveSpeedLadder * Time.deltaTime
         );
 
-        transform.position = new Vector3(
+        Vector3 nextPosition = new Vector3(
             nextHorizontal.x,
             nextY,
             nextHorizontal.z
         );
+
+        SC_guard_movement movementController =
+            GetComponent<SC_guard_movement>();
+
+        // La traque utilise exactement le même contrôle de collision que
+        // la patrouille et le retour à la base.
+        if (movementController == null ||
+            !SC_guard_movement.TryMoveWithGuardCollision(
+                movementController, nextPosition))
+        {
+            return;
+        }
 
         // Validation du point atteint
         if (Vector3.Distance(transform.position, target) <= reachDistance)

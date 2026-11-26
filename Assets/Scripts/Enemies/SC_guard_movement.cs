@@ -5,6 +5,97 @@ using UnityEngine;
 [RequireComponent(typeof(SC_guard_ai))]
 public class SC_guard_movement : MonoBehaviour
 {
+    // Registre global des gardes actifs : aucune réservation de node.
+    private static readonly HashSet<SC_guard_movement> activeGuards =
+        new HashSet<SC_guard_movement>();
+
+    [Header("Collision entre gardes")]
+    [Tooltip("Distance minimale entre les centres de deux gardes.")]
+    [SerializeField, Min(0.05f)] private float guardCollisionRadius = 0.65f;
+
+    [Tooltip("Autorise deux gardes à se croiser s'ils sont suffisamment éloignés en hauteur.")]
+    [SerializeField, Min(0f)] private float collisionVerticalTolerance = 0.8f;
+
+    private void OnEnable()
+    {
+        activeGuards.Add(this);
+    }
+
+    private void OnDisable()
+    {
+        activeGuards.Remove(this);
+    }
+
+    /// <summary>
+    /// Teste le déplacement complet (pas seulement sa position finale) contre
+    /// les autres gardes. En cas de collision, le déplacement est bloqué.
+    /// Cette méthode ne consulte aucun SC_guard_point.
+    /// </summary>
+    public static bool TryMoveWithGuardCollision(
+        SC_guard_movement mover,
+        Vector3 destination)
+    {
+        if (mover == null)
+            return false;
+
+        Vector3 start = mover.transform.position;
+        float minDistance = mover.guardCollisionRadius;
+        bool blocked = false;
+
+        foreach (SC_guard_movement other in activeGuards)
+        {
+            if (other == null || other == mover || !other.isActiveAndEnabled)
+                continue;
+
+            Vector3 otherPosition = other.transform.position;
+            if (Mathf.Abs(start.y - otherPosition.y) >
+                mover.collisionVerticalTolerance &&
+                Mathf.Abs(destination.y - otherPosition.y) >
+                mover.collisionVerticalTolerance)
+                continue;
+
+            // Distance minimale entre la position de l'autre garde et le
+            // segment parcouru pendant cette frame : évite de traverser un garde.
+            Vector3 closest = ClosestPointOnMovementSegment(
+                otherPosition, start, destination);
+
+            float requiredDistance = Mathf.Max(
+                minDistance,
+                other.guardCollisionRadius);
+
+            float closestDistance = Vector3.Distance(closest, otherPosition);
+            float startDistance = Vector3.Distance(start, otherPosition);
+            float endDistance = Vector3.Distance(destination, otherPosition);
+
+            // Si les gardes sont déjà trop proches, autoriser celui qui
+            // s'éloigne : cela évite de les immobiliser définitivement.
+            bool movingAway = endDistance > startDistance + 0.001f;
+
+            if (closestDistance < requiredDistance && !movingAway)
+            {
+                blocked = true;
+                break;
+            }
+        }
+
+        if (blocked)
+            return false;
+
+        mover.transform.position = destination;
+        return true;
+    }
+
+    private static Vector3 ClosestPointOnMovementSegment(
+        Vector3 point, Vector3 start, Vector3 end)
+    {
+        Vector3 segment = end - start;
+        float lengthSquared = segment.sqrMagnitude;
+        if (lengthSquared < 0.000001f)
+            return start;
+
+        float t = Mathf.Clamp01(Vector3.Dot(point - start, segment) / lengthSquared);
+        return start + segment * t;
+    }
     public enum MovementMode { Chase, Patrol }
     private List<Vector3> returnPath = new List<Vector3>();
     private int returnPathIndex;
@@ -136,7 +227,7 @@ public class SC_guard_movement : MonoBehaviour
             baseNode = currentNode;
 
         if (currentNode != null)
-            transform.position = currentNode.transform.position;
+            TryMoveWithGuardCollision(this, currentNode.transform.position);
 
         movementMode = MovementMode.Patrol;
 
@@ -580,7 +671,8 @@ public class SC_guard_movement : MonoBehaviour
     }
     private void ArriveAtBase()
     {
-        transform.position = baseNode.transform.position;
+        if (!TryMoveWithGuardCollision(this, baseNode.transform.position))
+            return;
 
         currentNode = baseNode;
 
@@ -897,11 +989,13 @@ public class SC_guard_movement : MonoBehaviour
 
     private void FollowGroundNormally(Vector3 targetPosition)
     {
-        transform.position = Vector3.MoveTowards(
+        Vector3 nextPosition = Vector3.MoveTowards(
             transform.position,
             targetPosition,
             moveSpeed * Time.deltaTime
         );
+
+        TryMoveWithGuardCollision(this, nextPosition);
     }
 
     private void FollowLadder(Vector3 targetPosition)
@@ -920,7 +1014,7 @@ public class SC_guard_movement : MonoBehaviour
                 ladderSpeed * Time.deltaTime
             );
 
-            transform.position = position;
+            TryMoveWithGuardCollision(this, position);
             return;
         }
 
@@ -938,7 +1032,7 @@ public class SC_guard_movement : MonoBehaviour
             ladderSpeed * Time.deltaTime
         );
 
-        transform.position = position;
+        TryMoveWithGuardCollision(this, position);
     }
 
     private void ArriveAtCurrentPathNode()
@@ -1289,10 +1383,11 @@ public class SC_guard_movement : MonoBehaviour
 
     public void SetCurrentNode(SC_guard_point node)
     {
-        currentNode = node;
+        if (node != null &&
+            !TryMoveWithGuardCollision(this, node.transform.position))
+            return;
 
-        if (node != null)
-            transform.position = node.transform.position;
+        currentNode = node;
 
         isReturningToBase = false;
 
