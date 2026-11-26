@@ -5,16 +5,19 @@ using UnityEngine;
 [RequireComponent(typeof(SC_guard_ai))]
 public class SC_guard_movement : MonoBehaviour
 {
-    // Registre global des gardes actifs : aucune réservation de node.
+    // ============================================================
+    // COLLISIONS ENTRE GARDES
+    // ============================================================
+
     private static readonly HashSet<SC_guard_movement> activeGuards =
         new HashSet<SC_guard_movement>();
 
     [Header("Collision entre gardes")]
-    [Tooltip("Distance minimale entre les centres de deux gardes.")]
-    [SerializeField, Min(0.05f)] private float guardCollisionRadius = 0.65f;
+    [SerializeField, Min(0.05f)]
+    private float guardCollisionRadius = 0.65f;
 
-    [Tooltip("Autorise deux gardes à se croiser s'ils sont suffisamment éloignés en hauteur.")]
-    [SerializeField, Min(0f)] private float collisionVerticalTolerance = 0.8f;
+    [SerializeField, Min(0f)]
+    private float collisionVerticalTolerance = 0.8f;
 
     private void OnEnable()
     {
@@ -26,11 +29,6 @@ public class SC_guard_movement : MonoBehaviour
         activeGuards.Remove(this);
     }
 
-    /// <summary>
-    /// Teste le déplacement complet (pas seulement sa position finale) contre
-    /// les autres gardes. En cas de collision, le déplacement est bloqué.
-    /// Cette méthode ne consulte aucun SC_guard_point.
-    /// </summary>
     public static bool TryMoveWithGuardCollision(
         SC_guard_movement mover,
         Vector3 destination)
@@ -39,94 +37,120 @@ public class SC_guard_movement : MonoBehaviour
             return false;
 
         Vector3 start = mover.transform.position;
-        float minDistance = mover.guardCollisionRadius;
-        bool blocked = false;
+
+        destination = SC_ScreenWarp.NearestImage(start, destination);
 
         foreach (SC_guard_movement other in activeGuards)
         {
-            if (other == null || other == mover || !other.isActiveAndEnabled)
+            if (other == null ||
+                other == mover ||
+                !other.isActiveAndEnabled)
                 continue;
 
-            Vector3 otherPosition = other.transform.position;
+            Vector3 otherPosition =
+                SC_ScreenWarp.NearestImage(start, other.transform.position);
+
             if (Mathf.Abs(start.y - otherPosition.y) >
-                mover.collisionVerticalTolerance &&
+                    mover.collisionVerticalTolerance &&
                 Mathf.Abs(destination.y - otherPosition.y) >
-                mover.collisionVerticalTolerance)
+                    mover.collisionVerticalTolerance)
                 continue;
 
-            // Distance minimale entre la position de l'autre garde et le
-            // segment parcouru pendant cette frame : évite de traverser un garde.
             Vector3 closest = ClosestPointOnMovementSegment(
-                otherPosition, start, destination);
+                otherPosition,
+                start,
+                destination
+            );
 
             float requiredDistance = Mathf.Max(
-                minDistance,
-                other.guardCollisionRadius);
+                mover.guardCollisionRadius,
+                other.guardCollisionRadius
+            );
 
-            float closestDistance = Vector3.Distance(closest, otherPosition);
-            float startDistance = Vector3.Distance(start, otherPosition);
-            float endDistance = Vector3.Distance(destination, otherPosition);
+            float closestDistance =
+                Vector3.Distance(closest, otherPosition);
 
-            // Si les gardes sont déjà trop proches, autoriser celui qui
-            // s'éloigne : cela évite de les immobiliser définitivement.
-            bool movingAway = endDistance > startDistance + 0.001f;
+            float startDistance =
+                Vector3.Distance(start, otherPosition);
+
+            float endDistance =
+                Vector3.Distance(destination, otherPosition);
+
+            bool movingAway =
+                endDistance > startDistance + 0.001f;
 
             if (closestDistance < requiredDistance && !movingAway)
-            {
-                blocked = true;
-                break;
-            }
+                return false;
         }
-
-        if (blocked)
-            return false;
 
         mover.transform.position = destination;
         return true;
     }
 
     private static Vector3 ClosestPointOnMovementSegment(
-        Vector3 point, Vector3 start, Vector3 end)
+        Vector3 point,
+        Vector3 start,
+        Vector3 end)
     {
         Vector3 segment = end - start;
         float lengthSquared = segment.sqrMagnitude;
+
         if (lengthSquared < 0.000001f)
             return start;
 
-        float t = Mathf.Clamp01(Vector3.Dot(point - start, segment) / lengthSquared);
+        float t = Mathf.Clamp01(
+            Vector3.Dot(point - start, segment) / lengthSquared
+        );
+
         return start + segment * t;
     }
-    public enum MovementMode { Chase, Patrol }
-    private List<Vector3> returnPath = new List<Vector3>();
-    private int returnPathIndex;
-    public GameObject exclamation;
-    public Transform exclamation_point;
-    public SC_damage_player damage;
 
-    [Header("Sommeil après traque")]
-    [SerializeField] private float sleepDuration = 3f;
+    // ============================================================
+    // MODES
+    // ============================================================
+
+    public enum MovementMode
+    {
+        Chase,
+        Patrol
+    }
+
+    private enum AnimationMovement
+    {
+        Walk,
+        LadderUp,
+        LadderDown
+    }
+
+    [Header("Mode")]
+    [SerializeField]
+    private MovementMode movementMode = MovementMode.Patrol;
+
+    // ============================================================
+    // REFERENCES
+    // ============================================================
 
     [Header("Références")]
     [SerializeField] private Animator flashlight;
     [SerializeField] private Animator animator;
     [SerializeField] private SC_guard_ai guardAI;
 
+    public GameObject exclamation;
+    public Transform exclamation_point;
+    public SC_damage_player damage;
+
+    // ============================================================
+    // DEPLACEMENT
+    // ============================================================
+
     [Header("Déplacement")]
     [SerializeField] private float moveSpeed = 3f;
     [SerializeField] private float ladderSpeed = 3f;
     [SerializeField] private float ladderAlignmentTolerance = 0.025f;
-    [SerializeField] private MovementMode movementMode = MovementMode.Patrol;
 
-    [Header("Animation de début de traque")]
-    [SerializeField] private string chaseStartTrigger = "ChaseStart";
-
-    private bool chaseMovementAuthorized;
-
-    [Header("Point actuel")]
-    [SerializeField] private SC_guard_point currentNode;
-
-    [Header("Zone de base")]
-    [SerializeField] private SC_guard_point baseNode;
+    // ============================================================
+    // PATROUILLE NORMALE
+    // ============================================================
 
     [Header("Patrouille")]
     [SerializeField]
@@ -139,6 +163,72 @@ public class SC_guard_movement : MonoBehaviour
     private int currentPatrolIndex = -1;
     private int patrolDirection = 1;
 
+    private float patrolWaitTimer;
+    private bool isWaitingAtPatrolPoint;
+
+    // ============================================================
+    // PATROUILLE AVEC UN SEUL POINT
+    // ============================================================
+
+    [Header("Patrouille avec un seul point")]
+    [SerializeField] private float singlePointMoveSpeed = 2f;
+    [SerializeField] private bool singlePointMoveRight = true;
+
+    private bool isSinglePointWalking;
+
+    // ============================================================
+    // NODES
+    // ============================================================
+
+    [Header("Point actuel")]
+    [SerializeField] private SC_guard_point currentNode;
+
+    [Header("Zone de base")]
+    [SerializeField] private SC_guard_point baseNode;
+
+    private List<SC_guard_point> currentPath =
+        new List<SC_guard_point>();
+
+    private int pathIndex;
+
+    private SC_guard_point segmentStartNode;
+    private SC_guard_point segmentTargetNode;
+
+    private bool isMovingBetweenNodes;
+
+    // ============================================================
+    // RETOUR A LA BASE
+    // ============================================================
+
+    private List<Vector3> returnPath = new List<Vector3>();
+    private int returnPathIndex;
+
+    private bool isReturningToBase;
+
+    // ============================================================
+    // CHASSE
+    // ============================================================
+
+    [Header("Animation de début de traque")]
+    [SerializeField] private string chaseStartTrigger = "ChaseStart";
+
+    private bool isChasing;
+    private bool chaseMovementAuthorized;
+
+    // ============================================================
+    // SOMMEIL APRES TRAQUE
+    // ============================================================
+
+    [Header("Sommeil après traque")]
+    [SerializeField] private float sleepDuration = 3f;
+
+    private float sleepTimer;
+    private bool isSleeping;
+
+    // ============================================================
+    // SOMMEIL ALEATOIRE
+    // ============================================================
+
     [Header("Sommeil aléatoire")]
     [SerializeField] private bool allowRandomSleep = true;
     [SerializeField] private float minSleepInterval = 8f;
@@ -150,6 +240,10 @@ public class SC_guard_movement : MonoBehaviour
     private float randomSleepTimer;
     private bool randomSleepInProgress;
 
+    // ============================================================
+    // ANIMATIONS
+    // ============================================================
+
     [Header("Sommeil")]
     [SerializeField] private string sleepParameter = "Sleep";
 
@@ -158,37 +252,15 @@ public class SC_guard_movement : MonoBehaviour
     [SerializeField] private string ladderUpParameter = "LadderUp";
     [SerializeField] private string ladderDownParameter = "LadderDown";
 
+    // ============================================================
+    // FLIP
+    // ============================================================
+
     [Header("Flip")]
     [SerializeField] private bool flipCharacter = true;
     [SerializeField] private bool facingRightByDefault = true;
 
     private Vector3 originalScale;
-
-    private List<SC_guard_point> currentPath =
-        new List<SC_guard_point>();
-
-    private int pathIndex;
-
-    private SC_guard_point segmentStartNode;
-    private SC_guard_point segmentTargetNode;
-
-    private float patrolWaitTimer;
-    private float sleepTimer;
-
-    private bool isMovingBetweenNodes;
-    private bool isChasing;
-    private bool isSleeping;
-    private bool isWaitingAtPatrolPoint;
-
-    // Nouveau : indique que le garde retourne à sa base.
-    private bool isReturningToBase;
-
-    private enum AnimationMovement
-    {
-        Walk,
-        LadderUp,
-        LadderDown
-    }
 
     // ============================================================
     // START
@@ -203,6 +275,9 @@ public class SC_guard_movement : MonoBehaviour
 
         if (guardAI == null)
             guardAI = GetComponent<SC_guard_ai>();
+
+        if (GetComponent<SC_ScreenWarp>() == null)
+            gameObject.AddComponent<SC_ScreenWarp>();
 
         if (guardAI == null)
         {
@@ -227,11 +302,15 @@ public class SC_guard_movement : MonoBehaviour
             baseNode = currentNode;
 
         if (currentNode != null)
-            TryMoveWithGuardCollision(this, currentNode.transform.position);
+            TryMoveWithGuardCollision(
+                this,
+                currentNode.transform.position
+            );
 
         movementMode = MovementMode.Patrol;
 
         ResetRandomSleepTimer();
+
         StartPatrol();
     }
 
@@ -280,21 +359,15 @@ public class SC_guard_movement : MonoBehaviour
         float verticalDifference = target.y - transform.position.y;
 
         if (verticalDifference > 0.05f)
-        {
             SetMovementAnimation(AnimationMovement.LadderUp);
-        }
         else if (verticalDifference < -0.05f)
-        {
             SetMovementAnimation(AnimationMovement.LadderDown);
-        }
         else
-        {
             SetMovementAnimation(AnimationMovement.Walk);
-        }
     }
 
     // ============================================================
-    // ANIMATION EVENT : DEBUT REEL DE LA TRAQUE
+    // DEBUT REEL DE LA TRAQUE
     // ============================================================
 
     public void StartChaseMovement()
@@ -380,24 +453,16 @@ public class SC_guard_movement : MonoBehaviour
 
     private void FinishSleep()
     {
-
         if (damage != null)
             damage.enabled = true;
 
         if (animator != null)
-            animator.SetBool(sleepParameter, false);
-        animator.SetTrigger("Wake");
-
-
-        // Sommeil aléatoire : reprendre le déplacement interrompu.
-        if (randomSleepInProgress)
         {
-            randomSleepInProgress = false;
-
-            return;
+            animator.SetBool(sleepParameter, false);
+            animator.SetTrigger("Wake");
         }
-
     }
+
     public void wakeup()
     {
         isSleeping = false;
@@ -410,11 +475,26 @@ public class SC_guard_movement : MonoBehaviour
 
         SetFlashlight(true);
 
-        // Sommeil aléatoire : reprendre le déplacement interrompu.
         if (randomSleepInProgress)
         {
             randomSleepInProgress = false;
+
             ResetRandomSleepTimer();
+
+            if (isSinglePointWalking)
+            {
+                float direction =
+                    singlePointMoveRight ? 1f : -1f;
+
+                UpdateFlip(
+                    transform.position,
+                    transform.position + Vector3.right * direction
+                );
+
+                SetMovementAnimation(AnimationMovement.Walk);
+
+                return;
+            }
 
             if (isMovingBetweenNodes &&
                 segmentStartNode != null &&
@@ -438,8 +518,6 @@ public class SC_guard_movement : MonoBehaviour
 
         currentNode = FindClosestNode(transform.position);
 
-        // Après le sommeil suivant la traque,
-        // retourner à la position initiale.
         if (isReturningToBase)
         {
             ReturnToBase();
@@ -455,6 +533,8 @@ public class SC_guard_movement : MonoBehaviour
         randomSleepInProgress = false;
 
         sleepTimer = sleepDuration;
+
+        isSinglePointWalking = false;
 
         FinishPath();
 
@@ -495,9 +575,11 @@ public class SC_guard_movement : MonoBehaviour
                     damage.enabled = true;
             }
 
-            // Annule un éventuel retour à la base.
+            isSinglePointWalking = false;
+
             returnPath.Clear();
             returnPathIndex = 0;
+
             if (exclamation != null && exclamation_point != null)
             {
                 Instantiate(
@@ -546,14 +628,13 @@ public class SC_guard_movement : MonoBehaviour
 
         currentNode = FindClosestNode(transform.position);
 
-        // Le retour à la base sera lancé après le sommeil.
         isReturningToBase = true;
 
         StartSleep();
     }
 
     // ============================================================
-    // RETOUR A LA POSITION INITIALE
+    // RETOUR A LA BASE
     // ============================================================
 
     private void ReturnToBase()
@@ -582,12 +663,11 @@ public class SC_guard_movement : MonoBehaviour
 
         returnPathIndex = 0;
 
-        // Ignore le premier point s'il correspond
-        // à la position actuelle du garde.
         if (returnPath.Count > 0 &&
-            Vector3.Distance(
+            SC_ScreenWarp.WrappedDistance(
                 transform.position,
-                returnPath[0]) <= 0.01f)
+                returnPath[0]
+            ) <= 0.01f)
         {
             returnPathIndex++;
         }
@@ -600,6 +680,7 @@ public class SC_guard_movement : MonoBehaviour
 
         StartReturnMovement();
     }
+
     private void StartReturnMovement()
     {
         if (returnPathIndex >= returnPath.Count)
@@ -615,20 +696,19 @@ public class SC_guard_movement : MonoBehaviour
         float verticalDifference = target.y - transform.position.y;
 
         if (verticalDifference > 0.05f)
-        {
             SetMovementAnimation(AnimationMovement.LadderUp);
-        }
         else if (verticalDifference < -0.05f)
-        {
             SetMovementAnimation(AnimationMovement.LadderDown);
-        }
         else
-        {
             SetMovementAnimation(AnimationMovement.Walk);
-        }
 
         isMovingBetweenNodes = true;
     }
+
+    // ============================================================
+    // SUIVRE LE CHEMIN DE RETOUR
+    // ============================================================
+
     private void FollowReturnPath()
     {
         if (returnPath == null ||
@@ -643,20 +723,24 @@ public class SC_guard_movement : MonoBehaviour
         float verticalDifference =
             targetPosition.y - transform.position.y;
 
-        if (Mathf.Abs(verticalDifference) <= 0.05f)
-        {
-            FollowGroundNormally(targetPosition);
-        }
-        else
-        {
-            FollowLadder(targetPosition);
-        }
+        // IMPORTANT :
+        // Le retour à la base ignore les collisions entre gardes.
 
-        if (Vector3.Distance(
+        if (Mathf.Abs(verticalDifference) <= 0.05f)
+            FollowGroundNormally(targetPosition, true);
+        else
+            FollowLadder(targetPosition, true);
+
+        if (SC_ScreenWarp.WrappedDistance(
             transform.position,
-            targetPosition) <= 0.001f)
+            targetPosition
+        ) <= 0.001f)
         {
-            transform.position = targetPosition;
+            transform.position =
+                SC_ScreenWarp.NearestImage(
+                    transform.position,
+                    targetPosition
+                );
 
             returnPathIndex++;
 
@@ -669,10 +753,18 @@ public class SC_guard_movement : MonoBehaviour
             StartReturnMovement();
         }
     }
+
     private void ArriveAtBase()
     {
-        if (!TryMoveWithGuardCollision(this, baseNode.transform.position))
+        if (baseNode == null)
             return;
+
+        // Positionnement final sans collision.
+        transform.position =
+            SC_ScreenWarp.NearestImage(
+                transform.position,
+                baseNode.transform.position
+            );
 
         currentNode = baseNode;
 
@@ -687,22 +779,29 @@ public class SC_guard_movement : MonoBehaviour
 
         StopMovementAnimation();
 
-        // Reprise de la patrouille depuis le point de base.
+        // Les collisions sont automatiquement réactivées
+        // car la patrouille utilise à nouveau les déplacements normaux.
+
         StartPatrol();
     }
+
     // ============================================================
     // PATROUILLE
     // ============================================================
 
     private void UpdatePatrol()
     {
-        // IMPORTANT :
-        // Le retour à la base doit fonctionner même si
-        // patrolPoints est vide ou non renseigné.
-
         if (isReturningToBase)
         {
             FollowReturnPath();
+            return;
+        }
+
+        if (isSinglePointWalking &&
+            patrolPoints != null &&
+            patrolPoints.Count == 1)
+        {
+            UpdateSinglePointMovement();
             return;
         }
 
@@ -730,6 +829,29 @@ public class SC_guard_movement : MonoBehaviour
 
         ChooseNextPatrolPoint();
     }
+
+    // ============================================================
+    // MARCHE CONTINUE AVEC UN SEUL POINT
+    // ============================================================
+
+    private void UpdateSinglePointMovement()
+    {
+        if (isSleeping || isChasing)
+            return;
+
+        float direction = singlePointMoveRight ? 1f : -1f;
+
+        Vector3 destination = transform.position;
+
+        destination.x +=
+            direction * singlePointMoveSpeed * Time.deltaTime;
+
+        TryMoveWithGuardCollision(this, destination);
+    }
+
+    // ============================================================
+    // CHOIX DU PROCHAIN POINT
+    // ============================================================
 
     private void ChooseNextPatrolPoint()
     {
@@ -813,7 +935,7 @@ public class SC_guard_movement : MonoBehaviour
             if (patrolPoints[i] == null)
                 continue;
 
-            float distance = Vector3.Distance(
+            float distance = SC_ScreenWarp.WrappedDistance(
                 transform.position,
                 patrolPoints[i].transform.position
             );
@@ -862,14 +984,18 @@ public class SC_guard_movement : MonoBehaviour
         patrolWaitTimer = patrolWaitTime;
     }
 
+    // ============================================================
+    // DEMARRAGE PATROUILLE
+    // ============================================================
+
     private void StartPatrol()
     {
         movementMode = MovementMode.Patrol;
+
         isChasing = false;
         chaseMovementAuthorized = false;
 
         isReturningToBase = false;
-
         isWaitingAtPatrolPoint = false;
 
         FinishPath();
@@ -877,7 +1003,29 @@ public class SC_guard_movement : MonoBehaviour
         patrolWaitTimer = 0f;
 
         if (patrolPoints == null || patrolPoints.Count == 0)
+        {
+            isSinglePointWalking = false;
             return;
+        }
+
+        if (patrolPoints.Count == 1)
+        {
+            isSinglePointWalking = true;
+
+            float direction =
+                singlePointMoveRight ? 1f : -1f;
+
+            UpdateFlip(
+                transform.position,
+                transform.position + Vector3.right * direction
+            );
+
+            SetMovementAnimation(AnimationMovement.Walk);
+
+            return;
+        }
+
+        isSinglePointWalking = false;
 
         currentPatrolIndex = patrolPoints.IndexOf(currentNode);
 
@@ -890,7 +1038,7 @@ public class SC_guard_movement : MonoBehaviour
     }
 
     // ============================================================
-    // DEPLACEMENT SUR LE CHEMIN
+    // DEPLACEMENT ENTRE LES NODES
     // ============================================================
 
     private void StartNextNodeMovement()
@@ -949,7 +1097,11 @@ public class SC_guard_movement : MonoBehaviour
             return;
         }
 
-        Vector3 targetPosition = target.transform.position;
+        Vector3 targetPosition =
+            SC_ScreenWarp.NearestImage(
+                transform.position,
+                target.transform.position
+            );
 
         AnimationMovement movement =
             GetMovementAnimation(currentNode, target);
@@ -958,17 +1110,17 @@ public class SC_guard_movement : MonoBehaviour
         {
             FollowGroundNormally(targetPosition);
 
-            Vector3 currentFlat = new Vector3(
-                transform.position.x, 0f, transform.position.z
-            );
-
-            Vector3 targetFlat = new Vector3(
-                targetPosition.x, 0f, targetPosition.z
-            );
-
-            if (Vector3.Distance(currentFlat, targetFlat) <= 0.001f)
+            if (SC_ScreenWarp.WrappedDistance(
+                transform.position,
+                targetPosition
+            ) <= 0.001f)
             {
-                transform.position = targetPosition;
+                transform.position =
+                    SC_ScreenWarp.NearestImage(
+                        transform.position,
+                        targetPosition
+                    );
+
                 ArriveAtCurrentPathNode();
             }
         }
@@ -976,31 +1128,58 @@ public class SC_guard_movement : MonoBehaviour
         {
             FollowLadder(targetPosition);
 
-            if (Vector3.Distance(
+            if (SC_ScreenWarp.WrappedDistance(
                 transform.position,
                 targetPosition
             ) <= 0.001f)
             {
-                transform.position = targetPosition;
+                transform.position =
+                    SC_ScreenWarp.NearestImage(
+                        transform.position,
+                        targetPosition
+                    );
+
                 ArriveAtCurrentPathNode();
             }
         }
     }
 
-    private void FollowGroundNormally(Vector3 targetPosition)
+    // ============================================================
+    // DEPLACEMENT AU SOL
+    // ============================================================
+
+    private void FollowGroundNormally(
+        Vector3 targetPosition,
+        bool ignoreGuardCollisions = false)
     {
-        Vector3 nextPosition = Vector3.MoveTowards(
+        Vector3 nextPosition = SC_ScreenWarp.MoveTowards(
             transform.position,
             targetPosition,
             moveSpeed * Time.deltaTime
         );
 
-        TryMoveWithGuardCollision(this, nextPosition);
+        if (ignoreGuardCollisions)
+        {
+            transform.position = nextPosition;
+        }
+        else
+        {
+            TryMoveWithGuardCollision(this, nextPosition);
+        }
     }
 
-    private void FollowLadder(Vector3 targetPosition)
+    // ============================================================
+    // DEPLACEMENT SUR ECHELLE
+    // ============================================================
+
+    private void FollowLadder(
+        Vector3 targetPosition,
+        bool ignoreGuardCollisions = false)
     {
         Vector3 position = transform.position;
+
+        targetPosition =
+            SC_ScreenWarp.NearestImage(position, targetPosition);
 
         float horizontalDifference =
             targetPosition.x - position.x;
@@ -1014,7 +1193,11 @@ public class SC_guard_movement : MonoBehaviour
                 ladderSpeed * Time.deltaTime
             );
 
-            TryMoveWithGuardCollision(this, position);
+            if (ignoreGuardCollisions)
+                transform.position = position;
+            else
+                TryMoveWithGuardCollision(this, position);
+
             return;
         }
 
@@ -1032,8 +1215,15 @@ public class SC_guard_movement : MonoBehaviour
             ladderSpeed * Time.deltaTime
         );
 
-        TryMoveWithGuardCollision(this, position);
+        if (ignoreGuardCollisions)
+            transform.position = position;
+        else
+            TryMoveWithGuardCollision(this, position);
     }
+
+    // ============================================================
+    // ARRIVEE SUR UN NODE
+    // ============================================================
 
     private void ArriveAtCurrentPathNode()
     {
@@ -1041,14 +1231,12 @@ public class SC_guard_movement : MonoBehaviour
 
         pathIndex++;
 
-        // Le garde vient d'arriver à sa position initiale.
         if (isReturningToBase && currentNode == baseNode)
         {
             FinishPath();
 
             isReturningToBase = false;
 
-            // Reprend la patrouille depuis la base.
             StartPatrol();
             return;
         }
@@ -1181,7 +1369,9 @@ public class SC_guard_movement : MonoBehaviour
     // FLIP
     // ============================================================
 
-    private void UpdateFlip(SC_guard_point from, SC_guard_point to)
+    private void UpdateFlip(
+        SC_guard_point from,
+        SC_guard_point to)
     {
         if (from == null || to == null)
             return;
@@ -1197,7 +1387,8 @@ public class SC_guard_movement : MonoBehaviour
         if (!flipCharacter)
             return;
 
-        Vector3 direction = to - from;
+        Vector3 direction =
+            SC_ScreenWarp.WrappedDelta(from, to);
 
         if (Mathf.Abs(direction.x) < 0.01f)
             return;
@@ -1219,9 +1410,13 @@ public class SC_guard_movement : MonoBehaviour
     // CONNEXIONS
     // ============================================================
 
-    private bool IsConnected(SC_guard_point from, SC_guard_point to)
+    private bool IsConnected(
+        SC_guard_point from,
+        SC_guard_point to)
     {
-        if (from == null || to == null || from.connections == null)
+        if (from == null ||
+            to == null ||
+            from.connections == null)
             return false;
 
         return from.connections.Contains(to);
@@ -1284,15 +1479,17 @@ public class SC_guard_movement : MonoBehaviour
 
             foreach (SC_guard_point neighbour in current.connections)
             {
-                if (neighbour == null || closedSet.Contains(neighbour))
+                if (neighbour == null ||
+                    closedSet.Contains(neighbour))
                     continue;
 
-                float distance = Vector3.Distance(
+                float distance = SC_ScreenWarp.WrappedDistance(
                     current.transform.position,
                     neighbour.transform.position
                 );
 
-                float tentativeGCost = gCost[current] + distance;
+                float tentativeGCost =
+                    gCost[current] + distance;
 
                 if (!gCost.ContainsKey(neighbour) ||
                     tentativeGCost < gCost[neighbour])
@@ -1312,9 +1509,11 @@ public class SC_guard_movement : MonoBehaviour
         return null;
     }
 
-    private float Heuristic(SC_guard_point a, SC_guard_point b)
+    private float Heuristic(
+        SC_guard_point a,
+        SC_guard_point b)
     {
-        return Vector3.Distance(
+        return SC_ScreenWarp.WrappedDistance(
             a.transform.position,
             b.transform.position
         );
@@ -1362,7 +1561,7 @@ public class SC_guard_movement : MonoBehaviour
             if (node == null)
                 continue;
 
-            float distance = Vector3.Distance(
+            float distance = SC_ScreenWarp.WrappedDistance(
                 position,
                 node.transform.position
             );
@@ -1384,7 +1583,9 @@ public class SC_guard_movement : MonoBehaviour
     public void SetCurrentNode(SC_guard_point node)
     {
         if (node != null &&
-            !TryMoveWithGuardCollision(this, node.transform.position))
+            !TryMoveWithGuardCollision(
+                this,
+                node.transform.position))
             return;
 
         currentNode = node;

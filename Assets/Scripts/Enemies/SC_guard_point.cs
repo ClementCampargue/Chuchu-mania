@@ -1,4 +1,3 @@
-
 using UnityEngine;
 using System.Collections.Generic;
 
@@ -20,14 +19,15 @@ public class SC_guard_point : MonoBehaviour
     {
         Gizmos.color = pointColor;
         Gizmos.DrawSphere(transform.position, pointSize);
-
         Gizmos.color = connectionColor;
-
+        if (connections == null) return;
         foreach (SC_guard_point node in connections)
         {
             if (node == null) continue;
-
-            Gizmos.DrawLine(transform.position, node.transform.position);
+            Vector3 end = Application.isPlaying
+                ? SC_ScreenWarp.NearestImage(transform.position, node.transform.position)
+                : node.transform.position;
+            Gizmos.DrawLine(transform.position, end);
         }
     }
 }

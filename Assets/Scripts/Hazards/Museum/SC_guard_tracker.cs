@@ -52,6 +52,11 @@ public class SC_guard_ai : MonoBehaviour
     private int lastGroundedPlayerFloor = -1;
     private float lastGroundedPlayerFloorY;
 
+    // Position mémorisée uniquement lorsque le joueur est réellement au sol.
+    // Pendant un saut, les gardes continuent de viser cette position.
+    private Vector3 lastGroundedPlayerPosition;
+    private bool hasLastGroundedPlayerPosition;
+
     private struct Segment
     {
         public SC_guard_point a;
@@ -78,6 +83,9 @@ public class SC_guard_ai : MonoBehaviour
 
     private void Start()
     {
+        if (GetComponent<SC_ScreenWarp>() == null)
+            gameObject.AddComponent<SC_ScreenWarp>();
+
         RefreshPoints();
 
         if (allPoints.Count == 0)
@@ -106,7 +114,10 @@ public class SC_guard_ai : MonoBehaviour
             directionLockTimer -= Time.deltaTime;
         }
 
-        // Recalcul permanent du chemin, même pendant un saut.
+        // La position cible n'est actualisée que lorsque le joueur est au sol.
+        // Un saut ne peut donc jamais faire croire aux gardes qu'il faut monter.
+        UpdateLastGroundedPlayerPosition();
+
         repathTimer -= Time.deltaTime;
 
         if (repathTimer <= 0f)
@@ -141,6 +152,14 @@ public class SC_guard_ai : MonoBehaviour
 
             lastGroundedPlayerFloor = -1;
             lastGroundedPlayerFloorY = 0f;
+            hasLastGroundedPlayerPosition = false;
+
+            // Ne mémorise une position de départ que si le joueur est au sol.
+            if (SC_player.instance != null && SC_player.instance.isGrounded)
+            {
+                lastGroundedPlayerPosition = SC_player.instance.transform.position;
+                hasLastGroundedPlayerPosition = true;
+            }
 
             CalculatePath();
         }
@@ -149,6 +168,7 @@ public class SC_guard_ai : MonoBehaviour
             currentPath.Clear();
             pathIndex = 0;
             groundedTimer = 0f;
+            hasLastGroundedPlayerPosition = false;
 
             directionLockTimer = 0f;
             hasMovementDirection = false;
@@ -173,7 +193,7 @@ public class SC_guard_ai : MonoBehaviour
             return false;
         }
 
-        target = currentPath[pathIndex];
+        target = SC_ScreenWarp.NearestImage(transform.position, currentPath[pathIndex]);
         return true;
     }
 
@@ -191,6 +211,19 @@ public class SC_guard_ai : MonoBehaviour
             );
 
         allPoints.AddRange(found);
+    }
+
+    // ============================================================
+    // MEMORISATION DE LA DERNIERE POSITION AU SOL
+    // ============================================================
+
+    private void UpdateLastGroundedPlayerPosition()
+    {
+        if (SC_player.instance == null || !SC_player.instance.isGrounded)
+            return;
+
+        lastGroundedPlayerPosition = SC_player.instance.transform.position;
+        hasLastGroundedPlayerPosition = true;
     }
 
     // ============================================================
@@ -221,10 +254,7 @@ public class SC_guard_ai : MonoBehaviour
             if (verticalDistance > 0.1f)
                 continue;
 
-            float horizontalDistance = Vector2.Distance(
-                new Vector2(position.x, position.z),
-                new Vector2(pointPosition.x, pointPosition.z)
-            );
+            float horizontalDistance = SC_ScreenWarp.WrappedDistance(position, pointPosition);
 
             if (horizontalDistance < bestDistance)
             {
@@ -254,24 +284,21 @@ public class SC_guard_ai : MonoBehaviour
                     continue;
 
                 Vector3 a = point.transform.position;
-                Vector3 b = connected.transform.position;
+                Vector3 b = SC_ScreenWarp.NearestImage(a, connected.transform.position);
+                Vector3 localPosition = SC_ScreenWarp.NearestImage(a, position);
 
                 if (Mathf.Abs(b.y - a.y) <= floorHeightTolerance)
                     continue;
 
                 Vector3 closest = ClosestPointOnSegment(
-                    position,
-                    a,
-                    b
+                    localPosition, a, b
                 );
 
                 float horizontalDistance = Vector2.Distance(
-                    new Vector2(position.x, position.z),
-                    new Vector2(closest.x, closest.z)
-                );
+                    new Vector2(localPosition.x, localPosition.z), new Vector2(closest.x, closest.z));
 
                 if (horizontalDistance <= maxSegmentDistance &&
-                    Vector3.Distance(position, closest) <= maxSegmentDistance)
+                    Vector3.Distance(localPosition, closest) <= maxSegmentDistance)
                 {
                     return true;
                 }
@@ -383,7 +410,7 @@ public class SC_guard_ai : MonoBehaviour
         for (int i = 1; i < newPath.Count; i++)
         {
             Vector3 difference =
-                newPath[i] - transform.position;
+                SC_ScreenWarp.WrappedDelta(transform.position, newPath[i]);
 
             if (difference.magnitude > directionDetectionDistance)
             {
@@ -450,18 +477,11 @@ public class SC_guard_ai : MonoBehaviour
                 checkedEdges.Add(edgeKey);
 
                 Vector3 a = point.transform.position;
-                Vector3 b = connected.transform.position;
+                Vector3 b = SC_ScreenWarp.NearestImage(a, connected.transform.position);
+                Vector3 localPosition = SC_ScreenWarp.NearestImage(a, position);
 
-                Vector3 closest = ClosestPointOnSegment(
-                    position,
-                    a,
-                    b
-                );
-
-                float distance = Vector3.Distance(
-                    position,
-                    closest
-                );
+                Vector3 closest = ClosestPointOnSegment(localPosition, a, b);
+                float distance = Vector3.Distance(localPosition, closest);
 
                 if (distance < bestDistance)
                 {
@@ -582,7 +602,7 @@ public class SC_guard_ai : MonoBehaviour
                     verticalDirection))
                     continue;
 
-                float edgeCost = Vector3.Distance(from, to);
+                float edgeCost = SC_ScreenWarp.WrappedDistance(from, to);
                 float newCost = bestDistance + edgeCost;
 
                 if (newCost < distances[neighbor])
@@ -624,9 +644,19 @@ public class SC_guard_ai : MonoBehaviour
         if (!chaseActive || SC_player.instance == null)
             return;
 
-        // Ne jamais recalculer vers la hauteur temporaire du joueur.
-        //  if (!SC_player.instance.isGrounded)
-        //  return;
+        // Si le joueur est en l'air, on conserve sa dernière position au sol.
+        // Si aucune position au sol n'a encore été enregistrée, on attend l'atterrissage.
+        if (SC_player.instance.isGrounded)
+        {
+            UpdateLastGroundedPlayerPosition();
+        }
+        else if (!hasLastGroundedPlayerPosition)
+        {
+            return;
+        }
+
+        if (!hasLastGroundedPlayerPosition)
+            return;
 
         if (allPoints.Count == 0)
             RefreshPoints();
@@ -645,8 +675,8 @@ public class SC_guard_ai : MonoBehaviour
             return;
         }
 
-        Vector3 playerPosition =
-            SC_player.instance.transform.position;
+        // Important : ne jamais utiliser la hauteur actuelle du joueur pendant un saut.
+        Vector3 playerPosition = lastGroundedPlayerPosition;
 
         if (!FindClosestSegment(
             playerPosition,
@@ -727,15 +757,9 @@ public class SC_guard_ai : MonoBehaviour
                     continue;
 
                 float totalCost =
-                    Vector3.Distance(
-                        enemySegment.closest,
-                        startNode.transform.position
-                    )
+                    SC_ScreenWarp.WrappedDistance(enemySegment.closest, startNode.transform.position)
                     + graphCost
-                    + Vector3.Distance(
-                        targetNode.transform.position,
-                        playerSegment.closest
-                    );
+                    + SC_ScreenWarp.WrappedDistance(targetNode.transform.position, playerSegment.closest);
 
                 if (totalCost >= bestCost)
                     continue;
@@ -746,18 +770,16 @@ public class SC_guard_ai : MonoBehaviour
 
                 foreach (SC_guard_point node in nodes)
                 {
-                    if (Vector3.Distance(
-                        candidate[candidate.Count - 1],
-                        node.transform.position
+                    if (SC_ScreenWarp.WrappedDistance(
+                        candidate[candidate.Count - 1], node.transform.position
                     ) > 0.01f)
                     {
                         candidate.Add(node.transform.position);
                     }
                 }
 
-                if (Vector3.Distance(
-                    candidate[candidate.Count - 1],
-                    playerSegment.closest
+                if (SC_ScreenWarp.WrappedDistance(
+                    candidate[candidate.Count - 1], playerSegment.closest
                 ) > 0.01f)
                 {
                     candidate.Add(playerSegment.closest);
@@ -781,10 +803,7 @@ public class SC_guard_ai : MonoBehaviour
                 playerSegment.closest,
                 verticalDirection))
         {
-            float directCost = Vector3.Distance(
-                enemySegment.closest,
-                playerSegment.closest
-            );
+            float directCost = SC_ScreenWarp.WrappedDistance(enemySegment.closest, playerSegment.closest);
 
             if (directCost < bestCost)
             {
@@ -832,6 +851,7 @@ public class SC_guard_ai : MonoBehaviour
 
         Vector3 target = currentPath[pathIndex];
 
+        target = SC_ScreenWarp.NearestImage(transform.position, target);
         Vector3 movement = target - transform.position;
 
         if (movement.magnitude > directionDetectionDistance)
@@ -873,6 +893,7 @@ public class SC_guard_ai : MonoBehaviour
             currentPosition.x, 0f, currentPosition.z
         );
 
+        target = SC_ScreenWarp.NearestImage(currentPosition, target);
         Vector3 targetHorizontal = new Vector3(
             target.x, 0f, target.z
         );
@@ -909,7 +930,7 @@ public class SC_guard_ai : MonoBehaviour
         }
 
         // Validation du point atteint
-        if (Vector3.Distance(transform.position, target) <= reachDistance)
+        if (SC_ScreenWarp.WrappedDistance(transform.position, target) <= reachDistance)
         {
             pathIndex++;
 
@@ -1004,10 +1025,7 @@ public class SC_guard_ai : MonoBehaviour
                 continue;
 
             float totalCost =
-                Vector3.Distance(
-                    startSegment.closest,
-                    startNode.transform.position
-                ) + graphCost;
+                SC_ScreenWarp.WrappedDistance(startSegment.closest, startNode.transform.position) + graphCost;
 
             if (totalCost >= bestCost)
                 continue;
@@ -1020,9 +1038,8 @@ public class SC_guard_ai : MonoBehaviour
             {
                 Vector3 nodePosition = node.transform.position;
 
-                if (Vector3.Distance(
-                    candidate[candidate.Count - 1],
-                    nodePosition) > 0.001f)
+                if (SC_ScreenWarp.WrappedDistance(
+                    candidate[candidate.Count - 1], nodePosition) > 0.001f)
                 {
                     candidate.Add(nodePosition);
                 }
