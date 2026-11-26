@@ -5,11 +5,11 @@ public class SC_ladder : MonoBehaviour
     [Header("Limites de l'échelle")]
     public Transform topPoint;
     public Transform bottomPoint;
-
     [Header("Position")]
     public float centerOffsetX = 0f;
 
     public float CenterX => transform.position.x + centerOffsetX;
+    public bool can_jump;
 
     public float TopY => topPoint.position.y;
 

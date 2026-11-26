@@ -1056,18 +1056,21 @@ MonoBehaviour:
   horizontalTolerance: 0.04
   searchInterval: 3
   maxStarbitDistance: 31.2
-  jumpDuration: 1.2
+  jumpSpeed: 5
+  minJumpDuration: 0.25
+  maxJumpDuration: 1.5
   apexDelay: 0.15
   fallDuration: 0.5
   postJumpDelay: 0.5
   eatDistance: 0.35
-  chaseDuration: 5
+  chuchuJumpsBeforeStop: 1
   chaseSpeed: 3
   chuchuCatchDistance: 0.5
-  chuchuJumpDuration: 1
-  chuchuJumpHeight: 3
+  chuchuJumpSpeed: 5
+  minChuchuJumpDuration: 0.25
+  maxChuchuJumpDuration: 1.5
   chuchuApexDelay: 0.15
-  leaveScreenDistance: 30
+  leaveScreenDistance: 15
   jump: {fileID: 6797311376687428347}
   angry: {fileID: 7705315772071218057}
 --- !u!58 &6753738923955640915
@@ -1173,6 +1176,7 @@ MonoBehaviour:
   isStunned: 0
   die_burn: 0
   script: {fileID: 4286570561266020812}
+  scripts: []
 --- !u!1 &8523090266757272195
 GameObject:
   m_ObjectHideFlags: 0

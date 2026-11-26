@@ -10183,6 +10183,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4179548949721023686}
   - component: {fileID: 4167154217632997446}
+  - component: {fileID: 7110811032714333052}
   m_Layer: 6
   m_Name: Square
   m_TagString: Untagged
@@ -10260,6 +10261,20 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &7110811032714333052
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1783581864057650519}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d3312081a01f49a4ca6bed04efcee9e7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  lowHealthMaterial: {fileID: 2100000, guid: dab62154501204d48b91a6f1cc99c506, type: 2}
+  lowHealthBlinkRate: 0.2
 --- !u!1 &2007643432017848248
 GameObject:
   m_ObjectHideFlags: 0
@@ -42165,6 +42180,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   hud_: {fileID: 0}
   cosmic_mode: {fileID: 4940170936916769476}
+  isOnLadder: 0
   climb_delay: 1
   PowermoveSpeed: 5
   BasePowermoveSpeed: 5
@@ -42179,11 +42195,13 @@ MonoBehaviour:
   coyoteTime: 0.2
   jumpBufferTime: 0.1
   jumpBufferCounter: 0
+  isJumping: 0
   canJump: 1
   climbSpeed: 1
   climbAttachUpThreshold: 0.6
   climbAttachDiagonalLimit: 1
   climbReattachDelay: 0.2
+  isClimbing: 0
   platformLayer:
     serializedVersion: 2
     m_Bits: 8
@@ -42191,9 +42209,6 @@ MonoBehaviour:
   dropThroughVelocity: 2
   hitFreezeTime: 0.51
   hitKnockback: {x: 10, y: 5}
-  normalMaterial: {fileID: 2100000, guid: a97c105638bdf8b4a8650670310a4cd3, type: 2}
-  lowHealthMaterial: {fileID: 2100000, guid: dab62154501204d48b91a6f1cc99c506, type: 2}
-  lowHealthBlinkRate: 0.2
   groundCheckBottom: {fileID: 354890283841259207}
   groundCheckRadius: 0.04
   groundLayer:
@@ -42214,12 +42229,15 @@ MonoBehaviour:
   bounceLayer:
     serializedVersion: 2
     m_Bits: 4096
+  canTakeDamage: 1
   stunLayer:
     serializedVersion: 2
     m_Bits: 2048
   stunDuration: 2
   isStunned: 0
   invincibilityTime: 2.5
+  sprites:
+  - {fileID: 7039531829478809680}
   spriteRenderer: {fileID: 4167154217632997446}
   spriteRendererPower: {fileID: 9120311054899858401}
   isInvincible: 0
@@ -43123,6 +43141,11 @@ MonoBehaviour:
 --- !u!4 &6293658348941271388 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4647377486346306679, guid: 91e5a3e7abd94ee47b3d909e75c82ba6, type: 3}
+  m_PrefabInstance: {fileID: 1668968349821904171}
+  m_PrefabAsset: {fileID: 0}
+--- !u!212 &7039531829478809680 stripped
+SpriteRenderer:
+  m_CorrespondingSourceObject: {fileID: 8545630019020572027, guid: 91e5a3e7abd94ee47b3d909e75c82ba6, type: 3}
   m_PrefabInstance: {fileID: 1668968349821904171}
   m_PrefabAsset: {fileID: 0}
 --- !u!114 &9091655242556548291 stripped

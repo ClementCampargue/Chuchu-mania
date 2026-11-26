@@ -182,6 +182,7 @@ MonoBehaviour:
   topPoint: {fileID: 459990269660448513}
   bottomPoint: {fileID: 3332048937724906835}
   centerOffsetX: 0
+  can_jump: 1
 --- !u!1 &7911474416850933461
 GameObject:
   m_ObjectHideFlags: 0

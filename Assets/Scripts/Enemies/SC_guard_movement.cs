@@ -289,6 +289,26 @@ public class SC_guard_movement : MonoBehaviour
 
     private void FinishSleep()
     {
+
+        if (damage != null)
+            damage.enabled = true;
+
+        if (animator != null)
+            animator.SetBool(sleepParameter, false);
+        animator.SetTrigger("Wake");
+
+
+        // Sommeil aléatoire : reprendre le déplacement interrompu.
+        if (randomSleepInProgress)
+        {
+            randomSleepInProgress = false;
+
+            return;
+        }
+
+    }
+    public void wakeup()
+    {
         isSleeping = false;
 
         if (damage != null)

@@ -99,7 +99,19 @@ public class SC_starbit_spawning : MonoBehaviour
             Invoke(nameof(StartRespawn), delay_respawn);
         }
     }
+    public void  DestroyAllCollectibles()
+    {
+        CancelInvoke(nameof(StartRespawn));
 
+        foreach (GameObject collectible in currentCollectibles)
+        {
+            Destroy(collectible);
+
+        }
+
+        currentCollectibles.Clear();
+
+    }
     void StartRespawn()
     {
         StartCoroutine(SpawnCollectibles());

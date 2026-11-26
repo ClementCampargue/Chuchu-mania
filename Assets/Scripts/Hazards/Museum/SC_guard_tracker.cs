@@ -14,6 +14,7 @@ public class SC_guard_ai : MonoBehaviour
 
     [Header("Déplacement")]
     public float moveSpeed = 3f;
+    public float moveSpeedLadder = 3f;
     public float reachDistance = 0.08f;
 
     [Header("Anti changement de direction")]
@@ -821,6 +822,7 @@ public class SC_guard_ai : MonoBehaviour
     // DEPLACEMENT
     // ============================================================
 
+
     private void MoveAlongPath()
     {
         if (currentPath == null ||
@@ -840,7 +842,6 @@ public class SC_guard_ai : MonoBehaviour
             {
                 lastMovementDirection = newDirection;
                 hasMovementDirection = true;
-
                 directionLockTimer = directionLockDuration;
             }
             else
@@ -865,15 +866,38 @@ public class SC_guard_ai : MonoBehaviour
             }
         }
 
-        transform.position = Vector3.MoveTowards(
-            transform.position,
-            target,
+        // Déplacement horizontal : X et Z
+        Vector3 currentPosition = transform.position;
+
+        Vector3 currentHorizontal = new Vector3(
+            currentPosition.x, 0f, currentPosition.z
+        );
+
+        Vector3 targetHorizontal = new Vector3(
+            target.x, 0f, target.z
+        );
+
+        Vector3 nextHorizontal = Vector3.MoveTowards(
+            currentHorizontal,
+            targetHorizontal,
             moveSpeed * Time.deltaTime
         );
 
-        if (Vector3.Distance(
-            transform.position,
-            target) <= reachDistance)
+        // Déplacement vertical : Y
+        float nextY = Mathf.MoveTowards(
+            currentPosition.y,
+            target.y,
+            moveSpeedLadder * Time.deltaTime
+        );
+
+        transform.position = new Vector3(
+            nextHorizontal.x,
+            nextY,
+            nextHorizontal.z
+        );
+
+        // Validation du point atteint
+        if (Vector3.Distance(transform.position, target) <= reachDistance)
         {
             pathIndex++;
 

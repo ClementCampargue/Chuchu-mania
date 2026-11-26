@@ -334,7 +334,11 @@ MonoBehaviour:
   floorDetectionDelay: 0.25
   floorConfirmationTolerance: 0.2
   moveSpeed: 3
+  moveSpeedLadder: 3
   reachDistance: 0.08
+  directionLockDuration: 1
+  directionChangeThreshold: 1.5
+  directionDetectionDistance: 0.15
   maxSegmentDistance: 3
   repathInterval: 0.25
   floorHeightTolerance: 0.11
@@ -749,7 +753,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4239849883444337517, guid: 861f2e20df3d6b149801340216555e4b, type: 3}
       propertyPath: patrolPoints.Array.size
-      value: 3
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 4239849883444337517, guid: 861f2e20df3d6b149801340216555e4b, type: 3}
       propertyPath: requireVerticalTransition
@@ -762,7 +766,7 @@ PrefabInstance:
     - target: {fileID: 4239849883444337517, guid: 861f2e20df3d6b149801340216555e4b, type: 3}
       propertyPath: 'patrolPoints.Array.data[1]'
       value: 
-      objectReference: {fileID: 1467618208}
+      objectReference: {fileID: 819830757}
     - target: {fileID: 4239849883444337517, guid: 861f2e20df3d6b149801340216555e4b, type: 3}
       propertyPath: 'patrolPoints.Array.data[2]'
       value: 
@@ -1057,7 +1061,7 @@ PrefabInstance:
     - target: {fileID: 4239849883444337517, guid: 861f2e20df3d6b149801340216555e4b, type: 3}
       propertyPath: baseNode
       value: 
-      objectReference: {fileID: 883157290}
+      objectReference: {fileID: 150354143}
     - target: {fileID: 4239849883444337517, guid: 861f2e20df3d6b149801340216555e4b, type: 3}
       propertyPath: hopSquash
       value: 0
@@ -1077,7 +1081,7 @@ PrefabInstance:
     - target: {fileID: 4239849883444337517, guid: 861f2e20df3d6b149801340216555e4b, type: 3}
       propertyPath: currentNode
       value: 
-      objectReference: {fileID: 883157290}
+      objectReference: {fileID: 150354143}
     - target: {fileID: 4239849883444337517, guid: 861f2e20df3d6b149801340216555e4b, type: 3}
       propertyPath: groundCheck
       value: 
@@ -1157,7 +1161,7 @@ PrefabInstance:
     - target: {fileID: 4239849883444337517, guid: 861f2e20df3d6b149801340216555e4b, type: 3}
       propertyPath: 'patrolPoints.Array.data[0]'
       value: 
-      objectReference: {fileID: 883157290}
+      objectReference: {fileID: 1762074867}
     - target: {fileID: 4239849883444337517, guid: 861f2e20df3d6b149801340216555e4b, type: 3}
       propertyPath: 'patrolPoints.Array.data[1]'
       value: 
@@ -1165,7 +1169,7 @@ PrefabInstance:
     - target: {fileID: 4239849883444337517, guid: 861f2e20df3d6b149801340216555e4b, type: 3}
       propertyPath: 'patrolPoints.Array.data[2]'
       value: 
-      objectReference: {fileID: 1762074867}
+      objectReference: {fileID: 883157290}
     - target: {fileID: 4239849883444337517, guid: 861f2e20df3d6b149801340216555e4b, type: 3}
       propertyPath: 'patrolPoints.Array.data[3]'
       value: 

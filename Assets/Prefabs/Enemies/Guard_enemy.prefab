@@ -141,6 +141,7 @@ GameObject:
   - component: {fileID: 2519460489625166877}
   - component: {fileID: 8650354465331186479}
   - component: {fileID: 2218076081841742635}
+  - component: {fileID: 6748320570005863639}
   m_Layer: 8
   m_Name: Visual
   m_TagString: Untagged
@@ -221,6 +222,35 @@ MonoBehaviour:
       - m_Target: {fileID: 4239849883444337517}
         m_TargetAssemblyTypeName: SC_guard_movement, Assembly-CSharp
         m_MethodName: StartChaseMovement
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+--- !u!114 &6748320570005863639
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 736061607559405491}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1cdfe354424f56b4ca47e224e77d11ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  animationName: Rabbit_wake
+  triggerBeforeEnd: 0.1
+  onAnimationFinished:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 4239849883444337517}
+        m_TargetAssemblyTypeName: SC_guard_movement, Assembly-CSharp
+        m_MethodName: wakeup
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -587,6 +617,7 @@ MonoBehaviour:
   floorDetectionDelay: 1.71
   floorConfirmationTolerance: 0.01
   moveSpeed: 3
+  moveSpeedLadder: 2
   reachDistance: 0.08
   directionLockDuration: 1
   directionChangeThreshold: 1.5

@@ -190,6 +190,8 @@ public class SC_balloon_player : MonoBehaviour
         player.enabled = false;
 
         player.isFrozen = false;
+        player.canTakeDamage = true;
+
         player.isStunned = false;
 
         player.knockbackVelocity = Vector2.zero;

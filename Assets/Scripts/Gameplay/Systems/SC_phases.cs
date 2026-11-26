@@ -9,7 +9,7 @@ public class SC_phases : MonoBehaviour
     public GameObject cosmicmode;
     private int currentPhaseIndex = 0;
     public static SC_phases instance;
-
+    public SC_starbit_spawning spawning;
     public static event Action<int> OnPhaseChanged;
 
     private void Awake()
@@ -35,7 +35,6 @@ public class SC_phases : MonoBehaviour
         if (currentPhaseIndex < phases.Length)
         {
             audio_.Play();
-
             phases[currentPhaseIndex].SetActive(true);
             OnPhaseChanged?.Invoke(currentPhaseIndex);
             SC_player.instance.hud_.SetTrigger("new");
@@ -47,6 +46,8 @@ public class SC_phases : MonoBehaviour
     }
     public void cosmic()
     {
+        spawning.DestroyAllCollectibles();
+
         cosmicmode.SetActive(true);
     }
 

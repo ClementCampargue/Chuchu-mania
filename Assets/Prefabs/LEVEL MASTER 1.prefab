@@ -121,6 +121,7 @@ MonoBehaviour:
   - {fileID: 2374933575822920501}
   - {fileID: 6024660918130890506}
   cosmicmode: {fileID: 3795417054220522592}
+  spawning: {fileID: 4261436311695942266}
 --- !u!82 &3013997074223320345
 AudioSource:
   m_ObjectHideFlags: 0

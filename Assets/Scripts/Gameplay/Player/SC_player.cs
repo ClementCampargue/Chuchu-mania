@@ -1,9 +1,9 @@
 
-using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.Rendering;
+using System.Collections.Generic;
 
 public class SC_player : MonoBehaviour
 {
@@ -11,12 +11,12 @@ public class SC_player : MonoBehaviour
 
     public GameObject cosmic_mode;
     private Coroutine invincibilityCoroutine;
-    private Coroutine lowHealthCoroutine;
     private Coroutine hitCoroutine;
     private Coroutine dropThroughCoroutine;
     private Coroutine knockbackInvincibilityCoroutine;
     private SC_ladder echelle;
     public bool isOnLadder;
+    private bool can_jump_ladder;
     public bool climb_delay = true;
 
     [Header("Power Up Stats")]
@@ -76,10 +76,6 @@ public class SC_player : MonoBehaviour
     public float hitFreezeTime = 0.15f;
     public Vector2 hitKnockback = new Vector2(5f, 3f);
 
-    [Header("Low Health Warning")]
-    public Material normalMaterial;
-    public Material lowHealthMaterial;
-    public float lowHealthBlinkRate = 0.2f;
 
     [Header("Ground Check")]
     public Transform groundCheckBottom;
@@ -114,7 +110,7 @@ public class SC_player : MonoBehaviour
     public LayerMask damageLayer;
     public LayerMask bounceLayer;
 
-    private bool canTakeDamage = true;
+    public bool canTakeDamage = true;
 
     [Header("Stun")]
     public LayerMask stunLayer;
@@ -123,6 +119,7 @@ public class SC_player : MonoBehaviour
 
     [Header("Invincibility")]
     public float invincibilityTime = 1f;
+    public List<SpriteRenderer> sprites;
     public SpriteRenderer spriteRenderer;
     public SpriteRenderer spriteRendererPower;
     public bool isInvincible;
@@ -248,9 +245,10 @@ public class SC_player : MonoBehaviour
 
     private void Start()
     {
+        health = sc_health_system.instance;
+
         canTakeDamage = true;
         climb_delay = true;
-        health = sc_health_system.instance;
 
         if (normal != null)
             normal.SetActive(true);
@@ -266,8 +264,6 @@ public class SC_player : MonoBehaviour
         wasGroundedBeforeCheck = false;
         landingHandled = false;
 
-        if (spriteRenderer != null && normalMaterial != null)
-            spriteRenderer.material = normalMaterial;
     }
 
     // =========================================================
@@ -280,7 +276,6 @@ public class SC_player : MonoBehaviour
             limit = SC_level_master.instance.limits;
 
         CheckStun();
-        HandleLowHealthBlink();
 
         if (climbReattachTimer > 0f)
         {
@@ -869,7 +864,13 @@ if (vertical > 0f && nextY >= echelle.TopY)
         // SORTIE DE L'ECHELLE SANS SAUT
         if (isOnLadder)
         {
+            if (echelle.can_jump)
+            {
+                StopClimbingLadder();
+                PerformJump();
+            }
             StopClimbingLadder();
+
             return;
         }
         // SAUT DEPUIS UNE GRILLE
@@ -1108,52 +1109,6 @@ if (vertical > 0f && nextY >= echelle.TopY)
     // LOW HEALTH
     // =========================================================
 
-    private void HandleLowHealthBlink()
-    {
-        if (health == null)
-            return;
-
-        if (health.current_health == 1)
-        {
-            if (lowHealthCoroutine == null)
-                lowHealthCoroutine = StartCoroutine(LowHealthBlink());
-        }
-        else
-        {
-            if (lowHealthCoroutine != null)
-            {
-                StopCoroutine(lowHealthCoroutine);
-                lowHealthCoroutine = null;
-            }
-
-            if (spriteRenderer != null && normalMaterial != null)
-                spriteRenderer.material = normalMaterial;
-        }
-    }
-
-    private IEnumerator LowHealthBlink()
-    {
-        bool toggle = false;
-
-        while (health != null && health.current_health == 1)
-        {
-            if (spriteRenderer != null)
-            {
-                spriteRenderer.material = toggle
-                    ? normalMaterial
-                    : lowHealthMaterial;
-            }
-
-            toggle = !toggle;
-
-            yield return new WaitForSeconds(lowHealthBlinkRate);
-        }
-
-        if (spriteRenderer != null && normalMaterial != null)
-            spriteRenderer.material = normalMaterial;
-
-        lowHealthCoroutine = null;
-    }
 
     // =========================================================
     // DAMAGE
@@ -1412,14 +1367,20 @@ if (vertical > 0f && nextY >= echelle.TopY)
         while (elapsed < duration)
         {
             visible = !visible;
-
+            foreach (SpriteRenderer spr in sprites)
+            {
+                spriteRenderer.enabled = visible;
+            }
             if (spriteRenderer != null)
                 spriteRenderer.enabled = visible;
 
             yield return new WaitForSecondsRealtime(0.1f);
             elapsed += 0.1f;
         }
-
+        foreach (SpriteRenderer spr in sprites)
+        {
+            spriteRenderer.enabled = true;
+        }
         if (spriteRenderer != null)
             spriteRenderer.enabled = true;
 
@@ -1431,6 +1392,10 @@ if (vertical > 0f && nextY >= echelle.TopY)
 
     private void delay_safe()
     {
+        foreach (SpriteRenderer spr in sprites)
+        {
+            spriteRenderer.enabled = true;
+        }
         if (spriteRenderer != null)
             spriteRenderer.enabled = true;
     }
@@ -1804,7 +1769,6 @@ if (vertical > 0f && nextY >= echelle.TopY)
         StopAllCoroutines();
 
         invincibilityCoroutine = null;
-        lowHealthCoroutine = null;
         hitCoroutine = null;
         dropThroughCoroutine = null;
 
@@ -1852,7 +1816,10 @@ if (vertical > 0f && nextY >= echelle.TopY)
 
         collider.enabled = true;
         spriteRenderer.enabled = true;
-
+        foreach (SpriteRenderer spr in sprites)
+        {
+            spriteRenderer.enabled = true;
+        }
         rb.bodyType = RigidbodyType2D.Dynamic;
         rb.linearVelocity = Vector2.zero;
         rb.constraints = RigidbodyConstraints2D.FreezeRotation;

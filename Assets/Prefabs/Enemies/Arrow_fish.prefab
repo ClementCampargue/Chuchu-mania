@@ -6036,8 +6036,8 @@ MonoBehaviour:
   spriteRenderer: {fileID: 3767033375751100388}
   animator: {fileID: 0}
   ps: {fileID: 0}
-  visuals: {fileID: 3574069979394456430}
-  trs: {fileID: 5650538638477718631}
+  visuals: {fileID: 1986609297800049689}
+  trs: {fileID: 1986609297800049689}
   collision: {fileID: 5650538638477718631}
   stunDetection: {fileID: 5650538638477718631}
   playerLayer:
@@ -6061,6 +6061,8 @@ MonoBehaviour:
   isStunned: 0
   die_burn: 0
   script: {fileID: 3080689799176463004}
+  scripts:
+  - {fileID: 8239810282969190215}
 --- !u!58 &1551268115359784579
 CircleCollider2D:
   m_ObjectHideFlags: 0
