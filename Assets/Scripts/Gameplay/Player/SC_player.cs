@@ -1420,6 +1420,7 @@ if (vertical > 0f && nextY >= echelle.TopY)
 
         float originalTimeScale = Time.timeScale;
         Time.timeScale = 0f;
+        SC_time_manager.instance.Pause();
 
         normal.SetActive(false);
         transformed.SetActive(true);
@@ -1428,8 +1429,7 @@ if (vertical > 0f && nextY >= echelle.TopY)
     public void powerup_end()
     {
         hud_.SetBool("cosmic", true);
-
-        Time.timeScale = 1;
+        SC_time_manager.instance.Resume();
         rb.bodyType = RigidbodyType2D.Dynamic;
         isFrozen = false;
         cosmic_mode.SetActive(true);

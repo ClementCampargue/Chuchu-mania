@@ -1070,7 +1070,7 @@ MonoBehaviour:
   minChuchuJumpDuration: 0.25
   maxChuchuJumpDuration: 1.5
   chuchuApexDelay: 0.15
-  leaveScreenDistance: 15
+  leaveScreenDistance: 20
   jump: {fileID: 6797311376687428347}
   angry: {fileID: 7705315772071218057}
 --- !u!58 &6753738923955640915
