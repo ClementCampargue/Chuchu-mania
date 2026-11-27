@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class SC_bee_stinger : MonoBehaviour
 {
+    public GameObject exclamation;
     public GameObject dard;
     public List<Transform> positions;
 
@@ -13,6 +14,7 @@ public class SC_bee_stinger : MonoBehaviour
 
     public int current_position;
 
+    private bool exclam = true;
     private bool isMoving;
     private bool isTeleporting;
     private bool isCheeksSequence;
@@ -39,7 +41,9 @@ public class SC_bee_stinger : MonoBehaviour
     // Temps d'attente une fois arrivée en hauteur
     public float cheeksDelay = 1.5f;
 
-
+    private void ShowExclamation()
+    { Instantiate(exclamation, positions[current_position].position, Quaternion.identity);
+    }
     void Start()
     {
         if (positions == null || positions.Count < 4)
@@ -195,7 +199,7 @@ public class SC_bee_stinger : MonoBehaviour
             move_speed * Time.deltaTime
         );
 
-        // Si l'abeille est arrivée au point
+
         if (Vector3.Distance(transform.position, target) < 0.05f)
         {
             fly.Stop();
@@ -254,6 +258,7 @@ public class SC_bee_stinger : MonoBehaviour
     {
         isTeleporting = true;
         isMoving = false;
+        exclam = true;
 
         // Position complètement hors écran à gauche
         Vector3 leftOffScreen = GetOffScreenPosition(true);
@@ -286,6 +291,7 @@ public class SC_bee_stinger : MonoBehaviour
         Vector3 target = positions[current_position].position;
 
         FlipTowards(target);
+        ShowExclamation();
 
         if (!fly.isPlaying)
         {
@@ -316,6 +322,7 @@ public class SC_bee_stinger : MonoBehaviour
     {
         isTeleporting = true;
         isMoving = false;
+        exclam = true;
 
         // Position complètement hors écran à droite
         Vector3 rightOffScreen = GetOffScreenPosition(false);
@@ -348,6 +355,7 @@ public class SC_bee_stinger : MonoBehaviour
         Vector3 target = positions[current_position].position;
 
         FlipTowards(target);
+        ShowExclamation();
 
         if (!fly.isPlaying)
         {

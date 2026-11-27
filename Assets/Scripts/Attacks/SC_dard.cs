@@ -25,16 +25,19 @@ public class SC_dard : MonoBehaviour
     {
         if (collision.CompareTag("Player"))
         {
-
-            if (SC_balloon_player.instance.isActive)
+            if (SC_player.instance.canTakeDamage && !SC_player.instance.isInvincible)
             {
-            }
-            else
-            {
-                SC_balloon_player.instance.Activate();
+                if (SC_balloon_player.instance.isActive)
+                {
+                }
+                else
+                {
+                    SC_balloon_player.instance.Activate();
 
-                Destroy(gameObject);
+                    Destroy(gameObject);
+                }
             }
+   
         }
     }
 }

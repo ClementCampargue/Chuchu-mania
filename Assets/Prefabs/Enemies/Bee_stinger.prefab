@@ -81,6 +81,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   trs: {fileID: 0}
   spriteRenderer: {fileID: 0}
+  spriteRendererList: []
   flashMaterial: {fileID: 2100000, guid: 778865bbd08486043a01aeb31184e581, type: 2}
   rumble: 1
   rumbleLow: 0.1
@@ -330,6 +331,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   trs: {fileID: 0}
   spriteRenderer: {fileID: 0}
+  spriteRendererList: []
   flashMaterial: {fileID: 2100000, guid: 778865bbd08486043a01aeb31184e581, type: 2}
   rumble: 0
   rumbleLow: 0.1
@@ -636,6 +638,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bf7c9a4105bada04494aaea25f506fd9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  exclamation: {fileID: 4181699033222870022, guid: 2c642d6e40fb2624287c03f9ace97d33, type: 3}
   dard: {fileID: 3969056154317488276, guid: 5f059029cf1dc434eb75f0166fe27f65, type: 3}
   positions:
   - {fileID: 0}
@@ -727,6 +730,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   damage: 1
   ejection_power: {x: 1, y: 1}
+  destroy_on_damage: 0
 --- !u!114 &3423422593993566457
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -767,6 +771,7 @@ MonoBehaviour:
   isStunned: 0
   die_burn: 0
   script: {fileID: 0}
+  scripts: []
 --- !u!1 &4661398253016872694
 GameObject:
   m_ObjectHideFlags: 0
@@ -1202,6 +1207,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   trs: {fileID: 0}
   spriteRenderer: {fileID: 0}
+  spriteRendererList: []
   flashMaterial: {fileID: 2100000, guid: 778865bbd08486043a01aeb31184e581, type: 2}
   rumble: 1
   rumbleLow: 0.1

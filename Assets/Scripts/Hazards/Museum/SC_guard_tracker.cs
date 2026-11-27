@@ -219,7 +219,19 @@ public class SC_guard_ai : MonoBehaviour
 
     private void UpdateLastGroundedPlayerPosition()
     {
-        if (SC_player.instance == null || !SC_player.instance.isGrounded)
+        if (SC_player.instance == null)
+            return;
+
+        // Sur une échelle, on suit directement le joueur,
+        // notamment sur l'axe Y.
+        if (SC_player.instance.isOnLadder)
+        {
+            lastGroundedPlayerPosition = SC_player.instance.transform.position;
+            hasLastGroundedPlayerPosition = true;
+            return;
+        }
+
+        if (!SC_player.instance.isGrounded)
             return;
 
         lastGroundedPlayerPosition = SC_player.instance.transform.position;
@@ -321,9 +333,21 @@ public class SC_guard_ai : MonoBehaviour
         if (SC_player.instance == null)
             return 0;
 
-        // IMPORTANT :
-        // Tant que le joueur n'est pas au sol,
-        // aucune décision de changement d'étage.
+        // SUR UNE ECHELLE
+        if (SC_player.instance.isOnLadder)
+        {
+            groundedTimer = 0f;
+
+            float ladderHeightDifference =
+                SC_player.instance.transform.position.y - transform.position.y;
+
+            if (Mathf.Abs(ladderHeightDifference) <= verticalTolerance)
+                return 0;
+
+            return ladderHeightDifference > 0f ? 1 : -1;
+        }
+
+        // HORS ECHELLE
         if (!SC_player.instance.isGrounded)
         {
             groundedTimer = 0f;
@@ -340,21 +364,17 @@ public class SC_guard_ai : MonoBehaviour
 
         if (!IsNearVerticalSegment(
             SC_player.instance.transform.position))
-        {
-            return 0;
-        }
-
-        float heightDifference = playerFloorY - enemyFloorY;
-
-        if (Mathf.Abs(heightDifference) <= floorHeightTolerance)
             return 0;
 
         if (Mathf.Abs(
             SC_player.instance.transform.position.y - playerFloorY
         ) > floorConfirmationTolerance)
-        {
             return 0;
-        }
+
+        float floorHeightDifference = playerFloorY - enemyFloorY;
+
+        if (Mathf.Abs(floorHeightDifference) <= floorHeightTolerance)
+            return 0;
 
         confirmedPlayerFloor = playerFloor;
         confirmedPlayerFloorY = playerFloorY;
@@ -362,13 +382,8 @@ public class SC_guard_ai : MonoBehaviour
         lastGroundedPlayerFloor = playerFloor;
         lastGroundedPlayerFloorY = playerFloorY;
 
-        if (heightDifference < 0f)
-            return -1;
-
-        return 1;
-    }
-
-    // ============================================================
+        return floorHeightDifference > 0f ? 1 : -1;
+    }    // ============================================================
     // VALIDATION DU SENS DE DEPLACEMENT
     // ============================================================
 
@@ -646,7 +661,8 @@ public class SC_guard_ai : MonoBehaviour
 
         // Si le joueur est en l'air, on conserve sa dernière position au sol.
         // Si aucune position au sol n'a encore été enregistrée, on attend l'atterrissage.
-        if (SC_player.instance.isGrounded)
+        if (SC_player.instance.isOnLadder ||
+            SC_player.instance.isGrounded)
         {
             UpdateLastGroundedPlayerPosition();
         }
