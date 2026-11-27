@@ -756,7 +756,7 @@ MonoBehaviour:
   score_per_star: 10
   star_color_max: {r: 0.22926305, g: 0.35798395, b: 0.4528302, a: 1}
   tongue_max_abs: -1.35
-  money_for_max_tongue: 100
+  money_for_max_tongue: 400
   anim_speed_range: {x: 1, y: 15}
   score_total: {fileID: 909619283}
   score_toadd: {fileID: 592175416}

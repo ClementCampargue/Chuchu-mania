@@ -5,6 +5,8 @@ public class SC_coconut : MonoBehaviour
 {
     [Header("Layer qui déclenche la chute")]
     public LayerMask triggerLayer;
+    public SC_juiciness juicefall;
+    public SC_juiciness impactjuice;
 
     [Header("Distance de détection")]
     public float rayDistance = 2f;
@@ -70,7 +72,7 @@ public class SC_coconut : MonoBehaviour
     void ForceHit()
     {
         if (hasHitGround) return;
-
+        impactjuice.PlayJuice();
         hasHitGround = true;
 
         float randomX = Random.Range(-randomHorizontalForce, randomHorizontalForce);
@@ -85,7 +87,7 @@ public class SC_coconut : MonoBehaviour
     {
         hasFallen = true;
         airTimer = 0f;
-
+        juicefall.PlayJuice();
         coll.SetActive(true);
         rb.gravityScale = 1f;
     }

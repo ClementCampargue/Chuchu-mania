@@ -65,6 +65,8 @@ public class SC_win_screen : MonoBehaviour
 
     public void Start_screen()
     {
+        SC_player.instance.hud_.SetBool("cosmic", false);
+
         group.SetFloat("LevelVolume", -1000f);
         if (SceneManager.GetActiveScene().name == "TUTO")
         {

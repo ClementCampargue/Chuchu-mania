@@ -5647,7 +5647,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 8
   CanMove: 1
-  damage: {fileID: 0}
+  damage: {fileID: 8294617790454294950}
   ownCollider: {fileID: 5676688543263674303}
 --- !u!114 &3255610440191343998
 MonoBehaviour:
