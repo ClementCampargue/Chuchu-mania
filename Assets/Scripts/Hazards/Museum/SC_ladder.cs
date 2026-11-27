@@ -5,6 +5,8 @@ public class SC_ladder : MonoBehaviour
     [Header("Limites de l'échelle")]
     public Transform topPoint;
     public Transform bottomPoint;
+    public Transform topPoint_out;
+    public Transform bottomPoint_out;
     [Header("Position")]
     public float centerOffsetX = 0f;
 
@@ -12,8 +14,10 @@ public class SC_ladder : MonoBehaviour
     public bool can_jump;
 
     public float TopY => topPoint.position.y;
+    public float TopY2 => topPoint_out.position.y;
 
     public float BottomY => bottomPoint.position.y;
+    public float BottomY2 => bottomPoint_out.position.y;
 
     public float ClampY(float y)
     {

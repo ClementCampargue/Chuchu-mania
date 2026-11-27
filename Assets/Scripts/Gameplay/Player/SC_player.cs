@@ -8,7 +8,8 @@ using System.Collections.Generic;
 public class SC_player : MonoBehaviour
 {
     public Animator hud_;
-
+    private bool enterFromTop;
+    private bool enterFromBottom;
     public GameObject cosmic_mode;
     private Coroutine invincibilityCoroutine;
     private Coroutine hitCoroutine;
@@ -733,11 +734,11 @@ if (isClimbing && isOnLadder)
         vertical * climbSpeed * Time.fixedDeltaTime;
 
 // ARRIVÉ EN HAUT
-if (vertical > 0f && nextY >= echelle.TopY)
+if (vertical > 0f && nextY >= echelle.TopY +0.2f)
 {
     rb.position = new Vector2(
         echelle.CenterX,
-        echelle.TopY +0.2f
+        echelle.TopY2 
     );
 
     StopClimbingLadder();
@@ -745,11 +746,11 @@ if (vertical > 0f && nextY >= echelle.TopY)
 }
 
     // ARRIVÉ EN BAS
-    if (nextY <= echelle.BottomY)
+    if (nextY <= echelle.BottomY2)
     {
         rb.position = new Vector2(
             echelle.CenterX,
-            echelle.BottomY
+            echelle.BottomY2
         );
 
         StopClimbingLadder();
@@ -1508,10 +1509,10 @@ if (vertical > 0f && nextY >= echelle.TopY)
             return;
 
         // Entrée classique : le joueur appuie vers le haut.
-        bool enterFromBottom = input.y >= climbAttachUpThreshold;
+        enterFromBottom = input.y >= climbAttachUpThreshold;
 
 
-        bool enterFromTop = input.y <= -climbAttachUpThreshold ;
+        enterFromTop = input.y <= -climbAttachUpThreshold ;
 
         if (enterFromBottom  && rb.position.y < echelle .TopY-0.5f|| enterFromTop && rb.position.y > echelle.BottomY + 0.5f)
         {
@@ -1533,8 +1534,18 @@ if (vertical > 0f && nextY >= echelle.TopY)
 
         rb.gravityScale = 0f;
         rb.linearVelocity = Vector2.zero;
-
-        rb.position = new Vector2(echelle.CenterX, rb.position.y);
+        if (enterFromBottom && rb.position.y < echelle.BottomY)
+        {
+             rb.position = echelle.topPoint.position;
+        }
+        else if (enterFromTop && rb.position.y > echelle.TopY)
+        {
+            rb.position = echelle.topPoint.position;
+        }
+        else 
+        {
+            rb.position = new Vector2(echelle.CenterX, rb.position.y);
+        }
 
         anim.SetBool("Climb", true);
     }
