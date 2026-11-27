@@ -531,23 +531,31 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bf3cdf50624d3b244b2b6de3d4e664c9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  exclamation: {fileID: 4181699033222870022, guid: 2c642d6e40fb2624287c03f9ace97d33, type: 3}
-  exclamation_point: {fileID: 4326461346714959402}
-  damage: {fileID: 2680671972605215812}
-  sleepDuration: 3.61
+  guardCollisionRadius: 0.65
+  collisionVerticalTolerance: 0.8
+  guardBounceForce: 5
+  guardBounceDuration: 0.2
+  guardBounceCooldown: 0.3
+  guardBounceUpForce: 5
+  movementMode: 0
   flashlight: {fileID: 2380945124946967503}
   animator: {fileID: 2519460489625166877}
   guardAI: {fileID: 157420288762404333}
+  exclamation: {fileID: 4181699033222870022, guid: 2c642d6e40fb2624287c03f9ace97d33, type: 3}
+  exclamation_point: {fileID: 4326461346714959402}
+  damage: {fileID: 2680671972605215812}
   moveSpeed: 1.8
   ladderSpeed: 1.5
   ladderAlignmentTolerance: 0.025
-  movementMode: 0
-  chaseStartTrigger: ChaseStart
-  currentNode: {fileID: 0}
-  baseNode: {fileID: 0}
   patrolPoints: []
   patrolWaitTime: 1.5
   randomPatrol: 1
+  singlePointMoveSpeed: 2
+  singlePointMoveRight: 1
+  currentNode: {fileID: 0}
+  baseNode: {fileID: 0}
+  chaseStartTrigger: ChaseStart
+  sleepDuration: 3.61
   allowRandomSleep: 1
   minSleepInterval: 15
   maxSleepInterval: 20

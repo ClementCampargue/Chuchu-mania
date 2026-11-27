@@ -18,7 +18,15 @@ public class SC_guard_movement : MonoBehaviour
 
     [SerializeField, Min(0f)]
     private float collisionVerticalTolerance = 0.8f;
-
+    [Header("Rebond entre gardes")]
+    [SerializeField] private float guardBounceForce = 2.5f;
+    [SerializeField] private float guardBounceDuration = 0.2f;
+    [SerializeField] private float guardBounceCooldown = 0.3f;
+    [SerializeField] private float guardBounceUpForce = 1.2f;
+    private Vector3 bounceDirection;
+    private float bounceTimer;
+    private float bounceCooldownTimer;
+    private bool isBouncing;
     private void OnEnable()
     {
         activeGuards.Add(this);
@@ -29,65 +37,81 @@ public class SC_guard_movement : MonoBehaviour
         activeGuards.Remove(this);
     }
 
-    public static bool TryMoveWithGuardCollision(
-        SC_guard_movement mover,
-        Vector3 destination)
+public static bool TryMoveWithGuardCollision(
+    SC_guard_movement mover,
+    Vector3 destination)
+{
+    if (mover == null)
+        return false;
+
+    Vector3 start = mover.transform.position;
+
+    destination = SC_ScreenWarp.NearestImage(start, destination);
+
+    foreach (SC_guard_movement other in activeGuards)
     {
-        if (mover == null)
-            return false;
-
-        Vector3 start = mover.transform.position;
-
-        destination = SC_ScreenWarp.NearestImage(start, destination);
-
-        foreach (SC_guard_movement other in activeGuards)
-        {
-            if (other == null ||
-                other == mover ||
-                !other.isActiveAndEnabled)
+        if (other == null ||
+            other == mover ||
+            !other.isActiveAndEnabled)
+            continue;
+            if (mover.IsOnLadder() || other.IsOnLadder())
                 continue;
-
             Vector3 otherPosition =
-                SC_ScreenWarp.NearestImage(start, other.transform.position);
-
-            if (Mathf.Abs(start.y - otherPosition.y) >
-                    mover.collisionVerticalTolerance &&
-                Mathf.Abs(destination.y - otherPosition.y) >
-                    mover.collisionVerticalTolerance)
-                continue;
-
-            Vector3 closest = ClosestPointOnMovementSegment(
-                otherPosition,
+            SC_ScreenWarp.NearestImage(
                 start,
-                destination
+                other.transform.position
             );
 
-            float requiredDistance = Mathf.Max(
-                mover.guardCollisionRadius,
-                other.guardCollisionRadius
-            );
+        if (Mathf.Abs(start.y - otherPosition.y) >
+                mover.collisionVerticalTolerance &&
+            Mathf.Abs(destination.y - otherPosition.y) >
+                mover.collisionVerticalTolerance)
+            continue;
 
-            float closestDistance =
-                Vector3.Distance(closest, otherPosition);
+        float requiredDistance = Mathf.Max(
+            mover.guardCollisionRadius,
+            other.guardCollisionRadius
+        );
 
-            float startDistance =
-                Vector3.Distance(start, otherPosition);
+        Vector3 closest = ClosestPointOnMovementSegment(
+            otherPosition,
+            start,
+            destination
+        );
 
-            float endDistance =
-                Vector3.Distance(destination, otherPosition);
+        float closestDistance =
+            Vector3.Distance(closest, otherPosition);
 
-            bool movingAway =
-                endDistance > startDistance + 0.001f;
+        if (closestDistance < requiredDistance)
+        {
+            Vector3 direction =
+                start - otherPosition;
 
-            if (closestDistance < requiredDistance && !movingAway)
-                return false;
+            direction.y = 0f;
+            direction.z = 0f;
+
+            if (direction.sqrMagnitude < 0.001f)
+            {
+                direction = destination - start;
+                direction.y = 0f;
+                direction.z = 0f;
+
+                direction = -direction;
+            }
+
+            direction.Normalize();
+
+            mover.StartGuardBounce(direction);
+
+            other.StartGuardBounce(-direction);
+
+            return false;
         }
-
-        mover.transform.position = destination;
-        return true;
     }
 
-    private static Vector3 ClosestPointOnMovementSegment(
+    mover.transform.position = destination;
+    return true;
+}    private static Vector3 ClosestPointOnMovementSegment(
         Vector3 point,
         Vector3 start,
         Vector3 end)
@@ -320,6 +344,11 @@ public class SC_guard_movement : MonoBehaviour
 
     private void Update()
     {
+        UpdateGuardBounce();
+
+        if (isBouncing)
+            return;
+
         if (isSleeping)
         {
             UpdateSleep();
@@ -335,7 +364,6 @@ public class SC_guard_movement : MonoBehaviour
         UpdatePatrol();
         UpdateRandomSleep();
     }
-
     // ============================================================
     // ANIMATION PENDANT LA TRAQUE
     // ============================================================
@@ -1508,7 +1536,66 @@ public class SC_guard_movement : MonoBehaviour
 
         return null;
     }
+    private bool IsOnLadder()
+    {
+        return animator != null &&
+        (
+            animator.GetBool(ladderUpParameter) ||
+            animator.GetBool(ladderDownParameter)
+        );
+    }
+    private void StartGuardBounce(Vector3 direction)
+    {
+        if (isBouncing || bounceCooldownTimer > 0f)
+            return;
 
+        direction.y = 0f;
+        direction.z = 0f;
+
+        if (direction.sqrMagnitude < 0.001f)
+            return;
+
+        bounceDirection = direction.normalized;
+
+        bounceTimer = guardBounceDuration;
+        bounceCooldownTimer = guardBounceCooldown;
+
+        isBouncing = true;
+
+        UpdateFlip(
+            transform.position,
+            transform.position + bounceDirection
+        );
+    }
+    private void UpdateGuardBounce()
+    {
+        if (bounceCooldownTimer > 0f)
+            bounceCooldownTimer -= Time.deltaTime;
+
+        if (!isBouncing)
+            return;
+
+        bounceTimer -= Time.deltaTime;
+
+        float progress = 1f - Mathf.Clamp01(
+            bounceTimer / guardBounceDuration
+        );
+
+        Vector3 destination = transform.position;
+
+        destination += bounceDirection *
+            guardBounceForce * Time.deltaTime;
+
+        destination.y += guardBounceUpForce *
+            (1f - progress) * Time.deltaTime;
+
+        transform.position = destination;
+
+        if (bounceTimer <= 0f)
+        {
+            isBouncing = false;
+        }
+    }
     private float Heuristic(
         SC_guard_point a,
         SC_guard_point b)
