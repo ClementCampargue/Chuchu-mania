@@ -531,6 +531,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bf3cdf50624d3b244b2b6de3d4e664c9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  warp: {fileID: 1601778833296915909}
   guardCollisionRadius: 0.65
   collisionVerticalTolerance: 0.8
   guardBounceForce: 5
@@ -583,6 +584,9 @@ MonoBehaviour:
   warningDistance: 0.7
   warningSpawnOffset: 0.5
   warningPrefab: {fileID: 4181699033222870022, guid: 2c642d6e40fb2624287c03f9ace97d33, type: 3}
+  wrapClonePrefab: {fileID: 3369610956028956592, guid: 16b741b6197e6b2498716276e157f8eb, type: 3}
+  enablePhysicalClone: 1
+  synchronizeAnimator: 1
 --- !u!50 &6484877146698918740
 Rigidbody2D:
   serializedVersion: 5

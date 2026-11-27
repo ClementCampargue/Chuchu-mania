@@ -5,10 +5,11 @@ using UnityEngine;
 [RequireComponent(typeof(SC_guard_ai))]
 public class SC_guard_movement : MonoBehaviour
 {
+    public bool hasclone;
     // ============================================================
     // COLLISIONS ENTRE GARDES
     // ============================================================
-
+    public SC_ScreenWarp warp;
     private static readonly HashSet<SC_guard_movement> activeGuards =
         new HashSet<SC_guard_movement>();
 
@@ -41,10 +42,17 @@ public static bool TryMoveWithGuardCollision(
     SC_guard_movement mover,
     Vector3 destination)
 {
-    if (mover == null)
-        return false;
+        if (mover == null)
+            return false;
 
-    Vector3 start = mover.transform.position;
+        // Pas de rebond en dehors du mode traque
+        if (!mover.isChasing)
+        {
+            mover.transform.position = destination;
+            return true;
+        }
+
+        Vector3 start = mover.transform.position;
 
     destination = SC_ScreenWarp.NearestImage(start, destination);
 
@@ -292,6 +300,7 @@ public static bool TryMoveWithGuardCollision(
 
     private void Start()
     {
+        
         originalScale = transform.localScale;
 
         if (animator == null)
@@ -336,6 +345,10 @@ public static bool TryMoveWithGuardCollision(
         ResetRandomSleepTimer();
 
         StartPatrol();
+        if (!hasclone)
+        {
+            warp.HideClone();
+        }
     }
 
     // ============================================================
@@ -402,7 +415,7 @@ public static bool TryMoveWithGuardCollision(
     {
         if (!isChasing || chaseMovementAuthorized)
             return;
-
+        warp.HideClone();
         chaseMovementAuthorized = true;
 
         if (guardAI != null)
@@ -493,7 +506,11 @@ public static bool TryMoveWithGuardCollision(
 
     public void wakeup()
     {
-        isSleeping = false;
+        if (hasclone)
+        {
+            warp.ShowClone();
+        }
+        isSleeping = false; 
 
         if (damage != null)
             damage.enabled = true;
