@@ -10239,7 +10239,7 @@ MonoBehaviour:
   broken: {fileID: 276436509634675586}
   broken2: {fileID: 7602365733670409876}
   effetc: {fileID: 2659834161301551704}
-  Health: 3
+  Health: 5
   fire_system: {fileID: 5117453445091579984}
   juice_damage: {fileID: 255846722985302402}
   juice_bump: {fileID: 6401161049628377223}

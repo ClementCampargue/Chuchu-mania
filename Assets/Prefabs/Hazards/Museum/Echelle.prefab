@@ -182,7 +182,7 @@ MonoBehaviour:
   topPoint: {fileID: 459990269660448513}
   bottomPoint: {fileID: 3332048937724906835}
   centerOffsetX: 0
-  can_jump: 1
+  can_jump: 0
 --- !u!1 &7911474416850933461
 GameObject:
   m_ObjectHideFlags: 0
@@ -329,7 +329,7 @@ Transform:
   m_GameObject: {fileID: 8156692386958525745}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 1.98, z: 0}
+  m_LocalPosition: {x: 0, y: 1.4666669, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
